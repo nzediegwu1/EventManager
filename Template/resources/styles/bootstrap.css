@@ -2875,7 +2875,8 @@ tbody.collapse.show {
   border-radius: 0.2rem;
 }
 
-.input-group-addon.form-control-lg,
+.input-group-addon.
+-lg,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .input-group-addon.btn {
   padding: 0.5rem 1rem;

@@ -1,0 +1,257 @@
+﻿.form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+}
+
+.lineSpacing {
+    margin-bottom: 0.5em;
+}
+
+.submitButton {
+    color: black;
+    background-color: lightgreen;
+}
+
+.send-password {
+    color: black;
+}
+
+    .send-password:hover {
+        background-color: yellowgreen;
+        color: black;
+    }
+
+.search-by-ingredient {
+    background-color: darkgreen;
+    color: white;
+}
+
+.link {
+    color: white;
+}
+
+.navbar-dark .navbar-toggler {
+    background-color: darkgreen;
+}
+
+.appTitle {
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 0.3em;
+    font-size: 1.2em;
+    color: black;
+    margin-left: 0.3em;
+}
+
+.formDiv {
+    box-shadow: 10px 10px 5px #888888;
+    background-color: darkgreen;
+    padding: 2em;
+    border-radius: 1em;
+    color: black;
+    margin-top: 100px;
+}
+
+.uploader {
+    display: block;
+}
+
+.file-upload {
+    display: none;
+}
+
+.appBackground {
+    background-color: lightgreen;
+}
+
+
+.form-links {
+    text-align: center;
+}
+
+    .form-links a {
+        color: #fff;
+    }
+
+.user-icon {
+    width: 60%;
+    margin: auto;
+}
+
+.email-input {
+    background-color: palegoldenrod;
+}
+
+.modal-theme {
+    background-color: goldenrod;
+}
+
+.social-icons {
+    background-color: white;
+}
+
+.navbar-background {
+    background-color: darkgreen;
+    color: white;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.fixed-top {
+    height: 4em;
+    padding-left: 0em;
+    padding-right: 0em;
+}
+
+a:hover {
+    color: lightgreen;
+}
+
+.submitButton:hover {
+    background: #4ab712;
+    color: black;
+}
+
+.card-header .card-footer {
+    background-color: palegoldenrod;
+}
+
+/*SIDE BAR STYLES*/
+.modal.left .modal-body,
+.modal.right .modal-body {
+    padding: 15px 15px 80px;
+}
+
+.modal.left .modal-dialog {
+    margin: auto;
+    width: 22%;
+    transform: translate3d(0%, 0, 0);
+}
+
+.modal.left.fade .modal-dialog {
+    left: -39%;
+    transition: opacity 2s linear, left 2s ease-out;
+}
+
+.modal.left.fade.in .modal-dialog {
+    left: 0;
+}
+
+.modal-header {
+    border-bottom-color: #EEEEEE;
+    background-color: #FAFAFA;
+}
+
+.sidebar {
+    background-color: black;
+    color: white;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    background-color: darkgreen;
+    color: white;
+}
+
+.card-footer {
+    background-color: saddlebrown;
+    color: white;
+}
+
+.card-header {
+    background-color: saddlebrown;
+    color: white;
+}
+
+.card {
+    margin-bottom: 1em;
+}
+
+.uploader {
+    display: block;
+}
+
+.file-upload {
+    display: none;
+}
+
+.card-img-top {
+    height: 100%;
+    width: 50px;
+}
+
+.flex {
+    display: flex;
+}
+
+.top-eight {
+    display: flex;
+}
+
+.top-eight-detail {
+    margin-left: 1em;
+}
+
+.zero-padding {
+    padding: 0em;
+}
+
+/*DASHBOARD STYLING*/
+.sidebar-images {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+    margin-left: 0.6em;
+}
+
+.custom-container {
+    padding-top: 8em;
+    width: 100%;
+}
+
+.nav-link {
+    color: white;
+}
+
+#navBody {
+    background-color: #28a745;
+    max-width: 100%;
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+
+@media screen and (max-width:780px) {
+    .modal.left .modal-dialog {
+        margin: auto;
+        width: 50%;
+        transform: translate3d(0%, 0, 0);
+    }
+
+    .modal.left.fade .modal-dialog {
+        left: -25%;
+        transition: opacity 2s linear, left 2s ease-out;
+    }
+
+    #searchByIngredient {
+        display: none;
+    }
+
+    #socialIcons {
+        margin-right: 1em;
+    }
+    /*recipe listing styles below*/
+    .listing {
+        width: 100%;
+    }
+
+    #favorites {
+        display: none;
+    }
+}

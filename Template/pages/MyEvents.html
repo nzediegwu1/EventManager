@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <link href="../resources/styles/bootstrap.css" rel="stylesheet" />
+    <!--<link href="../resources/styles/custom.css" rel="stylesheet" />-->
+    <script src="../resources/scripts/jquery.js"></script>
+    <script src="../resources/scripts/popper.min.js"></script>
+    <script src="../resources/scripts/bootstrap.js"></script>
+    <style>
+        .form-control {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+        }
+
+        .search-by-ingredient {
+            background-color: darkgreen;
+        }
+
+        .appBackground {
+            background-color: lightgreen;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .fixed-top {
+            height: 4em;
+            padding-left: 0em;
+            padding-right: 0em;
+        }
+
+        a:hover {
+            color: lightgreen;
+        }
+
+        .top-eight {
+            display: flex;
+        }
+        /*DASHBOARD STYLING*/
+        .custom-container {
+            padding-top: 8em;
+            width: 100%;
+        }
+
+        .nav-link {
+            color: white;
+        }
+
+        #navBody {
+            max-width: 100%;
+        }
+
+        .time {
+            margin-left: 0.3em;
+        }
+
+        .zero-padding {
+            padding: 0em;
+        }
+
+        .align-right {
+            text-align: right;
+        }
+
+        @media screen and (max-width:650px) { /* or 780*/
+            #searchByIngredient {
+                display: none;
+            }
+            /*recipe listing styles below*/
+            .listing {
+                width: 100%;
+            }
+
+            #favorites {
+                display: none;
+            }
+        }
+    </style>
+    <style>
+        .logo {
+            height: 12em;
+            margin-left: -2em;
+        }
+
+        .list-group-item {
+            background-color: white;
+            color: black;
+            height: 6em;
+        }
+
+        .navbar-background {
+            background-color: darkblue;
+        }
+
+        .list-group-item:first-child {
+            background-color: darkblue;
+            color: white;
+        }
+
+        .invert-color {
+            -webkit-filter: invert(1);
+            filter: invert(1);
+        }
+
+        .appTitle {
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-right: 0.3em;
+            font-size: 1.2em;
+            color: white;
+            margin-left: 1em;
+        }
+
+        #nav-body {
+            background-color: darkblue;
+        }
+    </style>
+</head>
+<body class="appBackground">
+    <nav class="navbar fixed-top navbar-expand-sm navbar-background">
+        <h4 class="appTitle">EventMgr</h4>
+        <!--<img src="../resources/images/log2.png" alt="eventManagerLogo" class="logo" />-->
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navBody" aria-controls="navBody" aria-expanded="false">
+            <img src="../resources/images/glyphicons-517-menu-hamburger.png" alt="hamburger" class="invert-color" />
+        </button>
+        <div class="collapse navbar-collapse collapsible" id="navBody">
+            <form class="form-inline my-lg-0" id="searchFormGroup">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search an Event" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 search-by-ingredient" id="searchByIngredient" type="submit">
+                    <img src="../resources/images/glyphicons-28-search.png" class="invert-color" />
+                </button>
+            </form>
+            <ul class="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Add Event
+                        <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Add Center
+                        <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- container -->
+    <div id="content" class="container custom-container">
+        <!-- Actual MyEvents Page -->
+        <div class="mx-sm-auto col-sm-11">
+            <ul class="nav nav-pills flex-column">
+                <li class="list-group-item sidebar-header text-center">
+                    <b>My Events</b>
+                    <input class="form-control" type="search" placeholder="Filter" aria-label="Search">
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="../resources/scripts/app.js"></script>
+</body>
+</html>
