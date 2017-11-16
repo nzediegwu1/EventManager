@@ -5,11 +5,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
     <link href="../resources/styles/bootstrap.css" rel="stylesheet" />
-    <!--<link href="../resources/styles/custom.css" rel="stylesheet" />-->
     <script src="../resources/scripts/jquery.js"></script>
     <script src="../resources/scripts/popper.min.js"></script>
     <script src="../resources/scripts/bootstrap.js"></script>
     <style>
+        @media screen and (max-width:650px) { /* or 780*/
+            #searchByIngredient {
+                display: none;
+            }
+            /*recipe listing styles below*/
+            .listing {
+                width: 100%;
+            }
+
+            #favorites {
+                display: none;
+            }
+        }
+
         .form-control {
             position: relative;
             font-size: 16px;
@@ -42,7 +55,7 @@
         .top-eight {
             display: flex;
         }
-        /*DASHBOARD STYLING*/
+
         .custom-container {
             padding-top: 8em;
             width: 100%;
@@ -68,21 +81,6 @@
             text-align: right;
         }
 
-        @media screen and (max-width:650px) { /* or 780*/
-            #searchByIngredient {
-                display: none;
-            }
-            /*recipe listing styles below*/
-            .listing {
-                width: 100%;
-            }
-
-            #favorites {
-                display: none;
-            }
-        }
-    </style>
-    <style>
         .logo {
             height: 12em;
             margin-left: -2em;
