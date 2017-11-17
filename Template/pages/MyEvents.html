@@ -1,0 +1,501 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <link href="../resources/styles/bootstrap.css" rel="stylesheet" />
+    <script src="../resources/scripts/jquery.js"></script>
+    <script src="../resources/scripts/popper.min.js"></script>
+    <script src="../resources/scripts/bootstrap.js"></script>
+    <style>
+        @media screen and (max-width:650px) { /* or 780*/
+            #searchByIngredient {
+                display: none;
+            }
+            /*recipe listing styles below*/
+            .listing {
+                width: 100%;
+            }
+
+            #favorites {
+                display: none;
+            }
+        }
+
+        .form-control {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+        }
+
+        .search-by-ingredient {
+            background-color: darkgreen;
+        }
+
+        .appBackground {
+            background-color: lightgreen;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .fixed-top {
+            height: 4em;
+            padding-left: 0em;
+            padding-right: 0em;
+        }
+
+        a:hover {
+            color: lightgreen;
+        }
+
+        .top-eight {
+            display: flex;
+        }
+
+        .custom-container {
+            padding-top: 8em;
+            width: 100%;
+        }
+
+        .nav-link {
+            color: white;
+        }
+
+        #navBody {
+            max-width: 100%;
+        }
+
+        .time {
+            margin-left: 0.3em;
+        }
+
+        .zero-padding {
+            padding: 0em;
+        }
+
+        .align-right {
+            text-align: right;
+        }
+
+        .logo {
+            height: 12em;
+            margin-left: -2em;
+        }
+
+        .list-group-item {
+            background-color: white;
+            color: black;
+            height: 6em;
+        }
+
+        .navbar-background {
+            background-color: darkblue;
+        }
+
+        .list-group-item:first-child {
+            background-color: darkblue;
+            color: white;
+        }
+
+        .invert-color {
+            -webkit-filter: invert(1);
+            filter: invert(1);
+        }
+
+        .appTitle {
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-right: 0.3em;
+            font-size: 1.2em;
+            color: white;
+            margin-left: 1em;
+        }
+
+        #nav-body {
+            background-color: darkblue;
+        }
+    </style>
+    <style>
+        /*sidebar style*/
+        .modal.left .modal-body,
+        .modal.right .modal-body {
+            padding: 15px 15px 80px;
+        }
+
+        .modal.left .modal-dialog {
+            margin: auto;
+            max-width: 25%;
+            transform: translate3d(0%, 0, 0);
+        }
+
+        .modal.left.fade .modal-dialog {
+            left: -38%;
+            transition: opacity 2s linear, left 2s ease-out;
+        }
+
+        .modal.left.fade.in .modal-dialog {
+            left: 0;
+        }
+
+        .modal-header {
+            border-bottom-color: #EEEEEE;
+            background-color: #FAFAFA;
+        }
+
+        .sidebar {
+            background-color: black;
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            width: 13em;
+        }
+
+        .sidebar-header {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        .sidebar-toggle {
+            margin-left: 0.5em;
+        }
+
+        .icon-margin-left {
+            margin-left: 0.5em;
+        }
+
+        .modalCustom {
+            text-align: center;
+            font-weight: bolder;
+            background-color: darkblue;
+            color: lightgreen;
+        }
+
+        .modalDivider {
+            border-bottom: inset;
+            border-bottom-width: thick;
+            padding-bottom: 0.5em;
+        }
+
+        .centerSearch {
+            height: 250px;
+            overflow-y: scroll;
+            width: 100%;
+            border-left: ridge;
+        }
+
+        .table-header {
+            background-color: grey;
+        }
+
+        .table {
+            background-color: white;
+        }
+
+        .badge {
+            color: black;
+            border: ridge;
+        }
+
+        #eventModal {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body class="appBackground">
+    <nav class="navbar fixed-top navbar-expand-sm navbar-background">
+        <a href="#" data-toggle="modal" data-target="#myModalSidebar"><img src="../resources/images/glyphicons-517-menu-hamburger.png" class="invert-color sidebar-toggle" id="menu-toggle" /></a>
+        <h4 class="appTitle">EventMgr</h4>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navBody" aria-controls="navBody" aria-expanded="false">
+            <img src="../resources/images/glyphicons-517-menu-hamburger.png" alt="hamburger" class="invert-color" />
+        </button>
+        <div class="collapse navbar-collapse collapsible" id="navBody">
+            <form class="form-inline my-lg-0" id="searchFormGroup">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search an Event" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 search-by-ingredient" id="searchByIngredient" type="submit">
+                    <img src="../resources/images/glyphicons-28-search.png" class="invert-color" />
+                </button>
+            </form>
+            <ul class="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="modal" data-target="#addNewEvent" href="#">
+                        Add Event
+                        <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Add Center
+                        <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="modal fade" role="dialog" id="addNewEvent" tabindex="-1" aria-labelledby="addNewEventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="eventModal">
+                <div class="modal-header modalCustom">
+                    <h5 class="modal-title"><b>New Event</b></h5>
+                    <button class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body mx-sm-auto col-sm-9">
+                    <form role="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="eventname" />
+                                </span>
+                                <input type="text" placeholder="Event Name" name="eventname" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-46-calendar.png" alt="eventname" />
+                                </span>
+                                <input type="date" name="eventname" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <button type="button" class="btn-success"><img src="../resources/images/glyphicons-218-circle-arrow-right.png" alt="start" /></button>
+                                </span>
+                                <input type="time" name="start" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <button type="button" class="btn-danger"><img src="../resources/images/glyphicons-217-circle-arrow-left.png" alt="end" /></button>
+                                </span>
+                                <input type="time" name="end" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="control-label">Description</label>
+                            <textarea name="description" rows="2" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <button type="button" class="navbar-background"><img class="invert-color" src="../resources/images/glyphicons-28-search.png" alt="search" /></button>
+                                </span>
+                                <input name="description" class="form-control" placeholder="search center" />
+                            </div>
+                        </div>
+                        <div class="table-responsive centerSearch">
+                            <table class="table table-hover table">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Capacity</th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>House on the Rock</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">900</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Christ embassy hall</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">670</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>National Assembly</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">250</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>National Stadium</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">700</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button class="btn btn-success">Create</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- container -->
+    <div id="content" class="container custom-container">
+        <!--SIDE BAR-->
+        <div class="modal left fade" id="myModalSidebar" tabindex="-1" role="dialog" aria-labelledby="myModalSidebarLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content sidebar">
+                    <div class="modal-header  sidebar-header">
+                        <h5 class="modal-title">
+                            <b>Dashboard</b>
+                        </h5>
+                        <img class="invert-color close" data-dismiss="modal" src="../resources/images/glyphicons-198-remove-circle.png">
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav flex-column nav-tabs">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyEvents <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-619-mixed-buildings.png" alt="myEvents" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyCenters <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-503-map.png" alt="myCenters" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyProfile <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-4-user.png" alt="myProfile" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../index.html" class="nav-link">
+                                    <h6>Logout <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-64-power.png" alt="logout" /></h6>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+        <!-- Actual MyEvents Page -->
+        <div class="mx-sm-auto col-sm-11">
+            <ul class="nav nav-pills flex-column">
+                <li class="list-group-item sidebar-header text-center">
+                    <b>My Events</b>
+                    <input class="form-control" type="search" placeholder="Filter" aria-label="Search">
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class="col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="top-eight">
+                        <div class="col-sm-1 zero-padding">
+                            <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
+                        </div>
+                        <div class=" col-sm-5 zero-padding">
+                            <a href="#"><b>World Programmers forum</b></a><br />
+                        </div>
+                        <div class="col-sm-3 zero-padding">
+                            <p class="time">Ikeja, Lagos</p>
+                        </div>
+                        <div class="col-sm-3 zero-padding align-right">
+                            <p class="time">5th Dec, 2017</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="../resources/scripts/app.js"></script>
+</body>
+</html>
