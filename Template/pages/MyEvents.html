@@ -166,6 +166,43 @@
         .icon-margin-left {
             margin-left: 0.5em;
         }
+
+        .modalCustom {
+            text-align: center;
+            font-weight: bolder;
+            background-color: darkblue;
+            color: lightgreen;
+        }
+
+        .modalDivider {
+            border-bottom: inset;
+            border-bottom-width: thick;
+            padding-bottom: 0.5em;
+        }
+
+        .centerSearch {
+            height: 250px;
+            overflow-y: scroll;
+            width: 100%;
+            border-left: ridge;
+        }
+
+        .table-header {
+            background-color: grey;
+        }
+
+        .table {
+            background-color: white;
+        }
+
+        .badge {
+            color: black;
+            border: ridge;
+        }
+
+        #eventModal {
+            background-color: lightgreen;
+        }
     </style>
 </head>
 <body class="appBackground">
@@ -184,7 +221,7 @@
             </form>
             <ul class="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" data-toggle="modal" data-target="#addNewEvent" href="#">
                         Add Event
                         <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
                     </a>
@@ -198,6 +235,106 @@
             </ul>
         </div>
     </nav>
+    <div class="modal fade" role="dialog" id="addNewEvent" tabindex="-1" aria-labelledby="addNewEventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="eventModal">
+                <div class="modal-header modalCustom">
+                    <h5 class="modal-title"><b>New Event</b></h5>
+                    <button class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body mx-sm-auto col-sm-9">
+                    <form role="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="eventname" />
+                                </span>
+                                <input type="text" placeholder="Event Name" name="eventname" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-46-calendar.png" alt="eventname" />
+                                </span>
+                                <input type="date" name="eventname" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <button type="button" class="btn-success"><img src="../resources/images/glyphicons-218-circle-arrow-right.png" alt="start" /></button>
+                                </span>
+                                <input type="time" name="start" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <button type="button" class="btn-danger"><img src="../resources/images/glyphicons-217-circle-arrow-left.png" alt="end" /></button>
+                                </span>
+                                <input type="time" name="end" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="control-label">Description</label>
+                            <textarea name="description" rows="2" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <button type="button" class="navbar-background"><img class="invert-color" src="../resources/images/glyphicons-28-search.png" alt="search" /></button>
+                                </span>
+                                <input name="description" class="form-control" placeholder="search center" />
+                            </div>
+                        </div>
+                        <div class="table-responsive centerSearch">
+                            <table class="table table-hover table">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Capacity</th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>House on the Rock</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">900</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Christ embassy hall</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">670</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>National Assembly</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">250</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>National Stadium</td>
+                                        <td >Ikeja, Lagos</td>
+                                        <td><span class="badge">700</span></td>
+                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button class="btn btn-success">Create</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- container -->
     <div id="content" class="container custom-container">
         <!--SIDE BAR-->
@@ -265,7 +402,7 @@
                         <div class="col-sm-1 zero-padding">
                             <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="events" />
                         </div>
-                        <div class=" col-sm-5 zero-padding">
+                        <div class="col-sm-5 zero-padding">
                             <a href="#"><b>World Programmers forum</b></a><br />
                         </div>
                         <div class="col-sm-3 zero-padding">
