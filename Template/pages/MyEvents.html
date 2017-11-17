@@ -119,11 +119,59 @@
             background-color: darkblue;
         }
     </style>
+    <style>
+        /*sidebar style*/
+        .modal.left .modal-body,
+        .modal.right .modal-body {
+            padding: 15px 15px 80px;
+        }
+
+        .modal.left .modal-dialog {
+            margin: auto;
+            max-width: 25%;
+            transform: translate3d(0%, 0, 0);
+        }
+
+        .modal.left.fade .modal-dialog {
+            left: -38%;
+            transition: opacity 2s linear, left 2s ease-out;
+        }
+
+        .modal.left.fade.in .modal-dialog {
+            left: 0;
+        }
+
+        .modal-header {
+            border-bottom-color: #EEEEEE;
+            background-color: #FAFAFA;
+        }
+
+        .sidebar {
+            background-color: black;
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            width: 13em;
+        }
+
+        .sidebar-header {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        .sidebar-toggle {
+            margin-left: 0.5em;
+        }
+
+        .icon-margin-left {
+            margin-left: 0.5em;
+        }
+    </style>
 </head>
 <body class="appBackground">
     <nav class="navbar fixed-top navbar-expand-sm navbar-background">
+        <a href="#" data-toggle="modal" data-target="#myModalSidebar"><img src="../resources/images/glyphicons-517-menu-hamburger.png" class="invert-color sidebar-toggle" id="menu-toggle" /></a>
         <h4 class="appTitle">EventMgr</h4>
-        <!--<img src="../resources/images/log2.png" alt="eventManagerLogo" class="logo" />-->
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navBody" aria-controls="navBody" aria-expanded="false">
             <img src="../resources/images/glyphicons-517-menu-hamburger.png" alt="hamburger" class="invert-color" />
         </button>
@@ -152,6 +200,43 @@
     </nav>
     <!-- container -->
     <div id="content" class="container custom-container">
+        <!--SIDE BAR-->
+        <div class="modal left fade" id="myModalSidebar" tabindex="-1" role="dialog" aria-labelledby="myModalSidebarLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content sidebar">
+                    <div class="modal-header  sidebar-header">
+                        <h5 class="modal-title">
+                            <b>Dashboard</b>
+                        </h5>
+                        <img class="invert-color close" data-dismiss="modal" src="../resources/images/glyphicons-198-remove-circle.png">
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav flex-column nav-tabs">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyEvents <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-619-mixed-buildings.png" alt="myEvents" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyCenters <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-503-map.png" alt="myCenters" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyProfile <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-4-user.png" alt="myProfile" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../index.html" class="nav-link">
+                                    <h6>Logout <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-64-power.png" alt="logout" /></h6>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
         <!-- Actual MyEvents Page -->
         <div class="mx-sm-auto col-sm-11">
             <ul class="nav nav-pills flex-column">
