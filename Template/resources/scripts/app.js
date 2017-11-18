@@ -9,4 +9,10 @@ $(document).ready(() => {
             $('.paymentInput').hide();
         }
     });
+    $('.createEvent').click(() => {
+        window.location = 'MyEvents.html';
+    });
+    $('.createCenter').click(() => {
+        window.location = 'MyCenters.html';
+    });
 });
