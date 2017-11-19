@@ -17,15 +17,23 @@ $(document).ready(() => {
         }
     });
     $('#addEvent, #addCenter').click(() => {
-        $('.createEvent, .createCenter').text('Create');
-        $('.createEvent, .createCenter').click(() => {
+        $('.createCenter, .createEvent').text('Create');
+        $('.createCenter').click(() => {
             window.location = 'MyCenters.html';
+        });
+        $('.createEvent').click(() => {
+            window.location = 'MyEvents.html';
         });
     });
     // implement functionality to load ManageEvent page when myEvents table row is clicked
-    $('#editEvent').click(() => {
+    $('.event').click(() => {
+        window.location = 'ManageEvent.html';
+    });
+
+    $('#edit').click(() => {
         $('.createEvent, .createCenter').text('Save');
-        $('.createEvent, .createCenter').unbind();
-        // on click of .createEvent and .createCenter: close modal
+        $('.createEvent, .createCenter').click(() => {
+            $('#addNewEvent, #addNewCenter').modal('hide');
+        });
     });
 });
