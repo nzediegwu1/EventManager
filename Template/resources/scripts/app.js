@@ -9,10 +9,31 @@ $(document).ready(() => {
             $('.paymentInput').hide();
         }
     });
-    $('.createEvent').click(() => {
-        window.location = 'MyEvents.html';
+    $('#deleteEvent').click(() => {
+        const sure = confirm('Are you sure to delete event?');
+        if (sure) {
+            alert('Event Deleted');
+            window.location = 'MyEvents.html';
+        }
     });
-    $('.createCenter').click(() => {
-        window.location = 'MyCenters.html';
+    $('#addEvent, #addCenter').click(() => {
+        $('.createCenter, .createEvent').text('Create');
+        $('.createCenter').click(() => {
+            window.location = 'MyCenters.html';
+        });
+        $('.createEvent').click(() => {
+            window.location = 'MyEvents.html';
+        });
+    });
+    // implement functionality to load ManageEvent page when myEvents table row is clicked
+    $('.event').click(() => {
+        window.location = 'ManageEvent.html';
+    });
+
+    $('#edit').click(() => {
+        $('.createEvent, .createCenter').text('Save');
+        $('.createEvent, .createCenter').click(() => {
+            $('#addNewEvent, #addNewCenter').modal('hide');
+        });
     });
 });
