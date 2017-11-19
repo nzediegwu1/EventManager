@@ -217,13 +217,13 @@
             </form>
             <ul class="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#addNewEvent" href="#">
+                    <a id="addEvent" class="nav-link" data-toggle="modal" data-target="#addNewEvent" href="#">
                         Add Event
                         <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#addNewCenter" href="#">
+                    <a id="addCenter" class="nav-link" data-toggle="modal" data-target="#addNewCenter" href="#">
                         Add Center
                         <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
                     </a>
@@ -235,7 +235,7 @@
         <div class="modal-dialog">
             <div class="modal-content eventModal">
                 <div class="modal-header modalCustom">
-                    <h5 class="modal-title"><b>New Event</b></h5>
+                    <h5 class="modal-title" id="addNewEventTitle"><b>New Event</b></h5>
                     <button class="close text-white" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body mx-sm-auto col-sm-9">
@@ -343,7 +343,7 @@
         <div class="modal-dialog">
             <div class="modal-content eventModal">
                 <div class="modal-header modalCustom">
-                    <h5 class="modal-title"><b>New Center</b></h5>
+                    <h5 class="modal-title" id="addNewCenterTitle"><b>New Center</b></h5>
                     <button class="close text-white" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body mx-sm-auto col-sm-9">
@@ -514,25 +514,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr class="event">
                             <td><img class="center-image" src="../resources/images/rome.jpg" alt="center-view" /></td>
                             <td>World Programmers forum</td>
                             <td>Rome, Italy</td>
                             <td>5th Dec, 2017</td>
                         </tr>
-                        <tr>
+                        <tr class="event">
                             <td><img class="center-image" src="../resources/images/hongkong.jpg" alt="center-view" /></td>
                             <td>Andela Bootcamp</td>
                             <td>Epic Andela Tower, Lagos</td>
                             <td>20th Nov, 2017</td>
                         </tr>
-                        <tr>
+                        <tr class="event">
                             <td><img class="center-image" src="../resources/images/temple.jpg" alt="center-view" /></td>
                             <td>PSquare Concert</td>
                             <td>Istambul, turkey</td>
                             <td>25th Dec, 2017</td>
                         </tr>
-                        <tr>
+                        <tr class="event">
                             <td><img class="center-image" src="../resources/images/beijing.jpg" alt="center-view" /></td>
                             <td>WHO international convention</td>
                             <td>Beijing, China</td>
