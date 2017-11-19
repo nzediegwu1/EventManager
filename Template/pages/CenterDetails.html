@@ -196,8 +196,39 @@
             margin-bottom: 0.3em;
         }
 
-        .center-image {
-            width: 50px;
+        .mg-event-header {
+            background-color: darkblue;
+            color: white;
+            margin: auto;
+            width: 100%;
+        }
+
+        .card-header-body {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+
+        .card-image {
+            width: auto;
+            float: left;
+            margin-right: 1em;
+        }
+
+        .manage {
+            display: flex;
+            float: right;
+        }
+
+        .zero-padding {
+            padding: 0px;
+        }
+
+        @media screen and (max-width: 482px) {
+            .card-image {
+                width: 100%;
+                float: none;
+                margin: auto;
+            }
         }
     </style>
 </head>
@@ -495,51 +526,77 @@
                 </div><!-- modal-content -->
             </div><!-- modal-dialog -->
         </div><!-- modal -->
-        <!-- Actual MyEvents Page -->
-        <div class="mx-sm-auto col-sm-11">
-            <ul class="nav nav-pills flex-column">
-                <li class="list-group-item sidebar-header text-center">
-                    <b>My Centers</b>
-                    <input class="form-control" type="search" placeholder="Filter" aria-label="Search">
-                </li>
-            </ul>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-header">
-                        <tr>
-                            <th>View</th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Capacity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="center">
-                            <td><img class="center-image" src="../resources/images/rome.jpg" alt="center-view" /></td>
-                            <td>Napoli metropolitan</td>
-                            <td>Rome, Italy</td>
-                            <td><span class="badge">9000</span></td>
-                        </tr>
-                        <tr class="center">
-                            <td><img class="center-image" src="../resources/images/hongkong.jpg" alt="center-view" /></td>
-                            <td>Quin mansion</td>
-                            <td>Hongkong, China</td>
-                            <td><span class="badge">12,400</span></td>
-                        </tr>
-                        <tr class="center">
-                            <td><img class="center-image" src="../resources/images/temple.jpg" alt="center-view" /></td>
-                            <td>House on the Rock</td>
-                            <td>Istambul, turkey</td>
-                            <td><span class="badge">34,000</span></td>
-                        </tr>
-                        <tr class="center">
-                            <td><img class="center-image" src="../resources/images/beijing.jpg" alt="center-view" /></td>
-                            <td>Beijing concert hall</td>
-                            <td>Beijing, China</td>
-                            <td><span class="badge">15,000</span></td>
-                        </tr>
-                    </tbody>
+        <!-- Actual ManageEvents Page -->
+        <div class="card mx-sm-auto col-sm-11 zero-padding">
+            <div class="card-header mg-event-header card-header-body">
+                <table class="table-responsive col-sm-12 bg-transparent  zero-padding">
+                    <tr>
+                        <td><h4 class="text-center"><b>Andela Epic Tower</b></h4></td>
+                        <td>
+                            <div class="manage">
+                                <button type="submit" id="editCenter" class="btn btn-success" data-toggle="modal" data-target="#addNewCenter">
+                                    <img src="../resources/images/glyphicons-151-edit.png" alt="Edit" />
+                                </button>
+                                <button type="submit" class="btn btn-danger" id="deleteCenter">
+                                    <img src="../resources/images/glyphicons-198-remove-circle.png" alt="delete" />
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
+            </div>
+            <div class="card-body">
+                <div>
+                    <img class="card-image" src="../resources/images/beijing.jpg" alt="centerImage" />
+                    <blockquote class="blockquote mb-0">
+                        <h5><b>Street Address</b>: Anthony Layout</h5>
+                        <h5><b>Town</b>: Mainland</h5>
+                        <h5><b>City</b>: Lagos, Nigeria</h5>
+                        <h5><b>Capacity</b>: 5200</h5>
+                        <h5><b>Booking price</b>: N34,000</h5>
+                    </blockquote>
+                </div><br />
+                <div class="table-responsive">
+                    <table class="table table-hover table">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Facility</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Projector</td>
+                                <td><span class="badge">150</span></td>
+                            </tr>
+                            <tr>
+                                <td>Backup power</td>
+                                <td><span class="badge">450</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sound system</td>
+                                <td><span class="badge">200</span></td>
+                            </tr>
+                            <tr>
+                                <td>Smart lighting</td>
+                                <td><span class="badge">385</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-muted mg-event-header">
+                <div class="row text-white">
+                    <div class="col-sm-4">
+                        <img class="invert-color" src="../resources/images/glyphicons-46-calendar.png" /> Date: 20th December, 2017
+                    </div>
+                    <div class="col-sm-4">
+                        <img class="invert-color" src="../resources/images/glyphicons-218-circle-arrow-right.png" /> Start Time: 8:30 AM
+                    </div>
+                    <div class="col-sm-4">
+                        <img class="invert-color" src="../resources/images/glyphicons-217-circle-arrow-left.png" /> End Time: 4:00 PM
+                    </div>
+                </div>
             </div>
         </div>
     </div>
