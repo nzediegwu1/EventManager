@@ -1,4 +1,4 @@
-﻿/// <reference path="jquery.js" />
+/// <reference path="jquery.js" />
 /// <reference path="bootstrap.js" />
 $(document).ready(() => {
     $('#accountType').change(() => {
