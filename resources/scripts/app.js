@@ -60,5 +60,4 @@ $(document).ready(() => {
             $('#addNewCenter').modal('hide');
         });
     });
-
 });
