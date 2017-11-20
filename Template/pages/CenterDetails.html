@@ -14,7 +14,6 @@
                 display: none;
             }
         }
-
         .form-control {
             position: relative;
             font-size: 16px;
@@ -209,9 +208,8 @@
         }
 
         .card-image {
-            width: auto;
-            float: left;
-            margin-right: 1em;
+            width: 100%;
+            border-radius:1em;
         }
 
         .manage {
@@ -221,14 +219,6 @@
 
         .zero-padding {
             padding: 0px;
-        }
-
-        @media screen and (max-width: 482px) {
-            .card-image {
-                width: 100%;
-                float: none;
-                margin: auto;
-            }
         }
     </style>
 </head>
@@ -546,16 +536,21 @@
                 </table>
             </div>
             <div class="card-body">
-                <div>
-                    <img class="card-image" src="../resources/images/beijing.jpg" alt="centerImage" />
-                    <blockquote class="blockquote mb-0">
-                        <h5><b>Street Address</b>: Anthony Layout</h5>
-                        <h5><b>Town</b>: Mainland</h5>
-                        <h5><b>City</b>: Lagos, Nigeria</h5>
-                        <h5><b>Capacity</b>: 5200</h5>
-                        <h5><b>Booking price</b>: N34,000</h5>
-                    </blockquote>
-                </div><br />
+                <div class="row">
+                    <div class="col-sm-4">
+                        <img id="cardImage" class="card-image" src="../resources/images/beijing.jpg" alt="centerImage" />
+                    </div>
+                    <div class="col-sm-8">
+                        <blockquote class="blockquote mb-0">
+                            <h5><b>Street Address</b>: Anthony Layout</h5>
+                            <h5><b>Town</b>: Mainland</h5>
+                            <h5><b>City</b>: Lagos, Nigeria</h5>
+                            <h5><b>Capacity</b>: 5200</h5>
+                            <h5><b>Booking price</b>: N34,000</h5>
+                        </blockquote>
+                    </div>
+                </div>
+                <br />
                 <div class="table-responsive">
                     <table class="table table-hover table">
                         <thead class="table-header">

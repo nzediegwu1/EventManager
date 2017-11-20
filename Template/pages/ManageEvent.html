@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title></title>
@@ -14,6 +14,12 @@
                 display: none;
             }
         }
+        .card-image {
+            width: 100%;
+            border-radius:1em;
+        }
+
+
 
         .form-control {
             position: relative;
@@ -206,12 +212,6 @@
         .card-header-body {
             padding-left: 0.5em;
             padding-right: 0.5em;
-        }
-
-        .card-image {
-            width: auto;
-            float: left;
-            margin-right: 1em;
         }
 
         .manage {
@@ -538,19 +538,23 @@
                 </table>
             </div>
             <div class="card-body">
-                <div>
-                    <img class="card-image" src="../resources/images/beijing.jpg" alt="eventImage" />
-                    <blockquote class="blockquote mb-0">
-                        <b>Description</b>: class is little more than syntactic sugar over the prototype-based behavior delegation capabilities we've had all along. This article will take a close look at the basic use of ES2015's class keyword, from the perspective of its relation to prototypes. We'll cover:
+                <div class="row">
+                    <div class="col-sm-4">
+                        <img class="card-image" src="../resources/images/beijing.jpg" alt="eventImage" />
+                    </div>
+                    <div class="col-sm-8">
+                        <blockquote class="blockquote mb-0">
+                            <b>Description</b>: class is little more than syntactic sugar over the prototype-based behavior delegation capabilities we've had all along. This article will take a close look at the basic use of ES2015's class keyword, from the perspective of its relation to prototypes. We'll cover:
 
-                        Defining and instantiating classes;
-                        Creating subclasses with extends;
-                        super calls from subclasses; and
-                        Examples of important symbol methods.
-                        Along the way, we'll pay special attention to how class maps to prototype-based code under the hood.
-                    </blockquote>
+                            Defining and instantiating classes;
+                            Creating subclasses with extends;
+                            super calls from subclasses; and
+                            Examples of important symbol methods.
+                            Along the way, we'll pay special attention to how class maps to prototype-based code under the hood.
+                        </blockquote><br />
+                        <h5 class="text-center"> <b>Address: Andela Epic Tower, Lagos, Nigeria</b></h5>
+                    </div>
                 </div>
-                <h5> <b>Address: Andela Epic Tower, Lagos, Nigeria</b></h5>
             </div>
             <div class="card-footer text-muted mg-event-header">
                 <div class="row text-white">
