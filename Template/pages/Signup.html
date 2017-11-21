@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <link href="../resources/styles/bootstrap.css" rel="stylesheet" />
+    <script src="../resources/scripts/jquery.js"></script>
+    <script src="../resources/scripts/popper.min.js"></script>
+    <script src="../resources/scripts/bootstrap.js"></script>
+    <style>
+        .background-image {
+            background: url(../resources/images/2012_gala_tent.jpg) center center no-repeat fixed;
+            background-size: cover;
+            background-color: lightgreen;
+        }
+
+        #loginPanel {
+            margin-top: 2em;
+            background-color: darkblue;
+            border-radius: 1em;
+            box-shadow: 7px 7px 10px white;
+        }
+
+        .form-links {
+            text-align: center;
+        }
+
+            .form-links a {
+                color: white;
+            }
+
+        .main-title {
+            font-family: 'Aclonica';
+            font-size: 2.5em;
+            color: white;
+            font-weight: bolder;
+            box-shadow: 10px 10px 20px orange;
+        }
+
+        .panel-font {
+            font-family: 'Aclonica';
+        }
+
+        #titleDiv {
+            text-align: center;
+            margin-top: 1em;
+        }
+
+        .formDiv {
+            color: white;
+            padding-top: 1em;
+            padding-bottom: 2em;
+            width: 80%;
+            margin: auto;
+        }
+
+        .btn-block {
+            margin-top: 1em;
+        }
+
+        .send-password {
+            background-color: darkslategray;
+        }
+
+        label {
+            padding-top: 0.4em;
+            margin-left: 0.5em;
+        }
+
+        @media screen and (max-width: 780px) {
+            .formDiv {
+                width: 100%;
+            }
+        }
+        .paymentInput{
+            display:none;
+        }
+    </style>
+</head>
+<body class="background-image">
+    <div class="container">
+        <div id="titleDiv">
+            <h2 class="main-title">EventManager</h2>
+        </div>
+        <div id="loginPanel" class="mx-sm-auto col-sm-6">
+            <form role="form" action="../index.html" class="formDiv">
+                <h3 class="text-center panel-font"><b>Register</b></h3>
+                <br />
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-522-user-lock.png" alt="username" />
+                        </span>
+                        <input type="text" name="username" placeholder="Username" required class="form-control input-lg" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-4-user.png" alt="name" />
+                        </span>
+                        <input type="text" name="name" placeholder="Full name" required class="form-control input-lg" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-11-envelope.png" alt="email" />
+                        </span>
+                        <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-442-phone-alt.png" alt="phone" />
+                        </span>
+                        <input type="number" name="phone" placeholder="Phone number" class="form-control input-lg" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-500-family.png" alt="accountType" />
+                        </span>
+                        <select id="accountType">
+                            <option value="ordinary">Ordinary</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <label class="form-control-label"><b>Account Type</b></label>
+                    </div>
+                </div>
+                <div class="form-group paymentInput">
+                    <p class="text-center">Pay $50 to:</p>
+                    <input type="text" name="bitcoin" value="1JBAidrXcYd4rWq8zPHYPGCejfJioV51Vm" disabled class="form-control form-control-sm" />
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-548-bitcoin.png" alt="phone" />
+                        </span>
+                        <input type="text" name="bitcoin" placeholder="Enter transaction id" required class="form-control input-lg" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-204-lock.png" alt="password" />
+                        </span>
+                        <input type="password" class="form-control input-lg" id="password" placeholder="Password" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <img src="../resources/images/glyphicons-204-lock.png" alt="password" />
+                        </span>
+                        <input type="password" class="form-control input-lg" id="rePassword" placeholder="Re-enter Password" required />
+                    </div>
+                </div>
+                <a href="../index.html" class="btn btn-lg btn-primary btn-block submitButton">Signup</a>
+                <div class="form-links">
+                    <a href="../index.html">Already have an account? Signin</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../resources/scripts/app.js"></script>
+</body>
+</html>
