@@ -23,32 +23,31 @@ class Validator {
             return true;
         };
 
+        // copied from stack-overflow: https://stackoverflow.com/questions/2048460/javascript-function-to-validate-time-0000-with-regular-expression
+        this.formatTime = (time) => {
+            let result = false, m;
+            const re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
+            if ((m = time.match(re))) {
+                result = (m[1].length === 2 ? '' : '0') + m[1] + ':' + m[2];
+            }
+            return result;
+        };
+
         this.verifyEvent = (req, res, next) => {
-            if (req.body.title === undefined) {
-                this.verificationError = this.errorMessage('Event has no title', res);
-            } else if (req.body.date === undefined) {
-                this.verificationError = this.errorMessage('Event has no date', res);
-            } else if (req.body.time === undefined) {
-                this.verificationError = this.errorMessage('Event has no time', res);
-            } else if (req.body.venue === undefined) {
-                this.verificationError = this.errorMessage('Event has no venue', res);
-            } else if (req.body.description === undefined) {
-                this.verificationError = this.errorMessage('Event has no description', res);
-                // CAUSES INEXPLICABLE ERROR
-            }/* else  if (typeof req.body.title !== 'string' || req.body.title.trim().length === 0) {
-                this.verificationError = this.errorMessage('Event title is empty string');
-            }/* else if (Date.parse(req.body.date) !== true) {
-                this.verificationError = this.errorMessage('Event date in incorrect format');
-            } else if (typeof req.body.time !== 'string'
-            || req.body.time.trim().length === 0) {
-                this.verificationError = this.errorMessage('Event time in incorrect format', res);
-            } else if (typeof req.body.venue !== 'string'
-            || req.body.time.trim().venue === 0) {
-                this.verificationError = this.errorMessage('Event venue should be a string', res);
-            } else if (typeof req.body.description !== 'string'
-            || req.body.time.trim().description === 0) {
-                this.verificationError = this.errorMessage('Event description should be string', res);
-            } */ else {
+            if (req.body.title === undefined || typeof req.body.title !== 'string'
+                || req.body.title.trim().length === 0) {
+                this.verificationError = this.errorMessage('Event has none or invalid title field', res);
+            } else if (req.body.date === undefined || isNaN(Date.parse(req.body.date))) {
+                this.verificationError = this.errorMessage('Event has none or invalid date field', res);
+            } else if (req.body.time === undefined || !this.formatTime(req.body.time)) {
+                this.verificationError = this.errorMessage('Event has none or invalid time field', res);
+            } else if (req.body.venue === undefined || typeof req.body.venue !== 'string'
+            || req.body.venue.trim().length === 0) {
+                this.verificationError = this.errorMessage('Event has none or invalid venue field', res);
+            } else if (req.body.description === undefined || typeof req.body.description !== 'string'
+            || req.body.description.trim().length === 0) {
+                this.verificationError = this.errorMessage('Event has none or invalid description field', res);
+            } else {
                 next();
             }
             return this.verificationError;
