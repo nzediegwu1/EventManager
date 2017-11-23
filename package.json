@@ -2,7 +2,7 @@
   "name": "event-manager",
   "version": "1.0.0",
   "description": "Event manager application",
-  "main": "server/bin",
+  "main": "Server/bin",
   "scripts": {
     "start": "nodemon ./Server/dist/bin/server.js",
     "build": "babel Server -d Server/dist --ignore Server/dist",
