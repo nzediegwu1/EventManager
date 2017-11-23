@@ -29,7 +29,7 @@ class Centers {
                 const itemId = models.indexOf(center);
                 if (parseInt(centerId) === itemId) {
                     models[itemId] = req.body;
-                    return validator.response(res, 'success', 201, models[itemId]);
+                    return validator.response(res, 'success', 200, models[itemId]);
                 }
             });
             return validator.response(res, 'error', 400, 'No such center found');
@@ -44,6 +44,22 @@ class Centers {
         }
         return validator.response(res, 'error', 400, 'No centers available');
     }
+
+    // get center details
+    getCenterDetails(req, res) {
+        if (validator.confirmParams(req, res)) {
+            const centerId = req.params.id;
+            models.forEach(center => {
+                const itemId = models.indexOf(center);
+                if (parseInt(centerId) === itemId) {
+                    return validator.response(res, 'success', 200, models[itemId]);
+                }
+            });
+            return validator.response(res, 'error', 400, 'No such center found');
+        }
+        return validator.confirmParams(req, res);
+    }
+
 }
 
 const centers = new Centers();
