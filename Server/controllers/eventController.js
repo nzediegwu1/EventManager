@@ -24,7 +24,7 @@ class Events {
     // modify an event
     modifyEvent(req, res) {
         if (validator.confirmParams(req, res)) {
-            let eventid = req.params.id;
+            const eventid = req.params.id;
             models.forEach(event => {
                 if (parseInt(eventid) === models.indexOf(event)) {
                     event = req.body;
@@ -39,7 +39,7 @@ class Events {
     // delete an event
     deleteEvent(req, res) {
         if (validator.confirmParams(req, res)) {
-            let eventid = req.params.id;
+            const eventid = req.params.id;
             models.forEach(event => {
                 if (parseInt(eventid) === models.indexOf(event)) {
                     models.splice(models.indexOf(event), 1);
