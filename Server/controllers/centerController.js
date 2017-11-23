@@ -26,14 +26,23 @@ class Centers {
         if (validator.confirmParams(req, res)) {
             const centerId = req.params.id;
             models.forEach(center => {
-                if (parseInt(centerId) === models.indexOf(center)) {
-                    center = req.body;
-                    return validator.response(res, 'success', 201, center);
+                let itemId = models.indexOf(center);
+                if (parseInt(centerId) === itemId) {
+                    models[itemId] = req.body;
+                    return validator.response(res, 'success', 201, models[itemId]);
                 }
             });
             return validator.response(res, 'error', 400, 'No such center found');
         }
         return validator.confirmParams(req, res);
+    }
+
+    // get all centers
+    getAllCenters(req, res) {
+        if (models.length !== 0) {
+            return validator.response(res, 'success', 200, models);
+        }
+        return validator.response(res, 'error', 400, 'No centers available');
     }
 }
 

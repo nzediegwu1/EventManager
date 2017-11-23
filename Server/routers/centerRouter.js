@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.post('/', Validator.verify, Centers.addCenter);
 router.put('/:id', Validator.verify, Centers.modifyCenter);
+router.get('/', Centers.getAllCenters); // no validation required
 
 export default router;

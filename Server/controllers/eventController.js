@@ -26,9 +26,10 @@ class Events {
         if (validator.confirmParams(req, res)) {
             const eventid = req.params.id;
             models.forEach(event => {
-                if (parseInt(eventid) === models.indexOf(event)) {
-                    event = req.body;
-                    return validator.response(res, 'success', 201, event);
+                let itemId = models.indexOf(event);
+                if (parseInt(eventid) === itemId) {
+                    models[itemId] = req.body;
+                    return validator.response(res, 'success', 201, models[itemId]);
                 }
             });
             return validator.response(res, 'error', 400, 'No such event found');
