@@ -26,7 +26,7 @@ class Centers {
         if (validator.confirmParams(req, res)) {
             const centerId = req.params.id;
             models.forEach(center => {
-                let itemId = models.indexOf(center);
+                const itemId = models.indexOf(center);
                 if (parseInt(centerId) === itemId) {
                     models[itemId] = req.body;
                     return validator.response(res, 'success', 201, models[itemId]);

@@ -21,12 +21,13 @@ class Events {
         }
     }
 
+
     // modify an event
     modifyEvent(req, res) {
         if (validator.confirmParams(req, res)) {
             const eventid = req.params.id;
             models.forEach(event => {
-                let itemId = models.indexOf(event);
+                const itemId = models.indexOf(event);
                 if (parseInt(eventid) === itemId) {
                     models[itemId] = req.body;
                     return validator.response(res, 'success', 201, models[itemId]);
