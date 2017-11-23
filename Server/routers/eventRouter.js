@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.post('/', Validator.verify, Events.addEvent);
 router.put('/:id', Validator.verify, Events.modifyEvent);
+router.delete('/:id', Validator.verify, Events.deleteEvent);
 
 export default router;
