@@ -87,10 +87,12 @@ class Validator {
                 || req.body.location.trim().length === 0) {
                 this.verificationError = this.errorMessage('Center has none or invalid location field', res);
                 // validate center capacity
-            } else if (req.body.capacity === undefined || isNaN(req.body.capacity)) {
+            } else if (req.body.capacity === undefined || isNaN(req.body.capacity)
+                || req.body.capacity.trim().length === 0) {
                 this.verificationError = this.errorMessage('Center has none or invalid capacity field', res);
                 // validate center price
-            } else if (req.body.price === undefined || isNaN(req.body.price)) {
+            } else if (req.body.price === undefined || isNaN(req.body.price)
+                || req.body.price.trim().length === 0) {
                 this.verificationError = this.errorMessage('Center has none or invalid price field', res);
                 // validate that extra fields are not contained in request:
                 // can be removed when sequelize model is integrated

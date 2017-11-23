@@ -20,6 +20,21 @@ class Centers {
             return validator.response(res, 'error', 500, 'A server error occured');
         }
     }
+
+    // modify an event
+    modifyCenter(req, res) {
+        if (validator.confirmParams(req, res)) {
+            const centerId = req.params.id;
+            models.forEach(center => {
+                if (parseInt(centerId) === models.indexOf(center)) {
+                    center = req.body;
+                    return validator.response(res, 'success', 201, center);
+                }
+            });
+            return validator.response(res, 'error', 400, 'No such center found');
+        }
+        return validator.confirmParams(req, res);
+    }
 }
 
 const centers = new Centers();
