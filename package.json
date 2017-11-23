@@ -4,11 +4,11 @@
   "description": "Event manager application",
   "main": "server/bin",
   "scripts": {
-    "start": "nodemon ./server/dist/bin/server.js",
-    "build": "babel ./server -d ./server/dist --ignore ./server/dist",
+    "start": "nodemon ./Server/dist/bin/server.js",
+    "build": "babel Server -d Server/dist --ignore Server/dist",
     "postinstall": "npm run build",
-    "start:dev": "nodemon --watch server/ --exec babel-node  -- server/bin/server.js",
-    "test": "nyc --reporter=html --reporter=text mocha ./server/tests/ --compilers js:babel-register",
+    "start:dev": "nodemon --watch Server/ --exec babel-node  -- Server/bin/server.js",
+    "test": "nyc --reporter=html --reporter=text mocha ./Server/tests/ --compilers js:babel-register",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test"
   },

@@ -8,13 +8,13 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.resolve('./././template')));
+app.use(express.static(path.resolve('./././Template')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('./././template/index.html'));
+    res.sendFile(path.resolve('./././Template/index.html'));
 });
 
 export default app;
