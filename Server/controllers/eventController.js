@@ -52,6 +52,12 @@ class Events {
         }
         return validator.confirmParams(req, res);
     }
+    getEvents(req, res) {
+        if (models.length !== 0) {
+            return validator.response(res, 'success', 200, models);
+        }
+        return validator.response(res, 'error', 400, 'No events available');
+    }
 }
 
 const events = new Events();
