@@ -64,7 +64,7 @@ class Validator {
             || req.body.description.trim().length === 0) {
                 this.verificationError = this.errorMessage('Event has none or invalid description field', res);
                 // validate that extra fields are not contained in request:
-                // to be removed when sequelize model is integrated
+                // can be removed when sequelize model is integrated
             } else if (Object.keys(req.body).length !== 5) {
                 this.verificationError = this.errorMessage('Request body contain invalid fields', res);
             } else {
@@ -93,7 +93,7 @@ class Validator {
             } else if (req.body.price === undefined || isNaN(req.body.price)) {
                 this.verificationError = this.errorMessage('Center has none or invalid price field', res);
                 // validate that extra fields are not contained in request:
-                // to be removed when sequelize model is integrated
+                // can be removed when sequelize model is integrated
             } else if (Object.keys(req.body).length !== 5) {
                 this.verificationError = this.errorMessage('Request body contain invalid fields', res);
             } else {
