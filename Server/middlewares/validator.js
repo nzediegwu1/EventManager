@@ -20,7 +20,7 @@
             return res.status(statusCode).json({ status: 'error', message: value });
         };
 
-        // copied from stack-overflow: https://stackoverflow.com/questions/2048460/javascript-function-to-validate-time-0000-with-regular-expression
+        // validate time
         this.formatTime = (time) => {
             let result = false, m;
             const re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
