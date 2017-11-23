@@ -4,7 +4,7 @@ import val from '../middlewares/validator';
 const validator = new val('events');
 
 class Events {
-
+    // add an event
     addEvent(req, res) {
         try {
             // implement check for if such event already exists
@@ -17,10 +17,11 @@ class Events {
             models.push(req.body);
             return validator.response(res, 'success', 201, req.body);
         } catch (e) {
-            return validator.response(res, 'error', 500, 'An error occured');
+            return validator.response(res, 'error', 500, 'A server error occured');
         }
     }
 
+    // modify an event
     modifyEvent(req, res) {
         if (validator.confirmParams(req, res)) {
             let eventid = req.params.id;
@@ -34,6 +35,22 @@ class Events {
         }
         return validator.confirmParams(req, res);
     }
+
+    // delete an event
+    deleteEvent(req, res) {
+        if (validator.confirmParams(req, res)) {
+            let eventid = req.params.id;
+            models.forEach(event => {
+                if (parseInt(eventid) === models.indexOf(event)) {
+                    models.splice(models.indexOf(event), 1);
+                    return validator.response(res, 'success', 200, event);
+                }
+            });
+            return validator.response(res, 'error', 400, 'Attempt to delete unexisting event');
+        }
+        return validator.confirmParams(req, res);
+    }
 }
+
 const events = new Events();
 export default events;
