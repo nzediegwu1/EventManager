@@ -1,5 +1,4 @@
-﻿const validator = require('validator');
-class Validator {
+﻿class Validator {
     constructor(model) {
         this.model = model;
         this.invalidParameter = {};
