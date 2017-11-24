@@ -9,3 +9,5 @@
 /node_modules
 /server/typings
 /Server/dist
+/.nyc_output
+/coverage
