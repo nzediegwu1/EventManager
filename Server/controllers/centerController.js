@@ -11,11 +11,20 @@ class Centers {
             for (let i = 0; i < models.length; i++) {
                 if (models[i].name === req.body.name && models[i].address === req.body.address
                     && models[i].location === req.body.location) {
-                    return validator.response(res, 'error', 401, 'Center already Exists');
+                    // not acceptabe
+                    return validator.response(res, 'error', 406, 'Center already Exists');
                 }
             }
-            models.push(req.body);
-            return validator.response(res, 'success', 201, req.body);
+            const { name, address, location, capacity, price } = req.body;
+            const newEntry = {
+                name,
+                address,
+                location,
+                capacity: parseInt(capacity),
+                price: parseInt(price),
+            };
+            models.push(newEntry);
+            return validator.response(res, 'success', 201, models[models.length - 1]);
         } catch (e) {
             return validator.response(res, 'error', 500, 'A server error occured');
         }
@@ -28,11 +37,20 @@ class Centers {
             models.forEach(center => {
                 const itemId = models.indexOf(center);
                 if (parseInt(centerId) === itemId) {
-                    models[itemId] = req.body;
+                    const { name, address, location, capacity, price } = req.body;
+                    const newEntry = {
+                        name,
+                        address,
+                        location,
+                        capacity: parseInt(capacity),
+                        price: parseInt(price),
+                    };
+
+                    models[itemId] = newEntry;
                     return validator.response(res, 'success', 200, models[itemId]);
                 }
             });
-            return validator.response(res, 'error', 400, 'No such center found');
+            return validator.response(res, 'error', 404, 'No such center found');
         }
         return validator.confirmParams(req, res);
     }
@@ -42,7 +60,7 @@ class Centers {
         if (models.length !== 0) {
             return validator.response(res, 'success', 200, models);
         }
-        return validator.response(res, 'error', 400, 'No centers available');
+        return validator.response(res, 'error', 200, 'No centers available');
     }
 
     // get center details
@@ -55,7 +73,7 @@ class Centers {
                     return validator.response(res, 'success', 200, models[itemId]);
                 }
             });
-            return validator.response(res, 'error', 400, 'No such center found');
+            return validator.response(res, 'error', 404, 'No such center found');
         }
         return validator.confirmParams(req, res);
     }

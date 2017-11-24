@@ -11,11 +11,19 @@ class Events {
             for (let i = 0; i < models.length; i++) {
                 if (models[i].title === req.body.title && models[i].date === req.body.date
                     && models[i].venue === req.body.venue) {
-                    return validator.response(res, 'error', 401, 'Event already Exists');
+                    return validator.response(res, 'error', 400, 'Event already Exists');
                 }
             }
-            models.push(req.body);
-            return validator.response(res, 'success', 201, req.body);
+            const { title, date, time, venue, description } = req.body;
+            const newEntry = {
+                title,
+                date,
+                time,
+                venue,
+                description,
+            };
+            models.push(newEntry);
+            return validator.response(res, 'success', 201, models[models.length - 1]);
         } catch (e) {
             return validator.response(res, 'error', 500, 'A server error occured');
         }
@@ -29,11 +37,19 @@ class Events {
             models.forEach(event => {
                 const itemId = models.indexOf(event);
                 if (parseInt(eventid) === itemId) {
-                    models[itemId] = req.body;
-                    return validator.response(res, 'success', 201, models[itemId]);
+                    const { title, date, time, venue, description } = req.body;
+                    const newEntry = {
+                        title,
+                        date,
+                        time,
+                        venue,
+                        description,
+                    };
+                    models[itemId] = newEntry;
+                    return validator.response(res, 'success', 202, models[itemId]); // accepted
                 }
             });
-            return validator.response(res, 'error', 400, 'No such event found');
+            return validator.response(res, 'error', 404, 'No such event found');
         }
         return validator.confirmParams(req, res);
     }
@@ -45,7 +61,7 @@ class Events {
             models.forEach(event => {
                 if (parseInt(eventid) === models.indexOf(event)) {
                     models.splice(models.indexOf(event), 1);
-                    return validator.response(res, 'success', 200, event);
+                    return validator.response(res, 'success', 200, 'Successfully deleted');
                 }
             });
             return validator.response(res, 'error', 400, 'Attempt to delete unexisting event');
@@ -56,7 +72,7 @@ class Events {
         if (models.length !== 0) {
             return validator.response(res, 'success', 200, models);
         }
-        return validator.response(res, 'error', 400, 'No events available');
+        return validator.response(res, 'error', 200, 'No events available');
     }
 }
 

@@ -7,7 +7,7 @@ import centers from './routers/centerRouter';
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('./././Template')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
