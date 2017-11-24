@@ -20,7 +20,7 @@
             return res.status(statusCode).json({ status: 'error', message: value });
         };
 
-        // validate time
+        // validate time using 24-hours format 00:00
         this.formatTime = (time) => {
             let result = false, m;
             const re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
