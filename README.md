@@ -3,9 +3,9 @@
 
 Given you manage an events center, this app will help you accept applications to use your center/facilities, and will either decline events when the proposed day is already taken, or suggest an available day
 
-######App's Link: https://eventmanager29.herokuapp.com 
+###### App's Link: https://eventmanager29.herokuapp.com 
 <hr>
-##TECHNOLOGIES USED
+## TECHNOLOGIES USED
 
   *Front-end: React/Redux + Bootstrap (Yet to be Implemented)
   *Back-end: Node/Expressjs + Sequelize/Postgres
@@ -35,7 +35,7 @@ To test, run:
 
 ``` npm test  ```
 
-##API ENDPOINTS
+## API ENDPOINTS
 <hr>
 <table>
   <tr>
