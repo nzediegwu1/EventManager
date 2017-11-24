@@ -5,12 +5,13 @@ Given you manage an events center, this app will help you accept applications to
 
 ###### App's Link: https://eventmanager29.herokuapp.com 
 <hr>
+
 ## TECHNOLOGIES USED
 
-  *Front-end: React/Redux + Bootstrap (Yet to be Implemented)
-  *Back-end: Node/Expressjs + Sequelize/Postgres
-  *Libraries: nodemon, Babel, eslint, etc.
-  *Test: Mocha/Chai
+  * Front-end: React/Redux + Bootstrap (Yet to be Implemented)
+  * Back-end: Node/Expressjs + Sequelize/Postgres
+  * Libraries: nodemon, Babel, eslint, etc.
+  * Test: Mocha/Chai
 
 
 ## Setup guide Clone this repository  To install all dependencies, run;
@@ -91,4 +92,3 @@ To test, run:
       <td>Get all events</td>
   </tr>
 </table>
-
