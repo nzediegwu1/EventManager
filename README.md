@@ -14,7 +14,7 @@ Given you manage an events center, this app will help you accept applications to
   * Test: Mocha/Chai
 
 
-## Setup guide Clone this repository  To install all dependencies, run;
+## Setup guide: Clone this repository. To install all dependencies, run;
 
 
 
@@ -26,7 +26,7 @@ To start server, run:
 
 
 
-``` npm start  ```
+``` npm run start:dev  ```
 
 
 
