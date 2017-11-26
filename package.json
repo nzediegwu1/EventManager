@@ -37,7 +37,9 @@
     "babel-register": "^6.26.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2"
   },
   "devDependencies": {
     "chai-http": "^3.0.0",
