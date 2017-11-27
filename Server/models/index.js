@@ -11,7 +11,7 @@ const db = {};
 let sequelize;
 
 if (config.use_env_variable) {
-  sequelize = new Sequelize(config.use_env_variable);
+  sequelize = new Sequelize('postgres://xcnwqlat:zmYX6GdPo_2tzznPiKoYSCbfPXp_Cci7@baasu.db.elephantsql.com:5432/xcnwqlat'); // config.use_env_variable
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }

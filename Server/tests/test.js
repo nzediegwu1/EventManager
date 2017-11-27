@@ -45,7 +45,7 @@ describe('Tests for EventRouter', () => {
           done();
       });
   });
-  
+
   it('Should test modifyEvent 202 success response status code', (done) => {
       chai.request(app)
         .put('/api/v1/events/0')
