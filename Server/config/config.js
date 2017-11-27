@@ -1,6 +1,6 @@
 ﻿require('dotenv').config();
 
-const databaseUrl = process.env.DATABASE_URL;
+// const databaseUrl = process.env.DATABASE_URL;
 
 module.exports = {
   development: {
@@ -18,7 +18,7 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    use_env_variable: databaseUrl,
+    use_env_variable: 'postgres://xcnwqlat:zmYX6GdPo_2tzznPiKoYSCbfPXp_Cci7@baasu.db.elephantsql.com:5432/xcnwqlat',
     dialect: 'postgres',
   },
 };
