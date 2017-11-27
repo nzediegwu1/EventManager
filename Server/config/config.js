@@ -18,7 +18,10 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    use_env_variable: databaseUrl,
+    username: 'xcnwqlat',
+    password: 'zmYX6GdPo_2tzznPiKoYSCbfPXp_Cci7',
+    database: 'xcnwqlat',
+    host: 'baasu.db.elephantsql.com',
     dialect: 'postgres',
   },
 };
