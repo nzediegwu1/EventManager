@@ -1,7 +1,5 @@
 ﻿require('dotenv').config();
 
-const databaseUrl = process.env.DATABASE_URL;
-
 module.exports = {
   development: {
     username: 'admin',
@@ -18,10 +16,7 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    username: 'xcnwqlat',
-    password: 'zmYX6GdPo_2tzznPiKoYSCbfPXp_Cci7',
-    database: 'xcnwqlat',
-    host: 'baasu.db.elephantsql.com',
-    dialect: 'postgres',
+      use_env_variable: process.env.DATABASE_URL,
+      dialect: 'postgres',
   },
 };
