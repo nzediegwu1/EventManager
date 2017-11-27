@@ -3,6 +3,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import events from './routers/eventRouter';
 import centers from './routers/centerRouter';
+import users from './routers/userRouter';
 
 const app = express();
 
@@ -11,10 +12,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('./././Template')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
+app.use('/api/v1/users', users);
 
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve('./././Template/index.html'));
+    res.sendFile(path.resolve('./././Template/index.html'));
 });
 
 export default app;
