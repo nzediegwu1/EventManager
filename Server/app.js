@@ -14,7 +14,7 @@ app.use('/api/v1/centers', centers);
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('./././Template/index.html'));
+  res.sendFile(path.resolve('./././Template/index.html'));
 });
 
 export default app;
