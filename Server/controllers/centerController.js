@@ -34,14 +34,8 @@ class Centers {
                 const itemId = models.indexOf(center);
                 if (parseInt(centerId) === itemId) {
                     const { name, address, location, capacity, price } = req.body;
-                    const newEntry = {
-                        name,
-                        address,
-                        location,
-                        capacity: parseInt(capacity),
-                        price: parseInt(price),
-                    };
-
+                    const newEntry = { name, address, location,
+                        capacity: parseInt(capacity), price: parseInt(price) };
                     models[itemId] = newEntry;
                     return validator.response(res, 'success', 200, models[itemId]);
                 }
