@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exorts = {
+module.exports = {
 	"config": path.resolve('./Server/config', 'config.js'),
 	"models-path": path.resolve('./Server/models'),
 	"seeders-path": path.resolve('./Server/seeders'),

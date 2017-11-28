@@ -8,8 +8,8 @@ class Centers {
     // add an event
     addCenter(req, res) {
         return model.findAll()
-            .then(centers => {
-                const { name, address, location, capacity, price, UserId } = req.body; // destructuring
+            .then(centers => { // destructuring
+                const { name, address, location, capacity, price, picture, userId } = req.body;
                 if (centers.length !== 0) {
                     centers.forEach(center => {
                         if (center.name === name
@@ -20,11 +20,11 @@ class Centers {
                         }
                     });
                 }
-                const newEntry = { name, address, location, UserId,
+                const newEntry = { name, address, location, userId, picture,
                     capacity: parseInt(capacity), price: parseInt(price),
                 };
                 return model.create(newEntry)
-                     .then(created => validator.response(res, 'success', 200, created))
+                     .then(created => validator.response(res, 'success', 201, created))
                      .catch(error => validator.response(res, 'error', 500, error));
             }).catch(error => validator.response(res, 'error', 500, error));
     }
@@ -32,15 +32,15 @@ class Centers {
     // modify a center
     modifyCenter(req, res) {
         // get center with same index as parameter and change the value
-        if (validator.confirmParams(req, res)) {
-            const { name, address, location, capacity, price, UserId } = req.body; // destructuring
-            const modifiedEntry = { name, address, location, UserId,
+        if (validator.confirmParams(req, res)) { // destructuring
+            const { name, address, location, capacity, price, picture, userId } = req.body;
+            const modifiedEntry = { name, address, location, picture, userId,
                 capacity: parseInt(capacity), price: parseInt(price),
             };
-            return model.update(modifiedEntry, { where: { id: req.params.id, UserId: UserId } })
+            return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
                .then(updatedCenter => {
                    if (updatedCenter[0] === 1) {
-                       return validator.response(res, 'success', 200, 'Update successful');
+                       return validator.response(res, 'success', 202, 'Update successful');
                    }
                    // trying to update a center whose id does not exist
                    // and or which doesnt belong to the user
@@ -65,8 +65,10 @@ class Centers {
     // get center details
     getCenterDetails(req, res) {
         if (validator.confirmParams(req, res)) {
-            return model.findById(req.params.id) // { include: [model.Events]
-            .then(center => {
+            return model.findById(req.params.id, { include:
+                [{ model: models.Events, as: 'events' },
+                { model: models.Facilities, as: 'facilities' }],
+            }).then(center => {
                 if (center !== null) {
                     return validator.response(res, 'success', 200, center);
                 }

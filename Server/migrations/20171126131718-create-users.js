@@ -7,19 +7,21 @@ module.exports = {
             type: Sequelize.INTEGER,
         },
         username: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(100),
         },
         name: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(100),
         },
         email: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(100),
         },
         phoneNo: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT(15),
         },
-        accountType: {
-            type: Sequelize.STRING,
+        accountType: { // admin or regular only
+            allowNull: false,
+            type: Sequelize.STRING(20),
+            defaultValue: 'regular',
         },
         password: {
             type: Sequelize.STRING,
