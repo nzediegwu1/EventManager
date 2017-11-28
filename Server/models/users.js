@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define('Users', {
         username: DataTypes.STRING,
-        fullname: DataTypes.STRING,
+        name: DataTypes.STRING,
         email: DataTypes.STRING,
         phoneNo: DataTypes.INTEGER,
         accountType: DataTypes.STRING, // admin or regular only

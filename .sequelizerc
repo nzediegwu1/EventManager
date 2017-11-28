@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exorts = {
-	"config": path.resolve('./Server/config', 'config.json'),
+	"config": path.resolve('./Server/config', 'config.js'),
 	"models-path": path.resolve('./Server/models'),
 	"seeders-path": path.resolve('./Server/seeders'),
 	"migrations-path": path.resolve('./Server/migrations'),
