@@ -7,6 +7,8 @@ import bcrypt from 'bcryptjs';
 
 const key = process.env.SECRET_KEY;
 const signupValidator = new val('users', 'signup');
+const signinValidator = new val('users', 'signin');
+
 const users = models.Users;
 class Users {
     signUp(req, res) {
@@ -37,6 +39,22 @@ class Users {
                     })
                     .catch(error => signupValidator.response(res, 'error', 500, error));
             }).catch(error => signupValidator.response(res, 'error', 500, error));
+    }
+    signIn(req, res) {
+        return users
+            .findOne({ where: { username: req.body.username } })
+            .then(loggedInUser => {
+                if (bcrypt.compareSync(req.body.password, loggedInUser.password)) {
+                    const token = jwt.sign({ id: loggedInUser.id }, key, {
+                        expiresIn: 60 * 60 * 24 });
+                    return signinValidator.response(res, 'success', 201, {
+                        User: loggedInUser,
+                        Token: token,
+                    });
+                }
+                return signinValidator.response(res, 'err', 401, 'Invalid Login Details');
+            })
+            .catch(error => signinValidator.response(res, 'err', 401, 'User not found'));
     }
     getUsers(req, res) {
         // gets all users' details excluding password

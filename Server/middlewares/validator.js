@@ -128,7 +128,7 @@
                 this.verificationError = this.errorMessage('Request has none or invalid account type', res);
                 // validate request account type enum
             } else if (!(req.body.accountType === 'regular' || req.body.accountType === 'admin')) {
-                this.verificationError = this.errorMessage('Account type can either be "regular" or "admin"', res);
+                this.verificationError = this.errorMessage('Account type can either be [regular] or [admin]', res);
                 // validate request password
             } else if (req.body.password === undefined
                 || typeof req.body.password !== 'string' || req.body.password.trim().length < 6) {
@@ -140,6 +140,20 @@
                 // validate request password matching
             } else if (req.body.confirmPassword !== req.body.password) {
                 this.verificationError = this.errorMessage('Request passwords do not match', res);
+            } else {
+                next();
+            }
+            return this.verificationError;
+        };
+        this.verifySignin = (req, res, next) => {
+            // validate request username
+            if (req.body.username === undefined ||
+                typeof req.body.username !== 'string' || req.body.username.trim().length === 0) {
+                this.verificationError = this.errorMessage('Request has none or invalid username', res);
+                // validate request password
+            } else if (req.body.password === undefined
+                || typeof req.body.password !== 'string' || req.body.password.trim().length < 6) {
+                this.verificationError = this.errorMessage('Request has none or invalid password', res);
             } else {
                 next();
             }
