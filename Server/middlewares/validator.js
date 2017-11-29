@@ -63,6 +63,10 @@
             } else if (req.body.description === undefined || typeof req.body.description !== 'string'
                 || req.body.description.trim().length === 0 || req.body.description.length  >  254) {
                 this.verificationError = this.errorMessage('Event description should be non-empty string less 255 characters', res);
+                // validate centerId
+            } else if (req.body.centerId === undefined || isNaN(req.body.centerId)
+                || req.body.centerId.trim().length === 0 || parseInt(req.body.centerId)  >  2000000) {
+                this.verificationError = this.errorMessage('centerId should be a number less 2m', res);
             } else {
                 next();
             }
