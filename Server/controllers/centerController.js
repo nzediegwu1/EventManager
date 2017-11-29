@@ -9,7 +9,7 @@ class Centers {
     addCenter(req, res) {
         return model.findAll()
             .then(centers => { // destructuring
-                const { name, address, location, capacity, price, picture, userId } = req.body;
+                const { name, address, location, capacity, price, picture } = req.body;
                 if (centers.length !== 0) {
                     centers.forEach(center => {
                         if (center.name === name
@@ -20,7 +20,7 @@ class Centers {
                         }
                     });
                 }
-                const newEntry = { name, address, location, userId, picture,
+                const newEntry = { name, address, location, userId: req.decoded.id, picture,
                     capacity: parseInt(capacity), price: parseInt(price),
                 };
                 return model.create(newEntry)
@@ -33,11 +33,10 @@ class Centers {
     modifyCenter(req, res) {
         // get center with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            const { name, address, location, capacity, price, picture, userId } = req.body;
-            const modifiedEntry = { name, address, location, picture, userId,
-                capacity: parseInt(capacity), price: parseInt(price),
-            };
-            return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
+            const { name, address, location, capacity, price, picture } = req.body;
+            const modifiedEntry = { name, address, location, picture, userId: req.decoded.id,
+                capacity: parseInt(capacity), price: parseInt(price) };
+            return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
                .then(updatedCenter => {
                    if (updatedCenter[0] === 1) {
                        return validator.response(res, 'success', 202, 'Update successful');
