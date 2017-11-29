@@ -56,18 +56,56 @@ class Events {
     modifyEvent(req, res) {
         // get event with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            const { title, date, time, description, picture, userId, centerId } = req.body;
-            const modifiedEntry = { title, date, time, description, userId, centerId };
-            return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
-               .then(updatedEvent => {
-                   if (updatedEvent[0] === 1) {
-                       return validator.response(res, 'success', 202, 'Update successful');
+            const { title, date, time, description, userId, picture, centerId } = req.body;
+            const timestamp = new Date(`${date} ${time}`);
+            console.log(`Time stamp generated: ${timestamp}`);
+            model.findAll()
+               .then(events => { // destructuring
+                   if (events.length !== 0) {
+                       const day = timestamp.getDate();
+                       const month = timestamp.getMonth();
+                       const year = timestamp.getFullYear();
+                       const occupiedDates = [];
+                       let errorMessage = '';
+                    
+                       console.log('Events were gotten from db');
+                       events.forEach(event => {
+                           const eventDate = event.date;
+                           const eventDay = eventDate.getDate();
+                           const eventMonth = eventDate.getMonth();
+                           const eventYear = eventDate.getFullYear();
+                           if (event.centerId === parseInt(centerId)) {
+                               occupiedDates.push(eventDate);
+                           }
+                           if (event.centerId === parseInt(centerId) && eventDay === day && eventMonth === month
+                               && eventYear === year) {
+                               // forbidden
+                               console.log(`Event ID is ${event.id} and req.params.id is ${req.params.id}`);
+                               if (event.id !== parseInt(req.params.id)) {
+                                   errorMessage = {
+                                       Sorry: `Selected date is already occupied for centerId: ${centerId}`,
+                                       OccupiedDates: occupiedDates,
+                                   };
+                                   console.log('forbidden error here');
+                               }
+                           }
+                       });
+                       if (errorMessage !== '') {
+                           return validator.response(res, 'err', 403, errorMessage);
+                       }
                    }
-                   // trying to update an event whose id does not exist
-                   // and or which doesnt belong to the user
-                   return validator.response(res, 'error', 403, 'Invalid transaction');
-               })
-               .catch(error => validator.response(res, 'error', 500, error));
+                   const modifiedEntry = { title, date, time, description, userId, centerId };
+                   return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
+                      .then(updatedEvent => {
+                          if (updatedEvent[0] === 1) {
+                              return validator.response(res, 'success', 202, 'Update successful');
+                          }
+                          // trying to update an event whose id does not exist
+                          // and or which doesnt belong to the user
+                          return validator.response(res, 'error', 403, 'Invalid transaction');
+                      })
+                      .catch(error => validator.response(res, 'error', 500, error));
+               });
         }
         return validator.invalidParameter;
     }
@@ -103,4 +141,4 @@ class Events {
 }
 
 const events = new Events();
-export default events;
+    export default events;
