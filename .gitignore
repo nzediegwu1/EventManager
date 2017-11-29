@@ -11,5 +11,4 @@
 /Server/dist
 /.nyc_output
 /coverage
-/.env
 /npm-debug.log
