@@ -1,10 +1,9 @@
 ﻿module.exports = {
     development: {
-        username: 'txvdyccl',
-        password: 'w2YlzmPt5T5SvrFbjDnnZ9bGb6Vd0Ttl',
-        database: 'txvdyccl',
-        host: 'tantor.db.elephantsql.com',
-        port: '5432',
+        username: 'admin',
+        password: 'password1',
+        database: 'EventManager',
+        host: '127.0.0.1',
         dialect: 'postgres',
     },
     test: {
