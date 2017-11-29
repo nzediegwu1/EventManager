@@ -19,8 +19,8 @@ class Users {
                         // if username/email already exists
                         if (members[item].username === req.body.username
                             || members[item].email === req.body.email) {
-                            // forbidden
-                            return signupValidator.response(res, 'err', 403, 'User already exists');
+                            // unacceptable
+                            return signupValidator.response(res, 'err', 406, 'User already exists');
                         }
                     }
                 }

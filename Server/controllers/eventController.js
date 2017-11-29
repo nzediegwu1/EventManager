@@ -37,11 +37,11 @@ class Events {
                                 Sorry: `Selected date is already occupied for centerId: ${centerId}`,
                                 OccupiedDates: occupiedDates,
                             };
-                            console.log('forbidden error here');
+                            console.log('unacceptable error here');
                         }
                     });
                     if (errorMessage !== '') {
-                        return validator.response(res, 'err', 403, errorMessage);
+                        return validator.response(res, 'err', 406, errorMessage);
                     }
                 }
                 const newEntry = { title, date: timestamp, description, picture, userId: req.decoded.id, centerId };
@@ -86,12 +86,12 @@ class Events {
                                        Sorry: `Selected date is already occupied for centerId: ${centerId}`,
                                        OccupiedDates: occupiedDates,
                                    };
-                                   console.log('forbidden error here');
+                                   console.log('unacceptable error here');
                                }
                            }
                        });
                        if (errorMessage !== '') {
-                           return validator.response(res, 'err', 403, errorMessage);
+                           return validator.response(res, 'err', 406, errorMessage);
                        }
                    }
                    const modifiedEntry = { title, date, time, description, userId: req.decoded.id, centerId };
@@ -102,7 +102,7 @@ class Events {
                           }
                           // trying to update an event whose id does not exist
                           // and or which doesnt belong to the user
-                          return validator.response(res, 'error', 403, 'Invalid transaction');
+                          return validator.response(res, 'error', 406, 'Invalid transaction');
                       })
                       .catch(error => validator.response(res, 'error', 500, error));
                });

@@ -15,8 +15,8 @@ class Centers {
                         if (center.name === name
                             && center.location === location
                             && center.address === address) {
-                            // forbidden
-                            return validator.response(res, 'err', 403, 'Center already exists');
+                            // unacceptable
+                            return validator.response(res, 'err', 406, 'Center already exists');
                         }
                     });
                 }
@@ -43,7 +43,7 @@ class Centers {
                    }
                    // trying to update a center whose id does not exist
                    // and or which doesnt belong to the user
-                   return validator.response(res, 'error', 403, 'Invalid transaction');
+                   return validator.response(res, 'error', 406, 'Invalid transaction');
                })
                .catch(error => validator.response(res, 'error', 500, error));
         }
