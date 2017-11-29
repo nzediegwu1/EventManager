@@ -9,9 +9,6 @@ module.exports = {
         title: {
             type: Sequelize.STRING,
         },
-        venue: {
-            type: Sequelize.STRING,
-        },
         date: {
             type: Sequelize.DATE,
         },

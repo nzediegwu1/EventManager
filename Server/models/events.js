@@ -2,7 +2,6 @@ module.exports = (sequelize, DataTypes) => {
     const Events = sequelize.define('Events', {
         title: DataTypes.STRING,
         date: DataTypes.DATE,
-        venue: DataTypes.STRING,
         description: DataTypes.TEXT,
         picture: {
             type: DataTypes.STRING, // image url

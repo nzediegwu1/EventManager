@@ -59,10 +59,6 @@
                 // validate event time format: 00:00
             } else if (req.body.time === undefined || !this.formatTime(req.body.time)) {
                 this.verificationError = this.errorMessage('Event has none or invalid time', res);
-                // validate event venue
-            } else if (req.body.venue === undefined || typeof req.body.venue !== 'string'
-                || req.body.venue.trim().length === 0) {
-                this.verificationError = this.errorMessage('Event has none or invalid venue', res);
                 // validate event description
             } else if (req.body.description === undefined || typeof req.body.description !== 'string'
                 || req.body.description.trim().length === 0) {

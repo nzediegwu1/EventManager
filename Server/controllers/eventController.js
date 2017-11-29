@@ -10,20 +10,36 @@ class Events {
     addEvent(req, res) {
         return model.findAll()
             .then(events => { // destructuring
-                const { title, date, time, venue, description, userId, picture, centerId } = req.body;
+                const { title, date, time, description, userId, picture, centerId } = req.body;
                 const timestamp = new Date(`${date} ${time}`);
-                console.log(`time stamp generated: ${timestamp}`);
+                const day = timestamp.getDate();
+                const month = timestamp.getMonth();
+                const year = timestamp.getFullYear();
+                console.log(`Time stamp generated: ${timestamp}`);
+
                 if (events.length !== 0) {
+                    const occupiedDates = [];
                     events.forEach(event => {
-                        if (event.title === title
-                            && event.date === timestamp
-                            && event.venue === venue) {
+                        const eventDate = event.date;
+                        const eventDay = eventDate.getDate();
+                        const eventMonth = eventDate.getMonth();
+                        const eventYear = eventDate.getFullYear();
+
+                        if (event.centerId === parseInt(centerId)) {
+                            occupiedDates.push(eventDate);
+                        }
+                        if (event.centerId === parseInt(centerId) && eventDay === day && eventMonth === month
+                            && eventYear === year) {
                             // forbidden
-                            return validator.response(res, 'err', 403, 'Event already exists');
+                            const errorMessage = {
+                                Sorry: `Selected date is already occupied for centerId: ${centerId}`,
+                                OccupiedDates: occupiedDates,
+                            };
+                            return validator.response(res, 'err', 403, errorMessage);
                         }
                     });
                 }
-                const newEntry = { title, date: timestamp, venue, description, picture, userId, centerId };
+                const newEntry = { title, date: timestamp, description, picture, userId, centerId };
                 return model.create(newEntry)
                      .then(created => validator.response(res, 'success', 201, created))
                      .catch(error => validator.response(res, 'error', 500, error));
@@ -35,8 +51,8 @@ class Events {
     modifyEvent(req, res) {
         // get event with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            const { title, date, time, venue, description, picture, userId, centerId } = req.body;
-            const modifiedEntry = { title, date, time, venue, description, userId, centerId };
+            const { title, date, time, description, picture, userId, centerId } = req.body;
+            const modifiedEntry = { title, date, time, description, userId, centerId };
             return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
                .then(updatedEvent => {
                    if (updatedEvent[0] === 1) {
