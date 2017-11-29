@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 require('dotenv').config();
 
+console.log(process.env.NODE_ENV);
+
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const env = process.env.NODE_ENV || 'development';

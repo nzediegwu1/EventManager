@@ -1,8 +1,4 @@
-﻿require('dotenv').config();
-
-const databaseUrl = process.env.DATABASE_URL;
-
-module.exports = {
+﻿module.exports = {
     development: {
         username: 'admin',
         password: 'password1',

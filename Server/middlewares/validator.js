@@ -59,10 +59,6 @@
                 // validate event time format: 00:00
             } else if (req.body.time === undefined || !this.formatTime(req.body.time)) {
                 this.verificationError = this.errorMessage('Event has none or invalid time', res);
-                // validate event venue
-            } else if (req.body.venue === undefined || typeof req.body.venue !== 'string'
-                || req.body.venue.trim().length === 0) {
-                this.verificationError = this.errorMessage('Event has none or invalid venue', res);
                 // validate event description
             } else if (req.body.description === undefined || typeof req.body.description !== 'string'
                 || req.body.description.trim().length === 0) {
@@ -110,10 +106,10 @@
             if (req.body.username === undefined || typeof req.body.username !== 'string'
                 || req.body.username.trim().length === 0) {
                 this.verificationError = this.errorMessage('Request has none or invalid username', res);
-                // validate request fullname
-            } else if (req.body.fullname === undefined || typeof req.body.fullname !== 'string'
-                || req.body.fullname.trim().length === 0) {
-                this.verificationError = this.errorMessage('Request has none or invalid fullname', res);
+                // validate request name
+            } else if (req.body.name === undefined || typeof req.body.name !== 'string'
+                || req.body.name.trim().length === 0) {
+                this.verificationError = this.errorMessage('Request has none or invalid name', res);
                 // validate request email
             } else if (req.body.email === undefined || typeof req.body.email !== 'string'
                 || req.body.email.trim().length === 0) {

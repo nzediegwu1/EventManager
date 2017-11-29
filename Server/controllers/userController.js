@@ -25,17 +25,18 @@ class Users {
                     }
                 }
                 // create new user
-                const { username, fullname, email, phoneNo, accountType, password } = req.body;
-                return users.create({ username, fullname, email, accountType, 
-                    phoneNo: parseInt(phoneNo),
+                const { username, name, email, phoneNo, accountType, password } = req.body;
+                return users.create({ username, name, email, accountType, phoneNo,
                     password: bcrypt.hashSync(password, 10) })
                     .then(createdUser => {
+                        const { username, name, email, phoneNo, accountType } = createdUser;
+                        const newUser = { username, name, email, phoneNo: parseFloat(phoneNo), accountType };
                         const token = jwt.sign({ id: createdUser.id }, key, {
                             expiresIn: 60 * 60 * 24 });
                         return signupValidator.response(res, 'success', 201, {
-                            User: createdUser,
+                            User: newUser,
                             Token: token,
-                        }); 
+                        });
                     })
                     .catch(error => signupValidator.response(res, 'error', 500, error));
             }).catch(error => signupValidator.response(res, 'error', 500, error));
@@ -47,7 +48,7 @@ class Users {
                 if (bcrypt.compareSync(req.body.password, loggedInUser.password)) {
                     const token = jwt.sign({ id: loggedInUser.id }, key, {
                         expiresIn: 60 * 60 * 24 });
-                    return signinValidator.response(res, 'success', 201, {
+                    return signinValidator.response(res, 'success', 200, {
                         User: loggedInUser,
                         Token: token,
                     });

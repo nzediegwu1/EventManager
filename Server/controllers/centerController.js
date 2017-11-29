@@ -1,74 +1,84 @@
-﻿import models from '../models/centers';
+﻿import models from '../models';
 import val from '../middlewares/validator';
 
 const validator = new val('centers');
+const model = models.Centers;
 
 class Centers {
     // add an event
     addCenter(req, res) {
-        try {
-            // implement check for if such center already exists
-            for (let i = 0; i < models.length; i++) {
-                if (models[i].name === req.body.name && models[i].address === req.body.address
-                    && models[i].location === req.body.location) {
-                    // not acceptabe
-                    return validator.response(res, 'error', 406, 'Center already Exists');
+        return model.findAll()
+            .then(centers => { // destructuring
+                const { name, address, location, capacity, price, picture, userId } = req.body;
+                if (centers.length !== 0) {
+                    centers.forEach(center => {
+                        if (center.name === name
+                            && center.location === location
+                            && center.address === address) {
+                            // forbidden
+                            return validator.response(res, 'err', 403, 'Center already exists');
+                        }
+                    });
                 }
-            }
-            const { name, address, location, capacity, price } = req.body;
-            const newEntry = { name, address, location,
-                capacity: parseInt(capacity), price: parseInt(price),
-            };
-            models.push(newEntry);
-            return validator.response(res, 'success', 201, models[models.length - 1]);
-        } catch (e) {
-            return validator.response(res, 'error', 500, 'A server error occured');
-        }
+                const newEntry = { name, address, location, userId, picture,
+                    capacity: parseInt(capacity), price: parseInt(price),
+                };
+                return model.create(newEntry)
+                     .then(created => validator.response(res, 'success', 201, created))
+                     .catch(error => validator.response(res, 'error', 500, error));
+            }).catch(error => validator.response(res, 'error', 500, error));
     }
 
-    // modify an event
+    // modify a center
     modifyCenter(req, res) {
-        if (validator.confirmParams(req, res)) {
-            const centerId = req.params.id;
-            models.forEach(center => {
-                const itemId = models.indexOf(center);
-                if (parseInt(centerId) === itemId) {
-                    const { name, address, location, capacity, price } = req.body;
-                    const newEntry = { name, address, location,
-                        capacity: parseInt(capacity), price: parseInt(price) };
-                    models[itemId] = newEntry;
-                    return validator.response(res, 'success', 200, models[itemId]);
-                }
-            });
-            return validator.response(res, 'error', 404, 'No such center found');
+        // get center with same index as parameter and change the value
+        if (validator.confirmParams(req, res)) { // destructuring
+            const { name, address, location, capacity, price, picture, userId } = req.body;
+            const modifiedEntry = { name, address, location, picture, userId,
+                capacity: parseInt(capacity), price: parseInt(price),
+            };
+            return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
+               .then(updatedCenter => {
+                   if (updatedCenter[0] === 1) {
+                       return validator.response(res, 'success', 202, 'Update successful');
+                   }
+                   // trying to update a center whose id does not exist
+                   // and or which doesnt belong to the user
+                   return validator.response(res, 'error', 403, 'Invalid transaction');
+               })
+               .catch(error => validator.response(res, 'error', 500, error));
         }
-        return validator.confirmParams(req, res);
+        return validator.invalidParameter;
     }
 
     // get all centers
     getAllCenters(req, res) {
-        if (models.length !== 0) {
-            return validator.response(res, 'success', 200, models);
-        }
-        return validator.response(res, 'error', 200, 'No centers available');
+        // gets all users' details excluding password
+        return model.findAll()
+            .then(allCenters => {
+                if (allCenters.length !== 0) {
+                    return validator.response(res, 'success', 200, allCenters);
+                }
+                return validator.response(res, 'error', 200, 'No centers available');
+            }).catch(error => validator.response(res, 'error', 500, error));
     }
-
     // get center details
     getCenterDetails(req, res) {
         if (validator.confirmParams(req, res)) {
-            const centerId = req.params.id;
-            models.forEach(center => {
-                const itemId = models.indexOf(center);
-                if (parseInt(centerId) === itemId) {
-                    return validator.response(res, 'success', 200, models[itemId]);
+            return model.findById(req.params.id, { include:
+                [{ model: models.Events, as: 'events' },
+                { model: models.Facilities, as: 'facilities' }],
+            }).then(center => {
+                if (center !== null) {
+                    return validator.response(res, 'success', 200, center);
                 }
-            });
-            return validator.response(res, 'error', 404, 'No such center found');
+                return validator.response(res, 'error', 404, 'Could not find Center');
+            })
+            .catch(error => validator.response(res, 'error', 500, error));
         }
-        return validator.confirmParams(req, res);
+        return validator.invalidParameter;
     }
-
 }
 
-const centers = new Centers();
-export default centers;
+const centerController = new Centers();
+export default centerController;
