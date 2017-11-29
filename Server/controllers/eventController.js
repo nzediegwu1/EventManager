@@ -12,32 +12,37 @@ class Events {
             .then(events => { // destructuring
                 const { title, date, time, description, userId, picture, centerId } = req.body;
                 const timestamp = new Date(`${date} ${time}`);
-                const day = timestamp.getDate();
-                const month = timestamp.getMonth();
-                const year = timestamp.getFullYear();
                 console.log(`Time stamp generated: ${timestamp}`);
 
                 if (events.length !== 0) {
+                    const day = timestamp.getDate();
+                    const month = timestamp.getMonth();
+                    const year = timestamp.getFullYear();
                     const occupiedDates = [];
+                    let errorMessage = '';
+                    
+                    console.log('Events were gotten from db');
                     events.forEach(event => {
                         const eventDate = event.date;
                         const eventDay = eventDate.getDate();
                         const eventMonth = eventDate.getMonth();
                         const eventYear = eventDate.getFullYear();
-
                         if (event.centerId === parseInt(centerId)) {
                             occupiedDates.push(eventDate);
                         }
                         if (event.centerId === parseInt(centerId) && eventDay === day && eventMonth === month
                             && eventYear === year) {
                             // forbidden
-                            const errorMessage = {
+                            errorMessage = {
                                 Sorry: `Selected date is already occupied for centerId: ${centerId}`,
                                 OccupiedDates: occupiedDates,
                             };
-                            return validator.response(res, 'err', 403, errorMessage);
+                            console.log('forbidden error here');
                         }
                     });
+                    if (errorMessage !== '') {
+                        return validator.response(res, 'err', 403, errorMessage);
+                    }
                 }
                 const newEntry = { title, date: timestamp, description, picture, userId, centerId };
                 return model.create(newEntry)
