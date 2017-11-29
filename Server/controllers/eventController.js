@@ -47,7 +47,13 @@ class Events {
                 const newEntry = { title, date: timestamp, description, picture, userId: req.decoded.id, centerId };
                 return model.create(newEntry)
                      .then(created => validator.response(res, 'success', 201, created))
-                     .catch(error => validator.response(res, 'error', 500, error));
+                     .catch(error => {
+                         let errorMessage = '';
+                         if (error.name === 'SequelizeForeignKeyConstraintError') {
+                             errorMessage = 'centerId selected for event does not exist in table'
+                         }
+                         return validator.response(res, 'error', 500, errorMessage)
+                     });
 
             }).catch(error => validator.response(res, 'error', 500, error));
     }
@@ -104,7 +110,13 @@ class Events {
                           // and or which doesnt belong to the user
                           return validator.response(res, 'error', 406, 'Invalid transaction');
                       })
-                      .catch(error => validator.response(res, 'error', 500, error));
+                      .catch(error => {
+                          let errorMessage = '';
+                          if (error.name === 'SequelizeForeignKeyConstraintError') {
+                              errorMessage = 'centerId selected for event does not exist in table'
+                          }
+                          return validator.response(res, 'error', 500, errorMessage)
+                      });
                });
         }
         return validator.invalidParameter;
