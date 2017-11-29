@@ -10,7 +10,7 @@ class Events {
     addEvent(req, res) {
         return model.findAll()
             .then(events => { // destructuring
-                const { title, date, time, description, userId, picture, centerId } = req.body;
+                const { title, date, time, description, picture, centerId } = req.body;
                 const timestamp = new Date(`${date} ${time}`);
                 console.log(`Time stamp generated: ${timestamp}`);
 
@@ -44,7 +44,7 @@ class Events {
                         return validator.response(res, 'err', 403, errorMessage);
                     }
                 }
-                const newEntry = { title, date: timestamp, description, picture, userId, centerId };
+                const newEntry = { title, date: timestamp, description, picture, userId: req.decoded.id, centerId };
                 return model.create(newEntry)
                      .then(created => validator.response(res, 'success', 201, created))
                      .catch(error => validator.response(res, 'error', 500, error));
@@ -56,7 +56,7 @@ class Events {
     modifyEvent(req, res) {
         // get event with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            const { title, date, time, description, userId, picture, centerId } = req.body;
+            const { title, date, time, description, picture, centerId } = req.body;
             const timestamp = new Date(`${date} ${time}`);
             console.log(`Time stamp generated: ${timestamp}`);
             model.findAll()
@@ -94,8 +94,8 @@ class Events {
                            return validator.response(res, 'err', 403, errorMessage);
                        }
                    }
-                   const modifiedEntry = { title, date, time, description, userId, centerId };
-                   return model.update(modifiedEntry, { where: { id: req.params.id, userId: userId } })
+                   const modifiedEntry = { title, date, time, description, userId: req.decoded.id, centerId };
+                   return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
                       .then(updatedEvent => {
                           if (updatedEvent[0] === 1) {
                               return validator.response(res, 'success', 202, 'Update successful');
@@ -114,7 +114,7 @@ class Events {
     deleteEvent(req, res) {
         // get recipe where index is same as id parameter and delete
         if (validator.confirmParams(req, res)) {
-            return model.destroy({ where: { id: req.params.id } }) // userId: req.decoded
+            return model.destroy({ where: { id: req.params.id, userId: req.decoded.id } })
                 .then(destroyed => {
                     if (destroyed) {
                         return validator.response(res, 'success', 200, 'Successfully deleted');
