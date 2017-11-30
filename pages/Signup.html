@@ -12,18 +12,28 @@
         .background-image {
             background: url(../resources/images/2012_gala_tent.jpg) center center no-repeat fixed;
             background-size: cover;
-            background-color: lightgreen;
+            background-color: black;
+        }
+
+        modal-content {
+            background-color: lightgray;
+            color: black;
+        }
+
+        button, select {
+            width: 100%;
         }
 
         #loginPanel {
             margin-top: 2em;
-            background-color: darkblue;
+            background-color: #252221;
             border-radius: 1em;
-            box-shadow: 7px 7px 10px white;
+            box-shadow: 2px 1px 20px 1px white;
         }
 
         .form-links {
             text-align: center;
+            margin-top: 1em;
         }
 
             .form-links a {
@@ -35,7 +45,10 @@
             font-size: 2.5em;
             color: white;
             font-weight: bolder;
-            box-shadow: 10px 10px 20px orange;
+            box-shadow: 2px 2px 10px 1px white;
+            background-color: #252221;
+            padding: 0.2em;
+            border-radius: 0.2em;
         }
 
         .panel-font {
@@ -73,15 +86,16 @@
                 width: 100%;
             }
         }
-        .paymentInput{
-            display:none;
+
+        .paymentInput {
+            display: none;
         }
     </style>
 </head>
 <body class="background-image">
     <div class="container">
         <div id="titleDiv">
-            <h2 class="main-title">EventManager</h2>
+            <b class="main-title">EventManager</b>
         </div>
         <div id="loginPanel" class="mx-sm-auto col-sm-6">
             <form role="form" action="../index.html" class="formDiv">
@@ -125,10 +139,10 @@
                             <img src="../resources/images/glyphicons-500-family.png" alt="accountType" />
                         </span>
                         <select id="accountType">
+                            <option value="">Account Type</option>
                             <option value="ordinary">Ordinary</option>
                             <option value="admin">Admin</option>
                         </select>
-                        <label class="form-control-label"><b>Account Type</b></label>
                     </div>
                 </div>
                 <div class="form-group paymentInput">
