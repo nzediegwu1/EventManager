@@ -7,10 +7,11 @@
         dialect: 'postgres',
     },
     test: {
-        username: 'admin',
-        password: 'password1',
-        database: 'EventManager',
-        host: '127.0.0.1',
+        username: 'omkcdhmt',
+        password: 'rxAH5VckpPKKQlg0dGyk5fbELSipPo3X',
+        database: 'omkcdhmt',
+        host: 'baasu.db.elephantsql.com',
+        port: '5432',
         dialect: 'postgres',
     },
     production: {

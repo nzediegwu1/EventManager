@@ -55,7 +55,7 @@ class Users {
                 }
                 return signinValidator.response(res, 'err', 401, 'Invalid Login Details');
             })
-            .catch(error => signinValidator.response(res, 'err', 401, 'User not found'));
+            .catch(error => signinValidator.response(res, 'err', 404, 'User not found'));
     }
     getUsers(req, res) {
         // gets all users' details excluding password
