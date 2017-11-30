@@ -22,12 +22,12 @@
         };
 
         // validate time using 24-hours format 00:00
-        this.formatTime = (time) => {
-            let result = false, m;
+        this.formatTime = time => {
+            let result = false;
             const re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
-            if ((m = time.match(re))) {
-                // tinary statement
-                result = (m[1].length === 2 ? '' : '0') + `${m[1]}:${m[2]}`;
+            const m = time.match(re);
+            if (m) { // tinary statement
+                result = `${(m[1].length === 2 ? '' : '0')}${m[1]}:${m[2]}`;
             }
             return result;
         };
