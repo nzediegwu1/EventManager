@@ -14,11 +14,29 @@
                 display: none;
             }
         }
-        .card-image {
+
+        .custom-select-sm {
             width: 100%;
-            border-radius:1em;
         }
 
+        .grey-color {
+            background-color: grey;
+        }
+
+        #addFacility {
+            width: 10%;
+            margin-right: 1em;
+        }
+
+        .add-facility-90 {
+            width: 90%;
+        }
+
+        .card-image {
+            width: 100%;
+            border-radius: 1em;
+            margin-bottom: 1em;
+        }
 
 
         .form-control {
@@ -33,7 +51,7 @@
         }
 
         .appBackground {
-            background-color: lightgreen;
+            background-color: lightgrey;
         }
 
         .text-center {
@@ -71,19 +89,9 @@
             padding: 0em;
         }
 
-        .list-group-item {
-            background-color: white;
-            color: black;
-            height: 6em;
-        }
 
         .navbar-background {
             background-color: darkblue;
-        }
-
-        .list-group-item:first-child {
-            background-color: darkblue;
-            color: white;
         }
 
         .invert-color {
@@ -173,7 +181,8 @@
         }
 
         .table-header {
-            background-color: grey;
+            background-color: darkblue;
+            color: white;
         }
 
         .table {
@@ -186,7 +195,7 @@
         }
 
         .eventModal {
-            background-color: lightgreen;
+            background-color: lightgrey;
         }
 
         .add-facility {
@@ -290,17 +299,9 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img class="btn-success" src="../resources/images/glyphicons-218-circle-arrow-right.png" alt="start" />
+                                    <img class="btn-success" src="../resources/images/glyphicons-54-alarm.png" alt="start" />
                                 </span>
-                                <input type="time" name="start" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <img class="btn-danger" src="../resources/images/glyphicons-217-circle-arrow-left.png" alt="end" />
-                                </span>
-                                <input type="time" name="end" class="form-control" />
+                                <input type="time" name="time" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -308,50 +309,26 @@
                             <textarea name="description" rows="2" class="form-control"></textarea>
                         </div>
                         <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-28-search.png" alt="search" />
-                                </span>
-                                <input name="description" class="form-control" placeholder="search center" />
-                            </div>
-                        </div>
-                        <div class="table-responsive centerSearch">
-                            <table class="table table-hover">
-                                <thead class="table-header">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th>Capacity</th>
-                                        <th> </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>House on the Rock</td>
-                                        <td>Ikeja, Lagos</td>
-                                        <td><span class="badge">900</span></td>
-                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Christ embassy hall</td>
-                                        <td>Ikeja, Lagos</td>
-                                        <td><span class="badge">670</span></td>
-                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>National Assembly</td>
-                                        <td>Ikeja, Lagos</td>
-                                        <td><span class="badge">250</span></td>
-                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td>National Stadium</td>
-                                        <td>Ikeja, Lagos</td>
-                                        <td><span class="badge">700</span></td>
-                                        <td><div class="checkbox"><input type="checkbox" name="selectedFriend" /></div></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <select class="custom-select-sm">
+                                <option>
+                                    Select Center
+                                </option>
+                                <option value="1">
+                                    House on the Rock, Ikeja, Lagos. Capacity: 500
+                                </option>
+                                <option value="1">
+                                    Christ embassy hall, Ikeja, Lagos. Capacity: 2300
+                                </option>
+                                <option value="1">
+                                    House on the Rock FCT, Abuja. Capacity: 1200
+                                </option>
+                                <option value="1">
+                                    National Assembly Conference Hall, Abuja. Capacity: 4500
+                                </option>
+                                <option value="1">
+                                    National Stadium, Owerri, Imo. Capacity: 85,000
+                                </option>
+                            </select>
                         </div>
                     </form>
                     <div class="modal-footer">
@@ -392,15 +369,7 @@
                                 <span class="input-group-addon">
                                     <img src="../resources/images/glyphicons-243-map-marker.png" alt="street" />
                                 </span>
-                                <input type="text" name="street" placeholder="Street address" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-503-map.png" alt="town" />
-                                </span>
-                                <input type="text" name="town" placeholder="Town" class="form-control" />
+                                <input type="text" name="street" placeholder="Address" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -408,7 +377,7 @@
                                 <span class="input-group-addon">
                                     <img src="../resources/images/glyphicons-740-cadastral-map.png" atl="city" />
                                 </span>
-                                <input type="text" name="city" placeholder="City" class="form-control" />
+                                <input type="text" name="location" placeholder="Location" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -424,12 +393,12 @@
                                 <span class="input-group-addon">
                                     <img src="../resources/images/glyphicons-548-bitcoin.png" alt="bookingAmount" />
                                 </span>
-                                <input type="number" name="bookingAmount" placeholder="Booking Amount/hour" class="form-control" />
+                                <input type="number" name="bookingAmount" placeholder="Booking price/day" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="top-eight add-facility">
-                                <div class="col-sm-10 zero-padding">
+                                <div class="col-sm-10 zero-padding add-facility-90">
                                     <b>Add facility</b>
                                 </div>
                                 <div class="col-sm-2 zero-padding" id="addFacility">
@@ -437,7 +406,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive centerSearch">
-                                <table class="table table-hover">
+                                <table class="table table-hover grey-color">
                                     <thead class="table-header">
                                         <tr>
                                             <th>Name</th>
@@ -523,7 +492,7 @@
             <div class="card-header mg-event-header card-header-body">
                 <table class="table-responsive col-sm-12 bg-transparent  zero-padding">
                     <tr>
-                        <td><h4 class="text-center"><b>World Developers Conference</b></h4></td>
+                        <td style="width:80%;"><h4 class="text-center"><b>World Developers Conference</b></h4></td>
                         <td>
                             <div class="manage">
                                 <button type="submit" id="editEvent" class="btn btn-success" data-toggle="modal" data-target="#addNewEvent">
