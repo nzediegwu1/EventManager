@@ -43,126 +43,126 @@ To test, run:
       <th>Request</th>
       <th>End Point</th>
       <th>Action</th>
-	  <th>Test Data</th>
+      <th>Test Data</th>
   </tr>
      <tr>
       <td>POST</td>
       <td>/api/v1/users/</td>
       <td>Signup New User</td>
-	  <td>
-	  	<pre>{
-				username: 'nzediegwu1'
-				name: 'Anaeze Nsoffor',
-				email: 'nzediegwu1@gmail.com',
-				phoneNo: '2347067256519',
-				accountType: admin, <pre> // ['admin' or 'regular']</pre>
-				password: 'password1',
-				confirmPassword: 'password1'
-	  }</pre>
-	  </td>
+      <td>
+	<pre>{
+	username: 'nzediegwu1'
+	name: 'Anaeze Nsoffor',
+	email: 'nzediegwu1@gmail.com',
+	phoneNo: '2347067256519',
+	accountType: admin, <pre> // ['admin' or 'regular']</pre>
+	password: 'password1',
+	confirmPassword: 'password1'
+     }</pre>
+     </td>
   </tr>
     </tr>
      <tr>
       <td>POST</td>
       <td>/api/v1/users/login</td>
       <td>Signin Existing User</td>
-	  <td>
-	  	<pre>{
-				username: 'nzediegwu1'
-				password: 'password1',
-	   }</pre>
-	  </td>
+      <td>
+	<pre>{
+	username: 'nzediegwu1'
+	password: 'password1',
+      }</pre>
+      </td>
   </tr>
   <tr>
       <td>POST</td>
       <td>/api/v1/events/</td>
       <td>Creates New Event</td>
-	  <td>
-	   <pre>{
-			title: 'Andela Bootcamp',
-			date: 'March 21, 2012',
-			time: '8:30',
-			venue: 'Andela Epic Tower',
-			description: 'A technology learning program',
-			centerId: 2,
-			token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	   }</pre>
-	  </td>
+      <td>
+      <pre>{
+	title: 'Andela Bootcamp',
+	date: 'March 21, 2012',
+	time: '8:30',
+	venue: 'Andela Epic Tower',
+	description: 'A technology learning program',
+	centerId: 2,
+	token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
+     }</pre>
+     </td>
   </tr>  
   <tr>
       <td>PUT</td>
       <td>/api/v1/events/<eventId> </td>
       <td>Edit an event</td>
-	  <td>
-	  	<pre>{
-				title: 'Andela Bootcamp',
-				date: 'March 21, 2012',
-				time: '8:30',
-				venue: 'Andela Epic Tower',
-				description: 'A technology learning program',
-				centerId: 2,
-				token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	     }</pre>
-	  </td>
+      <td>
+      <pre>{
+	title: 'Andela Bootcamp',
+	date: 'March 21, 2012',
+	time: '8:30',
+	venue: 'Andela Epic Tower',
+	description: 'A technology learning program',
+	centerId: 2,
+	token: 'shjdhfjshdfjd'// token from user signin/signup
+     }</pre>
+     </td>
   </tr>
   
   <tr>
       <td>DELETE</td>
       <td>/api/v1/events/<eventId></td>
       <td>Delete an event</td>
-	  <td>
-	  <pre>{
-			token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	  }</pre> 
-	  </td>
+      <td>
+      <pre>{
+	token: 'shjdhfjshdfjd'// token from user signin/signup
+      }</pre> 
+      </td>
   </tr>
   
   <tr>
       <td>GET</td>
       <td>/api/v1/events/</td>
       <td>Get all events</td>
-	  <td></td>
+      <td></td>
   </tr>
    <tr>
       <td>POST</td>
       <td>/api/v1/centers/</td>
       <td>Add a new center</td>
-	  <td>
-	   <pre>{
-			name: 'Eagle square',
-			address: 'Ikorodu Road',
-			location: 'Lagos',
-			capacity: '1000',
-			price: '25000',
-			token: 'shjdhfjshdfjd'// token from user signin/signup
-	   }</pre>
-	  </td>
+      <td>
+      <pre>{
+	name: 'Eagle square',
+	address: 'Ikorodu Road',
+	location: 'Lagos',
+	capacity: '1000',
+	price: '25000',
+	token: 'shjdhfjshdfjd'// token from user signin/signup
+      }</pre>
+      </td>
   </tr>
   <tr>
       <td>GET</td>
       <td>/api/v1/centers/</td>
       <td>Get all centers</td>
-	  <td></td>
+      <td></td>
   </tr>
   <tr>
       <td>GET</td>
       <td>/api/v1/centers/<centerId></td>
       <td>Get a single center</td>
-	  <td></td>
+      <td></td>
   </tr>
    <tr>
       <td>PUT</td>
       <td>/api/v1/centers/<centerId></td>
       <td>Modify the details of center</td>
-	  <td>
-	  	<pre>{
-				name: 'Eagle square',
-				address: 'Ikorodu Road',
-				location: 'Lagos',
-				capacity: '1000',
-				price: '25000',
-				token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	    }</pre>
-	  </td>
+      <td>
+      <pre>{
+	name: 'Eagle square',
+	address: 'Ikorodu Road',
+	location: 'Lagos',
+	capacity: '1000',
+	price: '25000',
+	token: 'shjdhfjshdfjd'// token from user signin/signup
+      }</pre>
+      </td>
   </tr>
 </table>
