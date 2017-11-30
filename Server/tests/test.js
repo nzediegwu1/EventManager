@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 
 describe('Tests for EventManager application', () => {
     describe('Tests for for UserRouter', () => {
-        it('Should test for signup 201 response status code', (done) => {
+        it('Should test for signup 406 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/users')
               .send({
@@ -20,11 +20,11 @@ describe('Tests for EventManager application', () => {
                   confirmPassword: 'password1',
               })
               .end((err, res) => {
-                  expect(res).to.have.status(201);
+                  expect(res).to.have.status(406);
                   done();
               });
         });
-        it('Should test for signup 201 response status code using faker', (done) => {
+        /*it('Should test for signup 201 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/users')
               .send({
@@ -52,7 +52,7 @@ describe('Tests for EventManager application', () => {
                   expect(res).to.have.status(200);
                   done();
               });
-        });
+        });*/
         it('Should test for signin 401 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/users/login')
