@@ -55,7 +55,7 @@ To test, run:
 	name: 'Anaeze Nsoffor',
 	email: 'nzediegwu1@gmail.com',
 	phoneNo: '2347067256519',
-	accountType: admin, <pre> // ['admin' or 'regular']</pre>
+	accountType: admin,//['admin' or 'regular']
 	password: 'password1',
 	confirmPassword: 'password1'
      }</pre>
@@ -85,7 +85,7 @@ To test, run:
 	venue: 'Andela Epic Tower',
 	description: 'A technology learning program',
 	centerId: 2,
-	token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
+	token: 'shjdhfjshdfjd'//token from user signin/signup
      }</pre>
      </td>
   </tr>  
@@ -101,7 +101,7 @@ To test, run:
 	venue: 'Andela Epic Tower',
 	description: 'A technology learning program',
 	centerId: 2,
-	token: 'shjdhfjshdfjd'// token from user signin/signup
+	token: 'shjdhfjshdfjd'
      }</pre>
      </td>
   </tr>
@@ -112,7 +112,7 @@ To test, run:
       <td>Delete an event</td>
       <td>
       <pre>{
-	token: 'shjdhfjshdfjd'// token from user signin/signup
+	token: 'shjdhfjshdfjd'
       }</pre> 
       </td>
   </tr>
@@ -134,7 +134,7 @@ To test, run:
 	location: 'Lagos',
 	capacity: '1000',
 	price: '25000',
-	token: 'shjdhfjshdfjd'// token from user signin/signup
+	token: 'shjdhfjshdfjd'
       }</pre>
       </td>
   </tr>
@@ -161,7 +161,7 @@ To test, run:
 	location: 'Lagos',
 	capacity: '1000',
 	price: '25000',
-	token: 'shjdhfjshdfjd'// token from user signin/signup
+	token: 'shjdhfjshdfjd'
       }</pre>
       </td>
   </tr>
