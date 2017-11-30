@@ -50,15 +50,15 @@ To test, run:
       <td>/api/v1/users/</td>
       <td>Signup New User</td>
 	  <td>
-	  	   {
-		username: 'nzediegwu1'
-        name: 'Anaeze Nsoffor',
-        email: 'nzediegwu1@gmail.com',
-        phoneNo: '2347067256519',
-        accountType: admin, <pre> // ['admin' or 'regular']</pre>
-        password: 'password1',
-		confirmPassword: 'password1'
-	   }
+	  	<pre>{
+				username: 'nzediegwu1'
+				name: 'Anaeze Nsoffor',
+				email: 'nzediegwu1@gmail.com',
+				phoneNo: '2347067256519',
+				accountType: admin, <pre> // ['admin' or 'regular']</pre>
+				password: 'password1',
+				confirmPassword: 'password1'
+	  }</pre>
 	  </td>
   </tr>
     </tr>
@@ -67,10 +67,10 @@ To test, run:
       <td>/api/v1/users/login</td>
       <td>Signin Existing User</td>
 	  <td>
-	  	   {
-		username: 'nzediegwu1'
-        password: 'password1',
-	   }
+	  	<pre>{
+				username: 'nzediegwu1'
+				password: 'password1',
+	   }</pre>
 	  </td>
   </tr>
   <tr>
@@ -78,15 +78,15 @@ To test, run:
       <td>/api/v1/events/</td>
       <td>Creates New Event</td>
 	  <td>
-	  {
-        title: 'Andela Bootcamp',
-        date: 'March 21, 2012',
-        time: '8:30',
-        venue: 'Andela Epic Tower',
-        description: 'A technology learning program',
-		centerId: 2,
-		token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	   }
+	   <pre>{
+			title: 'Andela Bootcamp',
+			date: 'March 21, 2012',
+			time: '8:30',
+			venue: 'Andela Epic Tower',
+			description: 'A technology learning program',
+			centerId: 2,
+			token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
+	   }</pre>
 	  </td>
   </tr>  
   <tr>
@@ -94,15 +94,15 @@ To test, run:
       <td>/api/v1/events/<eventId> </td>
       <td>Edit an event</td>
 	  <td>
-	  	  {
-        title: 'Andela Bootcamp',
-        date: 'March 21, 2012',
-        time: '8:30',
-        venue: 'Andela Epic Tower',
-        description: 'A technology learning program',
-		centerId: 2,
-		token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	   }
+	  	<pre>{
+				title: 'Andela Bootcamp',
+				date: 'March 21, 2012',
+				time: '8:30',
+				venue: 'Andela Epic Tower',
+				description: 'A technology learning program',
+				centerId: 2,
+				token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
+	     }</pre>
 	  </td>
   </tr>
   
@@ -111,9 +111,9 @@ To test, run:
       <td>/api/v1/events/<eventId></td>
       <td>Delete an event</td>
 	  <td>
-	  {
-		token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	  }
+	  <pre>{
+			token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
+	  }</pre> 
 	  </td>
   </tr>
   
@@ -128,14 +128,14 @@ To test, run:
       <td>/api/v1/centers/</td>
       <td>Add a new center</td>
 	  <td>
-	   {
-        name: 'Eagle square',
-        address: 'Ikorodu Road',
-        location: 'Lagos',
-        capacity: '1000',
-        price: '25000',
-		token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	   }
+	   <pre>{
+			name: 'Eagle square',
+			address: 'Ikorodu Road',
+			location: 'Lagos',
+			capacity: '1000',
+			price: '25000',
+			token: 'shjdhfjshdfjd'// token from user signin/signup
+	   }</pre>
 	  </td>
   </tr>
   <tr>
@@ -155,14 +155,14 @@ To test, run:
       <td>/api/v1/centers/<centerId></td>
       <td>Modify the details of center</td>
 	  <td>
-	  	   {
-        name: 'Eagle square',
-        address: 'Ikorodu Road',
-        location: 'Lagos',
-        capacity: '1000',
-        price: '25000',
-		token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
-	   }
+	  	<pre>{
+				name: 'Eagle square',
+				address: 'Ikorodu Road',
+				location: 'Lagos',
+				capacity: '1000',
+				price: '25000',
+				token: 'shjdhfjshdfjd' <pre> // token from user signin/signup</pre>
+	    }</pre>
 	  </td>
   </tr>
 </table>
