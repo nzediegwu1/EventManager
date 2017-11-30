@@ -38,24 +38,18 @@ class Centers {
     modifyCenter(req, res) {
         // get center with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            models.Users.findById(req.decoded.id).then(user => {
-                const { name, address, location, capacity, price, picture } = req.body;
-                const modifiedEntry = { name, address, location, picture, userId: req.decoded.id,
-                    capacity: parseInt(capacity), price: parseInt(price) };
-
-                if (user.accountType === 'admin') {
-                    return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
-                       .then(updatedCenter => {
-                           if (updatedCenter[0] === 1) {
-                               return validator.response(res, 'success', 202, 'Update successful');
-                           }
-                           // trying to update a center whose id does not exist
-                           // and or which doesnt belong to the user
-                           return validator.response(res, 'error', 406, 'Invalid transaction');
-                       }).catch(error => validator.response(res, 'error', 500, error));
-                }
-                return validator.response(res, 'error', 403, 'Only an admin can perform this action');
-            }).catch(error => validator.response(res, 'error', 500, error));
+            const { name, address, location, capacity, price, picture } = req.body;
+            const modifiedEntry = { name, address, location, picture, userId: req.decoded.id,
+                capacity: parseInt(capacity), price: parseInt(price) };
+            return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
+               .then(updatedCenter => {
+                   if (updatedCenter[0] === 1) {
+                       return validator.response(res, 'success', 202, 'Update successful');
+                   }
+                   // trying to update a center whose id does not exist
+                   // and or which doesnt belong to the user
+                   return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
+               }).catch(error => validator.response(res, 'error', 500, error));
         }
         return validator.invalidParameter;
     }

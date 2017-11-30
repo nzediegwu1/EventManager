@@ -20,7 +20,6 @@ class Events {
                     const year = timestamp.getFullYear();
                     const occupiedDates = [];
                     let errorMessage = '';
-                    
                     console.log('Events were gotten from db');
                     events.forEach(event => {
                         const eventDate = event.date;
@@ -50,11 +49,10 @@ class Events {
                      .catch(error => {
                          let errorMessage = '';
                          if (error.name === 'SequelizeForeignKeyConstraintError') {
-                             errorMessage = 'centerId selected for event does not exist in table'
+                             errorMessage = 'centerId selected for event does not exist in table';
                          }
-                         return validator.response(res, 'error', 500, errorMessage)
+                         return validator.response(res, 'error', 500, errorMessage);
                      });
-
             }).catch(error => validator.response(res, 'error', 500, error));
     }
 
@@ -73,7 +71,6 @@ class Events {
                        const year = timestamp.getFullYear();
                        const occupiedDates = [];
                        let errorMessage = '';
-                    
                        console.log('Events were gotten from db');
                        events.forEach(event => {
                            const eventDate = event.date;
@@ -108,14 +105,15 @@ class Events {
                           }
                           // trying to update an event whose id does not exist
                           // and or which doesnt belong to the user
-                          return validator.response(res, 'error', 406, 'Invalid transaction');
+                          return validator.response(res, 'error', 403,
+                              'Attempt to update unexisting or unauthorized item');
                       })
                       .catch(error => {
                           let errorMessage = '';
                           if (error.name === 'SequelizeForeignKeyConstraintError') {
-                              errorMessage = 'centerId selected for event does not exist in table'
+                              errorMessage = 'centerId selected for event does not exist in table';
                           }
-                          return validator.response(res, 'error', 500, errorMessage)
+                          return validator.response(res, 'error', 500, errorMessage);
                       });
                });
         }
