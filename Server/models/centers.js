@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING, // Image url
             allowNull: true,
         },
+        availability: DataTypes.STRING,
         userId: DataTypes.INTEGER,
     });
     Centers.associate = (models) => {
