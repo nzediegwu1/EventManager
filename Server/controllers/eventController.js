@@ -51,7 +51,7 @@ class Events {
                          if (error.name === 'SequelizeForeignKeyConstraintError') {
                              errorMessage = 'centerId selected for event does not exist in table';
                          }
-                         return validator.response(res, 'error', 500, errorMessage);
+                         return validator.response(res, 'error', 400, errorMessage);
                      });
             }).catch(error => validator.response(res, 'error', 500, error));
     }
@@ -113,7 +113,7 @@ class Events {
                           if (error.name === 'SequelizeForeignKeyConstraintError') {
                               errorMessage = 'centerId selected for event does not exist in table';
                           }
-                          return validator.response(res, 'error', 500, errorMessage);
+                          return validator.response(res, 'error', 400, errorMessage);
                       });
                });
         }
