@@ -97,7 +97,7 @@ class Events {
                            return validator.response(res, 'err', 406, errorMessage);
                        }
                    }
-                   const modifiedEntry = { title, date, time, description, userId: req.decoded.id, centerId };
+                   const modifiedEntry = { title, date, time, description, picture, userId: req.decoded.id, centerId };
                    return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
                       .then(updatedEvent => {
                           if (updatedEvent[0] === 1) {
