@@ -11,7 +11,7 @@ class Centers {
             if (user.accountType === 'admin') {
                 return model.findAll()
                     .then(centers => { // destructuring
-                        const { name, address, location, capacity, price, picture } = req.body;
+                        const { name, address, location, capacity, price, picture, availability } = req.body;
                         if (centers.length !== 0) {
                             centers.forEach(center => {
                                 if (center.name === name
@@ -22,7 +22,7 @@ class Centers {
                                 }
                             });
                         }
-                        const newEntry = { name, address, location, userId: req.decoded.id, picture,
+                        const newEntry = { name, address, location, picture, availability, userId: req.decoded.id,
                             capacity: parseInt(capacity), price: parseInt(price),
                         };
                         return model.create(newEntry)
@@ -38,8 +38,8 @@ class Centers {
     modifyCenter(req, res) {
         // get center with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            const { name, address, location, capacity, price, picture } = req.body;
-            const modifiedEntry = { name, address, location, picture, userId: req.decoded.id,
+            const { name, address, location, capacity, price, picture, availability } = req.body;
+            const modifiedEntry = { name, address, location, picture, availability, userId: req.decoded.id,
                 capacity: parseInt(capacity), price: parseInt(price) };
             return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
                .then(updatedCenter => {
