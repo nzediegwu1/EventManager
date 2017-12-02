@@ -6,3 +6,8 @@
 /.vs/EventManager/v14
 /Web.config
 /.vs
+/node_modules
+/coverage
+/.nyc_output
+/.env
+/typings
