@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 require('dotenv').config();
+import faker from 'faker';
+
 
 console.log(new Date());
 
