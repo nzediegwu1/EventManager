@@ -24,7 +24,7 @@ describe('Tests for EventManager application', () => {
                   done();
               });
         });
-        /*it('Should test for signup 201 response status code', (done) => {
+        it('Should test for signup 201 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/users')
               .send({
@@ -52,7 +52,7 @@ describe('Tests for EventManager application', () => {
                   expect(res).to.have.status(200);
                   done();
               });
-        });*/
+        });
         it('Should test for signin 401 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/users/login')
@@ -86,65 +86,112 @@ describe('Tests for EventManager application', () => {
               });
         });
     });
-    /*
     describe('Tests for CenterRouter', () => {
-        it('Should test for addCenter 201 response status code', (done) => {
-            chai.request(app)
-              .post('/api/v1/centers')
-              .send({
-                  name: 'Eagle square',
-                  address: 'Ikorodu Road',
-                  location: 'Lagos',
-                  capacity: '1000',
-                  price: '25000',
-              })
-              .end((err, res) => {
-                  expect(res).to.have.status(201);
-                  done();
-              });
-        });
         it('Should test for addCenter 406 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/centers')
               .send({
-                  name: 'Andela Epic Tower',
+                  name: 'Eagle square ultimate',
                   address: 'Ikorodu Road',
                   location: 'Lagos',
                   capacity: '1000',
                   price: '25000',
+                  picture: 'image.jpg',
+                  availability: 'close',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
               })
               .end((err, res) => {
                   expect(res).to.have.status(406);
                   done();
               });
         });
-        it('Should test for modifyCenter 200 response status code', (done) => {
+        it('Should test for addCenter 201 response status code', (done) => {
             chai.request(app)
-              .put('/api/v1/centers/0')
+              .post('/api/v1/centers')
               .send({
-                  name: 'Andela Epic Tower',
-                  address: 'Ikorodu Road',
-                  location: 'Lagos',
-                  capacity: '1000',
-                  price: '25000',
+                  name: faker.name.firstName(),
+                  address: faker.address.streetAddress(),
+                  location: faker.address.city(),
+                  capacity: `${faker.random.number()}`,
+                  price: `${faker.random.number()}`,
+                  picture: 'image.jpg',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
               })
               .end((err, res) => {
-                  expect(res).to.have.status(200);
+                  expect(res).to.have.status(201);
                   done();
               });
         });
-        it('Should test for modifyCenter 404 response status code', (done) => {
+
+        it('Should test for addCenter 403 response status code', (done) => {
             chai.request(app)
-              .put('/api/v1/centers/9')
+              .post('/api/v1/centers')
+              .send({
+                  name: faker.name.firstName(),
+                  address: faker.address.streetAddress(),
+                  location: faker.address.city(),
+                  capacity: `${faker.random.number()}`,
+                  price: `${faker.random.number()}`,
+                  picture: 'image.jpg',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTEyMTY1ODY1LCJleHAiOjE1MTIyNTIyNjV9.aVquiWS6ki2CZeuyiuLbbcTcvhwS-JYIKX2CtYUbpMQ',
+              })
+              .end((err, res) => {
+                  expect(res).to.have.status(403);
+                  done();
+              });
+        });
+
+        it('Should test for addCenter 500 response status code', (done) => {
+            chai.request(app)
+              .post('/api/v1/centers')
+              .send({
+                  name: faker.name.firstName(),
+                  address: faker.address.streetAddress(),
+                  location: faker.address.city(),
+                  capacity: faker.random.number(), // when use raw number instead of number in string form
+                  price: faker.random.number(), // when use raw number instead of number in string form
+                  picture: 'image.jpg',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+              .end((err, res) => {
+                  expect(res).to.have.status(500);
+                  done();
+              });
+        });
+
+
+        it('Should test for modifyCenter 202 response status code', (done) => {
+            chai.request(app)
+              .put('/api/v1/centers/6')
               .send({
                   name: 'Andela Epic Tower',
                   address: 'Ikorodu Road',
                   location: 'Lagos',
                   capacity: '1000',
                   price: '25000',
+                  availability: 'close',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
               })
               .end((err, res) => {
-                  expect(res).to.have.status(404);
+                  expect(res).to.have.status(202);
+                  done();
+              });
+        });
+
+        it('Should test for modifyCenter 403 response status code', (done) => {
+            chai.request(app)
+              .put('/api/v1/centers/3')
+              .send({
+                  name: 'Andela Epic Tower',
+                  address: 'Ikorodu Road',
+                  location: 'Lagos',
+                  capacity: '1000',
+                  price: '25000',
+                  availability: 'close',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+              .end((err, res) => {
+                  expect(res).to.have.status(403);
                   done();
               });
         });
@@ -158,7 +205,7 @@ describe('Tests for EventManager application', () => {
         });
         it('Should test for getCenterDetails 200 response status code', (done) => {
             chai.request(app)
-              .get('/api/v1/centers/0')
+              .get('/api/v1/centers/6')
               .end((err, res) => {
                   expect(res).to.have.status(200);
                   done();
@@ -166,17 +213,9 @@ describe('Tests for EventManager application', () => {
         });
         it('Should test for getCenterDetails 404 response status code', (done) => {
             chai.request(app)
-              .get('/api/v1/centers/7')
+              .get('/api/v1/centers/77')
               .end((err, res) => {
                   expect(res).to.have.status(404);
-                  done();
-              });
-        });
-        it('Should test for getCenterDetails for invalid parameter', (done) => {
-            chai.request(app)
-              .get('/api/v1/centers/fdf')
-              .end((err, res) => {
-                  expect(res).to.have.status(400);
                   done();
               });
         });
@@ -186,18 +225,115 @@ describe('Tests for EventManager application', () => {
             chai.request(app)
               .post('/api/v1/events')
               .send({
-                  title: 'Andela Bootcamp',
-                  date: 'March 21, 2010',
+                  title: faker.name.title(),
+                  date: `${faker.date.past().toDateString()}`,
                   time: '8:30',
-                  centerId: '2',
+                  centerId: '3',
                   description: 'A technology learning program',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTExOTY5NDg2LCJleHAiOjE1MTIwNTU4ODZ9.Zzb7FBm42wiQJ7qNTyJyjecgg1lTj88lXqMEOzqWUZM',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
               })
               .end((err, res) => {
                   expect(res).to.have.status(201);
                   done();
               });
         });
+        it('Should test for addEvents 406 response status code', (done) => {
+            chai.request(app)
+              .post('/api/v1/events')
+              .send({
+                  title: faker.name.title(),
+                  date: 'Wed Nov 22 2017',
+                  time: '17:30',
+                  centerId: '4',
+                  description: 'A technology learning program',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+              .end((err, res) => {
+                  expect(res).to.have.status(406);
+                  done();
+              });
+        });
+        it('Should test for addEvents 400 response status code', (done) => {
+            chai.request(app)
+              .post('/api/v1/events')
+              .send({
+                  title: faker.name.title(),
+                  date: 'Wed Nov 22 2017',
+                  time: '17:30',
+                  centerId: `${faker.random.number()}`,
+                  description: 'A technology learning program',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+              .end((err, res) => {
+                  expect(res).to.have.status(400);
+                  done();
+              });
+        });
+        it('Should test modifyEvent 406 error response status code', (done) => {
+            chai.request(app)
+            .put('/api/v1/events/4')
+              .send({
+                  title: faker.name.title(),
+                  date: 'Wed Nov 22 2017',
+                  time: '17:30',
+                  centerId: '4',
+                  description: 'A technology learning program',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+            .end((err, res) => {
+                expect(res).to.have.status(406);
+                done();
+            });
+        });
+        it('Should test modifyEvent 202 error response status code', (done) => {
+            chai.request(app)
+            .put('/api/v1/events/19')
+              .send({
+                  title: faker.name.title(),
+                  date: `${faker.date.past().toDateString()}`,
+                  time: '17:30',
+                  centerId: '4',
+                  description: 'A technology learning program',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+            .end((err, res) => {
+                expect(res).to.have.status(202);
+                done();
+            });
+        });
+        it('Should test modifyEvent 403 error response status code', (done) => {
+            chai.request(app)
+            .put('/api/v1/events/999')
+              .send({
+                  title: faker.name.title(),
+                  date: `${faker.date.past().toDateString()}`,
+                  time: '17:30',
+                  centerId: '4',
+                  description: 'A technology learning program',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+            .end((err, res) => {
+                expect(res).to.have.status(403);
+                done();
+            });
+        });
+        it('Should test for modifyEvent 400 response status code', (done) => {
+            chai.request(app)
+              .put('/api/v1/events/19')
+              .send({
+                  title: faker.name.title(),
+                  date: 'Wed Nov 22 2017',
+                  time: '17:30',
+                  centerId: `${faker.random.number()}`,
+                  description: 'A technology learning program',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+              })
+              .end((err, res) => {
+                  expect(res).to.have.status(400);
+                  done();
+              });
+        });
+
         it('Should test getEvents 200 response status code', (done) => {
             chai.request(app)
               .get('/api/v1/events')
@@ -206,35 +342,5 @@ describe('Tests for EventManager application', () => {
                   done();
               });
         });
-        it('Should test modifyEvent 404 error response status code', (done) => {
-            chai.request(app)
-            .put('/api/v1/events/4')
-              .send({
-                  title: 'Andela Bootcamp',
-                  date: 'March 21, 2012',
-                  time: '8:30',
-                  venue: 'Andela Epic Tower',
-                  description: 'A technology learning program',
-              })
-            .end((err, res) => {
-                expect(res).to.have.status(404);
-                done();
-            });
-        });
-        it('Should test modifyEvent 202 success response status code', (done) => {
-            chai.request(app)
-              .put('/api/v1/events/0')
-              .send({
-                  title: 'Andela Bootcamp',
-                  date: 'March 21, 2012',
-                  time: '8:30',
-                  venue: 'Andela Epic Tower',
-                  description: 'A technology learning program',
-              })
-              .end((err, res) => {
-                  expect(res).to.have.status(202);
-                  done();
-              });
-        });
-    });*/
+    });
 });
