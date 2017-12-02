@@ -4,7 +4,7 @@ require('dotenv').config();
 import faker from 'faker';
 
 
-console.log(new Date());
+console.log(faker.date.future().toDateString());
 
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);

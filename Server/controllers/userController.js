@@ -29,7 +29,6 @@ class Users {
                 return users.create({ username, name, email, accountType, phoneNo,
                     password: bcrypt.hashSync(password, 10) })
                     .then(createdUser => {
-                        const { username, name, email, phoneNo, accountType } = createdUser;
                         const newUser = { username, name, email, phoneNo: parseFloat(phoneNo), accountType };
                         const token = jwt.sign({ id: createdUser.id }, key, {
                             expiresIn: 60 * 60 * 24 * 30});
