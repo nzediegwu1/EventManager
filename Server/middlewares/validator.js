@@ -50,11 +50,13 @@
 
         this.verifyEvent = (req, res, next) => {
             // validate event title
+            const today = new Date();
             if (req.body.title === undefined || typeof req.body.title !== 'string'
                 || req.body.title.trim().length === 0 || req.body.title.length > 99) {
                 this.verificationError = this.errorMessage('Event title should be non-empty string less 100 characters', res);
                 // validate event date format: March 21, 2012
-            } else if (req.body.date === undefined || isNaN(Date.parse(req.body.date))) {
+            } else if (req.body.date === undefined || isNaN(Date.parse(req.body.date))
+                || Date.parse(req.body.date) < Date.parse(today)) {
                 this.verificationError = this.errorMessage('Event has none or invalid date', res);
                 // validate event time format: 00:00
             } else if (req.body.time === undefined || !this.formatTime(req.body.time)) {
