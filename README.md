@@ -168,7 +168,7 @@ To test, run:
   </tr>
 </table>
 ## Licence
-Copyright (c) 2017 Haruna Popoola
+Copyright (c) 2017 Anaeze Nsoffor
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
