@@ -7,6 +7,8 @@ chai.use(chaiHttp);
 
 describe('Tests for EventManager application', () => {
     describe('Tests for centerRouter response status codes', () => {
+
+        /*
         it('Should test for addCenter 406 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/centers')
@@ -42,7 +44,7 @@ describe('Tests for EventManager application', () => {
                   done();
               });
         });
-
+        */
         it('Should test for addCenter 403 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/centers')
@@ -78,8 +80,7 @@ describe('Tests for EventManager application', () => {
                   done();
               });
         });
-
-
+/*
         it('Should test for modifyCenter 202 response status code', (done) => {
             chai.request(app)
               .put('/api/v1/centers/2')
@@ -96,7 +97,7 @@ describe('Tests for EventManager application', () => {
                   expect(res).to.have.status(202);
                   done();
               });
-        });
+        }); */
 
         it('Should test for modifyCenter 403 response status code', (done) => {
             chai.request(app)
