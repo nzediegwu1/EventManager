@@ -18,7 +18,7 @@ describe('Tests for EventManager application', () => {
                   price: '7000',
                   picture: 'image.jpg',
                   availability: 'open',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTUxMjIyNjY4MywiZXhwIjoxNTEyMzEzMDgzfQ.4oq4auyRIbYFmSCBzPoMz5-oijSRrlTvAteRtQUDwiw',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTUxMjIzMDExNywiZXhwIjoxNTEyMzE2NTE3fQ.-XZJw8oHVJXlrp09uFtgixYVTKVsSdfCThiIHtwoVPI',
               })
               .end((err, res) => {
                   expect(res).to.have.status(406);
@@ -35,7 +35,7 @@ describe('Tests for EventManager application', () => {
                   capacity: `${faker.random.number()}`,
                   price: `${faker.random.number()}`,
                   picture: 'image.jpg',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTUxMjIyNjY4MywiZXhwIjoxNTEyMzEzMDgzfQ.4oq4auyRIbYFmSCBzPoMz5-oijSRrlTvAteRtQUDwiw',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTUxMjIzMDExNywiZXhwIjoxNTEyMzE2NTE3fQ.-XZJw8oHVJXlrp09uFtgixYVTKVsSdfCThiIHtwoVPI',
               })
               .end((err, res) => {
                   expect(res).to.have.status(201);
@@ -53,7 +53,7 @@ describe('Tests for EventManager application', () => {
                   capacity: `${faker.random.number()}`,
                   price: `${faker.random.number()}`,
                   picture: 'image.jpg',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNTEyMjI3MzQ2LCJleHAiOjE1MTIzMTM3NDZ9.QWeW-wkI5fHL9xpGEsahdh9IrpCsXxB3EqRscLyj_5Q',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNTEyMjI5ODIyLCJleHAiOjE1MTIzMTYyMjJ9.lwxkk_y9OimqwKPGaX02RgIO3yMg4vNBUP_OT7VHKvA',
               })
               .end((err, res) => {
                   expect(res).to.have.status(403);
