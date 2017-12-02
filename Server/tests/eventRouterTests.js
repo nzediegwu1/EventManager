@@ -8,6 +8,7 @@ chai.use(chaiHttp);
 describe('Tests for EventManager application', () => {
 
     describe('Tests for eventRouter response status codes', () => {
+        /*
         it('Should test for addEvents 201 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/events')
