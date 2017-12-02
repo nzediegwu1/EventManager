@@ -31,7 +31,7 @@ describe('Tests for EventManager application', () => {
                   username: faker.internet.userName(),
                   name: faker.name.firstName(),
                   email: faker.internet.email(),
-                  phoneNo: '070503943430',
+                  phoneNo: '70503943430',
                   accountType: 'regular', // ['admin' or 'regular']
                   password: 'password1',
                   confirmPassword: 'password1',
@@ -45,7 +45,7 @@ describe('Tests for EventManager application', () => {
             chai.request(app)
               .post('/api/v1/users/login')
               .send({
-                  username: 'nzediegwu1',
+                  username: 'ohams',
                   password: 'password1',
               })
               .end((err, res) => {
