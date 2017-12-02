@@ -3,7 +3,8 @@ import path from 'path';
 require('dotenv').config();
 import faker from 'faker';
 
-console.log(faker.date.past().toDateString());
+
+console.log(new Date());
 
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);

@@ -12,15 +12,19 @@ class Centers {
                 return model.findAll()
                     .then(centers => { // destructuring
                         const { name, address, location, capacity, price, picture, availability } = req.body;
+                        let sameCenter ='';
                         if (centers.length !== 0) {
                             centers.forEach(center => {
                                 if (center.name === name
                                     && center.location === location
                                     && center.address === address) {
                                     // unacceptable
-                                    return validator.response(res, 'err', 406, 'Center already exists');
+                                    sameCenter = 'Same center already exists';
                                 }
                             });
+                        }
+                        if (sameCenter != '') {
+                            return validator.response(res, 'err', 406, sameCenter);
                         }
                         const newEntry = { name, address, location, picture, availability, userId: req.decoded.id,
                             capacity: parseInt(capacity), price: parseInt(price),
@@ -38,18 +42,35 @@ class Centers {
     modifyCenter(req, res) {
         // get center with same index as parameter and change the value
         if (validator.confirmParams(req, res)) { // destructuring
-            const { name, address, location, capacity, price, picture, availability } = req.body;
-            const modifiedEntry = { name, address, location, picture, availability, userId: req.decoded.id,
-                capacity: parseInt(capacity), price: parseInt(price) };
-            return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
-               .then(updatedCenter => {
-                   if (updatedCenter[0] === 1) {
-                       return validator.response(res, 'success', 202, 'Update successful');
-                   }
-                   // trying to update a center whose id does not exist
-                   // and or which doesnt belong to the user
-                   return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
-               }).catch(error => validator.response(res, 'error', 500, error));
+            return model.findAll()
+                .then(centers => { // destructuring
+                    const { name, address, location, capacity, price, picture, availability } = req.body;
+                    let sameCenter ='';
+                    if (centers.length !== 0) {
+                        centers.forEach(center => {
+                            if (center.name === name
+                                && center.location === location
+                                && center.address === address && center.id !== parseInt(req.params.id)) {
+                                // unacceptable
+                                sameCenter = 'Same center already exists';
+                            }
+                        });
+                    }
+                    if (sameCenter != '') {
+                        return validator.response(res, 'err', 406, sameCenter);
+                    }
+                    const modifiedEntry = { name, address, location, picture, availability, userId: req.decoded.id,
+                        capacity: parseInt(capacity), price: parseInt(price) };
+                    return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
+                       .then(updatedCenter => {
+                           if (updatedCenter[0] === 1) {
+                               return validator.response(res, 'success', 202, 'Update successful');
+                           }
+                           // trying to update a center whose id does not exist
+                           // and or which doesnt belong to the user
+                           return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
+                       }).catch(error => validator.response(res, 'error', 500, error));
+                }).catch(error => validator.response(res, 'error', 500, error));
         }
         return validator.invalidParameter;
     }
