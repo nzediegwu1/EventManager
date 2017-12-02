@@ -6,20 +6,19 @@ import faker from 'faker';
 chai.use(chaiHttp);
 
 describe('Tests for EventManager application', () => {
-    /*
     describe('Tests for centerRouter response status codes', () => {
         it('Should test for addCenter 406 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/centers')
               .send({
-                  name: 'Eagle square ultimate',
-                  address: 'Ikorodu Road',
-                  location: 'Lagos',
-                  capacity: '1000',
-                  price: '25000',
+                  name: 'Woment Empowerment Hall',
+                  address: 'Wuse Market place',
+                  location: 'FCT, Abuja',
+                  capacity: '34000',
+                  price: '7000',
                   picture: 'image.jpg',
-                  availability: 'close',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+                  availability: 'open',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTUxMjIyNjY4MywiZXhwIjoxNTEyMzEzMDgzfQ.4oq4auyRIbYFmSCBzPoMz5-oijSRrlTvAteRtQUDwiw',
               })
               .end((err, res) => {
                   expect(res).to.have.status(406);
@@ -36,7 +35,7 @@ describe('Tests for EventManager application', () => {
                   capacity: `${faker.random.number()}`,
                   price: `${faker.random.number()}`,
                   picture: 'image.jpg',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTUxMjIyNjY4MywiZXhwIjoxNTEyMzEzMDgzfQ.4oq4auyRIbYFmSCBzPoMz5-oijSRrlTvAteRtQUDwiw',
               })
               .end((err, res) => {
                   expect(res).to.have.status(201);
@@ -54,7 +53,7 @@ describe('Tests for EventManager application', () => {
                   capacity: `${faker.random.number()}`,
                   price: `${faker.random.number()}`,
                   picture: 'image.jpg',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTEyMTY1ODY1LCJleHAiOjE1MTIyNTIyNjV9.aVquiWS6ki2CZeuyiuLbbcTcvhwS-JYIKX2CtYUbpMQ',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNTEyMjI3MzQ2LCJleHAiOjE1MTIzMTM3NDZ9.QWeW-wkI5fHL9xpGEsahdh9IrpCsXxB3EqRscLyj_5Q',
               })
               .end((err, res) => {
                   expect(res).to.have.status(403);
@@ -83,7 +82,7 @@ describe('Tests for EventManager application', () => {
 
         it('Should test for modifyCenter 202 response status code', (done) => {
             chai.request(app)
-              .put('/api/v1/centers/6')
+              .put('/api/v1/centers/2')
               .send({
                   name: 'Andela Epic Tower',
                   address: 'Ikorodu Road',
@@ -91,7 +90,7 @@ describe('Tests for EventManager application', () => {
                   capacity: '1000',
                   price: '25000',
                   availability: 'close',
-                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTEyMTM3NDEyLCJleHAiOjE1MTIyMjM4MTJ9.q2BhHpIVCvUmvSrGpu2xioHdlCOmoly67R747BqbAbM',
+                  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImlhdCI6MTUxMjIyNzc0NiwiZXhwIjoxNTEyMzE0MTQ2fQ.JVVq_P0RPe1Y8lADfXYwPhppN59ZTPtEjLS30nBFTGY',
               })
               .end((err, res) => {
                   expect(res).to.have.status(202);
@@ -126,7 +125,7 @@ describe('Tests for EventManager application', () => {
         });
         it('Should test for getCenterDetails 200 response status code', (done) => {
             chai.request(app)
-              .get('/api/v1/centers/6')
+              .get('/api/v1/centers/2')
               .end((err, res) => {
                   expect(res).to.have.status(200);
                   done();
@@ -141,5 +140,4 @@ describe('Tests for EventManager application', () => {
               });
         });
     });
-    */
 });
