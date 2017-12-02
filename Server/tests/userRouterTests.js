@@ -24,35 +24,37 @@ describe('Tests for EventManager application', () => {
                   done();
               });
         });
-        it('Should test for signup 201 response status code', (done) => {
-            chai.request(app)
-              .post('/api/v1/users')
-              .send({
-                  username: faker.internet.userName(),
-                  name: faker.name.firstName(),
-                  email: faker.internet.email(),
-                  phoneNo: '70503943430',
-                  accountType: 'regular', // ['admin' or 'regular']
-                  password: 'password1',
-                  confirmPassword: 'password1',
-              })
-              .end((err, res) => {
-                  expect(res).to.have.status(201);
-                  done();
-              });
-        });
-        it('Should test for signin 200 response status code', (done) => {
-            chai.request(app)
-              .post('/api/v1/users/login')
-              .send({
-                  username: 'ohams',
-                  password: 'password1',
-              })
-              .end((err, res) => {
-                  expect(res).to.have.status(200);
-                  done();
-              });
-        });
+        /*
+                it('Should test for signup 201 response status code', (done) => {
+                    chai.request(app)
+                      .post('/api/v1/users')
+                      .send({
+                          username: faker.internet.userName(),
+                          name: faker.name.firstName(),
+                          email: faker.internet.email(),
+                          phoneNo: '70503943430',
+                          accountType: 'regular', // ['admin' or 'regular']
+                          password: 'password1',
+                          confirmPassword: 'password1',
+                      })
+                      .end((err, res) => {
+                          expect(res).to.have.status(201);
+                          done();
+                      });
+                });
+                it('Should test for signin 200 response status code', (done) => {
+                    chai.request(app)
+                      .post('/api/v1/users/login')
+                      .send({
+                          username: 'ohams',
+                          password: 'password1',
+                      })
+                      .end((err, res) => {
+                          expect(res).to.have.status(200);
+                          done();
+                      });
+                });
+        */
         it('Should test for signin 401 response status code', (done) => {
             chai.request(app)
               .post('/api/v1/users/login')
