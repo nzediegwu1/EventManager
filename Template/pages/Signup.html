@@ -15,6 +15,14 @@
             background-color: black;
         }
 
+        .input-group-addon:not(:last-child) {
+            width: 3em;
+        }
+
+        .input-group {
+            height: 2.5em;
+        }
+
         modal-content {
             background-color: lightgray;
             color: black;
@@ -131,28 +139,6 @@
                             <img src="../resources/images/glyphicons-442-phone-alt.png" alt="phone" />
                         </span>
                         <input type="number" name="phone" placeholder="Phone number" class="form-control input-lg" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <img src="../resources/images/glyphicons-500-family.png" alt="accountType" />
-                        </span>
-                        <select id="accountType">
-                            <option value="">Account Type</option>
-                            <option value="ordinary">Ordinary</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group paymentInput">
-                    <p class="text-center">Pay $50 to:</p>
-                    <input type="text" name="bitcoin" value="1JBAidrXcYd4rWq8zPHYPGCejfJioV51Vm" disabled class="form-control form-control-sm" />
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <img src="../resources/images/glyphicons-548-bitcoin.png" alt="phone" />
-                        </span>
-                        <input type="text" name="bitcoin" placeholder="Enter transaction id" required class="form-control input-lg" />
                     </div>
                 </div>
                 <div class="form-group">
