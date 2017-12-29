@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <link href="resources/styles/bootstrap.css" rel="stylesheet" />
+    <script src="resources/scripts/jquery.js"></script>
+    <script src="resources/scripts/popper.min.js"></script>
+    <script src="resources/scripts/bootstrap.js"></script>
+    <style>
+        .background-image {
+            background: url(resources/images/2012_gala_tent.jpg) center center no-repeat fixed;
+            background-size: cover;
+            background-color: black;
+        }
+
+        .input-group-addon:not(:last-child) {
+            width: 3em;
+        }
+
+        #loginPanel {
+            margin-top: 10%;
+            background-color: #252221;
+            border-radius: 1em;
+            box-shadow: 2px 1px 20px 1px white;
+        }
+
+        .input-group {
+            height: 2.5em;
+        }
+
+        .form-links {
+            text-align: center;
+            margin-top: 1em;
+        }
+
+            .form-links a {
+                color: white;
+            }
+
+        .main-title {
+            font-family: 'Aclonica';
+            font-size: 2.5em;
+            color: white;
+            font-weight: bolder;
+            box-shadow: 2px 2px 10px 1px white;
+            background-color: #252221;
+            padding: 0.2em;
+            border-radius: 0.2em;
+        }
+
+        .panel-font {
+            font-family: 'Aclonica';
+        }
+
+        #titleDiv {
+            text-align: center;
+            margin-top: 3em;
+        }
+
+        .formDiv {
+            color: white;
+            padding-top: 1em;
+            padding-bottom: 2em;
+            width: 80%;
+            margin: auto;
+        }
+
+        .btn-block {
+            margin-top: 1em;
+        }
+
+        .modal-content {
+            background-color: lightgrey;
+        }
+
+        .modal-header {
+            background-color: darkblue;
+            color: white;
+        }
+
+        .send-password {
+            background-color: darkslategray;
+        }
+
+        @media screen and (max-width: 780px) {
+            .formDiv {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="background-image">
+    <div class="container">
+        <div id="titleDiv">
+            <b class="main-title">EventManager</b>
+        </div>
+        <div id="loginPanel" class="mx-sm-auto col-sm-6">
+            <form role="form" action="pages/MyEvents.html" class="formDiv">
+                <h3 class="text-center panel-font"><b>Login</b></h3>
+                <br />
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <img src="resources/images/glyphicons-522-user-lock.png" alt="username" />
+                    </span>
+                    <input type="text" name="username" placeholder="Username" required class="form-control input-lg" />
+                </div><br />
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <img src="resources/images/glyphicons-204-lock.png" alt="username" />
+                    </span>
+                    <input type="password" class="form-control input-lg" id="password" placeholder="Password" required />
+                </div>
+                <button type="submit" class="btn btn-lg btn-primary btn-block submitButton">Sign in</button>
+                <div class="form-links">
+                    <a href="pages/Signup.html">Create account</a> | <a href="#" data-toggle="modal" data-target="#resetPassword">reset password</a>
+                </div>
+            </form>
+            <!-- Modal -->
+            <div class="modal fade" id="resetPassword" tabindex="-1" role="dialog" aria-labelledby="resetPasswordLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header modal-theme">
+                            <h5 class="modal-title" id="resetPasswordLabel"><b>Recover Password</b></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body  text-center">
+                            <h4>Forgot Password?</h4>
+                            <p>Enter your email to recover password</p>
+                            <form class="form">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <img src="resources/images/glyphicons-11-envelope.png" alt="username" />
+                                            </span>
+                                            <input id="emailInput" placeholder="email address" class="form-control email-input" required type="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="btn btn-lg btn-primary btn-block modal-theme send-password" value="Recover Password" type="submit">
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="modal-footer modal-theme">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="resources/scripts/app.js"></script>
+</body>
+</html>

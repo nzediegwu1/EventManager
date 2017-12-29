@@ -1,0 +1,605 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <link href="../resources/styles/bootstrap.css" rel="stylesheet" />
+    <script src="../resources/scripts/jquery.js"></script>
+    <script src="../resources/scripts/popper.min.js"></script>
+    <script src="../resources/scripts/bootstrap.js"></script>
+    <style>
+        @media screen and (max-width:780px) { /* or 780*/
+            #searchEvents {
+                display: none;
+            }
+        }
+
+        .input-group-addon {
+            padding: 0em;
+        }
+
+        .input-icon {
+            margin: auto;
+        }
+
+        .input-group {
+            height: 2.5em;
+        }
+
+        .input-group-addon:not(:last-child) {
+            width: 3em;
+        }
+
+        #editCenter {
+            margin-right: 0.5em;
+        }
+
+        .modal-title {
+            color: white;
+        }
+
+        .custom-select-sm {
+            width: 100%;
+        }
+
+        .grey-color {
+            background-color: grey;
+        }
+
+        #addFacility {
+            width: 10%;
+            margin-right: 1em;
+        }
+
+        .add-facility-90 {
+            width: 90%;
+        }
+
+        .form-control {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+        }
+
+        .search-events {
+            background-color: darkgreen;
+        }
+
+        .appBackground {
+            background-color: lightgrey;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .fixed-top {
+            height: 4em;
+            padding-left: 0em;
+            padding-right: 0em;
+        }
+
+        a:hover {
+            color: lightgreen;
+        }
+
+        .top-eight {
+            display: flex;
+        }
+
+        .custom-container {
+            padding-top: 8em;
+            width: 100%;
+        }
+
+        .nav-link {
+            color: white;
+        }
+
+        #navBody {
+            max-width: 100%;
+        }
+
+        .zero-padding {
+            padding: 0em;
+        }
+
+        .navbar-background {
+            background-color: darkblue;
+        }
+
+        .invert-color {
+            -webkit-filter: invert(1);
+            filter: invert(1);
+        }
+
+        .appTitle {
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-right: 0.3em;
+            font-size: 1.2em;
+            color: white;
+            margin-left: 1em;
+        }
+
+        #nav-body {
+            background-color: darkblue;
+        }
+    </style>
+    <style>
+        /*sidebar style*/
+        .modal.left .modal-body,
+        .modal.right .modal-body {
+            padding: 15px 15px 80px;
+        }
+
+        .modal.left .modal-dialog {
+            margin: auto;
+            max-width: 25%;
+            transform: translate3d(0%, 0, 0);
+        }
+
+        .modal.left.fade .modal-dialog {
+            left: -38%;
+            transition: opacity 2s linear, left 2s ease-out;
+        }
+
+        .modal.left.fade.in .modal-dialog {
+            left: 0;
+        }
+
+        .modal-header {
+            border-bottom-color: #EEEEEE;
+            background-color: #FAFAFA;
+        }
+
+        .sidebar {
+            background-color: black;
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            width: 13em;
+        }
+
+        .sidebar-header {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        .sidebar-toggle {
+            margin-left: 0.5em;
+        }
+
+        .icon-margin-left {
+            margin-left: 0.5em;
+        }
+
+        .modalCustom {
+            text-align: center;
+            font-weight: bolder;
+            background-color: darkblue;
+            color: lightgreen;
+        }
+
+        .modalDivider {
+            border-bottom: inset;
+            border-bottom-width: thick;
+            padding-bottom: 0.5em;
+        }
+
+        .centerSearch {
+            height: 250px;
+            overflow-y: scroll;
+            width: 100%;
+            border-left: ridge;
+        }
+
+        .table-header {
+            background-color: grey;
+        }
+
+        .table {
+            background-color: white;
+        }
+
+        .badge {
+            color: black;
+            border: ridge;
+        }
+
+        .eventModal {
+            background-color: lightgrey;
+        }
+
+        .add-facility {
+            padding-left: 1em;
+            background-color: darkblue;
+            color: white;
+            border-top-left-radius: 0.5em;
+            border-top-right-radius: 0.5em;
+            padding-top: 0.3em;
+        }
+
+        .add-facility-icon {
+            margin-bottom: 0.3em;
+        }
+
+        .mg-event-header {
+            background-color: darkblue;
+            color: white;
+            margin: auto;
+            width: 100%;
+        }
+
+        .card-header-body {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+
+        .card-image {
+            width: 100%;
+            border-radius: 1em;
+            margin-bottom: 1em;
+        }
+
+        .manage {
+            display: flex;
+            float: right;
+        }
+
+        .zero-padding {
+            padding: 0px;
+        }
+    </style>
+</head>
+<body class="appBackground">
+    <nav class="navbar fixed-top navbar-expand-sm navbar-background">
+        <a href="#" data-toggle="modal" data-target="#myModalSidebar"><img src="../resources/images/glyphicons-517-menu-hamburger.png" class="invert-color sidebar-toggle" id="menu-toggle" /></a>
+        <h4 class="appTitle">EventMgr</h4>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navBody" aria-controls="navBody" aria-expanded="false">
+            <img src="../resources/images/glyphicons-517-menu-hamburger.png" alt="hamburger" class="invert-color" />
+        </button>
+        <div class="collapse navbar-collapse collapsible" id="navBody">
+            <form class="form-inline my-lg-0" id="searchFormGroup">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search an Event" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 search-events" id="searchEvents" type="submit">
+                    <img src="../resources/images/glyphicons-28-search.png" class="invert-color" />
+                </button>
+            </form>
+            <ul class="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
+                <li class="nav-item">
+                    <a id="addEvent" class="nav-link" data-toggle="modal" data-target="#addNewEvent" href="#">
+                        Add Event
+                        <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="addCenter" class="nav-link" data-toggle="modal" data-target="#addNewCenter" href="#">
+                        Add Center
+                        <img src="../resources/images/glyphicons-191-plus-sign.png" alt="add" class="invert-color" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="modal fade" role="dialog" id="addNewEvent" tabindex="-1" aria-labelledby="addNewEventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content eventModal">
+                <div class="modal-header modalCustom">
+                    <h5 class="modal-title" id="addNewEventTitle"><b>New Event</b></h5>
+                    <button class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body mx-sm-auto col-sm-9">
+                    <form role="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img class="input-icon" src="../resources/images/glyphicons-619-mixed-buildings.png" alt="eventname" />
+                                </span>
+                                <input type="text" placeholder="Event Name" name="eventname" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img class="input-icon" src="../resources/images/glyphicons-139-picture.png" alt="eventImage" />
+                                </span>
+                                <input type="file" name="eventImage" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img class="input-icon" src="../resources/images/glyphicons-46-calendar.png" alt="eventdate" />
+                                </span>
+                                <input type="date" name="eventdate" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img class="input-icon" src="../resources/images/glyphicons-54-alarm.png" alt="start" />
+                                </span>
+                                <input type="time" name="time" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="control-label">Description</label>
+                            <textarea name="description" rows="2" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <select class="custom-select-sm">
+                                <option>
+                                    Select Center
+                                </option>
+                                <option value="1">
+                                    House on the Rock, Ikeja, Lagos. Capacity: 500
+                                </option>
+                                <option value="1">
+                                    Christ embassy hall, Ikeja, Lagos. Capacity: 2300
+                                </option>
+                                <option value="1">
+                                    House on the Rock FCT, Abuja. Capacity: 1200
+                                </option>
+                                <option value="1">
+                                    National Assembly Conference Hall, Abuja. Capacity: 4500
+                                </option>
+                                <option value="1">
+                                    National Stadium, Owerri, Imo. Capacity: 85,000
+                                </option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button class="btn btn-success createEvent">Save</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" id="addNewCenter" tabindex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content eventModal">
+                <div class="modal-header modalCustom">
+                    <h5 class="modal-title" id="addNewCenterTitle"><b>New Center</b></h5>
+                    <button class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body mx-sm-auto col-sm-9">
+                    <form role="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-21-home.png" class="input-icon" alt="centername" />
+                                </span>
+                                <input type="text" placeholder="Center Name" name="centername" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-139-picture.png" class="input-icon" alt="centerImage" />
+                                </span>
+                                <input type="file" name="centerImage" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-243-map-marker.png" class="input-icon" alt="street" />
+                                </span>
+                                <input type="text" name="street" placeholder="Address" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-740-cadastral-map.png" class="input-icon" atl="city" />
+                                </span>
+                                <input type="text" name="location" placeholder="State/City" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-44-group.png" class="input-icon" alt="capacity" />
+                                </span>
+                                <input type="number" name="capacity" placeholder="Capacity" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <img src="../resources/images/glyphicons-548-bitcoin.png" class="input-icon" alt="bookingAmount" />
+                                </span>
+                                <input type="number" name="bookingAmount" placeholder="Booking price/day" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select class="custom-select-sm">
+                                <option>
+                                    Availability
+                                </option>
+                                <option value="1">
+                                    open
+                                </option>
+                                <option value="0">
+                                    close
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="top-eight add-facility">
+                                <div class="col-sm-10 zero-padding add-facility-90">
+                                    <b>Add facility</b>
+                                </div>
+                                <div class="col-sm-2 zero-padding" id="addFacility">
+                                    <a href="#"><img class="invert-color add-facility-icon" src="../resources/images/glyphicons-191-plus-sign.png" /></a>
+                                </div>
+                            </div>
+                            <div class="table-responsive centerSearch">
+                                <table class="table table-hover grey-color">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+                                            <th><img src="../resources/images/glyphicons-198-remove-circle.png" alt="delete" /></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Projector</td>
+                                            <td><span class="badge">150</span></td>
+                                            <td><div class="checkbox"><input type="checkbox" name="mark" /></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Backup power</td>
+                                            <td><span class="badge">450</span></td>
+                                            <td><div class="checkbox"><input type="checkbox" name="mark" /></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sound system</td>
+                                            <td><span class="badge">200</span></td>
+                                            <td><div class="checkbox"><input type="checkbox" name="mark" /></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Smart lighting</td>
+                                            <td><span class="badge">385</span></td>
+                                            <td><div class="checkbox"><input type="checkbox" name="mark" /></div></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button class="btn btn-success createCenter">Save</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- container -->
+    <div id="content" class="container custom-container">
+        <!--SIDE BAR-->
+        <div class="modal left fade" id="myModalSidebar" tabindex="-1" role="dialog" aria-labelledby="myModalSidebarLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content sidebar">
+                    <div class="modal-header  sidebar-header">
+                        <h5 class="modal-title">
+                            <b>Dashboard</b>
+                        </h5>
+                        <img class="invert-color close" data-dismiss="modal" src="../resources/images/glyphicons-198-remove-circle.png">
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav flex-column nav-tabs">
+                            <li class="nav-item">
+                                <a href="MyEvents.html" class="nav-link">
+                                    <h6>MyEvents <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-619-mixed-buildings.png" alt="myEvents" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="MyCenters.html" class="nav-link">
+                                    <h6>MyCenters <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-503-map.png" alt="myCenters" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <h6>MyProfile <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-4-user.png" alt="myProfile" /></h6>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../index.html" class="nav-link">
+                                    <h6>Logout <img class="invert-color icon-margin-left" src="../resources/images/glyphicons-64-power.png" alt="logout" /></h6>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+        <!-- Actual ManageEvents Page -->
+        <div class="card mx-sm-auto col-sm-11 zero-padding">
+            <div class="card-header mg-event-header card-header-body">
+                <table class="table-responsive col-sm-12 bg-transparent  zero-padding">
+                    <tr>
+                        <td style="width:80%;"><h4 class="text-center"><b>Andela Epic Tower</b></h4></td>
+                        <td>
+                            <div class="manage">
+                                <button type="submit" id="editCenter" class="btn btn-success" data-toggle="modal" data-target="#addNewCenter">
+                                    <img src="../resources/images/glyphicons-151-edit.png" alt="Edit" />
+                                </button>
+                                <button type="submit" class="btn btn-danger" id="deleteCenter">
+                                    <img src="../resources/images/glyphicons-198-remove-circle.png" alt="delete" />
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <img id="cardImage" class="card-image" src="../resources/images/beijing.jpg" alt="centerImage" />
+                    </div>
+                    <div class="col-sm-8">
+                        <blockquote class="blockquote mb-0">
+                            <h5><b>Street Address</b>: Anthony Layout</h5>
+                            <h5><b>Town</b>: Mainland</h5>
+                            <h5><b>City</b>: Lagos, Nigeria</h5>
+                            <h5><b>Capacity</b>: 5200</h5>
+                            <h5><b>Booking price</b>: N34,000</h5>
+                        </blockquote>
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive">
+                    <table class="table table-hover table">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Facility</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Projector</td>
+                                <td><span class="badge">150</span></td>
+                            </tr>
+                            <tr>
+                                <td>Backup power</td>
+                                <td><span class="badge">450</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sound system</td>
+                                <td><span class="badge">200</span></td>
+                            </tr>
+                            <tr>
+                                <td>Smart lighting</td>
+                                <td><span class="badge">385</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-muted mg-event-header">
+                <div class="row text-white">
+                    <div class="col-sm-4">
+                        <img class="invert-color" src="../resources/images/glyphicons-46-calendar.png" /> Date: 20th December, 2017
+                    </div>
+                    <div class="col-sm-4">
+                        <img class="invert-color" src="../resources/images/glyphicons-218-circle-arrow-right.png" /> Start Time: 8:30 AM
+                    </div>
+                    <div class="col-sm-4">
+                        <img class="invert-color" src="../resources/images/glyphicons-217-circle-arrow-left.png" /> End Time: 4:00 PM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../resources/scripts/app.js"></script>
+</body>
+</html>
