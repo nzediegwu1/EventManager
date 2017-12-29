@@ -15,101 +15,98 @@
             }
         }
 
+        .input-group-addon {
+            padding: 0em;
+        }
+        .input-icon {
+            margin: auto;
+        }
+        .table-header {
+            background-color: grey;
+        }
+        .input-group {
+            height: 2.5em;
+        }
+        .modal-title {
+            color: white;
+        }
+        .input-group-addon:not(:last-child) {
+            width: 3em;
+        }
         .custom-select-sm {
             width: 100%;
         }
-
         .grey-color {
             background-color: grey;
         }
-
         #addFacility {
             width: 10%;
             margin-right: 1em;
         }
-
         .add-facility-90 {
             width: 90%;
         }
-
         .search-input {
             margin-top: 1em;
         }
-
         .page-header {
             font-size: xx-large;
         }
-
         .form-control {
             position: relative;
             font-size: 16px;
             height: auto;
             padding: 10px;
         }
-
         .search-events {
             background-color: darkgreen;
         }
-
         .appBackground {
             background-color: lightgrey;
         }
-
         .text-center {
             text-align: center;
         }
-
         .fixed-top {
             height: 4em;
             padding-left: 0em;
             padding-right: 0em;
         }
-
         a:hover {
             color: lightgreen;
         }
-
         .top-eight {
             display: flex;
         }
-
         .custom-container {
             padding-top: 8em;
             width: 100%;
         }
-
         .nav-link {
             color: white;
         }
-
         #navBody {
             max-width: 100%;
         }
-
         .zero-padding {
             padding: 0em;
         }
-
         .list-group-item {
             background-color: white;
             color: black;
             height: 6em;
         }
-
         .navbar-background {
             background-color: darkblue;
         }
-
         .list-group-item:first-child {
             background-color: grey;
             color: white;
         }
-
         .invert-color {
             -webkit-filter: invert(1);
             filter: invert(1);
         }
-
         .appTitle {
             font-weight: bold;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -118,7 +115,6 @@
             color: white;
             margin-left: 1em;
         }
-
         #nav-body {
             background-color: darkblue;
         }
@@ -218,7 +214,7 @@
         .add-facility {
             padding-left: 1em;
             background-color: darkblue;
-            color: lightgreen;
+            color: white;
             border-top-left-radius: 0.5em;
             border-top-right-radius: 0.5em;
             padding-top: 0.3em;
@@ -275,7 +271,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-619-mixed-buildings.png" alt="eventname" />
+                                    <img class="input-icon" src="../resources/images/glyphicons-619-mixed-buildings.png" alt="eventname" />
                                 </span>
                                 <input type="text" placeholder="Event Name" name="eventname" class="form-control" />
                             </div>
@@ -283,7 +279,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-139-picture.png" alt="eventImage" />
+                                    <img class="input-icon" src="../resources/images/glyphicons-139-picture.png" alt="eventImage" />
                                 </span>
                                 <input type="file" name="eventImage" class="form-control" />
                             </div>
@@ -291,7 +287,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-46-calendar.png" alt="eventdate" />
+                                    <img class="input-icon" src="../resources/images/glyphicons-46-calendar.png" alt="eventdate" />
                                 </span>
                                 <input type="date" name="eventdate" class="form-control" />
                             </div>
@@ -299,7 +295,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img class="btn-success" src="../resources/images/glyphicons-54-alarm.png" alt="start" />
+                                    <img class="input-icon" src="../resources/images/glyphicons-54-alarm.png" alt="start" />
                                 </span>
                                 <input type="time" name="time" class="form-control" />
                             </div>
@@ -351,7 +347,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-21-home.png" alt="centername" />
+                                    <img src="../resources/images/glyphicons-21-home.png" class="input-icon" alt="centername" />
                                 </span>
                                 <input type="text" placeholder="Center Name" name="centername" class="form-control" />
                             </div>
@@ -359,7 +355,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-139-picture.png" alt="centerImage" />
+                                    <img src="../resources/images/glyphicons-139-picture.png" class="input-icon" alt="centerImage" />
                                 </span>
                                 <input type="file" name="centerImage" class="form-control" />
                             </div>
@@ -367,7 +363,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-243-map-marker.png" alt="street" />
+                                    <img src="../resources/images/glyphicons-243-map-marker.png" class="input-icon" alt="street" />
                                 </span>
                                 <input type="text" name="street" placeholder="Address" class="form-control" />
                             </div>
@@ -375,15 +371,15 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-740-cadastral-map.png" atl="city" />
+                                    <img src="../resources/images/glyphicons-740-cadastral-map.png" class="input-icon" atl="city" />
                                 </span>
-                                <input type="text" name="location" placeholder="Location" class="form-control" />
+                                <input type="text" name="location" placeholder="State/City" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-44-group.png" alt="capacity" />
+                                    <img src="../resources/images/glyphicons-44-group.png" class="input-icon" alt="capacity" />
                                 </span>
                                 <input type="number" name="capacity" placeholder="Capacity" class="form-control" />
                             </div>
@@ -391,7 +387,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <img src="../resources/images/glyphicons-548-bitcoin.png" alt="bookingAmount" />
+                                    <img src="../resources/images/glyphicons-548-bitcoin.png" class="input-icon" alt="bookingAmount" />
                                 </span>
                                 <input type="number" name="bookingAmount" placeholder="Booking price/day" class="form-control" />
                             </div>
