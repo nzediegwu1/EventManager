@@ -10,7 +10,7 @@ import cors from 'cors';
 
 const app = express();
 const options = {
-    controllers: './Server/controllers',
+    controllers: './Server/dist/controllers',
     useStubs: true,
 };
 
