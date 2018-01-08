@@ -4,10 +4,24 @@ import bodyParser from 'body-parser';
 import events from './routers/eventRouter';
 import centers from './routers/centerRouter';
 import users from './routers/userRouter';
+import swaggerTools from 'swagger-tools';
+import swaggerDoc from './swaggerDoc.json';
+import cors from 'cors';
 
 const app = express();
+const options = {
+    controllers: './Server/controllers',
+    useStubs: true,
+};
 
-app.use(bodyParser.json());
+app.use(cors());
+swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
+    app.use(middleware.swaggerMetadata());
+    app.use(middleware.swaggerValidator());
+    app.use(middleware.swaggerRouter(options));
+    app.use(middleware.swaggerUi());
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('./././Template')));
 app.use('/api/v1/events', events);

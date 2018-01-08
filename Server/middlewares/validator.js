@@ -131,9 +131,6 @@
             } else if (req.body.accountType === undefined || typeof req.body.accountType !== 'string'
                 || req.body.accountType.trim().length === 0 || req.body.accountType.length > 19) {
                 this.verificationError = this.errorMessage('Account type should be non-empty string less 20 characters', res);
-                // validate request account type enum
-            } else if (!(req.body.accountType === 'regular' || req.body.accountType === 'admin')) {
-                this.verificationError = this.errorMessage('Account type can either be [regular] or [admin]', res);
                 // validate request password
             } else if (req.body.password === undefined
                 || typeof req.body.password !== 'string' || req.body.password.trim().length < 6) {

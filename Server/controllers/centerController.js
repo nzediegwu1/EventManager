@@ -12,7 +12,7 @@ class Centers {
                 return model.findAll()
                     .then(centers => { // destructuring
                         const { name, address, location, capacity, price, picture, availability } = req.body;
-                        let sameCenter ='';
+                        let sameCenter = '';
                         if (centers.length !== 0) {
                             centers.forEach(center => {
                                 if (center.name === name
@@ -23,7 +23,7 @@ class Centers {
                                 }
                             });
                         }
-                        if (sameCenter != '') {
+                        if (sameCenter !== '') {
                             return validator.response(res, 'err', 406, sameCenter);
                         }
                         const newEntry = { name, address, location, picture, availability, userId: req.decoded.id,
@@ -45,7 +45,7 @@ class Centers {
             return model.findAll()
                 .then(centers => { // destructuring
                     const { name, address, location, capacity, price, picture, availability } = req.body;
-                    let sameCenter ='';
+                    let sameCenter = '';
                     if (centers.length !== 0) {
                         centers.forEach(center => {
                             if (center.name === name
@@ -56,7 +56,7 @@ class Centers {
                             }
                         });
                     }
-                    if (sameCenter != '') {
+                    if (sameCenter !== '') {
                         return validator.response(res, 'err', 406, sameCenter);
                     }
                     const modifiedEntry = { name, address, location, picture, availability, userId: req.decoded.id,
