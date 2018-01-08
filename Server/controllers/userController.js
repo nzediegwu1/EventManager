@@ -25,13 +25,13 @@ class Users {
                     }
                 }
                 // create new user
-                const { username, name, email, phoneNo, accountType, password } = req.body;
-                return users.create({ username, name, email, accountType, phoneNo,
+                const { username, name, email, phoneNo, password } = req.body;
+                return users.create({ username, name, email, phoneNo,
                     password: bcrypt.hashSync(password, 10) })
                     .then(createdUser => {
-                        const newUser = { username, name, email, phoneNo: parseFloat(phoneNo), accountType };
+                        const newUser = { username, name, email, phoneNo: parseFloat(phoneNo) };
                         const token = jwt.sign({ id: createdUser.id }, key, {
-                            expiresIn: 60 * 60 * 24 * 30});
+                            expiresIn: 60 * 60 * 24 * 30 });
                         return signupValidator.response(res, 'success', 201, {
                             User: newUser,
                             Token: token,

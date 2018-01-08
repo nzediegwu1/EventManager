@@ -15,7 +15,6 @@ $(document).ready(() => {
             window.location = 'MyCenters.html';
         }
     });
-
     $('#addEvent').click(() => {
         $('.createEvent').text('Create');
         $('#addNewEventTitle').text('Add Event');
