@@ -5,7 +5,7 @@
   "main": "Server/bin",
   "scripts": {
     "start": "nodemon ./Server/dist/bin/server.js",
-    "build": "babel Server -d Server/dist --ignore Server/dist",
+    "build": "babel Server -d Server/dist --copy-files --ignore Server/dist",
     "postinstall": "npm run build",
     "start:dev": "nodemon --watch Server/ --exec babel-node  -- Server/bin/server.js",
     "test": "nyc --reporter=html --reporter=text mocha --timeout 250000 ./Server/tests/ --compilers js:babel-register",
