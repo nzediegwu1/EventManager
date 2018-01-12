@@ -10,19 +10,21 @@ import cors from 'cors';
 
 const app = express();
 const options = {
-    controllers: './Server/dist/controllers',
-    useStubs: true,
+  controllers: './Server/dist/controllers',
+  useStubs: true,
 };
 
 app.use(cors());
 swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
-    app.use(middleware.swaggerMetadata());
-    app.use(middleware.swaggerValidator());
-    app.use(middleware.swaggerRouter(options));
-    app.use(middleware.swaggerUi());
+  app.use(middleware.swaggerMetadata());
+  app.use(middleware.swaggerValidator());
+  app.use(middleware.swaggerRouter(options));
+  app.use(middleware.swaggerUi());
 });
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // to allow chai-http post and put tests to run
 app.use(express.static(path.resolve('./././Template')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
@@ -30,7 +32,7 @@ app.use('/api/v1/users', users);
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('./././Template/index.html'));
+  res.sendFile(path.resolve('./././Template/index.html'));
 });
 
 export default app;
