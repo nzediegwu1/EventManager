@@ -1,9 +1,3 @@
 ﻿{
-  "presets": [ "env" ],
-  "plugins": [
-    [
-      "inline-json-import",
-      { }
-    ]
-  ]
+  "presets": [ "env" ]
 }
