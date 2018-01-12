@@ -4,6 +4,7 @@ node_js:
 env:
  global:
    - export NODE_ENV=test
+   - export SECRET_KEY=The Wisdom of God Rules the World
 script:
 - npm test
 - npm run coverage
