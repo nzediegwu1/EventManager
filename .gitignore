@@ -14,3 +14,6 @@
 /npm-debug.log
 /.env
 /typings
+Client/dist/bundle.js
+npm-debug.log.3159501567
+Client/dist/bundle.js.map
