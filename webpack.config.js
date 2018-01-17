@@ -2,10 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 module.exports = {
     entry: [
-        './Client/src/app.js',
-        'react-hot-loader/patch',
+        'react-hot-loader/patch',        
         'webpack-dev-server/client?http://localhost:9876',
         'webpack/hot/only-dev-server',
+        './Client/src/app.js',        
     ],
     devServer: {
         hot: true,
@@ -17,7 +17,7 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, './Client/dist'),
-        publicPath: '/Client/dist'
+        publicPath: '/'
     },
     module: {
         rules: [{
@@ -30,7 +30,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         contentBase: path.resolve(__dirname, 'Client/dist'),
-        publicPath: '/Client/dist',
+        publicPath: '/',
         port: '9876'
     }
 };
