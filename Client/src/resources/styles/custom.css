@@ -1,0 +1,80 @@
+.background-image {
+    background: url(resources/images/2012_gala_tent.jpg) center center no-repeat fixed;
+    background-size: cover;
+    background-color: black;
+}
+
+.input-group-addon:not(:last-child) {
+    width: 3em;
+}
+
+#loginPanel {
+    margin-top: 10%;
+    background-color: #252221;
+    border-radius: 1em;
+    box-shadow: 2px 1px 20px 1px white;
+}
+
+.input-group {
+    height: 2.5em;
+}
+
+.form-links {
+    text-align: center;
+    margin-top: 1em;
+}
+
+    .form-links a {
+        color: white;
+    }
+
+.main-title {
+    font-family: 'Aclonica';
+    font-size: 2.5em;
+    color: white;
+    font-weight: bolder;
+    box-shadow: 2px 2px 10px 1px white;
+    background-color: #252221;
+    padding: 0.2em;
+    border-radius: 0.2em;
+}
+
+.panel-font {
+    font-family: 'Aclonica';
+}
+
+#titleDiv {
+    text-align: center;
+    margin-top: 3em;
+}
+
+.formDiv {
+    color: white;
+    padding-top: 1em;
+    padding-bottom: 2em;
+    width: 80%;
+    margin: auto;
+}
+
+.btn-block {
+    margin-top: 1em;
+}
+
+.modal-content {
+    background-color: lightgrey;
+}
+
+.modal-header {
+    background-color: darkblue;
+    color: white;
+}
+
+.send-password {
+    background-color: darkslategray;
+}
+
+@media screen and (max-width: 780px) {
+    .formDiv {
+        width: 100%;
+    }
+}
