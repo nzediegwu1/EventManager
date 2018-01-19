@@ -12,10 +12,3 @@ const render = (Component) => {
     );
 };
 render(Hello);
-
-// Hot module replacement API
-if (module.hot) {
-    module.hot.accept('./helloComponent', () => {
-        render(Hello);
-    });
-}
