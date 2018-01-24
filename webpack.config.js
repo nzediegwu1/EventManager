@@ -13,6 +13,12 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default']
+    })
   ],
   output: {
     filename: 'bundle.js',
@@ -51,7 +57,6 @@ module.exports = {
       },
     ],
   },
-  devtool: 'source-map',
   devServer: {
     contentBase: path.resolve(__dirname, 'Client/dist'),
     publicPath: '/',

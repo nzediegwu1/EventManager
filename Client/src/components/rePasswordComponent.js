@@ -1,32 +1,26 @@
 import React from 'react';
+import { FormGroup } from './formGroup';
+import emailImage from '../resources/images/glyphicons-11-envelope.png';
 
-export default class RecoverPassword extends React.Component {
+const inputAttrs = (inputType, inputName, placeholder, className, required) => {
+  return { inputType, inputName, placeholder, className, required };
+};
+export class RecoverPassword extends React.Component {
   render() {
     const content = (
-      <div className="modal fade" id="resetPassword" tabindex="-1" role="dialog" aria-labelledby="resetPasswordLabel" aria-hidden="true">
+      <div className="modal fade" id="resetPassword" tabIndex="-1" role="dialog" aria-labelledby="resetPasswordLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header modal-theme">
               <h5 className="modal-title" id="resetPasswordLabel"><b>Recover Password</b></h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
             </div>
             <div className="modal-body  text-center">
-              <h4>Forgot Password?</h4>
-              <p>Enter your email to recover password</p>
+              <h6>Enter your email to recover password</h6>
               <form className="form">
                 <fieldset>
+                  <FormGroup image={emailImage} alt='email' inputProps={inputAttrs('text', 'email', 'email address', 'form-control input-sm', 'required')} />
                   <div className="form-group">
-                    <div className="input-group">
-                      <span className="input-group-addon">
-                        <img src="resources/images/glyphicons-11-envelope.png" alt="username" />
-                      </span>
-                      <input id="emailInput" placeholder="email address" className="form-control email-input" required type="email" />
-                      <div className="form-group">
-                        <input className="btn btn-lg btn-primary btn-block modal-theme send-password" value="Recover Password" type="submit" />
-                      </div>
-                    </div>
+                    <input className="btn btn-lg btn-primary btn-block modal-theme send-password" value="Recover Password" type="submit" />
                   </div>
                 </fieldset>
               </form>

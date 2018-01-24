@@ -1,18 +1,14 @@
 .background-image {
-    background: url(resources/images/2012_gala_tent.jpg) center center no-repeat fixed;
+    background: url(../images/2012_gala_tent.jpg) center center no-repeat fixed;
     background-size: cover;
     background-color: black;
+    height: 100vh;
+    overflow-y: hidden;
+    position: relative;
 }
 
 .input-group-addon:not(:last-child) {
     width: 3em;
-}
-
-#loginPanel {
-    margin-top: 10%;
-    background-color: #252221;
-    border-radius: 1em;
-    box-shadow: 2px 1px 20px 1px white;
 }
 
 .input-group {
@@ -27,6 +23,51 @@
     .form-links a {
         color: white;
     }
+
+.formDiv {
+    color: white;
+    padding-top: 1em;
+    padding-bottom: 2em;
+    width: 80%;
+    margin: auto;
+}
+
+.btn-block {
+    margin-top: 1em;
+}
+
+.modal-header {
+    background-color: darkblue;
+    color: white;
+}
+
+.send-password {
+    background-color: darkslategray;
+}
+
+@media screen and (max-width: 780px) {
+    .formDiv {
+        width: 100%;
+    }
+}
+
+/*SIGNUP STYLES*/
+
+.modal-content {
+    background-color: lightgrey;
+    color: black;
+}
+
+button, select {
+    width: 100%;
+}
+
+#loginPanel {
+    margin-top: 2em;
+    background-color: #252221;
+    border-radius: 1em;
+    box-shadow: 2px 1px 20px 1px white;
+}
 
 .main-title {
     font-family: 'Aclonica';
@@ -45,36 +86,10 @@
 
 #titleDiv {
     text-align: center;
-    margin-top: 3em;
-}
-
-.formDiv {
-    color: white;
-    padding-top: 1em;
-    padding-bottom: 2em;
-    width: 80%;
-    margin: auto;
-}
-
-.btn-block {
     margin-top: 1em;
 }
 
-.modal-content {
-    background-color: lightgrey;
-}
-
-.modal-header {
-    background-color: darkblue;
-    color: white;
-}
-
-.send-password {
-    background-color: darkslategray;
-}
-
-@media screen and (max-width: 780px) {
-    .formDiv {
-        width: 100%;
-    }
+label {
+    padding-top: 0.4em;
+    margin-left: 0.5em;
 }
