@@ -1,20 +1,30 @@
 import React from 'react';
 import { RecoverPassword } from './rePasswordComponent';
-import { SignIn } from './signinComponent'
-/*
+import { SignIn } from './signinComponent';
+import { Dashboard } from './dashboardComponent';
+
+// JQUERY
 $(document).ready(() => {
-  $('.welcome').click(() => {
-    $('#signinForm').toggleClass('visibility');
-    $('#signupForm').toggleClass('visibility'); // signup form will have visibility class
+  $('.appBackground').toggleClass('visibility');
+  function toggler() {
+    $('#signinPage').toggleClass('visibility');
+    $('.appBackground').toggleClass('visibility');
+  }
+  $('#login').click(() => {
+    toggler();
+  });
+  $('.logout').click(() => {
+    $('#myModalSidebar').modal('hide');    
+    toggler();
   });
 });
-*/
+
 export const Content = (props) => {
-    return (
-      <div>
-        <SignIn />
-        <RecoverPassword />
-      </div>
-    );
-  }
-  
+  return (
+    <div>
+      <SignIn />
+      <RecoverPassword />
+      <Dashboard />
+    </div>
+  );
+}
