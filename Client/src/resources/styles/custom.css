@@ -93,3 +93,6 @@ label {
     padding-top: 0.4em;
     margin-left: 0.5em;
 }
+.visibility {
+    display: none;
+}
