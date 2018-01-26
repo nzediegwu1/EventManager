@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormGroup } from './formGroup';
-import emailImage from '../resources/images/glyphicons-11-envelope.png';
+import emailIcon from '../resources/images/glyphicons-11-envelope.png';
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => {
   return { inputType, inputName, placeholder, className, required };
@@ -18,7 +18,7 @@ export class RecoverPassword extends React.Component {
               <h6>Enter your email to recover password</h6>
               <form className="form">
                 <fieldset>
-                  <FormGroup image={emailImage} alt='email' inputProps={inputAttrs('text', 'email', 'email address', 'form-control input-sm', 'required')} />
+                  <FormGroup image={emailIcon} alt='email' inputProps={inputAttrs('text', 'email', 'email address', 'form-control input-sm', 'required')} />
                   <div className="form-group">
                     <input className="btn btn-lg btn-primary btn-block modal-theme send-password" value="Recover Password" type="submit" />
                   </div>
