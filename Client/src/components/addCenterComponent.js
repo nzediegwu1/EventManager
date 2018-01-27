@@ -28,7 +28,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, required) => {
 export class AddCenter extends Component {
   render() {
     const content = (
-      <div class="modal fade" role="dialog" id="addNewCenter" tabindex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
+      <div class="modal fade" role="dialog" id="addNewCenter" tabIndex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content eventModal">
             <ModalHeader id='addNewCenterTitle' title='New Center' />
