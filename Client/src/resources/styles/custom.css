@@ -327,3 +327,9 @@ a:hover {
 .navbar-toggler {
     width: auto;
 }
+button.close {
+    width: 1em;
+}
+button, select {
+    width: auto;
+}
