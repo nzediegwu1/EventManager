@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormGroup } from './formGroup';
 import emailIcon from '../resources/images/glyphicons-11-envelope.png';
+import { ModalHeader } from './modalHeader';
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => {
   return { inputType, inputName, placeholder, className, required };
@@ -11,9 +12,7 @@ export class RecoverPassword extends React.Component {
       <div className="modal fade" id="resetPassword" tabIndex="-1" role="dialog" aria-labelledby="resetPasswordLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header modal-theme">
-              <h5 className="modal-title" id="resetPasswordLabel"><b>Recover Password</b></h5>
-            </div>
+            <ModalHeader id='resetPasswordLabel' title='Recover Password' />
             <div className="modal-body  text-center">
               <h6>Enter your email to recover password</h6>
               <form className="form">
