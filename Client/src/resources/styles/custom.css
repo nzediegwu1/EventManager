@@ -265,13 +265,6 @@ a:hover {
     margin-left: 0.5em;
 }
 
-.modalCustom {
-    text-align: center;
-    font-weight: bolder;
-    background-color: darkblue;
-    color: lightgreen;
-}
-
 .modalDivider {
     border-bottom: inset;
     border-bottom-width: thick;

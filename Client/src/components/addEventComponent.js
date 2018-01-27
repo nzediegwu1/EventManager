@@ -4,6 +4,8 @@ import eventImageIcon from '../resources/images/glyphicons-139-picture.png';
 import eventDateIcon from '../resources/images/glyphicons-46-calendar.png';
 import eventTimeIcon from '../resources/images/glyphicons-54-alarm.png';
 import { FormGroup } from './formGroup';
+import { ModalHeader } from './modalHeader';
+import { ModalFooter } from './modalFooter';
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => {
   return { inputType, inputName, placeholder, className, required };
@@ -12,13 +14,10 @@ const inputAttrs = (inputType, inputName, placeholder, className, required) => {
 export class AddEvent extends Component {
   render() {
     const content = (
-      <div className="modal fade" role="dialog" id="addNewEvent" tabindex="-1" aria-labelledby="addNewEventLabel" aria-hidden="true">
+      <div className="modal fade" role="dialog" id="addNewEvent" tabIndex="-1" aria-labelledby="addNewEventLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content eventModal">
-            <div className="modal-header modalCustom">
-              <h5 className="modal-title" id="addNewEventTitle"><b>New Event</b></h5>
-              <button className="close text-white" data-dismiss="modal">&times;</button>
-            </div>
+            <ModalHeader id='addNewEventTitle' title='New Event' />
             <div className="modal-body mx-sm-auto col-sm-9">
               <form role="form">
                 <FormGroup image={eventNameIcon} alt='eventname' inputProps={inputAttrs('text', 'eventname', 'Event Name', 'form-control input-sm', 'required')} />
@@ -26,7 +25,7 @@ export class AddEvent extends Component {
                 <FormGroup image={eventDateIcon} alt='eventdate' inputProps={inputAttrs('date', 'eventdate', 'Event Date', 'form-control input-sm', 'required')} />
                 <FormGroup image={eventTimeIcon} alt='eventTime' inputProps={inputAttrs('time', 'eventTime', 'Event Time', 'form-control input-sm', 'required')} />
                 <div className="form-group">
-                  <label for="description" className="control-label">Description</label>
+                  <label htmlFor="description" className="control-label">Description</label>
                   <textarea name="description" rows="2" className="form-control"></textarea>
                 </div>
                 <div className="form-group">
@@ -52,10 +51,7 @@ export class AddEvent extends Component {
                   </select>
                 </div>
               </form>
-              <div className="modal-footer">
-                <button className="btn btn-success createEvent">Save</button>
-                <button className="btn btn-danger" data-dismiss="modal">Cancel</button>
-              </div>
+              <ModalFooter class='btn btn-success createEvent' success='Save'/>
             </div>
           </div>
         </div>
