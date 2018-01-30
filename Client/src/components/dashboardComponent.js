@@ -3,6 +3,7 @@ import { Sidebar } from './sidebarComponent';
 import { NavBar } from './navBarComponent';
 import { AddEvent } from './addEventComponent';
 import { AddCenter } from './addCenterComponent';
+import { MyCenters } from './myCenterComponent';
 
 export class Dashboard extends Component {
   render() {
@@ -13,6 +14,7 @@ export class Dashboard extends Component {
           <Sidebar />
           <AddEvent />
           <AddCenter />
+          <MyCenters />
         </div>
       </div>
     );

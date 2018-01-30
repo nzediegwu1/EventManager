@@ -15,8 +15,8 @@ function FacilityRow(props) {
   const content = (
     <tr>
       <td>{props.name}</td>
-      <td><span class="badge">{props.quantity}</span></td>
-      <td><div class="checkbox"><input type="checkbox" name="mark" /></div></td>
+      <td><span className="badge">{props.quantity}</span></td>
+      <td><div className="checkbox"><input type="checkbox" name="mark" /></div></td>
     </tr>
   );
   return content;
@@ -28,11 +28,11 @@ const inputAttrs = (inputType, inputName, placeholder, className, required) => {
 export class AddCenter extends Component {
   render() {
     const content = (
-      <div class="modal fade" role="dialog" id="addNewCenter" tabIndex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content eventModal">
+      <div className="modal fade" role="dialog" id="addNewCenter" tabIndex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content eventModal">
             <ModalHeader id='addNewCenterTitle' title='New Center' />
-            <div class="modal-body mx-sm-auto col-sm-9">
+            <div className="modal-body mx-sm-auto col-sm-9">
               <form role="form">
                 <FormGroup image={centerNameIcon} alt='centername' inputProps={inputAttrs('text', 'centername', 'Center Name', 'form-control input-sm', 'required')} />
                 <FormGroup image={centerImageIcon} alt='centerImage' inputProps={inputAttrs('file', 'centerImage', 'Center Image', 'form-control input-sm', 'required')} />
@@ -40,8 +40,8 @@ export class AddCenter extends Component {
                 <FormGroup image={cityIcon} alt='city' inputProps={inputAttrs('text', 'city', 'State/City', 'form-control input-sm', 'required')} />
                 <FormGroup image={capacityIcon} alt='capacity' inputProps={inputAttrs('number', 'capacity', 'Capacity', 'form-control input-sm', 'required')} />
                 <FormGroup image={amountIcon} alt='bookingAmount' inputProps={inputAttrs('number', 'bookingAmount', 'Booking price(per day)', 'form-control input-sm', 'required')} />
-                <div class="form-group">
-                  <select class="custom-select-sm">
+                <div className="form-group">
+                  <select className="custom-select-sm">
                     <option>
                       Availability
                       </option>
@@ -53,18 +53,18 @@ export class AddCenter extends Component {
                     </option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <div class="top-eight add-facility">
-                    <div class="col-sm-10 zero-padding add-facility-90">
+                <div className="form-group">
+                  <div className="top-eight add-facility">
+                    <div className="col-sm-10 zero-padding add-facility-90">
                       <b>Add facility</b>
                     </div>
-                    <div class="col-sm-2 zero-padding" id="addFacility">
-                      <a href="#"><img class="invert-color add-facility-icon" src={addIcon} /></a>
+                    <div className="col-sm-2 zero-padding" id="addFacility">
+                      <a href="#"><img className="invert-color add-facility-icon" src={addIcon} /></a>
                     </div>
                   </div>
-                  <div class="table-responsive centerSearch">
-                    <table class="table table-hover grey-color">
-                      <thead class="table-header">
+                  <div className="table-responsive centerSearch">
+                    <table className="table table-hover grey-color">
+                      <thead className="table-header">
                         <tr>
                           <th>Name</th>
                           <th>Quantity</th>

@@ -3,6 +3,9 @@ import { FormGroup } from './formGroup';
 import { SignupForm } from './signupComponent';
 import usernameIcon from '../resources/images/glyphicons-522-user-lock.png';
 import passwordIcon from '../resources/images/glyphicons-204-lock.png';
+import { RecoverPassword } from './rePasswordComponent';
+import { Link } from 'react-router-dom';
+
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => {
   return { inputType, inputName, placeholder, className, required };
@@ -38,13 +41,16 @@ export class SignIn extends React.Component {
               <br />
               <FormGroup image={usernameIcon} alt='username' inputProps={inputAttrs('text', 'username', 'Username', 'form-control input-sm', 'required')} />
               <FormGroup image={passwordIcon} alt='password' inputProps={inputAttrs('text', 'password', 'Password', 'form-control input-sm', 'required')} />
-              <button type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Sign in</button>
+              <Link to="/dashboard">
+                <button type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Login</button>
+              </Link>
               <div className="form-links">
                 <a href="#" className="welcome" onClick={this.changeState}>Create account</a> | <a href="#" data-toggle="modal" data-target="#resetPassword">reset password</a>
               </div>
             </form>
           </div>
         </div>
+        <RecoverPassword />
       </div>
     );
     return content;
