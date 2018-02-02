@@ -3,6 +3,7 @@ import romeImage from '../resources/images/rome.jpg';
 import hongkong from '../resources/images/hongkong.jpg';
 import temple from '../resources/images/temple.jpg';
 import beijing from '../resources/images/beijing.jpg';
+import { TableHead } from './tableHead';
 
 const MyCenterRow = (props) => {
   const content = (
@@ -27,14 +28,7 @@ export class MyCenters extends Component {
         </ul>
         <div className="table-responsive">
           <table className="table table-hover table-main">
-            <thead className="table-header table-header-main">
-              <tr>
-                <th>View</th>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Capacity</th>
-              </tr>
-            </thead>
+          <TableHead col1='View' col2='Name' col3='Location' col4='Capacity' />
             <tbody>
               <MyCenterRow image={romeImage} address='Napoli metropolitan' city='Rome, Italy' capacity='9000' />
               <MyCenterRow image={hongkong} address='Quin mansion' city='Hongkong, China' capacity='12400' />

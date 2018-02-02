@@ -3,8 +3,9 @@ import romeImage from '../resources/images/rome.jpg';
 import hongkongImg from '../resources/images/hongkong.jpg';
 import templeImgage from '../resources/images/temple.jpg';
 import beijingImg from '../resources/images/beijing.jpg';
+import { TableHead } from './tableHead';
 
-function EventRow(props) {
+const EventRow = (props) => {
   const content = (
     <tr className="event">
       <td><img className="center-image" src={props.image} alt="event-view" /></td>
@@ -29,14 +30,7 @@ export class EventList extends Component {
         </ul>
         <div className="table-responsive">
           <table className="table table-hover table-main">
-            <thead className="table-header table-header-main">
-              <tr>
-                <th>View</th>
-                <th>Title</th>
-                <th>Location</th>
-                <th>Date</th>
-              </tr>
-            </thead>
+            <TableHead col1='View' col2='Title' col3='Location' col4='Date' />
             <tbody>
               <EventRow title='World Programmers forum' image={romeImage} location='Rome, Italy' date='5th Dec, 2017' />
               <EventRow title='Andela Bootcamp' image={hongkongImg} location='Epic Andela Tower, Lagos' date='20th Nov, 2017' />
