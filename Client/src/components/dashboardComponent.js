@@ -5,6 +5,7 @@ import { AddEvent } from './addEventComponent';
 import { AddCenter } from './addCenterComponent';
 import { MyCenters } from './myCenterComponent';
 import { Route } from 'react-router-dom';
+import { EventList } from './eventListComponent';
 
 
 export class Dashboard extends Component {
@@ -17,6 +18,7 @@ export class Dashboard extends Component {
           <AddEvent />
           <AddCenter />
           <Route path={`${this.props.match.path}/centerlist`} component={MyCenters} />
+          <Route path={`${this.props.match.path}/eventlist`} component={EventList} />
         </div>
       </div>
     );

@@ -151,6 +151,8 @@ label {
 
 .search-events {
     background-color: darkgreen;
+    height: 2.6em;
+    margin-top: 0.3em;
 }
 
 .appBackground {
@@ -221,6 +223,7 @@ a:hover {
     margin-left: 1em;
 }
 
+/*join #nav-body and nav-background*/
 #nav-body {
     background-color: darkblue;
 }
@@ -328,4 +331,8 @@ button, select {
 }
 .search-list {
     width: 100%;
+}
+.search-input {
+    margin-top: 0.3em;
+    height: 2.6em;
 }

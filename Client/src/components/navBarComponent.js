@@ -27,7 +27,7 @@ export class NavBar extends Component {
           <form className="form-inline my-lg-0" id="searchFormGroup">
             <div style={{ display: 'flex' }}>
               <input className="form-control mr-sm-2 search-input" type="search" placeholder="Search an Event" aria-label="Search" />
-              <button className="btn btn-outline-success my-2 my-sm-0 search-events" id="searchEvents" type="submit">
+              <button className="btn btn-outline-success search-events" id="searchEvents" type="submit">
                 <img src={searchIcon} className="invert-color" />
               </button>
             </div>
