@@ -326,3 +326,6 @@ button.close {
 button, select {
     width: auto;
 }
+.search-list {
+    width: 100%;
+}

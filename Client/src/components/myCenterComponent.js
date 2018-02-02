@@ -22,7 +22,7 @@ export class MyCenters extends Component {
         <b className="page-header">My Centers</b>
         <ul className="nav nav-pills flex-column">
           <li className="list-group-item sidebar-header text-center">
-            <input className="form-control search-input" type="search" placeholder="Filter" aria-label="Search" />
+            <input className="form-control search-input search-list" type="search" placeholder="Filter" aria-label="Search" />
           </li>
         </ul>
         <div className="table-responsive">

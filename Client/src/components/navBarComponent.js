@@ -3,7 +3,6 @@ import menuIcon from '../resources/images/glyphicons-517-menu-hamburger.png';
 import searchIcon from '../resources/images/glyphicons-28-search.png';
 import createIcon from '../resources/images/glyphicons-191-plus-sign.png';
 
-
 const NavbarList = (props) => {
   const content = (
     <li className="nav-item">

@@ -7,16 +7,30 @@ import logoutIcon from '../resources/images/glyphicons-64-power.png';
 
 export const ListItem = (props) => {
   const content = (
-    <li className={props.class}>
-      <a href={props.link} className="nav-link">
-        <h6>{props.title} <img className="invert-color icon-margin-left" src={props.icon} alt={props.alt} /></h6>
-      </a>
+    <li onClick={props.event} className={props.class}>
+      <h6>
+        <a className="nav-link" href="#">{props.title}
+          <img className="invert-color icon-margin-left" src={props.icon} alt={props.alt} />
+        </a>
+      </h6>
     </li>
   );
   return content;
 }
 
 export class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: 'dashboard content',
+    };
+    this.changeLocation = this.changeLocation.bind(this);
+  }
+  changeLocation(url) {
+    $('#myModalSidebar').modal('hide');
+    history.pushState(this.state, 'dashboard content', url);
+  }
+
   render() {
     const content = (
       <div className="modal left fade" id="myModalSidebar" tabIndex="-1" role="dialog" aria-labelledby="myModalSidebarLabel" aria-hidden="true">
@@ -30,10 +44,10 @@ export class Sidebar extends Component {
             </div>
             <div className="modal-body">
               <ul className="nav flex-column nav-tabs">
-                <ListItem link='#' class='nav-item' title='MyEvents' icon={eventIcon} alt='myEvents' />
-                <ListItem link='#' class='nav-item' title='MyCenters' icon={centerIcon} alt='myCenters' />
-                <ListItem link='#' class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
-                <ListItem link='#' class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
+                <ListItem event={this.changeLocation.bind(this, '/dashboard/eventlist')} class='nav-item' title='MyEvents' icon={eventIcon} alt='myEvents' />
+                <ListItem event={this.changeLocation.bind(this, '/dashboard/centerlist')} class='nav-item' title='MyCenters' icon={centerIcon} alt='myCenters' />
+                <ListItem event={this.changeLocation.bind(this, '/dashboard/profile')} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
+                <ListItem event={this.changeLocation.bind(this, '/dashboard/logout')} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
               </ul>
             </div>
           </div>

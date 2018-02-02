@@ -3,10 +3,6 @@ import { SignIn } from './signinComponent';
 import { Dashboard } from './dashboardComponent';
 import { Route } from 'react-router-dom';
 
-// JQUERY
-window.addEventListener('hashchange', () => {
-  $('#myModalSidebar').modal('hide');
-});
 
 export const App = () => (
   <div >
