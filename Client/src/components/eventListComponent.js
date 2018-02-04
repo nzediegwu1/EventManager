@@ -4,21 +4,21 @@ import hongkongImg from '../resources/images/hongkong.jpg';
 import templeImgage from '../resources/images/temple.jpg';
 import beijingImg from '../resources/images/beijing.jpg';
 import { TableHead } from './tableHead';
+import { Link } from 'react-router-dom';
+
 
 const EventRow = (props) => {
   const content = (
-    <tr className="event">
+    <tr className="event" >
       <td><img className="center-image" src={props.image} alt="event-view" /></td>
-      <td>{props.title}</td>
+      <td><Link className='event-detail' to={props.url}>{props.title}</Link></td>
       <td>{props.location}</td>
       <td>{props.date}</td>
     </tr>
   );
   return content;
 }
-
 export class EventList extends Component {
-
   render() {
     const content = (
       <div className="mx-sm-auto col-sm-11">
@@ -32,10 +32,10 @@ export class EventList extends Component {
           <table className="table table-hover table-main">
             <TableHead col1='View' col2='Title' col3='Location' col4='Date' />
             <tbody>
-              <EventRow title='World Programmers forum' image={romeImage} location='Rome, Italy' date='5th Dec, 2017' />
-              <EventRow title='Andela Bootcamp' image={hongkongImg} location='Epic Andela Tower, Lagos' date='20th Nov, 2017' />
-              <EventRow title='PSquare Concert' image={templeImgage} location='Istambul, turkey' date='25th Dec, 2017' />
-              <EventRow title='WHO international convention' image={beijingImg} location='Beijing, China' date='4th Jan, 2018' />
+              <EventRow url='/dashboard/manage-event' title='World Programmers forum' image={romeImage} location='Rome, Italy' date='5th Dec, 2017' />
+              <EventRow url='/dashboard/manage-event' title='Andela Bootcamp' image={hongkongImg} location='Epic Andela Tower, Lagos' date='20th Nov, 2017' />
+              <EventRow url='/dashboard/manage-event' title='PSquare Concert' image={templeImgage} location='Istambul, turkey' date='25th Dec, 2017' />
+              <EventRow url='/dashboard/manage-event' title='WHO international convention' image={beijingImg} location='Beijing, China' date='4th Jan, 2018' />
             </tbody>
           </table>
         </div>

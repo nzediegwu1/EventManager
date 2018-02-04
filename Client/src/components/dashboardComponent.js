@@ -4,9 +4,9 @@ import { NavBar } from './navBarComponent';
 import { AddEvent } from './addEventComponent';
 import { AddCenter } from './addCenterComponent';
 import { MyCenters } from './myCenterComponent';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { EventList } from './eventListComponent';
-
+import { ManageEvent } from './manageEventComponent';
 
 export class Dashboard extends Component {
   render() {
@@ -17,8 +17,11 @@ export class Dashboard extends Component {
           <Sidebar />
           <AddEvent />
           <AddCenter />
-          <Route path={`${this.props.match.path}/centerlist`} component={MyCenters} />
-          <Route path={`${this.props.match.path}/eventlist`} component={EventList} />
+          <Switch>
+            <Route path={`${this.props.match.path}/centerlist`} component={MyCenters} />
+            <Route path={`${this.props.match.path}/manage-event`} component={ManageEvent} />
+            <Route path={`${this.props.match.path}`} component={EventList} />
+          </Switch>
         </div>
       </div>
     );
