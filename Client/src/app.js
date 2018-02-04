@@ -5,13 +5,14 @@ import { AppContainer } from 'react-hot-loader';
 import '../src/resources/styles/bootstrap.min.css';
 import '../src/resources/styles/custom.css';
 import 'bootstrap';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router';
+import createHistory from 'history/createBrowserHistory';
 
-
+const history = createHistory();
 const render = () => {
   reactDOM.render(
     <AppContainer>
-      <Router>
+      <Router history={history} >
         <App />
       </Router>
     </AppContainer>,
