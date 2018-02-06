@@ -4,12 +4,13 @@ import hongkong from '../resources/images/hongkong.jpg';
 import temple from '../resources/images/temple.jpg';
 import beijing from '../resources/images/beijing.jpg';
 import { TableHead } from './tableHead';
+import { Link } from 'react-router-dom';
 
 const MyCenterRow = (props) => {
   const content = (
     <tr className="center">
       <td><img className="center-image" src={props.image} alt="center-view" /></td>
-      <td>{props.address}</td>
+      <td><Link className='event-detail' to={props.url}>{props.name}</Link></td>
       <td>{props.city}</td>
       <td><span className="badge">{props.capacity}</span></td>
     </tr>
@@ -30,10 +31,10 @@ export class MyCenters extends Component {
           <table className="table table-hover table-main">
           <TableHead col1='View' col2='Name' col3='Location' col4='Capacity' />
             <tbody>
-              <MyCenterRow image={romeImage} address='Napoli metropolitan' city='Rome, Italy' capacity='9000' />
-              <MyCenterRow image={hongkong} address='Quin mansion' city='Hongkong, China' capacity='12400' />
-              <MyCenterRow image={temple} address='House on the Rock' city='Istambul, turkey' capacity='34700' />
-              <MyCenterRow image={beijing} address='Beijing concert hall' city='Beijing, China' capacity='150000' />
+              <MyCenterRow url='/dashboard/center-details' image={romeImage} name='Napoli metropolitan' city='Rome, Italy' capacity='9000' />
+              <MyCenterRow url='/dashboard/center-details' image={hongkong} name='Quin mansion' city='Hongkong, China' capacity='12400' />
+              <MyCenterRow url='/dashboard/center-details' image={temple} name='House on the Rock' city='Istambul, turkey' capacity='34700' />
+              <MyCenterRow url='/dashboard/center-details' image={beijing} name='Beijing concert hall' city='Beijing, China' capacity='150000' />
             </tbody>
           </table>
         </div>

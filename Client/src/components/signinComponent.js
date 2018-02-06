@@ -7,8 +7,8 @@ import { RecoverPassword } from './rePasswordComponent';
 import { Link } from 'react-router-dom';
 
 
-const inputAttrs = (inputType, inputName, placeholder, className, required) => {
-  return { inputType, inputName, placeholder, className, required };
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
+  return { inputType, inputName, placeholder, className, ref, required };
 };
 export class SignIn extends React.Component {
   constructor(props) {
@@ -18,12 +18,26 @@ export class SignIn extends React.Component {
       signupView: 'none',
     };
     this.changeState = this.changeState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.validate = this.validate.bind(this);
   }
   changeState() {
     this.setState(prevState => ({
       signinView: (prevState.signinView === 'block') ? 'none' : 'block',
       signupView: (prevState.signupView === 'none') ? 'block' : 'none',
     }));
+  }
+  validate(username, password, event){
+    if (username.trim().length === 0) {
+      alert('Username must not be empty');
+      event.preventDefault();      
+    } else if (password.length < 6) {
+      alert('password must be up to 6 characters');
+      event.preventDefault();      
+    }
+  }
+  handleSubmit(event) {
+    this.validate(this.username.value, this.password.value, event);
   }
   render() {
     const content = (
@@ -39,10 +53,10 @@ export class SignIn extends React.Component {
             <form role="form" action="pages/MyEvents.html" className="formDiv" id="signinForm" style={{ display: this.state.signinView }}>
               <h3 className="text-center panel-font"><b>Login</b></h3>
               <br />
-              <FormGroup image={usernameIcon} alt='username' inputProps={inputAttrs('text', 'username', 'Username', 'form-control input-sm', 'required')} />
-              <FormGroup image={passwordIcon} alt='password' inputProps={inputAttrs('text', 'password', 'Password', 'form-control input-sm', 'required')} />
+              <FormGroup image={usernameIcon} alt='username' inputProps={inputAttrs('text', 'username', 'Username', 'form-control input-sm', (input) => this.username = input, 'required')} />
+              <FormGroup image={passwordIcon} alt='password' inputProps={inputAttrs('password', 'password', 'Password', 'form-control input-sm', (input) => this.password = input, 'required')} />
               <Link to="/dashboard">
-                <button type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Login</button>
+                <button onClick={this.handleSubmit} type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Login</button>
               </Link>
               <div className="form-links">
                 <a href="#" className="welcome" onClick={this.changeState}>Create account</a> | <a href="#" data-toggle="modal" data-target="#resetPassword">reset password</a>

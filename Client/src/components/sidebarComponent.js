@@ -44,7 +44,7 @@ export class Sidebar extends Component {
                 <ListItem event={this.changeLocation.bind(this, '/dashboard')} class='nav-item' title='MyEvents' icon={eventIcon} alt='myEvents' />
                 <ListItem event={this.changeLocation.bind(this, '/dashboard/centerlist')} class='nav-item' title='MyCenters' icon={centerIcon} alt='myCenters' />
                 <ListItem event={this.changeLocation.bind(this, '/dashboard/profile')} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
-                <ListItem event={this.changeLocation.bind(this, '/dashboard/logout')} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
+                <ListItem event={this.changeLocation.bind(this, '/')} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
               </ul>
             </div>
           </div>

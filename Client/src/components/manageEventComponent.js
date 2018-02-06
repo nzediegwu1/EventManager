@@ -1,32 +1,15 @@
 import React, { Component } from 'react';
-import editIcon from '../resources/images/glyphicons-151-edit.png';
-import removeIcon from '../resources/images/glyphicons-17-bin.png';
 import beijingImage from '../resources/images/beijing.jpg';
 import calenderIcon from '../resources/images/glyphicons-46-calendar.png';
 import timeIcon from '../resources/images/glyphicons-54-alarm.png';
+import { ManageDetailsHeader } from './manageDetailsHeader';
 
 export class ManageEvent extends Component {
   render() {
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-          <table className="table-responsive col-sm-12 bg-transparent  zero-padding">
-            <tbody>
-              <tr>
-                <td style={{ width: '80%' }}><h4 className="text-center"><b>World Developers Conference</b></h4></td>
-                <td>
-                  <div className="manage">
-                    <button type="submit" id="editEvent" className="btn btn-success" data-toggle="modal" data-target="#addNewEvent">
-                      <img src={editIcon} alt="Edit" />
-                    </button>
-                    <button type="submit" className="btn btn-danger icon-margin-left" id="deleteEvent">
-                      <img src={removeIcon} alt="delete" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <ManageDetailsHeader title='World Developers Conference' editModal='#addNewEvent' />
         </div>
         <div className="card-body">
           <div className="row">
