@@ -2,9 +2,9 @@ import React from 'react';
 
 const Input = (props) => {
     if (props.params.required) {
-        return (<input type={props.params.inputType} name={props.params.inputName} placeholder={props.params.placeholder} required className={props.params.className} />);
+        return (<input type={props.params.inputType} name={props.params.inputName} placeholder={props.params.placeholder} required className={props.params.className} ref={props.params.ref} />);
     }
-    return (<input type={props.params.inputType} name={props.params.inputName} placeholder={props.params.placeholder} className={props.params.className} />);
+    return (<input type={props.params.inputType} name={props.params.inputName} placeholder={props.params.placeholder} className={props.params.className} ref={props.params.ref}/>);
 }
 export const FormGroup = (props) => {
     const content = (

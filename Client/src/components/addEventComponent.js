@@ -6,6 +6,7 @@ import eventTimeIcon from '../resources/images/glyphicons-54-alarm.png';
 import { FormGroup } from './formGroup';
 import { ModalHeader } from './modalHeader';
 import { ModalFooter } from './modalFooter';
+import { Option } from './selectOption';
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => {
   return { inputType, inputName, placeholder, className, required };
@@ -18,7 +19,7 @@ export class AddEvent extends Component {
         <div className="modal-dialog">
           <div className="modal-content eventModal">
             <ModalHeader id='addNewEventTitle' title='New Event' />
-            <div className="modal-body mx-sm-auto col-sm-9">
+            <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form">
                 <FormGroup image={eventNameIcon} alt='eventname' inputProps={inputAttrs('text', 'eventname', 'Event Name', 'form-control input-sm', 'required')} />
                 <FormGroup image={eventImageIcon} alt='eventImage' inputProps={inputAttrs('file', 'eventImage', 'Event Image', 'form-control input-sm', 'required')} />
@@ -30,24 +31,12 @@ export class AddEvent extends Component {
                 </div>
                 <div className="form-group">
                   <select className="custom-select-sm">
-                    <option>
-                      Select Center
-                    </option>
-                    <option value="1">
-                      House on the Rock, Ikeja, Lagos. Capacity: 500
-                      </option>
-                    <option value="1">
-                      Christ embassy hall, Ikeja, Lagos. Capacity: 2300
-                      </option>
-                    <option value="1">
-                      House on the Rock FCT, Abuja. Capacity: 1200
-                      </option>
-                    <option value="1">
-                      National Assembly Conference Hall, Abuja. Capacity: 4500
-                      </option>
-                    <option value="1">
-                      National Stadium, Owerri, Imo. Capacity: 85,000
-                    </option>
+                  <Option text='Select Center'/>
+                  <Option value='1' text='House on the Rock, Ikeja, Lagos. Capacity: 500'/>
+                  <Option value='1' text='Christ embassy hall, Ikeja, Lagos. Capacity: 2300'/>
+                  <Option value='1' text='House on the Rock FCT, Abuja. Capacity: 1200'/>
+                  <Option value='1' text='National Assembly Conference Hall, Abuja. Capacity: 4500'/>
+                  <Option value='1' text='National Stadium, Owerri, Imo. Capacity: 85,000'/>
                   </select>
                 </div>
               </form>

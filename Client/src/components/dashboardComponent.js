@@ -7,6 +7,7 @@ import { MyCenters } from './myCenterComponent';
 import { Route, Switch } from 'react-router-dom';
 import { EventList } from './eventListComponent';
 import { ManageEvent } from './manageEventComponent';
+import { CenterDetails } from './centerDetailsComponent';
 
 export class Dashboard extends Component {
   render() {
@@ -20,6 +21,7 @@ export class Dashboard extends Component {
           <Switch>
             <Route path={`${this.props.match.path}/centerlist`} component={MyCenters} />
             <Route path={`${this.props.match.path}/manage-event`} component={ManageEvent} />
+            <Route path={`${this.props.match.path}/center-details`} component={CenterDetails} />
             <Route path={`${this.props.match.path}`} component={EventList} />
           </Switch>
         </div>

@@ -10,17 +10,8 @@ import amountIcon from '../resources/images/glyphicons-548-bitcoin.png';
 import addIcon from '../resources/images/glyphicons-191-plus-sign.png';
 import removeIcon from '../resources/images/glyphicons-198-remove-circle.png';
 import { ModalFooter } from './modalFooter';
-
-function FacilityRow(props) {
-  const content = (
-    <tr>
-      <td>{props.name}</td>
-      <td><span className="badge">{props.quantity}</span></td>
-      <td><div className="checkbox"><input type="checkbox" name="mark" /></div></td>
-    </tr>
-  );
-  return content;
-}
+import { FacilityRow, FacilityHeader } from './facilityComponent';
+import { Option } from './selectOption';
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => {
   return { inputType, inputName, placeholder, className, required };
@@ -32,7 +23,7 @@ export class AddCenter extends Component {
         <div className="modal-dialog">
           <div className="modal-content eventModal">
             <ModalHeader id='addNewCenterTitle' title='New Center' />
-            <div className="modal-body mx-sm-auto col-sm-9">
+            <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form">
                 <FormGroup image={centerNameIcon} alt='centername' inputProps={inputAttrs('text', 'centername', 'Center Name', 'form-control input-sm', 'required')} />
                 <FormGroup image={centerImageIcon} alt='centerImage' inputProps={inputAttrs('file', 'centerImage', 'Center Image', 'form-control input-sm', 'required')} />
@@ -42,15 +33,9 @@ export class AddCenter extends Component {
                 <FormGroup image={amountIcon} alt='bookingAmount' inputProps={inputAttrs('number', 'bookingAmount', 'Booking price(per day)', 'form-control input-sm', 'required')} />
                 <div className="form-group">
                   <select className="custom-select-sm">
-                    <option>
-                      Availability
-                      </option>
-                    <option value="1">
-                      open
-                      </option>
-                    <option value="0">
-                      close
-                    </option>
+                    <Option text='Availability'/>
+                    <Option value='1' text='open'/>
+                    <Option value='0' text='close'/>
                   </select>
                 </div>
                 <div className="form-group">
@@ -64,19 +49,13 @@ export class AddCenter extends Component {
                   </div>
                   <div className="table-responsive centerSearch">
                     <table className="table table-hover grey-color">
-                      <thead className="table-header">
-                        <tr>
-                          <th>Name</th>
-                          <th>Quantity</th>
-                          <th><img src={removeIcon} alt="delete" /></th>
-                        </tr>
-                      </thead>
+                      <FacilityHeader deleteIcon={removeIcon} context='addCenter' />
                       <tbody>
-                        <FacilityRow name='Projector' quantity='150' />
-                        <FacilityRow name='Backup power' quantity='450' />
-                        <FacilityRow name='Sound system' quantity='200' />
-                        <FacilityRow name='Smart lighting' quantity='349' />
-                        <FacilityRow name='Airconditioner' quantity='57' />
+                        <FacilityRow name='Projector' spec='200w...' quantity='150' context='addCenter' />
+                        <FacilityRow name='Backup power' spec='15kw...' quantity='450' context='addCenter' />
+                        <FacilityRow name='Sound system' spec='500w...' quantity='200' context='addCenter' />
+                        <FacilityRow name='Smart lighting' spec='Energy..' quantity='349' context='addCenter' />
+                        <FacilityRow name='Airconditioner' spec='2kw...' quantity='57' context='addCenter' />
                       </tbody>
                     </table>
                   </div>
