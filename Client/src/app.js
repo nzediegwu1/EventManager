@@ -7,14 +7,18 @@ import '../src/resources/styles/custom.css';
 import 'bootstrap';
 import { Router } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
+import store from './redux/store';
+import { Provider } from 'react-redux';
 
 const history = createHistory();
 const render = () => {
   reactDOM.render(
     <AppContainer>
-      <Router history={history} >
-        <App />
-      </Router>
+      <Provider store={store}>
+        <Router history={history} >
+          <App />
+        </Router>
+      </Provider>
     </AppContainer>,
     document.getElementById('root')
   );
