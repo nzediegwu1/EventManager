@@ -8,6 +8,7 @@ import { Route, Switch } from 'react-router-dom';
 import { EventList } from './eventListComponent';
 import { ManageEvent } from './manageEventComponent';
 import { CenterDetails } from './centerDetailsComponent';
+import { TestRedux } from './testRedux';
 
 export class Dashboard extends Component {
   render() {
@@ -19,6 +20,7 @@ export class Dashboard extends Component {
           <AddEvent />
           <AddCenter />
           <Switch>
+            <Route path={`${this.props.match.path}/testredux`} component={TestRedux} />
             <Route path={`${this.props.match.path}/centerlist`} component={MyCenters} />
             <Route path={`${this.props.match.path}/manage-event`} component={ManageEvent} />
             <Route path={`${this.props.match.path}/center-details`} component={CenterDetails} />

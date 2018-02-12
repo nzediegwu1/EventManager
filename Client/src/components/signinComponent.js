@@ -6,7 +6,6 @@ import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import { RecoverPassword } from './rePasswordComponent';
 import { Link } from 'react-router-dom';
 
-
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
   return { inputType, inputName, placeholder, className, ref, required };
 };
@@ -27,17 +26,17 @@ export class SignIn extends React.Component {
       signupView: (prevState.signupView === 'none') ? 'block' : 'none',
     }));
   }
-  validate(username, password, event){
+  validate(username, password, event) {
     if (username.trim().length === 0) {
       alert('Username must not be empty');
-      event.preventDefault();      
     } else if (password.length < 6) {
       alert('password must be up to 6 characters');
-      event.preventDefault();      
+    } else {
+      return true;      
     }
   }
   handleSubmit(event) {
-    this.validate(this.username.value, this.password.value, event);
+    this.validate(this.username.value, this.password.value, event) && this.props.history.push('./dashboard');
   }
   render() {
     const content = (
@@ -50,14 +49,12 @@ export class SignIn extends React.Component {
             <div style={{ display: this.state.signupView }}>
               <SignupForm changeState={this.changeState} />
             </div>
-            <form role="form" action="pages/MyEvents.html" className="formDiv" id="signinForm" style={{ display: this.state.signinView }}>
+            <form role="form" onSubmit={this.handleSubmit} className="formDiv" id="signinForm" style={{ display: this.state.signinView }}>
               <h3 className="text-center panel-font"><b>Login</b></h3>
               <br />
               <FormGroup image={usernameIcon} alt='username' inputProps={inputAttrs('text', 'username', 'Username', 'form-control input-sm', (input) => this.username = input, 'required')} />
               <FormGroup image={passwordIcon} alt='password' inputProps={inputAttrs('password', 'password', 'Password', 'form-control input-sm', (input) => this.password = input, 'required')} />
-              <Link to="/dashboard">
-                <button onClick={this.handleSubmit} type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Login</button>
-              </Link>
+              <button type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Login</button>
               <div className="form-links">
                 <a href="#" className="welcome" onClick={this.changeState}>Create account</a> | <a href="#" data-toggle="modal" data-target="#resetPassword">reset password</a>
               </div>
