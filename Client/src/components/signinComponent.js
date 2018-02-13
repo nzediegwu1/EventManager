@@ -27,7 +27,7 @@ export class SignIn extends React.Component {
       signupView: (prevState.signupView === 'none') ? 'block' : 'none',
     }));
   }
-  validate(username, password, event) {
+  validate(username, password) {
     if (username.trim().length === 0) {
       alert('Username must not be empty');
     } else if (password.length < 6) {
@@ -39,7 +39,7 @@ export class SignIn extends React.Component {
   handleSubmit(event) {
     const username = this.username.value;
     const password = this.password.value;
-    if (this.validate(this.username.value, this.password.value, event)) {
+    if (this.validate(username, password)) {
       axios.post('http://localhost:8000/api/v1/users/login', { username, password })
         .then(res => {
           localStorage.setItem('token', res.data.data.Token);
@@ -63,7 +63,7 @@ export class SignIn extends React.Component {
           </div>
           <div id="loginPanel" className="mx-sm-auto col-sm-6">
             <div style={{ display: this.state.signupView }}>
-              <SignupForm changeState={this.changeState} />
+              <SignupForm history={this.props.history} changeState={this.changeState} />
             </div>
             <form onSubmit={this.handleSubmit} role="form" className="formDiv" id="signinForm" style={{ display: this.state.signinView }}>
               <h3 className="text-center panel-font"><b>Login</b></h3>

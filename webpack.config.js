@@ -9,8 +9,10 @@ module.exports = {
   ],
   devServer: {
     hot: true,
-    contentBase: './Client/dist',
-    // historyApiFallback: true,
+    historyApiFallback: true,
+    contentBase: path.resolve(__dirname, 'Client/dist'),
+    publicPath: '/',
+    port: '9876'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -57,10 +59,5 @@ module.exports = {
         ]
       },
     ],
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, 'Client/dist'),
-    publicPath: '/',
-    port: '9876'
   }
 };

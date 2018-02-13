@@ -23,10 +23,15 @@ export class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.changeLocation = this.changeLocation.bind(this);
+    this.logout = this.logout.bind(this);
   }
   changeLocation(url) {
-    $('#myModalSidebar').modal('hide');
     history.push(url);
+  }
+  logout() {
+    $('#myModalSidebar').modal('hide');    
+    localStorage.removeItem('token');
+    history.push('/');
   }
   render() {
     const content = (
@@ -44,7 +49,7 @@ export class Sidebar extends Component {
                 <ListItem event={this.changeLocation.bind(this, '/dashboard')} class='nav-item' title='MyEvents' icon={eventIcon} alt='myEvents' />
                 <ListItem event={this.changeLocation.bind(this, '/dashboard/centerlist')} class='nav-item' title='MyCenters' icon={centerIcon} alt='myCenters' />
                 <ListItem event={this.changeLocation.bind(this, '/dashboard/testredux')} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
-                <ListItem event={this.changeLocation.bind(this, '/')} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
+                <ListItem event={this.logout} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
               </ul>
             </div>
           </div>
