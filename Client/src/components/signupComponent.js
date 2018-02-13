@@ -58,6 +58,7 @@ export class SignupForm extends React.Component {
     }
     event.preventDefault();
   }
+
   render() {
     const content = (
       <form role="form" onSubmit={this.handleSubmit} className="formDiv" id="signupForm">
