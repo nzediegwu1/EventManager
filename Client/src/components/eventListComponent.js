@@ -19,6 +19,10 @@ const EventRow = (props) => {
   return content;
 }
 export class EventList extends Component {
+  componentDidMount(){
+    const loggedInUser = localStorage.getItem('token');
+    alert(loggedInUser);
+  }
   render() {
     const content = (
       <div className="mx-sm-auto col-sm-11">

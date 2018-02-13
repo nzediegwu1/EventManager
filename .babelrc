@@ -1,5 +1,5 @@
 ﻿{
-  "presets": [["env", { "modules": false }], "react" ],
+  "presets": [ "env", "react" ],
   "plugins": [
     "react-hot-loader/babel",
     "transform-object-rest-spread"
