@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 
 export const App = () => (
   <Switch >
-    <Route exact path='/' component={SignIn} />
     <Route path='/dashboard' component={Dashboard} />
+    <Route path='/' component={SignIn} />
   </Switch>
 );

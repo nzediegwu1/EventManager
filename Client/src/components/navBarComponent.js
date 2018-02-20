@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import menuIcon from '../resources/images/glyphicons-517-menu-hamburger.png';
 import searchIcon from '../resources/images/glyphicons-28-search.png';
 import createIcon from '../resources/images/glyphicons-191-plus-sign.png';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+  return {
+    accountType: state.accountType.accountType
+  };
+};
 
 const NavbarList = (props) => {
   const content = (
@@ -14,7 +21,7 @@ const NavbarList = (props) => {
   );
   return content;
 }
-export class NavBar extends Component {
+class NavBarItem extends Component {
   render() {
     const content = (
       <nav className="navbar fixed-top navbar-expand-sm navbar-background">
@@ -34,7 +41,7 @@ export class NavBar extends Component {
           </form>
           <ul className="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
             <NavbarList id='addEvent' dataTarget='#addNewEvent' body='Add Event' />
-            <NavbarList id='addCenter' dataTarget='#addNewCenter' body='Add Center' />
+            {(this.props.accountType === 'admin') && <NavbarList id='addCenter' dataTarget='#addNewCenter' body='Add Center' />}
           </ul>
         </div>
       </nav>
@@ -42,3 +49,4 @@ export class NavBar extends Component {
     return content;
   }
 }
+export const NavBar = connect(mapStateToProps)(NavBarItem);

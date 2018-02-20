@@ -22,10 +22,10 @@ swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
   app.use(middleware.swaggerUi());
 });
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to allow chai-http post and put tests to run
-app.use(express.static(path.resolve('./././Template')));
+app.use('/public', express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, '../Template')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
 app.use('/api/v1/users', users);

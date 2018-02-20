@@ -2,13 +2,13 @@ import React from 'react';
 import { FormGroup } from './formGroup';
 import emailIcon from '../resources/images/glyphicons-11-envelope.png';
 import { connect } from 'react-redux';
-import { addArticle } from '../actions/articles'
+import { addArticle } from '../actions/articleActions'
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
   return { inputType, inputName, placeholder, className, ref, required };
 };
 const mapStateToProps = state => {
-  return { articles: state.articles };
+  return { articles: state.articles.articles };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -21,7 +21,7 @@ export class MyCenters extends Component {
   render() {
     const content = (
       <div className="mx-sm-auto col-sm-11">
-        <b className="page-header">My Centers</b>
+        <b className="page-header">Centers</b>
         <ul className="nav nav-pills flex-column">
           <li className="list-group-item sidebar-header text-center">
             <input className="form-control search-input search-list" type="search" placeholder="Filter" aria-label="Search" />
