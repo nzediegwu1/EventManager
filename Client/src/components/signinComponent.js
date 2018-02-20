@@ -4,13 +4,23 @@ import { SignupForm } from './signupComponent';
 import usernameIcon from '../resources/images/glyphicons-522-user-lock.png';
 import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import { RecoverPassword } from './rePasswordComponent';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { signin } from '../reusables';
+import { connect } from 'react-redux';
+import { setAccountType } from '../actions/userActions';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
   return { inputType, inputName, placeholder, className, ref, required };
 };
-export class SignIn extends React.Component {
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setAccountType: (accountType) => dispatch(setAccountType(accountType))
+  }
+}
+
+class SignInPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,14 +52,10 @@ export class SignIn extends React.Component {
     if (this.validate(username, password)) {
       axios.post('http://localhost:8000/api/v1/users/login', { username, password })
         .then(res => {
-          localStorage.setItem('token', res.data.data.Token);
-          this.props.history.push('/dashboard');
+          signin(res, this.props.history);
+          this.props.setAccountType(JSON.parse(localStorage.token).accountType);
         }).catch(err => {
-          if (err.response.status === 404) {
-            alert(err.response.data.message);
-          } else if (err.response.status === 401) {
-            alert(err.response.data.message);
-          }
+          alert(err.response.data.message);
         });
     }
     event.preventDefault();
@@ -80,6 +86,9 @@ export class SignIn extends React.Component {
         <RecoverPassword />
       </div>
     );
-    return content;
+    const token = localStorage.token;
+    return token ? <Redirect to='/dashboard' /> : content;
   }
 }
+
+export const SignIn = connect(null, mapDispatchToProps)(SignInPage);

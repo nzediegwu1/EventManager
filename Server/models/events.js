@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     });
     Events.associate = (models) => {
         // associations can be defined here
-        Events.belongsTo(models.Centers, { foreignKey: 'centerId', as: 'centers', onDelete: 'CASCADE' });
-        Events.belongsTo(models.Users, { foreignKey: 'userId', as: 'users', onDelete: 'SET NULL' });
+        Events.belongsTo(models.Centers, { foreignKey: 'centerId', as: 'center', onDelete: 'CASCADE' });
+        Events.belongsTo(models.Users, { foreignKey: 'userId', as: 'user', onDelete: 'SET NULL' });
     };
     return Events;
 };

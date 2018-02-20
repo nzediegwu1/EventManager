@@ -11,8 +11,10 @@ class Authenticator {
       }
       jwt.verify(token, this.key, (error, decoded) => {
         if (error) {
-          return res.status(403).json({ status: 'error',
-            message: 'Token could not be authenticated' });
+          return res.status(403).json({
+            status: 'error',
+            message: 'Token could not be authenticated'
+          });
         }
         req.decoded = decoded;
         next();

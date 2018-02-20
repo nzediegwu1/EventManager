@@ -6,6 +6,7 @@ import emailIcon from '../resources/images/glyphicons-11-envelope.png';
 import phoneIcon from '../resources/images/glyphicons-442-phone-alt.png';
 import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import axios from 'axios';
+import { signin } from '../reusables';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
   return { inputType, inputName, placeholder, className, ref, required };
@@ -45,15 +46,10 @@ export class SignupForm extends React.Component {
     if (this.validate(username, name, email, password, confirmPassword)) {
       axios.post('http://localhost:8000/api/v1/users', { username, name, email, phoneNo, accountType, password, confirmPassword })
         .then(res => {
-          localStorage.setItem('token', res.data.data.Token);
-          history.push('/dashboard');
+          alert('Successful');
+          signin(res, history);
         }).catch(err => {
-          console.log(err);
-          if (err.response.status === 406) {
-            alert(err.response.data.message);
-          } else if (err.response.status === 500) {
-            alert(err.response.data.message);            
-          }
+          alert(err.response.data.message);
         })
     }
     event.preventDefault();

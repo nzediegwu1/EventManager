@@ -3,8 +3,8 @@ import { Sidebar } from './sidebarComponent';
 import { NavBar } from './navBarComponent';
 import { AddEvent } from './addEventComponent';
 import { AddCenter } from './addCenterComponent';
-import { MyCenters } from './myCenterComponent';
-import { Route, Switch } from 'react-router-dom';
+import { MyCenters } from './centerListComponent';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { EventList } from './eventListComponent';
 import { ManageEvent } from './manageEventComponent';
 import { CenterDetails } from './centerDetailsComponent';
@@ -29,6 +29,7 @@ export class Dashboard extends Component {
         </div>
       </div>
     );
-    return content;
+    const token = localStorage.token;
+    return token? content : <Redirect to='/' />;
   }
 }
