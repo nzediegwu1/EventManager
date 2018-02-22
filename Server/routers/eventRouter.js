@@ -21,5 +21,6 @@ router.post('/', upload.single('picture'), Validator.verify, Auth.Verify, Events
 router.put('/:id', upload.single('picture'), Validator.verify, Auth.Verify, Events.modifyEvent);
 router.delete('/:id', Auth.Verify, Events.deleteEvent);
 router.get('/', Events.getEvents);
+router.get('/:id', Events.getEventDetails); // no validation required
 
 export default router;

@@ -143,7 +143,7 @@ class Events {
         { model: models.Centers, as: 'center' },
         { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
       ],
-      attributes: { exclude: ['centerId', 'userId']}
+      attributes: { exclude: ['centerId', 'userId'] }
     }).then(allEvents => {
       if (allEvents.length !== 0) {
         return validator.response(res, 'success', 200, allEvents);
@@ -151,7 +151,25 @@ class Events {
       return validator.response(res, 'error', 200, 'No events available');
     }).catch(error => validator.response(res, 'error', 500, error));
   }
+  getEventDetails(req, res) {
+    if (validator.confirmParams(req, res)) {
+      return model.findById(req.params.id, {
+        include:
+        [{ model: models.Centers, as: 'center' },
+        { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+      ],
+      attributes: { exclude: ['centerId', 'userId'] }
+      }).then(event => {
+        if (event !== null) {
+          return validator.response(res, 'success', 200, event);
+        }
+        return validator.response(res, 'error', 404, 'Could not find Event');
+      }).catch(error => validator.response(res, 'error', 500, error));
+    }
+    return validator.invalidParameter;
+  }
 }
+
 
 const events = new Events();
 export default events;
