@@ -48,7 +48,7 @@ export class Sidebar extends Component {
               <ul className="nav flex-column nav-tabs">
                 <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}`)} class='nav-item' title='Events' icon={eventIcon} alt='myEvents' />
                 <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/centers`)} class='nav-item' title='Centers' icon={centerIcon} alt='myCenters' />
-                <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/testredux`)} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
+                <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/profile`)} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
                 <ListItem event={this.logout} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
               </ul>
             </div>

@@ -4,7 +4,6 @@ import { NavBar } from './navBarComponent';
 import { AddEvent } from './addEventComponent';
 import { AddCenter } from './addCenterComponent';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { TestRedux } from './testRedux';
 import { EventRouter } from './eventRouter';
 import { CenterRouter } from './centerRouter';
 import { connect } from 'react-redux';
@@ -25,7 +24,6 @@ class DashboardComponent extends Component {
           <AddEvent />
           {(this.props.accountType === 'admin') && <AddCenter />}
           <Switch>
-            <Route path={`${this.props.match.path}/testredux`} component={TestRedux} />
             <Route path={`${this.props.match.path}/centers`} component={CenterRouter} />
             <Route path={`${this.props.match.path}`} component={EventRouter} />
           </Switch>

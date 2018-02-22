@@ -1,4 +1,3 @@
-export const ADD_ARTICLE = 'ADD_ARTICLE';
 export const POPULATE_EVENTS = 'POPULATE_EVENTS';
 export const ADD_ACCOUNT_TYPE = 'ADD_ACCOUNT_TYPE';
 export const SET_EVENT_DETAIL = 'SET_EVENT_DETAIL';
