@@ -142,7 +142,8 @@ class Events {
       include: [
         { model: models.Centers, as: 'center' },
         { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
-      ], attributes: { exclude: ['centerId', 'userId'] }
+      ],
+      attributes: { exclude: ['centerId', 'userId']}
     }).then(allEvents => {
       if (allEvents.length !== 0) {
         return validator.response(res, 'success', 200, allEvents);

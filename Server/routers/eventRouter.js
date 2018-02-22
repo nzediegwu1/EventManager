@@ -18,7 +18,7 @@ const Validator = new val('events');
 const router = express.Router();
 
 router.post('/', upload.single('picture'), Validator.verify, Auth.Verify, Events.addEvent);
-router.put('/:id', Validator.verify, Auth.Verify, Events.modifyEvent);
+router.put('/:id', upload.single('picture'), Validator.verify, Auth.Verify, Events.modifyEvent);
 router.delete('/:id', Auth.Verify, Events.deleteEvent);
 router.get('/', Events.getEvents);
 

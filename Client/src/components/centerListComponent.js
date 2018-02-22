@@ -31,10 +31,10 @@ export class MyCenters extends Component {
           <table className="table table-hover table-main">
           <TableHead col1='View' col2='Name' col3='Location' col4='Capacity' />
             <tbody>
-              <MyCenterRow url='/dashboard/center-details' image={romeImage} name='Napoli metropolitan' city='Rome, Italy' capacity='9000' />
-              <MyCenterRow url='/dashboard/center-details' image={hongkong} name='Quin mansion' city='Hongkong, China' capacity='12400' />
-              <MyCenterRow url='/dashboard/center-details' image={temple} name='House on the Rock' city='Istambul, turkey' capacity='34700' />
-              <MyCenterRow url='/dashboard/center-details' image={beijing} name='Beijing concert hall' city='Beijing, China' capacity='150000' />
+              <MyCenterRow url={`${this.props.match.path}/id`} image={romeImage} name='Napoli metropolitan' city='Rome, Italy' capacity='9000' />
+              <MyCenterRow url={`${this.props.match.path}/id`} image={hongkong} name='Quin mansion' city='Hongkong, China' capacity='12400' />
+              <MyCenterRow url={`${this.props.match.path}/id`} image={temple} name='House on the Rock' city='Istambul, turkey' capacity='34700' />
+              <MyCenterRow url={`${this.props.match.path}/id`} image={beijing} name='Beijing concert hall' city='Beijing, China' capacity='150000' />
             </tbody>
           </table>
         </div>
