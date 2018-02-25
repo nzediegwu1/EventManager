@@ -21,8 +21,8 @@ class DashboardComponent extends Component {
         <NavBar />
         <div id="content" className="container custom-container">
           <Route path={`${this.props.match.path}`} component={Sidebar} />
-          <AddEvent />
-          {(this.props.accountType === 'admin') && <AddCenter />}
+          <Route path={`${this.props.match.path}`} component={AddEvent} />
+          {(this.props.accountType === 'admin') && <Route path={`${this.props.match.path}`} component={AddCenter} />}
           <Switch>
             <Route path={`${this.props.match.path}/centers`} component={CenterRouter} />
             <Route path={`${this.props.match.path}`} component={EventRouter} />

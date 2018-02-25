@@ -68,7 +68,7 @@
         // validate centerId
       } else if (req.body.centerId === undefined || isNaN(req.body.centerId)
           || req.body.centerId.trim().length === 0 || parseInt(req.body.centerId) > 2000000) {
-        this.verificationError = this.errorMessage('centerId should be a number less 2m', res);
+        this.verificationError = this.errorMessage('Invalid center selected', res);
       } else {
         next();
       }

@@ -1,3 +1,4 @@
 export const POPULATE_EVENTS = 'POPULATE_EVENTS';
 export const ADD_ACCOUNT_TYPE = 'ADD_ACCOUNT_TYPE';
 export const SET_EVENT_DETAIL = 'SET_EVENT_DETAIL';
+export const CHANGE_PAGE = 'CHANGE_PAGE';

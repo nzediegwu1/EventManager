@@ -4,11 +4,12 @@ import timeIcon from '../resources/images/glyphicons-54-alarm.png';
 import { ManageDetailsHeader } from './manageDetailsHeader';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { setEventDetail } from '../actions/eventActions';
+import { setEventDetail, changePage } from '../actions/eventActions';
 
 const mapDispatchToProps = dispatch => {
   return {
-    setEventDetail: event => dispatch(setEventDetail(event))
+    setEventDetail: event => dispatch(setEventDetail(event)),
+    changePage: page => dispatch(changePage(page))
   };
 };
 
@@ -25,9 +26,14 @@ class ManageEventComponent extends Component {
     axios.get(`http://localhost:8000/api/v1/events/${this.props.match.params.id}`)
       .then(res => {
         this.props.setEventDetail(res.data.data);
+        this.props.changePage('manageEvent');        
       }).catch(err => {
-        alert(err);
+        alert(err.response.data.message);
+        (err.response.status === 404 || err.response.status === 400) && this.props.history.push('/dashboard');
       })
+  }
+  componentWillUnmount(){
+    this.props.changePage('dashboard');
   }
   render() {
     const event = this.props.eventDetails[0];
