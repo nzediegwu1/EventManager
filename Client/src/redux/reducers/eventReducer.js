@@ -1,8 +1,9 @@
-import { POPULATE_EVENTS, SET_EVENT_DETAIL } from '../../constants/actionTypes';
+import { POPULATE_EVENTS, SET_EVENT_DETAIL, CHANGE_PAGE } from '../../constants/actionTypes';
 
 const initialState = {
   eventList: [],
-  event: []
+  event: [],
+  currentPage: 'dashboard'
 };
 
 const eventReducer = (state = initialState, action) => {
@@ -12,6 +13,9 @@ const eventReducer = (state = initialState, action) => {
       break;
     case SET_EVENT_DETAIL:
       return { eventList: [...state.eventList], event: [action.payload] };
+      break;
+    case CHANGE_PAGE:
+      return { eventList: [...state.eventList], event: [...state.event], currentPage: action.payload };
       break;
     default:
       return state;

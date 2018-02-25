@@ -9,7 +9,6 @@ import capacityIcon from '../resources/images/glyphicons-44-group.png';
 import amountIcon from '../resources/images/glyphicons-548-bitcoin.png';
 import addIcon from '../resources/images/glyphicons-191-plus-sign.png';
 import removeIcon from '../resources/images/glyphicons-198-remove-circle.png';
-import { ModalFooter } from './modalFooter';
 import { FacilityRow, FacilityHeader } from './facilityComponent';
 import { Option } from './selectOption';
 
@@ -61,8 +60,11 @@ export class AddCenter extends Component {
                   </div>
                 </div>
               </form>
-              <ModalFooter class='btn btn-success createCenter' success='Save' />
+              <div className="modal-footer">
+              <button className='btn btn-success createCenter'>Save</button>
+              <button className="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
+          </div>
           </div>
         </div>
       </div>

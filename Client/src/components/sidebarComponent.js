@@ -5,6 +5,7 @@ import centerIcon from '../resources/images/glyphicons-503-map.png';
 import userIcon from '../resources/images/glyphicons-4-user.png';
 import logoutIcon from '../resources/images/glyphicons-64-power.png';
 import createHistory from 'history/createBrowserHistory';
+import { logout } from '../reusables';
 
 const history = createHistory();
 export const ListItem = (props) => {
@@ -23,15 +24,9 @@ export class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.changeLocation = this.changeLocation.bind(this);
-    this.logout = this.logout.bind(this);
   }
   changeLocation(url) {
     history.push(url);
-  }
-  logout() {
-    $('#myModalSidebar').modal('hide');    
-    localStorage.removeItem('token');
-    history.push('/');
   }
   render() {
     const content = (
@@ -49,7 +44,7 @@ export class Sidebar extends Component {
                 <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}`)} class='nav-item' title='Events' icon={eventIcon} alt='myEvents' />
                 <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/centers`)} class='nav-item' title='Centers' icon={centerIcon} alt='myCenters' />
                 <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/profile`)} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
-                <ListItem event={this.logout} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
+                <ListItem event={()=>logout('myModalSidebar', this.props.history)} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
               </ul>
             </div>
           </div>

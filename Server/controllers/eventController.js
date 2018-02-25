@@ -31,23 +31,34 @@ class Events {
               && eventYear === year) {
               // forbidden
               errorMessage = {
-                Sorry: `Selected date is already occupied for centerId: ${centerId}`,
+                Sorry: `Selected date is already occupied for selected center`,
                 OccupiedDates: occupiedDates,
               };
-              // console.log('unacceptable error here');
             }
           });
           if (errorMessage !== '') {
+            console.log(typeof errorMessage);
             return validator.response(res, 'error', 406, errorMessage);
           }
         }
-        const newEntry = { title, date: timestamp, description, picture: req.file.filename, userId: req.decoded.id, centerId };
+        const newEntry = (req.file) ? {
+          title, date: timestamp, description, picture: req.file.filename, userId: req.decoded.id, centerId
+        }
+          : { title, date: timestamp, description, userId: req.decoded.id, centerId };
         return model.create(newEntry)
-          .then(created => validator.response(res, 'success', 201, created))
-          .catch(error => {
+          .then(created => {
+            return model.findById(created.id, {
+              include: [
+                { model: models.Centers, as: 'center' },
+                { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+              ],
+              attributes: { exclude: ['centerId', 'userId'] }
+            }).then(response => validator.response(res, 'success', 201, response))
+              .catch(err => validator.response(res, 'error', 500, err))
+          }).catch(error => {
             let errorMessage = '';
             if (error.name === 'SequelizeForeignKeyConstraintError') {
-              errorMessage = 'centerId selected for event does not exist in table';
+              errorMessage = 'center selected for event does not exist in database';
             }
             return validator.response(res, 'error', 400, errorMessage);
           });
@@ -157,8 +168,8 @@ class Events {
         include:
         [{ model: models.Centers, as: 'center' },
         { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
-      ],
-      attributes: { exclude: ['centerId', 'userId'] }
+        ],
+        attributes: { exclude: ['centerId', 'userId'] }
       }).then(event => {
         if (event !== null) {
           return validator.response(res, 'success', 200, event);

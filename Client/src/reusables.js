@@ -7,3 +7,9 @@ export const signin = (res, history) => {
     localStorage.setItem('token', JSON.stringify(token));
     history.push('/dashboard');
 };
+
+export const logout = (id, history) => {
+    localStorage.clear();
+    $(`#${id}`).modal('hide');
+    history.push('/');
+  };

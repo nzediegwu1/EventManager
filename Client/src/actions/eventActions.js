@@ -1,4 +1,4 @@
-import { POPULATE_EVENTS, SET_EVENT_DETAIL } from '../constants/actionTypes';
+import { POPULATE_EVENTS, SET_EVENT_DETAIL, CHANGE_PAGE } from '../constants/actionTypes';
 
 export const populateEvents = (eventList) => {
   return {
@@ -12,3 +12,10 @@ export const setEventDetail = (event) => {
     payload: event,
   };
 };
+
+export const changePage = page => {
+  return {
+    type: CHANGE_PAGE,
+    payload: page
+  }
+}
