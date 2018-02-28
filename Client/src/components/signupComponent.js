@@ -44,7 +44,7 @@ export class SignupForm extends React.Component {
     const password = this.password.value;
     const confirmPassword = this.rePassword.value;
     if (this.validate(username, name, email, password, confirmPassword)) {
-      axios.post('http://localhost:8000/api/v1/users', { username, name, email, phoneNo, accountType, password, confirmPassword })
+      axios.post('http://localhost:8080/api/v1/users', { username, name, email, phoneNo, accountType, password, confirmPassword })
         .then(res => {
           alert('Successful');
           signin(res, history);

@@ -1,10 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 require('dotenv').config();
-import faker from 'faker';
-
-
-console.log(faker.date.future().toDateString());
 
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);

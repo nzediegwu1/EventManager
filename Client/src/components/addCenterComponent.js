@@ -9,13 +9,53 @@ import capacityIcon from '../resources/images/glyphicons-44-group.png';
 import amountIcon from '../resources/images/glyphicons-548-bitcoin.png';
 import addIcon from '../resources/images/glyphicons-191-plus-sign.png';
 import removeIcon from '../resources/images/glyphicons-198-remove-circle.png';
-import { FacilityRow, FacilityHeader } from './facilityComponent';
 import { Option } from './selectOption';
+import { TableHead, TableRow } from './table';
+import axios from 'axios';
+import { Redirect } from 'react-router';
+import { logout } from '../reusables';
+import { connect } from 'react-redux';
+import { setCenterDetails } from '../actions/centerActions';
 
-const inputAttrs = (inputType, inputName, placeholder, className, required) => {
-  return { inputType, inputName, placeholder, className, required };
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
+  return { inputType, inputName, placeholder, className, ref, required };
 };
-export class AddCenter extends Component {
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setCenterDetails: center => dispatch(setCenterDetails(center)),
+  };
+};
+
+class AddCenterComponent extends Component {
+  constructor(props) {
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleSubmit(event) {
+    const newCenter = new FormData();
+    newCenter.append('name', this.name.value);
+    newCenter.append('picture', this.picture.files[0]);
+    newCenter.append('address', this.address.value);
+    newCenter.append('location', this.location.value);
+    newCenter.append('capacity', this.capacity.value);
+    newCenter.append('price', this.price.value);
+    newCenter.append('availability', this.availability.value);
+    newCenter.append('token', JSON.parse(localStorage.token).value);
+
+    axios.post('http://localhost:8080/api/v1/centers', newCenter)
+      .then(res => {
+        alert('Successful');
+        this.props.history.push(`/dashboard/centers/${res.data.data.id}`);
+        console.log(res.data.data);
+        this.props.setCenterDetails(res.data.data);
+      }).catch(err => {
+        (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
+        (err.response.status === 403 || err.response.status === 401) && logout('addNewCenter', this.props.history);
+      });
+    event.preventDefault();
+  }
+
   render() {
     const content = (
       <div className="modal fade" role="dialog" id="addNewCenter" tabIndex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
@@ -23,18 +63,18 @@ export class AddCenter extends Component {
           <div className="modal-content eventModal">
             <ModalHeader id='addNewCenterTitle' title='New Center' />
             <div className="modal-body mx-sm-auto col-sm-10">
-              <form role="form">
-                <FormGroup image={centerNameIcon} alt='centername' inputProps={inputAttrs('text', 'centername', 'Center Name', 'form-control input-sm', 'required')} />
-                <FormGroup image={centerImageIcon} alt='centerImage' inputProps={inputAttrs('file', 'centerImage', 'Center Image', 'form-control input-sm', 'required')} />
-                <FormGroup image={addressIcon} alt='address' inputProps={inputAttrs('text', 'street', 'Address', 'form-control input-sm', 'required')} />
-                <FormGroup image={cityIcon} alt='city' inputProps={inputAttrs('text', 'city', 'State/City', 'form-control input-sm', 'required')} />
-                <FormGroup image={capacityIcon} alt='capacity' inputProps={inputAttrs('number', 'capacity', 'Capacity', 'form-control input-sm', 'required')} />
-                <FormGroup image={amountIcon} alt='bookingAmount' inputProps={inputAttrs('number', 'bookingAmount', 'Booking price(per day)', 'form-control input-sm', 'required')} />
+              <form role="form" onSubmit={this.handleSubmit}>
+                <FormGroup image={centerNameIcon} alt='centername' inputProps={inputAttrs('text', 'centername', 'Center Name', 'form-control input-sm', input => this.name = input, 'required')} />
+                <FormGroup image={centerImageIcon} alt='centerImage' inputProps={inputAttrs('file', 'centerImage', 'Center Image', 'form-control input-sm', input => this.picture = input, 'required')} />
+                <FormGroup image={addressIcon} alt='address' inputProps={inputAttrs('text', 'street', 'Address', 'form-control input-sm', input => this.address = input, 'required')} />
+                <FormGroup image={cityIcon} alt='city' inputProps={inputAttrs('text', 'city', 'State/City', 'form-control input-sm', input => this.location = input, 'required')} />
+                <FormGroup image={capacityIcon} alt='capacity' inputProps={inputAttrs('number', 'capacity', 'Capacity', 'form-control input-sm', input => this.capacity = input, 'required')} />
+                <FormGroup image={amountIcon} alt='bookingAmount' inputProps={inputAttrs('number', 'bookingAmount', 'Booking price(per day)', 'form-control input-sm', input => this.price = input, 'required')} />
                 <div className="form-group">
-                  <select className="custom-select-sm">
-                    <Option text='Availability'/>
-                    <Option value='1' text='open'/>
-                    <Option value='0' text='close'/>
+                  <select required ref={input => this.availability = input} className="custom-select-sm">
+                    <Option value='' text='Availability' disabled selected />
+                    <Option value='open' text='open' />
+                    <Option value='close' text='close' />
                   </select>
                 </div>
                 <div className="form-group">
@@ -48,23 +88,23 @@ export class AddCenter extends Component {
                   </div>
                   <div className="table-responsive centerSearch">
                     <table className="table table-hover grey-color">
-                      <FacilityHeader deleteIcon={removeIcon} context='addCenter' />
+                      <TableHead colNumber={4} columns={['Facilities', 'Spec', 'Quantity', <img src={removeIcon} alt="delete" />]} class='table-header' />
                       <tbody>
-                        <FacilityRow name='Projector' spec='200w...' quantity='150' context='addCenter' />
-                        <FacilityRow name='Backup power' spec='15kw...' quantity='450' context='addCenter' />
-                        <FacilityRow name='Sound system' spec='500w...' quantity='200' context='addCenter' />
-                        <FacilityRow name='Smart lighting' spec='Energy..' quantity='349' context='addCenter' />
-                        <FacilityRow name='Airconditioner' spec='2kw...' quantity='57' context='addCenter' />
+                        <TableRow colNumber={4} columns={[<b>Projector</b>, <b>200w...</b>, <span className="badge">150</span>, <div className="checkbox"><input type="checkbox" name="mark" /></div>]} />
+                        <TableRow colNumber={4} columns={[<b>Backup power</b>, <b>150kw...</b>, <span className="badge">450</span>, <div className="checkbox"><input type="checkbox" name="mark" /></div>]} />
+                        <TableRow colNumber={4} columns={[<b>Sound system</b>, <b>500w...</b>, <span className="badge">200</span>, <div className="checkbox"><input type="checkbox" name="mark" /></div>]} />
+                        <TableRow colNumber={4} columns={[<b>Smart lighting</b>, <b>Energy...</b>, <span className="badge">349</span>, <div className="checkbox"><input type="checkbox" name="mark" /></div>]} />
+                        <TableRow colNumber={4} columns={[<b>Airconditioner</b>, <b>2kw...</b>, <span className="badge">57</span>, <div className="checkbox"><input type="checkbox" name="mark" /></div>]} />
                       </tbody>
                     </table>
                   </div>
                 </div>
+                <div className="modal-footer">
+                  <button type="submit" className='btn btn-success createCenter'>Save</button>
+                  <button className="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
               </form>
-              <div className="modal-footer">
-              <button className='btn btn-success createCenter'>Save</button>
-              <button className="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -72,3 +112,4 @@ export class AddCenter extends Component {
     return content;
   }
 }
+export const AddCenter = connect(null, mapDispatchToProps)(AddCenterComponent);

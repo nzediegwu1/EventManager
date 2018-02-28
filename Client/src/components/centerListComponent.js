@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
-import romeImage from '../resources/images/rome.jpg';
-import hongkong from '../resources/images/hongkong.jpg';
-import temple from '../resources/images/temple.jpg';
-import beijing from '../resources/images/beijing.jpg';
-import { TableHead } from './tableHead';
+import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { populateCenters } from '../actions/centerActions';
+import { connect } from 'react-redux';
 
-const MyCenterRow = (props) => {
-  const content = (
-    <tr className="center">
-      <td><img className="center-image" src={props.image} alt="center-view" /></td>
-      <td><Link className='event-detail' to={props.url}>{props.name}</Link></td>
-      <td>{props.city}</td>
-      <td><span className="badge">{props.capacity}</span></td>
-    </tr>
-  );
-  return content;
-}
-export class MyCenters extends Component {
+const mapDispatchToProps = dispatch => {
+  return {
+    populateCenters: centers => dispatch(populateCenters(centers)),
+  };
+};
+const mapStateToProps = state => {
+  return {
+    centers: state.centers.centerList,
+  };
+};
+
+class CenterList extends Component {
+  constructor(props) {
+    super(props)
+  }
+  componentWillMount() {
+    axios.get('http://localhost:8080/api/v1/centers')
+      .then(res => {
+        this.props.populateCenters(res.data.data);
+      }).catch(err => {
+        alert(err);
+      });
+  }
+
   render() {
     const content = (
       <div className="mx-sm-auto col-sm-11">
@@ -29,12 +40,16 @@ export class MyCenters extends Component {
         </ul>
         <div className="table-responsive">
           <table className="table table-hover table-main">
-          <TableHead col1='View' col2='Name' col3='Location' col4='Capacity' />
+            <TableHead colNumber={4} columns={['View', 'Name', 'Location', 'Capacity']} class='table-header table-header-main' />
             <tbody>
-              <MyCenterRow url={`${this.props.match.path}/id`} image={romeImage} name='Napoli metropolitan' city='Rome, Italy' capacity='9000' />
-              <MyCenterRow url={`${this.props.match.path}/id`} image={hongkong} name='Quin mansion' city='Hongkong, China' capacity='12400' />
-              <MyCenterRow url={`${this.props.match.path}/id`} image={temple} name='House on the Rock' city='Istambul, turkey' capacity='34700' />
-              <MyCenterRow url={`${this.props.match.path}/id`} image={beijing} name='Beijing concert hall' city='Beijing, China' capacity='150000' />
+              {this.props.centers.map(center => (
+                <TableRow key={center.id} colNumber={4} columns={[
+                  <img className="center-image" src={`http://localhost:8080/public/centers/${center.picture}`} alt="center-view" />,
+                  <Link className='event-detail' to={`${this.props.match.path}/${center.id}`}>{center.name}</Link>,
+                  `${center.name}, ${center.address}`,
+                  <span className="badge">{center.capacity}</span>
+                ]} />
+              ))}
             </tbody>
           </table>
         </div>
@@ -43,3 +58,5 @@ export class MyCenters extends Component {
     return content;
   }
 }
+
+export const MyCenters = connect(mapStateToProps, mapDispatchToProps)(CenterList);

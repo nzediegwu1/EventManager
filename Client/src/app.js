@@ -7,7 +7,7 @@ import '../src/resources/styles/custom.css';
 import 'bootstrap';
 import { Router } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
-import store from './redux/store';
+import store from './store';
 import { Provider } from 'react-redux';
 
 const history = createHistory();

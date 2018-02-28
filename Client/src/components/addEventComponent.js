@@ -12,22 +12,15 @@ import { logout } from '../reusables';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
 
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
+  return { inputType, inputName, placeholder, className, ref, required };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     setEventDetail: event => dispatch(setEventDetail(event)),
   };
 };
-
-
-const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
-  return { inputType, inputName, placeholder, className, ref, required };
-};
-
-const mapStatesToProps = state => {
-  return {
-    currentPage: state.events.currentPage
-  }
-}
 
 class AddEventComponent extends Component {
   constructor(props) {
@@ -44,11 +37,11 @@ class AddEventComponent extends Component {
     newEvent.append('centerId', this.center.value);
     newEvent.append('token', JSON.parse(localStorage.token).value);
 
-    axios.post('http://localhost:8000/api/v1/events', newEvent)
+    axios.post('http://localhost:8080/api/v1/events', newEvent)
       .then(res => {
         alert('Successful');
         this.props.history.push(`/dashboard/events/${res.data.data.id}`);
-        (this.props.currentPage !== 'dashboard') && this.props.setEventDetail(res.data.data);
+        this.props.setEventDetail(res.data.data);
       }).catch(err => {
         (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
         (err.response.status === 403 || err.response.status === 401) && logout('addNewEvent', this.props.history);
@@ -104,4 +97,4 @@ class AddEventComponent extends Component {
   }
 }
 
-export const AddEvent = connect(mapStatesToProps, mapDispatchToProps)(AddEventComponent);
+export const AddEvent = connect(null, mapDispatchToProps)(AddEventComponent);

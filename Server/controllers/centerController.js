@@ -10,29 +10,39 @@ class Centers {
     models.Users.findById(req.decoded.id).then(user => {
       if (user.accountType === 'admin') {
         return model.findAll()
-            .then(centers => { // destructuring
-              const { name, address, location, capacity, price, picture, availability } = req.body;
-              let sameCenter = '';
-              if (centers.length !== 0) {
-                centers.forEach(center => {
-                  if (center.name === name
-                      && center.location === location
-                      && center.address === address) {
-                    // unacceptable
-                    sameCenter = 'Same center already exists';
-                  }
-                });
-              }
-              if (sameCenter !== '') {
-                return validator.response(res, 'err', 406, sameCenter);
-              }
-              const newEntry = { name, address, location, picture, availability, userId: req.decoded.id,
-                capacity: parseInt(capacity), price: parseInt(price),
-              };
-              return model.create(newEntry)
-                   .then(created => validator.response(res, 'success', 201, created))
-                   .catch(error => validator.response(res, 'error', 500, error));
-            }).catch(error => validator.response(res, 'error', 500, error));
+          .then(centers => { // destructuring
+            const { name, address, location, capacity, price, picture, availability } = req.body;
+            let sameCenter = '';
+            if (centers.length !== 0) {
+              centers.forEach(center => {
+                if (center.name === name
+                  && center.location === location
+                  && center.address === address) {
+                  // unacceptable
+                  sameCenter = 'Same center already exists';
+                }
+              });
+            }
+            if (sameCenter !== '') {
+              return validator.response(res, 'err', 406, sameCenter);
+            }
+            const newEntry = {
+              name, address, location, picture: req.file.filename, availability, userId: req.decoded.id,
+              capacity: parseInt(capacity), price: parseInt(price),
+            };
+            return model.create(newEntry)
+              .then(created => {
+                return model.findById(created.id, {
+                  include: [
+                    { model: models.Events, as: 'events' },
+                    { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+                  ],
+                  attributes: { exclude: ['userId'] }
+                }).then(response => validator.response(res, 'success', 201, response))
+                  .catch(err => validator.response(res, 'error', 500, err))
+              })
+              .catch(error => validator.response(res, 'error', 500, error));
+          }).catch(error => validator.response(res, 'error', 500, error));
       }
       return validator.response(res, 'error', 403, 'Only an admin can perform this action');
     }).catch(error => validator.response(res, 'error', 500, error));
@@ -43,34 +53,36 @@ class Centers {
     // get center with same index as parameter and change the value
     if (validator.confirmParams(req, res)) { // destructuring
       return model.findAll()
-          .then(centers => { // destructuring
-            const { name, address, location, capacity, price, picture, availability } = req.body;
-            let sameCenter = '';
-            if (centers.length !== 0) {
-              centers.forEach(center => {
-                if (center.name === name
-                    && center.location === location
-                    && center.address === address && center.id !== parseInt(req.params.id)) {
-                  // unacceptable
-                  sameCenter = 'Same center already exists';
-                }
-              });
-            }
-            if (sameCenter !== '') {
-              return validator.response(res, 'error', 406, sameCenter);
-            }
-            const modifiedEntry = { name, address, location, picture, availability, userId: req.decoded.id,
-              capacity: parseInt(capacity), price: parseInt(price) };
-            return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
-               .then(updatedCenter => {
-                 if (updatedCenter[0] === 1) {
-                   return validator.response(res, 'success', 202, 'Update successful');
-                 }
-                 // trying to update a center whose id does not exist
-                 // and or which doesnt belong to the user
-                 return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
-               }).catch(error => validator.response(res, 'error', 500, error));
-          }).catch(error => validator.response(res, 'error', 500, error));
+        .then(centers => { // destructuring
+          const { name, address, location, capacity, price, availability } = req.body;
+          let sameCenter = '';
+          if (centers.length !== 0) {
+            centers.forEach(center => {
+              if (center.name === name
+                && center.location === location
+                && center.address === address && center.id !== parseInt(req.params.id)) {
+                // unacceptable
+                sameCenter = 'Same center already exists';
+              }
+            });
+          }
+          if (sameCenter !== '') {
+            return validator.response(res, 'error', 406, sameCenter);
+          }
+          const modifiedEntry = {
+            name, address, location, picture: req.file.filename, availability, userId: req.decoded.id,
+            capacity: parseInt(capacity), price: parseInt(price)
+          };
+          return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
+            .then(updatedCenter => {
+              if (updatedCenter[0] === 1) {
+                return validator.response(res, 'success', 202, 'Update successful');
+              }
+              // trying to update a center whose id does not exist
+              // and or which doesnt belong to the user
+              return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
+            }).catch(error => validator.response(res, 'error', 500, error));
+        }).catch(error => validator.response(res, 'error', 500, error));
     }
     return validator.invalidParameter;
   }
@@ -79,25 +91,29 @@ class Centers {
   getAllCenters(req, res) {
     // gets all users' details excluding password
     return model.findAll()
-        .then(allCenters => {
-          if (allCenters.length !== 0) {
-            return validator.response(res, 'success', 200, allCenters);
-          }
-          return validator.response(res, 'error', 200, 'No centers available');
-        }).catch(error => validator.response(res, 'error', 500, error));
+      .then(allCenters => {
+        if (allCenters.length !== 0) {
+          return validator.response(res, 'success', 200, allCenters);
+        }
+        return validator.response(res, 'error', 200, 'No centers available');
+      }).catch(error => validator.response(res, 'error', 500, error));
   }
   // get center details
   getCenterDetails(req, res) {
     if (validator.confirmParams(req, res)) {
-      return model.findById(req.params.id, { include:
-          [{ model: models.Events, as: 'events' },
-          { model: models.Facilities, as: 'facilities' }],
-      }).then(center => {
-        if (center !== null) {
-          return validator.response(res, 'success', 200, center);
-        }
-        return validator.response(res, 'error', 404, 'Could not find Center');
-      }).catch(error => validator.response(res, 'error', 500, error));
+      return model.findById(req.params.id,
+        {
+          include: [
+            { model: models.Events, as: 'events' },
+            { model: models.Facilities, as: 'facilities' },
+            { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+          ]
+        }).then(center => {
+          if (center !== null) {
+            return validator.response(res, 'success', 200, center);
+          }
+          return validator.response(res, 'error', 404, 'Could not find Center');
+        }).catch(error => validator.response(res, 'error', 500, error));
     }
     return validator.invalidParameter;
   }
