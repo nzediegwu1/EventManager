@@ -282,20 +282,18 @@ a:hover {
 }
 
 .centerSearch {
-    height: 250px;
+    height: 200px;
     overflow-y: scroll;
     width: 100%;
-    border-left: ridge;
 }
 
 .table-header-main {
     background-color: darkblue;
     color: white;
 }
-
 .table {
     background-color: white;
-    border: ridge;
+    margin-bottom: 0em;
 }
 
 .table-main {
@@ -362,3 +360,32 @@ button, select {
     border-radius: 1em;
     margin-bottom: 1em;
 }
+.thick{
+    font-weight: 500;
+}
+.table-fixed thead {
+    width: 97%;
+    }
+    .table-fixed tbody {
+    height: 200px;
+    overflow-y: scroll;
+    width: 99%;
+    }
+    .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+    display: block;
+    }
+    .table-fixed tbody td, .table-fixed thead > tr> th {
+    display: inline-block;
+    border-bottom-width: 0;
+    }
+    @media (max-width: 760px) {
+          .col-sm-4 {
+            width: 33.33333333333333%;
+          }
+      }
+      .last{
+        margin-bottom: 2em;
+        border-bottom: solid;
+        border-bottom-left-radius: 2em;
+        border-bottom-right-radius: 2em;
+    }

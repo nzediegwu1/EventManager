@@ -37,14 +37,11 @@ class Events {
             }
           });
           if (errorMessage !== '') {
-            console.log(typeof errorMessage);
             return validator.response(res, 'error', 406, errorMessage);
           }
         }
-        const newEntry = (req.file) ? {
-          title, date: timestamp, description, picture: req.file.filename, userId: req.decoded.id, centerId
-        }
-          : { title, date: timestamp, description, userId: req.decoded.id, centerId };
+        const newEntry = (req.file) ? { title, date: timestamp, description, picture: req.file.filename, userId: req.decoded.id, centerId }
+        : { title, date: timestamp, description, userId: req.decoded.id, centerId };
         return model.create(newEntry)
           .then(created => {
             return model.findById(created.id, {
@@ -152,8 +149,7 @@ class Events {
     return model.findAll({
       include: [
         { model: models.Centers, as: 'center' },
-        { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
-      ],
+        { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }],
       attributes: { exclude: ['centerId', 'userId'] }
     }).then(allEvents => {
       if (allEvents.length !== 0) {
@@ -165,10 +161,9 @@ class Events {
   getEventDetails(req, res) {
     if (validator.confirmParams(req, res)) {
       return model.findById(req.params.id, {
-        include:
-        [{ model: models.Centers, as: 'center' },
-        { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
-        ],
+        include: [
+          { model: models.Centers, as: 'center' },
+          { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }],
         attributes: { exclude: ['centerId', 'userId'] }
       }).then(event => {
         if (event !== null) {

@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
-import { TableHead } from './tableHead';
+import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { populateEvents, setEventDetail } from '../actions/eventActions';
 import { connect } from 'react-redux';
-
-const EventRow = (props) => {
-  const content = (
-    <tr id={props.id} className="event" >
-      <td><img className="center-image" src={props.image} alt="event-view" /></td>
-      <td><b onClick={props.setEventDetail}><Link className='event-detail' to={props.url}>{props.title}</Link></b></td>
-      <td>{props.location}</td>
-      <td>{props.date}</td>
-    </tr>
-  );
-  return content;
-}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -34,12 +22,12 @@ export class Events extends Component {
     super(props);
   }
   componentWillMount() {
-    axios.get('http://localhost:8000/api/v1/events')
+    axios.get('http://localhost:8080/api/v1/events')
       .then(res => {
         this.props.populateEvents(res.data.data);
       }).catch(err => {
         alert(err);
-      })
+      });
   }
   render() {
     const content = (
@@ -52,10 +40,15 @@ export class Events extends Component {
         </ul>
         <div className="table-responsive" >
           <table className="table table-hover table-main">
-            <TableHead col1='View' col2='Title' col3='Location' col4='Date' />
+            <TableHead colNumber={4} columns={['View', 'Title', 'Venue', 'Date']} class='table-header table-header-main' />
             <tbody>
               {this.props.events.map(event => (
-                <EventRow key={event.id} setEventDetail={()=>this.props.setEventDetail(event)} id={event.id} url={`${this.props.match.path}/${event.id}`} title={event.title} image={`http://localhost:8000/public/${event.picture}`} location={`${event.center.name}, ${event.center.address}`} date={new Date(event.date).toDateString()} />
+                <TableRow key={event.id} colNumber={4} columns={[
+                  <img className="center-image" src={`http://localhost:8080/public/events/${event.picture}`} alt="event-view" />,
+                  <b onClick={() => this.props.setEventDetail(event)}><Link className='event-detail' to={`${this.props.match.path}/${event.id}`}>{event.title}</Link></b>,
+                  `${event.center.name}, ${event.center.address}`,
+                  new Date(event.date).toDateString()
+                ]} />
               ))}
             </tbody>
           </table>

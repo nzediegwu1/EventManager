@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     Centers.associate = (models) => {
         // associations can be defined here
         Centers.hasMany(models.Events, { foreignKey: 'centerId', as: 'events' });
-        Centers.belongsTo(models.Users, { foreignKey: 'userId', as: 'users', onDelete: 'SET NULL' });
+        Centers.belongsTo(models.Users, { foreignKey: 'userId', as: 'user', onDelete: 'SET NULL' });
         Centers.hasMany(models.Facilities, { foreignKey: 'centerId', as: 'facilities' });
     };
     return Centers;

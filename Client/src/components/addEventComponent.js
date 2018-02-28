@@ -25,7 +25,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 
 const mapStatesToProps = state => {
   return {
-    currentPage: state.events.currentPage
+    currentPage: state.page.currentPage
   }
 }
 
@@ -44,7 +44,7 @@ class AddEventComponent extends Component {
     newEvent.append('centerId', this.center.value);
     newEvent.append('token', JSON.parse(localStorage.token).value);
 
-    axios.post('http://localhost:8000/api/v1/events', newEvent)
+    axios.post('http://localhost:8080/api/v1/events', newEvent)
       .then(res => {
         alert('Successful');
         this.props.history.push(`/dashboard/events/${res.data.data.id}`);

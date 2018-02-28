@@ -1,4 +1,4 @@
-import { ADD_ACCOUNT_TYPE } from '../../constants/actionTypes';
+import { ADD_ACCOUNT_TYPE } from '../constants/actionTypes';
 
 const initialState = {
   accountType: localStorage.token ? JSON.parse(localStorage.token).accountType : 'regular'
