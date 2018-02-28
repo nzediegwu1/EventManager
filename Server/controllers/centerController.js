@@ -31,7 +31,16 @@ class Centers {
               capacity: parseInt(capacity), price: parseInt(price),
             };
             return model.create(newEntry)
-              .then(created => validator.response(res, 'success', 201, created))
+              .then(created => {
+                return model.findById(created.id, {
+                  include: [
+                    { model: models.Events, as: 'events' },
+                    { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+                  ],
+                  attributes: { exclude: ['userId'] }
+                }).then(response => validator.response(res, 'success', 201, response))
+                  .catch(err => validator.response(res, 'error', 500, err))
+              })
               .catch(error => validator.response(res, 'error', 500, error));
           }).catch(error => validator.response(res, 'error', 500, error));
       }
