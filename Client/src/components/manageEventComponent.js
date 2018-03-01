@@ -45,7 +45,7 @@ class ManageEventComponent extends Component {
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-          <ManageDetailsHeader title={event.title} editModal='#addNewEvent' />
+        <ManageDetailsHeader history={this.props.history} param={this.props.match.params.id} title={event.title} editModal='#addNewEvent' />
         </div>
         <div className="card-body">
           <div className="row">
@@ -69,7 +69,7 @@ class ManageEventComponent extends Component {
         <div className="card-footer text-muted mg-event-header">
           <div className="row text-white">
             <div className="col-sm-6">
-              <img className="invert-color" src={calenderIcon}  /> Date: {new Date(event.date).toDateString()}
+              <img className="invert-color" src={calenderIcon} /> Date: {new Date(event.date).toDateString()}
             </div>
             <div className="col-sm-6">
               <img className="invert-color" src={timeIcon} /> Start Time: {new Date(event.date).toLocaleTimeString()}

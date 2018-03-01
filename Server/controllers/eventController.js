@@ -1,5 +1,7 @@
 ﻿import models from '../models';
 import val from '../middlewares/validator';
+import fs from 'fs';
+import path from 'path';
 
 const validator = new val('events');
 const model = models.Events;
@@ -41,7 +43,7 @@ class Events {
           }
         }
         const newEntry = (req.file) ? { title, date: timestamp, description, picture: req.file.filename, userId: req.decoded.id, centerId }
-        : { title, date: timestamp, description, userId: req.decoded.id, centerId };
+          : { title, date: timestamp, description, userId: req.decoded.id, centerId };
         return model.create(newEntry)
           .then(created => {
             return model.findById(created.id, {
@@ -133,13 +135,17 @@ class Events {
       return model.destroy({ where: { id: req.params.id, userId: req.decoded.id } })
         .then(destroyed => {
           if (destroyed) {
-            return validator.response(res, 'success', 200, 'Successfully deleted');
+            const filepath = path.join(__dirname, `../public/events/${req.query.file}`);
+            fs.unlink(filepath, (err) => {
+              return validator.response(res, 'success', 200, 'Successfully deleted');
+            });
+          } else {
+            return validator.response(res, 'error', 400, 'Invalid transaction');
+            // Event does not exist or User not priviledged to delete
           }
-          // Event does not exist or User not priviledged to delete
-          return validator.response(res, 'error', 400, 'Invalid transaction');
-        })
-        .catch(error => validator.response(res, 'error', 500, error));
+        }).catch(error => validator.response(res, 'error', 500, error));
     }
+
     return validator.invalidParameter;
   }
 

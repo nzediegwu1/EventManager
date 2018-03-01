@@ -45,7 +45,7 @@ class CenterDetailsComponent extends Component {
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-          <ManageDetailsHeader title={center.name} editModal='#addNewCenter' />
+          <ManageDetailsHeader history={this.props.history} param={this.props.match.params.id} title={center.name} editModal='#addNewCenter'/>
         </div>
         <div className="card-body">
           <div className="row">
