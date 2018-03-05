@@ -26,6 +26,13 @@ const mapDispatchToProps = dispatch => {
     setCenterDetails: center => dispatch(setCenterDetails(center)),
   };
 };
+const mapStateToProps = state => {
+  return {
+    modalTitle: state.page.modalTitle,
+    required: state.page.required,
+    centerDefaults: state.page.centerDefaults
+  };
+};
 
 class AddCenterComponent extends Component {
   constructor(props) {
@@ -47,7 +54,6 @@ class AddCenterComponent extends Component {
       .then(res => {
         alert('Successful');
         this.props.history.push(`/dashboard/centers/${res.data.data.id}`);
-        console.log(res.data.data);
         this.props.setCenterDetails(res.data.data);
       }).catch(err => {
         (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
@@ -55,17 +61,25 @@ class AddCenterComponent extends Component {
       });
     event.preventDefault();
   }
-
+  componentWillReceiveProps(nextState) {
+    const centerDefaults = nextState.centerDefaults;
+    this.name.value = centerDefaults.name;
+    this.address.value = centerDefaults.address;
+    this.location.value = centerDefaults.location;
+    this.capacity.value = centerDefaults.capacity;
+    this.price.value = centerDefaults.price;
+    this.availability.value = centerDefaults.availability;    
+  }
   render() {
     const content = (
       <div className="modal fade" role="dialog" id="addNewCenter" tabIndex="-1" aria-labelledby="addNewCenterLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content eventModal">
-            <ModalHeader id='addNewCenterTitle' title='New Center' />
+            <ModalHeader id='addNewCenterTitle' title={this.props.modalTitle} />
             <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup image={centerNameIcon} alt='centername' inputProps={inputAttrs('text', 'centername', 'Center Name', 'form-control input-sm', input => this.name = input, 'required')} />
-                <FormGroup image={centerImageIcon} alt='centerImage' inputProps={inputAttrs('file', 'centerImage', 'Center Image', 'form-control input-sm', input => this.picture = input, 'required')} />
+                <FormGroup image={centerImageIcon} alt='centerImage' inputProps={inputAttrs('file', 'centerImage', 'Center Image', 'form-control input-sm', input => this.picture = input, this.props.required)} />
                 <FormGroup image={addressIcon} alt='address' inputProps={inputAttrs('text', 'street', 'Address', 'form-control input-sm', input => this.address = input, 'required')} />
                 <FormGroup image={cityIcon} alt='city' inputProps={inputAttrs('text', 'city', 'State/City', 'form-control input-sm', input => this.location = input, 'required')} />
                 <FormGroup image={capacityIcon} alt='capacity' inputProps={inputAttrs('number', 'capacity', 'Capacity', 'form-control input-sm', input => this.capacity = input, 'required')} />
@@ -112,4 +126,4 @@ class AddCenterComponent extends Component {
     return content;
   }
 }
-export const AddCenter = connect(null, mapDispatchToProps)(AddCenterComponent);
+export const AddCenter = connect(mapStateToProps, mapDispatchToProps)(AddCenterComponent);

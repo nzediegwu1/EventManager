@@ -30,7 +30,8 @@ class ManageEventComponent extends Component {
         this.props.setEventDetail(res.data.data);
         this.props.setPage('manageEvent');
       }).catch(err => {
-        alert(err.response.data.message);
+        err.response.status === 500 ? alert(err.response.data.message.name) :
+          alert(err.response.data.message);
         (err.response.status === 404 || err.response.status === 400) && this.props.history.push('/dashboard');
       })
   }
@@ -45,7 +46,7 @@ class ManageEventComponent extends Component {
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-        <ManageDetailsHeader history={this.props.history} param={this.props.match.params.id} title={event.title} editModal='#addNewEvent' />
+          <ManageDetailsHeader history={this.props.history} param={this.props.match.params.id} title={event.title} editModal='#addNewEvent' />
         </div>
         <div className="card-body">
           <div className="row">

@@ -21,7 +21,13 @@ const mapDispatchToProps = dispatch => {
     setEventDetail: event => dispatch(setEventDetail(event)),
   };
 };
-
+const mapStateToProps = state => {
+  return {
+    modalTitle: state.page.modalTitle,
+    eventDetails: state.events.event,
+    eventDefaults: state.page.eventDefaults
+  };
+};
 class AddEventComponent extends Component {
   constructor(props) {
     super(props)
@@ -56,15 +62,36 @@ class AddEventComponent extends Component {
       });
     event.preventDefault();
   }
+  componentWillReceiveProps(nextState) {
+    const eventDefaults = nextState.eventDefaults;
+    this.name.value = eventDefaults.title;
+    let date = new Date(eventDefaults.date); // The Date object lets you work with dates.
+    let year = date.getFullYear(); // This method gets the four digit year.
+    let month = date.getMonth() + 1; // This method gets the month and Jan is 0.
+    let day = date.getDate(); // This method gets the day of month as a number.
+    let hour = date.getHours(); // This method gets the hour 
+    let min = date.getMinutes(); // This method gets the minutes
+    month = (month < 10 ? `0${month}` : month);
+    day = (day < 10 ? `0${day}` : day);
+    hour = (hour < 10 ? `0${hour}` : hour);
+    // It adds a 0 to number less than 10 because input[type=time] only accepts 00:00 format. 
+    min = (min < 10 ? `0${min}` : min);
+    let eventDate = `${year}-${month}-${day}`;
+    let eventTime = `${hour}:${min}`;
+    this.date.value = eventDate;
+    this.time.value = eventTime;
+    this.description.value = eventDefaults.description;
+    this.center.value = eventDefaults.center.id;
+  }
   render() {
     const content = (
       <div className="modal fade" role="dialog" id="addNewEvent" tabIndex="-1" aria-labelledby="addNewEventLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content eventModal">
-            <ModalHeader id='addNewEventTitle' title='New Event' />
+            <ModalHeader id='addNewEventTitle' title={this.props.modalTitle} />
             <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form" onSubmit={this.handleSubmit}>
-                <FormGroup image={eventNameIcon} alt='eventname' inputProps={inputAttrs('text', 'eventname', 'Event Name', 'form-control input-sm', input => this.name = input, 'required')} />
+                <FormGroup image={eventNameIcon} alt='eventname' inputProps={inputAttrs('text', 'eventTitle', 'Event Title', 'form-control input-sm', input => this.name = input, 'required')} />
                 <FormGroup image={eventImageIcon} alt='eventImage' inputProps={inputAttrs('file', 'eventImage', 'Event Image', 'form-control input-sm', input => this.picture = input)} />
                 <FormGroup image={eventDateIcon} alt='eventdate' inputProps={inputAttrs('date', 'eventdate', 'Event Date', 'form-control input-sm', input => this.date = input, 'required')} />
                 <FormGroup image={eventTimeIcon} alt='eventTime' inputProps={inputAttrs('time', 'eventTime', 'Event Time', 'form-control input-sm', input => this.time = input, 'required')} />
@@ -97,4 +124,4 @@ class AddEventComponent extends Component {
   }
 }
 
-export const AddEvent = connect(null, mapDispatchToProps)(AddEventComponent);
+export const AddEvent = connect(mapStateToProps, mapDispatchToProps)(AddEventComponent);
