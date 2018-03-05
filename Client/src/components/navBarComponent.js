@@ -3,17 +3,28 @@ import menuIcon from '../resources/images/glyphicons-517-menu-hamburger.png';
 import searchIcon from '../resources/images/glyphicons-28-search.png';
 import createIcon from '../resources/images/glyphicons-191-plus-sign.png';
 import { connect } from 'react-redux';
+import { setModalTitle, setRequired, setEventDefaults, setCenterDefaults } from '../actions/pageActions';
+import { initialState } from '../reducers/pageReducer';
+
 
 const mapStateToProps = state => {
   return {
     accountType: state.accountType.accountType
   };
 };
+const mapDispatchToProps = dispatch => {
+  return {
+    setModalTitle: title => dispatch(setModalTitle(title)),
+    setRequired: value => dispatch(setRequired(value)),
+    setEventDefaults: data => dispatch(setEventDefaults(data)),
+    setCenterDefaults: data => dispatch(setCenterDefaults(data))
+  };
+};
 
 const NavbarList = (props) => {
   const content = (
     <li className="nav-item">
-      <a id={props.id} className="nav-link" data-toggle="modal" data-target={props.dataTarget} href="#">
+      <a id={props.id} onClick={props.setModalProps} className="nav-link" data-toggle="modal" data-target={props.dataTarget} href="#">
         {props.body}
         <img src={createIcon} alt="add" className="invert-color sidebar-toggle" />
       </a>
@@ -22,7 +33,16 @@ const NavbarList = (props) => {
   return content;
 }
 class NavBarItem extends Component {
+  constructor(props) {
+    super(props);;
+  }
   render() {
+    const setModalProps = (title) => {
+      this.props.setModalTitle(title);
+      this.props.setRequired(true);
+      (title === 'New Event') ? this.props.setEventDefaults(initialState.eventDefaults)
+        : this.props.setCenterDefaults(initialState.centerDefaults);
+    };
     const content = (
       <nav className="navbar fixed-top navbar-expand-sm navbar-background">
         <a href="#" data-toggle="modal" data-target="#myModalSidebar"><img src={menuIcon} className="invert-color sidebar-toggle" id="menu-toggle" /></a>
@@ -40,8 +60,8 @@ class NavBarItem extends Component {
             </div>
           </form>
           <ul className="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center" id="nav-body">
-            <NavbarList id='addEvent' dataTarget='#addNewEvent' body='Add Event' />
-            {(this.props.accountType === 'admin') && <NavbarList id='addCenter' dataTarget='#addNewCenter' body='Add Center' />}
+            <NavbarList setModalProps={() => setModalProps('New Event')} id='addEvent' dataTarget='#addNewEvent' body='Add Event' />
+            {(this.props.accountType === 'admin') && <NavbarList setModalProps={() => setModalProps('New Center')} id='addCenter' dataTarget='#addNewCenter' body='Add Center' />}
           </ul>
         </div>
       </nav>
@@ -49,4 +69,4 @@ class NavBarItem extends Component {
     return content;
   }
 }
-export const NavBar = connect(mapStateToProps)(NavBarItem);
+export const NavBar = connect(mapStateToProps, mapDispatchToProps)(NavBarItem);

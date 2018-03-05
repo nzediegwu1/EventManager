@@ -96,10 +96,6 @@
       } else if (req.body.price === undefined || isNaN(req.body.price)
         || req.body.price.trim().length === 0 || parseInt(req.body.price) > 2000000) {
         this.verificationError = this.errorMessage('Center price should be number less 2m', res);
-      } else if (req.file === undefined || typeof req.file !== 'object' || req.file.filename === undefined ||
-        req.file.originalname === undefined || req.file.encoding === undefined || req.file.mimetype === undefined ||
-        req.file.destination === undefined || req.file.path === undefined || req.file.size === undefined) {
-        this.verificationError = this.errorMessage('Invalid or undefined Center Image', res);
       } else if (req.body.availability !== undefined && !(req.body.availability === 'open'
         || req.body.availability === 'close')) {
         this.verificationError = this.errorMessage('Availability should be either [open] or [close]', res);
