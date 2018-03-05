@@ -34,10 +34,10 @@ const pageReducer = (state = initialState, action) => {
       return { eventDefaults: state.eventDefaults, currentPage: state.currentPage, modalTitle: state.modalTitle, centerDefaults: state.centerDefaults, required: action.payload };
       break;
     case SET_EVENT_DEFAULTS:
-      return { currentPage: state.currentPage, modalTitle: state.modalTitle, required: action.payload, centerDefaults: state.centerDefaults, eventDefaults: action.payload };
+      return { currentPage: state.currentPage, modalTitle: state.modalTitle, required: state.required, centerDefaults: state.centerDefaults, eventDefaults: action.payload };
       break;
     case SET_CENTER_DEFAULTS:
-      return { currentPage: state.currentPage, modalTitle: state.modalTitle, required: action.payload, eventDefaults: state.eventDefaults, centerDefaults: action.payload };
+      return { currentPage: state.currentPage, modalTitle: state.modalTitle, required: state.required, eventDefaults: state.eventDefaults, centerDefaults: action.payload };
       break;
     default:
       return state;

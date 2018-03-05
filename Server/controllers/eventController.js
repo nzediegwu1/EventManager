@@ -107,42 +107,55 @@ class Events {
           }
           let modifiedEntry;
           if (req.file) {
-            modifiedEntry = { title, date, time, description, centerId, picture: req.file.filename, userId: req.decoded.id };
+            modifiedEntry = { title, date: timestamp, description, centerId, picture: req.file.filename, userId: req.decoded.id };
             let picturePath;
             return model.findOne({ where: { id: req.params.id, userId: req.decoded.id } })
               .then(found => {
                 picturePath = path.join(__dirname, `../public/events/${found.picture}`);
                 found.updateAttributes(modifiedEntry).then(updatedEvent => {
                   fs.unlink(picturePath, (err) => {
-                    return validator.response(res, 'success', 202, 'Update successful');
+                    return model.findById(updatedEvent.id, {
+                      include: [
+                        { model: models.Centers, as: 'center' },
+                        { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+                      ],
+                      attributes: { exclude: ['centerId', 'userId'] }
+                    }).then(response => validator.response(res, 'success', 201, response))
+                      .catch(err => validator.response(res, 'error', 500, err))
                   });
+                  // trying to update a center whose id does not exist
+                  // and or which doesnt belong to the user
                 }).catch(error => {
                   let errorMessage = '';
                   if (error.name === 'SequelizeForeignKeyConstraintError') {
-                    errorMessage = 'centerId selected for event does not exist in table';
+                    errorMessage = 'center selected for event does not exist in table';
                   }
                   return validator.response(res, 'error', 400, errorMessage);
                 });
-                // trying to update a center whose id does not exist
-                // and or which doesnt belong to the user
               }).catch(err => validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item'));
           } else {
-            modifiedEntry = { title, date, time, description, centerId, userId: req.decoded.id };
-            return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
-              .then(updatedCenter => {
-                if (updatedCenter[0] === 1) {
-                  return validator.response(res, 'success', 202, 'Update successful');
-                }
-                // trying to update a center whose id does not exist
-                // and or which doesnt belong to the user
-                return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
-              }).catch(error => {
-                let errorMessage = '';
-                if (error.name === 'SequelizeForeignKeyConstraintError') {
-                  errorMessage = 'centerId selected for event does not exist in table';
-                }
-                return validator.response(res, 'error', 400, errorMessage);
-              });
+            modifiedEntry = { title, date: timestamp, description, centerId, userId: req.decoded.id };
+            return model.findOne({ where: { id: req.params.id, userId: req.decoded.id } })
+              .then(found => {
+                found.updateAttributes(modifiedEntry).then(updatedEvent => {
+                  return model.findById(updatedEvent.id, {
+                    include: [
+                      { model: models.Centers, as: 'center' },
+                      { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+                    ],
+                    attributes: { exclude: ['centerId', 'userId'] }
+                  }).then(response => validator.response(res, 'success', 201, response))
+                    .catch(err => validator.response(res, 'error', 500, err))
+                  // trying to update a center whose id does not exist
+                  // and or which doesnt belong to the user
+                }).catch(error => {
+                  let errorMessage = '';
+                  if (error.name === 'SequelizeForeignKeyConstraintError') {
+                    errorMessage = 'center selected for event does not exist in table';
+                  }
+                  return validator.response(res, 'error', 400, errorMessage);
+                });
+              }).catch(err => validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item'));
           }
         }).catch(err => validator.response(res, 'error', 500, err));
     }

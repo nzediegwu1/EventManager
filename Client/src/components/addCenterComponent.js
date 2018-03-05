@@ -24,6 +24,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 const mapDispatchToProps = dispatch => {
   return {
     setCenterDetails: center => dispatch(setCenterDetails(center)),
+    setCenterDefaults: data => dispatch(setCenterDefaults(data))
   };
 };
 const mapStateToProps = state => {
@@ -33,7 +34,7 @@ const mapStateToProps = state => {
     centerDefaults: state.page.centerDefaults
   };
 };
-
+let centerId;
 class AddCenterComponent extends Component {
   constructor(props) {
     super(props)
@@ -50,15 +51,23 @@ class AddCenterComponent extends Component {
     newCenter.append('availability', this.availability.value);
     newCenter.append('token', JSON.parse(localStorage.token).value);
 
-    axios.post('http://localhost:8080/api/v1/centers', newCenter)
-      .then(res => {
-        alert('Successful');
-        this.props.history.push(`/dashboard/centers/${res.data.data.id}`);
-        this.props.setCenterDetails(res.data.data);
-      }).catch(err => {
-        (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) && logout('addNewCenter', this.props.history);
-      });
+    let httpRequest;
+    if (this.props.modalTitle === 'New Center') {
+      httpRequest = axios.post('http://localhost:8080/api/v1/centers', newCenter);
+    } else {
+      httpRequest = axios.put(`http://localhost:8080/api/v1/centers/${centerId}`, newCenter);
+    }
+    httpRequest.then(res => {
+      alert('Successful');
+      this.props.history.push(`/dashboard/centers/${res.data.data.id}`);
+      this.props.setCenterDetails(res.data.data);
+      if (this.props.modalTitle !== 'New Center') {
+        $('#addNewCenter').modal('hide');
+      }
+    }).catch(err => {
+      (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
+      (err.response.status === 403 || err.response.status === 401) && logout('addNewCenter', this.props.history);
+    });
     event.preventDefault();
   }
   componentWillReceiveProps(nextState) {
@@ -68,7 +77,8 @@ class AddCenterComponent extends Component {
     this.location.value = centerDefaults.location;
     this.capacity.value = centerDefaults.capacity;
     this.price.value = centerDefaults.price;
-    this.availability.value = centerDefaults.availability;    
+    this.availability.value = centerDefaults.availability;
+    centerId = centerDefaults.id;
   }
   render() {
     const content = (

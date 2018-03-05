@@ -31,6 +31,7 @@ const mapStateToProps = state => {
     centers: state.centers.centerList
   };
 };
+let eventId;
 class AddEventComponent extends Component {
   constructor(props) {
     super(props)
@@ -49,28 +50,36 @@ class AddEventComponent extends Component {
     newEvent.append('description', this.description.value);
     newEvent.append('centerId', this.center.value);
     newEvent.append('token', JSON.parse(localStorage.token).value);
-
-    axios.post('http://localhost:8080/api/v1/events', newEvent)
-      .then(res => {
-        alert('Successful');
-        this.props.history.push(`/dashboard/events/${res.data.data.id}`);
-        this.props.setEventDetail(res.data.data);
-      }).catch(err => {
-        (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) && logout('addNewEvent', this.props.history);
-        if (typeof err.response.data.message === 'object') {
-          let occupiedDates = '';
-          err.response.data.message.OccupiedDates.forEach(date => {
-            occupiedDates += `${new Date(date).toDateString()}\n`;
-          });
-          alert(`MESSAGE:\n${err.response.data.message.Sorry}\n\nSELECTED DATES:\n${occupiedDates}`);
-          occupiedDates = '';
-        }
-      });
+    let httpRequest;
+    if (this.props.modalTitle === 'New Event') {
+      httpRequest = axios.post('http://localhost:8080/api/v1/events', newEvent);
+    } else {
+      httpRequest = axios.put(`http://localhost:8080/api/v1/events/${eventId}`, newEvent);
+    }
+    httpRequest.then(res => {
+      alert('Successful');
+      this.props.history.push(`/dashboard/events/${eventId}`);
+      this.props.setEventDetail(res.data.data);
+      if (this.props.modalTitle !== 'New Event') {
+        $('#addNewEvent').modal('hide');
+      }
+    }).catch(err => {
+      (typeof err.response.data.message !== 'object') && alert(JSON.stringify(err.response.data.message));
+      (err.response.status === 403 || err.response.status === 401) && logout('addNewEvent', this.props.history);
+      if (typeof err.response.data.message === 'object') {
+        let occupiedDates = '';
+        err.response.data.message.OccupiedDates.forEach(date => {
+          occupiedDates += `${new Date(date).toDateString()}\n`;
+        });
+        alert(`MESSAGE:\n${err.response.data.message.Sorry}\n\nSELECTED DATES:\n${occupiedDates}`);
+        occupiedDates = '';
+      }
+    });
     event.preventDefault();
   }
   componentWillReceiveProps(nextState) {
     const eventDefaults = nextState.eventDefaults;
+    eventId = eventDefaults.id;
     this.name.value = eventDefaults.title;
     let date = new Date(eventDefaults.date); // The Date object lets you work with dates.
     let year = date.getFullYear(); // This method gets the four digit year.

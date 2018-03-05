@@ -42,6 +42,7 @@ class Centers {
                   return model.findById(created.id, {
                     include: [
                       { model: models.Events, as: 'events' },
+                      { model: models.Facilities, as: 'facilities' },                      
                       { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
                     ],
                     attributes: { exclude: ['userId'] }
@@ -89,7 +90,15 @@ class Centers {
                 picturePath = path.join(__dirname, `../public/centers/${found.picture}`);
                 found.updateAttributes(modifiedEntry).then(updatedCenter => {
                   fs.unlink(picturePath, (err) => {
-                    return validator.response(res, 'success', 202, 'Update successful');
+                    return model.findById(updatedCenter.id, {
+                      include: [
+                        { model: models.Events, as: 'events' },
+                        { model: models.Facilities, as: 'facilities' },                        
+                        { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+                      ],
+                      attributes: { exclude: ['userId'] }
+                    }).then(response => validator.response(res, 'success', 201, response))
+                      .catch(err => validator.response(res, 'error', 500, err))
                   });
                 }).catch(error => validator.response(res, 'error', 500, error));
                 // trying to update a center whose id does not exist
@@ -100,15 +109,22 @@ class Centers {
               name, address, location, availability, userId: req.decoded.id, capacity: parseInt(capacity),
               price: parseInt(price)
             };
-            return model.update(modifiedEntry, { where: { id: req.params.id, userId: req.decoded.id } })
-              .then(updatedCenter => {
-                if (updatedCenter[0] === 1) {
-                  return validator.response(res, 'success', 202, 'Update successful');
-                }
+            return model.findOne({ where: { id: req.params.id, userId: req.decoded.id } })
+              .then(found => {
+                found.updateAttributes(modifiedEntry).then(updatedCenter => {
+                  return model.findById(updatedCenter.id, {
+                    include: [
+                      { model: models.Events, as: 'events' },
+                      { model: models.Facilities, as: 'facilities' },                      
+                      { model: models.Users, as: 'user', attributes: { exclude: ['password'] } }
+                    ],
+                    attributes: { exclude: ['userId'] }
+                  }).then(response => validator.response(res, 'success', 201, response))
+                    .catch(err => validator.response(res, 'error', 500, err))
+                }).catch(error => validator.response(res, 'error', 500, error));
                 // trying to update a center whose id does not exist
                 // and or which doesnt belong to the user
-                return validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item');
-              }).catch(error => validator.response(res, 'error', 500, error));
+              }).catch(err => validator.response(res, 'error', 403, 'Attempt to update unexisting or unauthorized item'));
           }
         }).catch(error => validator.response(res, 'error', 500, error));
     }
