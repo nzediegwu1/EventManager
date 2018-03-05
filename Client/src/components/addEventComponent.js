@@ -8,9 +8,10 @@ import { ModalHeader } from './modalHeader';
 import { Option } from './selectOption';
 import axios from 'axios';
 import { Redirect } from 'react-router';
-import { logout } from '../reusables';
+import { logout, getCenters } from '../reusables';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
+import { populateCenters } from '../actions/centerActions';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
   return { inputType, inputName, placeholder, className, ref, required };
@@ -19,13 +20,15 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 const mapDispatchToProps = dispatch => {
   return {
     setEventDetail: event => dispatch(setEventDetail(event)),
+    populateCenters: centers => dispatch(populateCenters(centers))
   };
 };
 const mapStateToProps = state => {
   return {
     modalTitle: state.page.modalTitle,
     eventDetails: state.events.event,
-    eventDefaults: state.page.eventDefaults
+    eventDefaults: state.page.eventDefaults,
+    centers: state.centers.centerList
   };
 };
 class AddEventComponent extends Component {
@@ -33,6 +36,10 @@ class AddEventComponent extends Component {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  componentWillMount() {
+    getCenters(axios, this.props.populateCenters);
+  }
+
   handleSubmit(event) {
     const newEvent = new FormData();
     newEvent.append('title', this.name.value);
@@ -102,11 +109,9 @@ class AddEventComponent extends Component {
                 <div className="form-group">
                   <select required ref={input => this.center = input} className="custom-select-sm">
                     <Option value='' text='Select Center' disabled selected />
-                    <Option value="1" text='House on the Rock, Ikeja, Lagos. Capacity: 500' />
-                    <Option value="2" text='Christ embassy hall, Ikeja, Lagos. Capacity: 2300' />
-                    <Option value="3" text='House on the Rock FCT, Abuja. Capacity: 1200' />
-                    <Option value="4" text='National Assembly Conference Hall, Abuja. Capacity: 4500' />
-                    <Option value="5" text='National Stadium, Owerri, Imo. Capacity: 85,000' />
+                    {this.props.centers.map(center => (
+                      <Option key={center.id} value={center.id} text={`${center.name}, ${center.address}, ${center.location}. Capacity: ${center.capacity}`} />
+                    ))}
                     <Option value="100009" text='Invalid center' />
                   </select>
                   <div className="modal-footer">

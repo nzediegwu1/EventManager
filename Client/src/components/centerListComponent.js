@@ -4,15 +4,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { populateCenters } from '../actions/centerActions';
 import { connect } from 'react-redux';
+import { getCenters } from '../reusables';
 
 const mapDispatchToProps = dispatch => {
   return {
-    populateCenters: centers => dispatch(populateCenters(centers)),
+    populateCenters: centers => dispatch(populateCenters(centers))
   };
 };
 const mapStateToProps = state => {
   return {
-    centers: state.centers.centerList,
+    centers: state.centers.centerList
   };
 };
 
@@ -21,12 +22,7 @@ class CenterList extends Component {
     super(props)
   }
   componentWillMount() {
-    axios.get('http://localhost:8080/api/v1/centers')
-      .then(res => {
-        this.props.populateCenters(res.data.data);
-      }).catch(err => {
-        alert(err);
-      });
+    getCenters(axios, this.props.populateCenters);
   }
 
   render() {
