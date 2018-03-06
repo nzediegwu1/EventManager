@@ -49,25 +49,26 @@
     };
 
     this.verifyEvent = (req, res, next) => {
-      // validate event title
       const today = new Date();
-      if (req.body.title === undefined || typeof req.body.title !== 'string'
-        || req.body.title.trim().length === 0 || req.body.title.length > 99) {
+      const {title, date, time, description, centerId } = req.body;
+      // validate event title
+      if (title === undefined || typeof title !== 'string'
+        || title.trim().length === 0 || title.length > 99) {
         this.verificationError = this.errorMessage('Event title should be non-empty string less 100 characters', res);
         // validate event date format: March 21, 2012
-      } else if (req.body.date === undefined || isNaN(Date.parse(req.body.date))
-        || Date.parse(req.body.date) < Date.parse(today)) {
+      } else if (date === undefined || isNaN(Date.parse(date))
+        || Date.parse(date) < Date.parse(today)) {
         this.verificationError = this.errorMessage('Event has none or invalid date', res);
-        // validate event time format: 00:00
-      } else if (req.body.time === undefined || !this.formatTime(req.body.time)) {
+        // validate event time 24-hours format: 00:00
+      } else if (time === undefined || !this.formatTime(time)) {
         this.verificationError = this.errorMessage('Event has none or invalid time', res);
         // validate event description
-      } else if (req.body.description === undefined || typeof req.body.description !== 'string'
-        || req.body.description.trim().length === 0 || req.body.description.length > 254) {
+      } else if (description === undefined || typeof description !== 'string'
+        || description.trim().length === 0 || description.length > 254) {
         this.verificationError = this.errorMessage('Event description should be non-empty string less 255 characters', res);
         // validate centerId
-      } else if (req.body.centerId === undefined || isNaN(req.body.centerId)
-        || req.body.centerId.trim().length === 0 || parseInt(req.body.centerId) > 2000000) {
+      } else if (centerId === undefined || isNaN(centerId)
+        || centerId.trim().length === 0 || parseInt(centerId) > 2000000) {
         this.verificationError = this.errorMessage('Invalid center selected', res);
       } else {
         next();
