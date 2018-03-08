@@ -6,7 +6,7 @@ import faker from 'faker';
 chai.use(chaiHttp);
 export let adminToken;
 export let userToken;
-
+/*
 describe('Tests for EventManager application\n', () => {
   describe('Tests for for userRouter\n', () => {
     it('Should test for existing user signup', (done) => {
@@ -102,3 +102,4 @@ describe('Tests for EventManager application\n', () => {
     });
   });
 });
+*/
