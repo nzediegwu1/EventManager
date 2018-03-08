@@ -3,7 +3,7 @@ import chai, { expect } from 'chai';
 import { userToken, adminToken } from './1 userRouterTests';
 import app from '../app';
 import faker from 'faker';
-
+/*
 chai.use(chaiHttp);
 describe('Tests for EventManager application\n', () => {
   describe('Tests for eventRouter response status codes\n', () => {
@@ -227,3 +227,4 @@ describe('Tests for EventManager application\n', () => {
     });
   });
 });
+*/
