@@ -26,8 +26,9 @@
       let result = false;
       const re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
       const m = time.match(re);
-      if (m) { // tinary statement
-        result = `${(m[1].length === 2 ? '' : '0')}${m[1]}:${m[2]}`;
+      if (m) {
+        // tinary statement
+        result = `${m[1].length === 2 ? '' : '0'}${m[1]}:${m[2]}`;
       }
       return result;
     };
@@ -50,25 +51,46 @@
 
     this.verifyEvent = (req, res, next) => {
       const today = new Date();
-      const {title, date, time, description, centerId } = req.body;
+      const { title, date, time, description, centerId } = req.body;
       // validate event title
-      if (title === undefined || typeof title !== 'string'
-        || title.trim().length === 0 || title.length > 99) {
-        this.verificationError = this.errorMessage('Event title should be non-empty string less 100 characters', res);
+      if (
+        title === undefined ||
+        typeof title !== 'string' ||
+        title.trim().length === 0 ||
+        title.length > 99
+      ) {
+        this.verificationError = this.errorMessage(
+          'Event title should be non-empty string less 100 characters',
+          res
+        );
         // validate event date format: March 21, 2012
-      } else if (date === undefined || isNaN(Date.parse(date))
-        || Date.parse(date) < Date.parse(today)) {
+      } else if (
+        date === undefined ||
+        isNaN(Date.parse(date)) ||
+        Date.parse(date) < Date.parse(today)
+      ) {
         this.verificationError = this.errorMessage('Event has none or invalid date', res);
         // validate event time 24-hours format: 00:00
       } else if (time === undefined || !this.formatTime(time)) {
         this.verificationError = this.errorMessage('Event has none or invalid time', res);
         // validate event description
-      } else if (description === undefined || typeof description !== 'string'
-        || description.trim().length === 0 || description.length > 254) {
-        this.verificationError = this.errorMessage('Event description should be non-empty string less 255 characters', res);
+      } else if (
+        description === undefined ||
+        typeof description !== 'string' ||
+        description.trim().length === 0 ||
+        description.length > 254
+      ) {
+        this.verificationError = this.errorMessage(
+          'Event description should be non-empty string less 255 characters',
+          res
+        );
         // validate centerId
-      } else if (centerId === undefined || isNaN(centerId)
-        || centerId.trim().length === 0 || parseInt(centerId) > 2000000) {
+      } else if (
+        centerId === undefined ||
+        isNaN(centerId) ||
+        centerId.trim().length === 0 ||
+        parseInt(centerId, 10) > 2000000
+      ) {
         this.verificationError = this.errorMessage('Invalid center selected', res);
       } else {
         next();
@@ -78,28 +100,63 @@
 
     this.verifyCenter = (req, res, next) => {
       // validate center name
-      if (req.body.name === undefined || typeof req.body.name !== 'string'
-        || req.body.name.trim().length === 0 || req.body.name.length > 99) {
-        this.verificationError = this.errorMessage('Center name should be non-empty string less 100 characters', res);
+      const { name, address, location, capacity, price, availability } = req.body;
+      if (
+        name === undefined ||
+        typeof name !== 'string' ||
+        name.trim().length === 0 ||
+        name.length > 99
+      ) {
+        this.verificationError = this.errorMessage(
+          'Center name should be non-empty string less 100 characters',
+          res
+        );
         // validate center address
-      } else if (req.body.address === undefined || typeof req.body.address !== 'string'
-        || req.body.address.trim().length === 0 || req.body.address.length > 254) {
-        this.verificationError = this.errorMessage('Center address should be non-empty string less 255 characters', res);
+      } else if (
+        address === undefined ||
+        typeof address !== 'string' ||
+        address.trim().length === 0 ||
+        address.length > 254
+      ) {
+        this.verificationError = this.errorMessage(
+          'Center address should be non-empty string less 255 characters',
+          res
+        );
         // validate center location
-      } else if (req.body.location === undefined || typeof req.body.location !== 'string'
-        || req.body.location.trim().length === 0 || req.body.location.length > 254) {
-        this.verificationError = this.errorMessage('Center location should be non-empty string less 255 characters', res);
+      } else if (
+        location === undefined ||
+        typeof location !== 'string' ||
+        location.trim().length === 0 ||
+        location.length > 254
+      ) {
+        this.verificationError = this.errorMessage(
+          'Center location should be non-empty string less 255 characters',
+          res
+        );
         // validate center capacity
-      } else if (req.body.capacity === undefined || isNaN(req.body.capacity)
-        || req.body.capacity.trim().length === 0 || parseInt(req.body.capacity) > 2000000) {
+      } else if (
+        capacity === undefined ||
+        isNaN(capacity) ||
+        capacity.trim().length === 0 ||
+        parseInt(capacity, 10) > 2000000
+      ) {
         this.verificationError = this.errorMessage('Center capacity should be number less 2m', res);
         // validate center price
-      } else if (req.body.price === undefined || isNaN(req.body.price)
-        || req.body.price.trim().length === 0 || parseInt(req.body.price) > 2000000) {
+      } else if (
+        price === undefined ||
+        isNaN(price) ||
+        price.trim().length === 0 ||
+        parseInt(price, 10) > 2000000
+      ) {
         this.verificationError = this.errorMessage('Center price should be number less 2m', res);
-      } else if (req.body.availability !== undefined && !(req.body.availability === 'open'
-        || req.body.availability === 'close')) {
-        this.verificationError = this.errorMessage('Availability should be either [open] or [close]', res);
+      } else if (
+        availability !== undefined &&
+        !(availability === 'open' || availability === 'close')
+      ) {
+        this.verificationError = this.errorMessage(
+          'Availability should be either [open] or [close]',
+          res
+        );
       } else {
         next();
       }
@@ -113,34 +170,75 @@
     };
     this.verifySinup = (req, res, next) => {
       // validate request username
-      if (req.body.username === undefined || typeof req.body.username !== 'string'
-        || req.body.username.trim().length === 0 || req.body.username.length > 99) {
-        this.verificationError = this.errorMessage('Username should be non-empty string less 100 characters', res);
+      const { username, name, email, phoneNo, accountType, password, confirmPassword } = req.body;
+      if (
+        username === undefined ||
+        typeof username !== 'string' ||
+        username.trim().length === 0 ||
+        username.length > 99
+      ) {
+        this.verificationError = this.errorMessage(
+          'Username should be non-empty string less 100 characters',
+          res
+        );
         // validate request name
-      } else if (req.body.name === undefined || typeof req.body.name !== 'string'
-        || req.body.name.trim().length === 0 || req.body.name.length > 99) {
-        this.verificationError = this.errorMessage('Name should be non-empty string less 100 characters', res);
+      } else if (
+        name === undefined ||
+        typeof name !== 'string' ||
+        name.trim().length === 0 ||
+        name.length > 99
+      ) {
+        this.verificationError = this.errorMessage(
+          'Name should be non-empty string less 100 characters',
+          res
+        );
         // validate request email
-      } else if (req.body.email === undefined || typeof req.body.email !== 'string'
-        || req.body.email.trim().length === 0 || req.body.email.length > 99) {
-        this.verificationError = this.errorMessage('Email should be non-empty string less 100 characters', res);
+      } else if (
+        email === undefined ||
+        typeof email !== 'string' ||
+        email.trim().length === 0 ||
+        email.length > 99
+      ) {
+        this.verificationError = this.errorMessage(
+          'Email should be non-empty string less 100 characters',
+          res
+        );
         // validate request phone number
-      } else if (req.body.phoneNo === undefined || isNaN(req.body.phoneNo)
-        || req.body.phoneNo.trim().length === 0 || req.body.phoneNo.length > 15) {
+      } else if (
+        phoneNo === undefined ||
+        isNaN(phoneNo) ||
+        phoneNo.trim().length === 0 ||
+        phoneNo.length > 15
+      ) {
         this.verificationError = this.errorMessage('Request has none or invalid phone no.', res);
         // validate request account type
-      } else if (!(req.body.accountType === 'regular' || req.body.accountType === 'admin')) {
-        this.verificationError = this.errorMessage('Account type should either be conf[regular] or [adim]', res);
+      } else if (!(accountType === 'regular' || accountType === 'admin')) {
+        this.verificationError = this.errorMessage(
+          'Account type should either be conf[regular] or [adim]',
+          res
+        );
         // validate request password
-      } else if (req.body.password === undefined
-        || typeof req.body.password !== 'string' || req.body.password.trim().length < 6) {
-        this.verificationError = this.errorMessage('Password should be string not less than 6', res);
+      } else if (
+        password === undefined ||
+        typeof password !== 'string' ||
+        password.trim().length < 6
+      ) {
+        this.verificationError = this.errorMessage(
+          'Password should be string not less than 6',
+          res
+        );
         // validate request confirm password
-      } else if (req.body.confirmPassword === undefined || typeof req.body.confirmPassword !== 'string'
-        || req.body.confirmPassword.trim().length < 6) {
-        this.verificationError = this.errorMessage('Request has none or invalid confirmation password', res);
+      } else if (
+        confirmPassword === undefined ||
+        typeof confirmPassword !== 'string' ||
+        confirmPassword.trim().length < 6
+      ) {
+        this.verificationError = this.errorMessage(
+          'Request has none or invalid confirmation password',
+          res
+        );
         // validate request password matching
-      } else if (req.body.confirmPassword !== req.body.password) {
+      } else if (confirmPassword !== password) {
         this.verificationError = this.errorMessage('Request passwords do not match', res);
       } else {
         next();
@@ -149,13 +247,27 @@
     };
     this.verifySignin = (req, res, next) => {
       // validate request username
-      if (req.body.username === undefined || typeof req.body.username !== 'string'
-        || req.body.username.trim().length === 0 || req.body.username.length > 99) {
-        this.verificationError = this.errorMessage('Username should be non-empty string less 100 characters', res);
+      const { username, password } = req.body;
+      if (
+        username === undefined ||
+        typeof username !== 'string' ||
+        username.trim().length === 0 ||
+        username.length > 99
+      ) {
+        this.verificationError = this.errorMessage(
+          'Username should be non-empty string less 100 characters',
+          res
+        );
         // validate request password
-      } else if (req.body.password === undefined
-        || typeof req.body.password !== 'string' || req.body.password.trim().length < 6) {
-        this.verificationError = this.errorMessage('Password should be string not less than 6', res);
+      } else if (
+        password === undefined ||
+        typeof password !== 'string' ||
+        password.trim().length < 6
+      ) {
+        this.verificationError = this.errorMessage(
+          'Password should be string not less than 6',
+          res
+        );
       } else {
         next();
       }
