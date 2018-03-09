@@ -16,10 +16,10 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setAccountType: (accountType) => dispatch(setAccountType(accountType))
-  }
-}
-
+    setAccountType: (accountType) => dispatch(setAccountType(accountType)),
+  };
+};
+const apiLink = localStorage.getItem('apiLink');
 class SignInPage extends React.Component {
   constructor(props) {
     super(props);
@@ -50,7 +50,7 @@ class SignInPage extends React.Component {
     const username = this.username.value;
     const password = this.password.value;
     if (this.validate(username, password)) {
-      axios.post('http://localhost:8080/api/v1/users/login', { username, password })
+      axios.post(`${apiLink}/api/v1/users/login`, { username, password })
         .then(res => {
           signin(res, this.props.history);
           this.props.setAccountType(JSON.parse(localStorage.token).accountType);

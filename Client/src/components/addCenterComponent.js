@@ -35,6 +35,8 @@ const mapStateToProps = state => ({
   centerDefaults: state.page.centerDefaults,
 });
 let centerId;
+const apiLink = localStorage.getItem('apiLink');
+
 class AddCenterComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -53,9 +55,9 @@ class AddCenterComponent extends React.Component {
 
     let httpRequest;
     if (this.props.modalTitle === 'New Center') {
-      httpRequest = axios.post('http://localhost:8080/api/v1/centers', newCenter);
+      httpRequest = axios.post(`${apiLink}/api/v1/centers`, newCenter);
     } else {
-      httpRequest = axios.put(`http://localhost:8080/api/v1/centers/${centerId}`, newCenter);
+      httpRequest = axios.put(`${apiLink}/api/v1/centers/${centerId}`, newCenter);
     }
     httpRequest
       .then(res => {

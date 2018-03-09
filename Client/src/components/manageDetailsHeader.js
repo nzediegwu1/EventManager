@@ -40,6 +40,7 @@ const Manager = (props) => {
   return content;
 }
 let param, currentPage, history, resource;
+const apiLink = localStorage.getItem('apiLink');
 class ManageDetails extends Component {
   constructor(props) {
     super(props)
@@ -50,7 +51,7 @@ class ManageDetails extends Component {
     if (validate) {
       const urlGenerator = () => {
         const type = (currentPage === 'manageEvent') ? 'events' : 'centers';
-        return `http://localhost:8080/api/v1/${type}/${param}/?token=${JSON.parse(localStorage.token).value}&file=${resource.picture}`;
+        return `${apiLink}/api/v1/${type}/${param}/?token=${JSON.parse(localStorage.token).value}&file=${resource.picture}`;
       }
       const url = urlGenerator();
       axios.delete(url).then(res => {
@@ -74,7 +75,8 @@ class ManageDetails extends Component {
       (title === 'Modify Event') ? this.props.setEventDefaults(this.props.eventDetails[0])
         : this.props.setCenterDefaults(this.props.centerDetails[0]);
     }
-
+    console.log(`JSON.parse(localStorage.token).id: ${JSON.parse(localStorage.token).id}`);
+    console.log(`this.props.owner: ${this.props.owner}`);
     const content = (
       <table className="table-responsive col-sm-12 bg-transparent  zero-padding">
         <tbody>

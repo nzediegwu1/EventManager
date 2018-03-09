@@ -13,13 +13,13 @@ const mapDispatchToProps = dispatch => {
 };
 const mapStateToProps = state => {
   return {
-    centers: state.centers.centerList
+    centers: state.centers.centerList,
   };
 };
-
+const apiLink = localStorage.getItem('apiLink');
 class CenterList extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   componentWillMount() {
     getCenters(axios, this.props.populateCenters);
@@ -40,7 +40,7 @@ class CenterList extends Component {
             <tbody>
               {this.props.centers.map(center => (
                 <TableRow key={center.id} colNumber={4} columns={[
-                  <img className="center-image" src={`http://localhost:8080/public/centers/${center.picture}`} alt="center-view" />,
+                  <img className="center-image" src={`${apiLink}/public/centers/${center.picture}`} alt="center-view" />,
                   <Link className='event-detail' to={`${this.props.match.path}/${center.id}`}>{center.name}</Link>,
                   `${center.name}, ${center.address}`,
                   <span className="badge">{center.capacity}</span>

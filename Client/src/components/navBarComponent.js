@@ -9,7 +9,7 @@ import { initialState } from '../reducers/pageReducer';
 
 const mapStateToProps = state => {
   return {
-    accountType: state.accountType.accountType
+    accountType: state.accountType.accountType,
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -34,7 +34,7 @@ const NavbarList = (props) => {
 }
 class NavBarItem extends Component {
   constructor(props) {
-    super(props);;
+    super(props);
   }
   render() {
     const setModalProps = (title) => {

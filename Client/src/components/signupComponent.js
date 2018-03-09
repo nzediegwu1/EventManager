@@ -7,12 +7,21 @@ import phoneIcon from '../resources/images/glyphicons-442-phone-alt.png';
 import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import axios from 'axios';
 import { signin } from '../reusables';
+import { connect } from 'react-redux';
+import { setAccountType } from '../actions/userActions';
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setAccountType: (accountType) => dispatch(setAccountType(accountType)),
+  };
+};
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
   return { inputType, inputName, placeholder, className, ref, required };
 };
 let history;
-export class SignupForm extends React.Component {
+const apiLink = localStorage.getItem('apiLink');
+class SignupComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,10 +53,11 @@ export class SignupForm extends React.Component {
     const password = this.password.value;
     const confirmPassword = this.rePassword.value;
     if (this.validate(username, name, email, password, confirmPassword)) {
-      axios.post('http://localhost:8080/api/v1/users', { username, name, email, phoneNo, accountType, password, confirmPassword })
+      axios.post(`${apiLink}/api/v1/users`, { username, name, email, phoneNo, accountType, password, confirmPassword })
         .then(res => {
           alert('Successful');
           signin(res, history);
+          this.props.setAccountType(JSON.parse(localStorage.token).accountType);
         }).catch(err => {
           alert(err.response.data.message);
         })
@@ -75,3 +85,4 @@ export class SignupForm extends React.Component {
     return content;
   }
 }
+export const SignupForm = connect(null, mapDispatchToProps)(SignupComponent);
