@@ -1,9 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+console.log(`process.env.PORT: ${process.env.PORT}`);
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:9876',
+    'webpack-dev-server/client?https://eventmanageronline.herokuapp.com/',
     'webpack/hot/only-dev-server',
     './Client/src/app.js',
   ],
@@ -12,7 +13,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: path.resolve(__dirname, 'Client/dist'),
     publicPath: '/',
-    port: '9876',
+    port: process.env.PORT || 9876,
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
