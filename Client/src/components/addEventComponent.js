@@ -32,6 +32,7 @@ const mapStateToProps = state => ({
   centers: state.centers.centerList,
 });
 let eventId;
+const apiLink = localStorage.getItem('apiLink');
 class AddEventComponent extends Component {
   constructor(props) {
     super(props);
@@ -52,14 +53,14 @@ class AddEventComponent extends Component {
     newEvent.append('token', JSON.parse(localStorage.token).value);
     let httpRequest;
     if (this.props.modalTitle === 'New Event') {
-      httpRequest = axios.post('http://localhost:8080/api/v1/events', newEvent);
+      httpRequest = axios.post(`${apiLink}/api/v1/events`, newEvent);
     } else {
-      httpRequest = axios.put(`http://localhost:8080/api/v1/events/${eventId}`, newEvent);
+      httpRequest = axios.put(`${apiLink}/api/v1/events/${eventId}`, newEvent);
     }
     httpRequest
       .then(res => {
         alert('Successful');
-        this.props.history.push(`/dashboard/events/${eventId}`);
+        this.props.history.push(`/dashboard/events/${res.data.data.id}`);
         this.props.setEventDetail(res.data.data);
         if (this.props.modalTitle !== 'New Event') {
           $('#addNewEvent').modal('hide');

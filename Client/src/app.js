@@ -10,6 +10,13 @@ import createHistory from 'history/createBrowserHistory';
 import store from './store';
 import { Provider } from 'react-redux';
 
+const apiLink =
+process.env.NODE_ENV !== 'production'
+  ? 'http://localhost:8080'
+  : 'https://eventmanager29.herokuapp.com';
+
+localStorage.setItem('apiLink', apiLink);
+
 const history = createHistory();
 const render = () => {
   reactDOM.render(

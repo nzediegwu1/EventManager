@@ -17,12 +17,14 @@ const mapStateToProps = state => {
   };
 };
 
+const apiLink = localStorage.getItem('apiLink');
 export class Events extends Component {
   constructor(props) {
     super(props);
   }
   componentWillMount() {
-    axios.get('http://localhost:8080/api/v1/events')
+    console.log(`apiLink: ${apiLink}`);
+    axios.get(`${apiLink}/api/v1/events`)
       .then(res => {
         this.props.populateEvents(res.data.data);
       }).catch(err => {
@@ -44,7 +46,7 @@ export class Events extends Component {
             <tbody>
               {this.props.events.map(event => (
                 <TableRow key={event.id} colNumber={4} columns={[
-                  <img className="center-image" src={`http://localhost:8080/public/events/${event.picture}`} alt="event-view" />,
+                  <img className="center-image" src={`${apiLink}/public/events/${event.picture}`} alt="event-view" />,
                   <b onClick={() => this.props.setEventDetail(event)}><Link className='event-detail' to={`${this.props.match.path}/${event.id}`}>{event.title}</Link></b>,
                   `${event.center.name}, ${event.center.address}`,
                   new Date(event.date).toDateString()

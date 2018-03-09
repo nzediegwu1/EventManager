@@ -32,7 +32,7 @@ class Users {
           password: bcrypt.hashSync(password, 10)
         })
           .then(createdUser => {
-            const newUser = { username, name, email, accountType, phoneNo: parseFloat(phoneNo) };
+            const newUser = { id: createdUser.id, username, name, email, accountType, phoneNo: parseFloat(phoneNo) };
             const token = jwt.sign({ id: createdUser.id }, key, {
               expiresIn: 60 * 60 * 24
             });

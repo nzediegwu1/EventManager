@@ -8,11 +8,9 @@ import { EventRouter } from './eventRouter';
 import { CenterRouter } from './centerRouter';
 import { connect } from 'react-redux';
 
-const mapStateToProps = state => {
-  return {
-    accountType: state.accountType.accountType
-  };
-};
+const mapStateToProps = state => ({
+  accountType: state.accountType.accountType,
+});
 
 class DashboardComponent extends Component {
   render() {
@@ -22,7 +20,9 @@ class DashboardComponent extends Component {
         <div id="content" className="container custom-container">
           <Route path={`${this.props.match.path}`} component={Sidebar} />
           <Route path={`${this.props.match.path}`} component={AddEvent} />
-          {(this.props.accountType === 'admin') && <Route path={`${this.props.match.path}`} component={AddCenter} />}
+          {this.props.accountType === 'admin' && (
+            <Route path={`${this.props.match.path}`} component={AddCenter} />
+          )}
           <Switch>
             <Route path={`${this.props.match.path}/centers`} component={CenterRouter} />
             <Route path={`${this.props.match.path}`} component={EventRouter} />
@@ -31,7 +31,7 @@ class DashboardComponent extends Component {
       </div>
     );
     const token = localStorage.token;
-    return token ? content : <Redirect to='/' />;
+    return token ? content : <Redirect to="/" />;
   }
 }
 

@@ -12,21 +12,24 @@ module.exports = {
     historyApiFallback: true,
     contentBase: path.resolve(__dirname, 'Client/dist'),
     publicPath: '/',
-    port: '9876'
+    port: '9876',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development',
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
-      Popper: ['popper.js', 'default']
-    })
+      Popper: ['popper.js', 'default'],
+    }),
   ],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, './Client/dist'),
-    publicPath: '/'
+    publicPath: '/',
   },
   module: {
     loaders: [
@@ -37,27 +40,27 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           query: {
-            presets: ['react', 'env', 'stage-1']
+            presets: ['react', 'env', 'stage-1'],
           },
         },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         use: [
           {
             loader: 'url-loader',
-            options: { limit: 10000 }
-          }
-        ]
+            options: { limit: 10000 },
+          },
+        ],
       },
     ],
-  }
+  },
 };

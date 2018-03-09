@@ -15,14 +15,16 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   centerDetails: state.centers.centerDetails,
 });
-
+let apiLink;
 class CenterDetailsComponent extends Component {
   constructor(props) {
     super(props);
+    apiLink = localStorage.getItem('apiLink');
+    this.id = this.props.match.params.id;
   }
   componentWillMount() {
     axios
-      .get(`http://localhost:8080/api/v1/centers/${this.props.match.params.id}`)
+      .get(`${apiLink}/api/v1/centers/${this.id}`)
       .then(res => {
         this.props.setCenterDetails(res.data.data);
         this.props.setPage('centerDetails');
@@ -50,7 +52,7 @@ class CenterDetailsComponent extends Component {
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
             history={this.props.history}
-            param={this.props.match.params.id}
+            param={this.id}
             title={center.name}
             editModal="#addNewCenter"
           />
@@ -61,7 +63,7 @@ class CenterDetailsComponent extends Component {
               <img
                 id="cardImage"
                 className="card-image"
-                src={`http://localhost:8080/public/centers/${center.picture}`}
+                src={`${apiLink}/public/centers/${center.picture}`}
                 alt="centerImage"
               />
             </div>
@@ -143,7 +145,7 @@ class CenterDetailsComponent extends Component {
                     columns={[
                       <img
                         className="center-image"
-                        src={`http://localhost:8080/public/events/${event.picture}`}
+                        src={`${apiLink}/public/events/${event.picture}`}
                         alt="event-view"
                       />,
                       <b>

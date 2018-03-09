@@ -20,12 +20,14 @@ const mapStateToProps = state => {
     eventDetails: state.events.event,
   };
 };
+const apiLink = localStorage.getItem('apiLink');
 class ManageEventComponent extends Component {
   constructor(props) {
     super(props);
+    this.id = this.props.match.params.id;
   }
   componentWillMount() {
-    axios.get(`http://localhost:8080/api/v1/events/${this.props.match.params.id}`)
+    axios.get(`${apiLink}/api/v1/events/${this.id}`)
       .then(res => {
         this.props.setEventDetail(res.data.data);
         this.props.setPage('manageEvent');
@@ -40,18 +42,18 @@ class ManageEventComponent extends Component {
   }
   render() {
     const event = this.props.eventDetails[0];
-    if (event === undefined) {
+    if (!event || !apiLink) {
       return <div><h2>Loading...</h2></div>
     }
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-          <ManageDetailsHeader history={this.props.history} param={this.props.match.params.id} title={event.title} editModal='#addNewEvent' />
+          <ManageDetailsHeader history={this.props.history} param={this.id} title={event.title} editModal='#addNewEvent' />
         </div>
         <div className="card-body">
           <div className="row">
             <div className="col-sm-5">
-              <img className="card-image" src={`http://localhost:8080/public/events/${event.picture}`} alt="eventImage" />
+              <img className="card-image" src={`${apiLink}/public/events/${event.picture}`} alt="eventImage" />
             </div>
             <div className="col-sm-7">
               <div className="table-responsive">
