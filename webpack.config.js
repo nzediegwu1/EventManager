@@ -4,7 +4,7 @@ console.log(`process.env.PORT: ${process.env.PORT}`);
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?https://eventmanageronline.herokuapp.com/',
+    'webpack-dev-server/client?http://localhost:39220',
     'webpack/hot/only-dev-server',
     './Client/src/app.js',
   ],
