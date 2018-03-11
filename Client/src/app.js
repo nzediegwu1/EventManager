@@ -9,10 +9,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import store from './store';
 import { Provider } from 'react-redux';
 
-const apiLink =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8080'
-    : 'https://eventmanageronline.herokuapp.com';
+const apiLink = 'https://eventmanageronline.herokuapp.com';
 
 localStorage.setItem('apiLink', apiLink);
 
