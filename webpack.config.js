@@ -13,7 +13,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: path.resolve(__dirname, 'Client/dist'),
     publicPath: '/',
-    port: process.env.PORT || 9876,
+    port: 9876,
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

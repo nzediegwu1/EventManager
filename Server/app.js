@@ -7,6 +7,7 @@ import users from './routers/userRouter';
 import swaggerTools from 'swagger-tools';
 import swaggerDoc from './swaggerDoc.json';
 import cors from 'cors';
+import history from 'connect-history-api-fallback';
 
 const app = express();
 const options = {
@@ -21,10 +22,10 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
   app.use(middleware.swaggerRouter(options));
   app.use(middleware.swaggerUi());
 });
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to allow chai-http post and put tests to run
 app.use('/public', express.static(path.join(__dirname, './public')));
+app.use(history());
 app.use(express.static(path.join(__dirname, '../Client/dist')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);

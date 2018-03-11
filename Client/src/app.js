@@ -5,24 +5,22 @@ import { AppContainer } from 'react-hot-loader';
 import '../src/resources/styles/bootstrap.min.css';
 import '../src/resources/styles/custom.css';
 import 'bootstrap';
-import { Router } from 'react-router';
-import createHistory from 'history/createBrowserHistory';
+import { BrowserRouter as Router } from 'react-router-dom';
 import store from './store';
 import { Provider } from 'react-redux';
 
 const apiLink =
-process.env.NODE_ENV !== 'production'
-  ? 'http://localhost:8080'
-  : 'https://eventmanager29.herokuapp.com';
+  process.env.NODE_ENV === 'production'
+    ? 'https://eventmanager29.herokuapp.com'
+    : 'http://localhost:8080';
 
 localStorage.setItem('apiLink', apiLink);
 
-const history = createHistory();
 const render = () => {
   reactDOM.render(
     <AppContainer>
       <Provider store={store}>
-        <Router history={history} >
+        <Router>
           <App />
         </Router>
       </Provider>
