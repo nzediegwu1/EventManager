@@ -3,7 +3,7 @@ const webpack = require('webpack');
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    `webpack-dev-server/client?http://localhost:${process.env.PORT}`,
+    'webpack-dev-server/client?http://localhost:9876',
     'webpack/hot/only-dev-server',
     './Client/src/app.js',
   ],
@@ -12,7 +12,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: path.resolve(__dirname, 'Client/dist'),
     publicPath: '/',
-    port: process.env.PORT || 9876,
+    port: 9876,
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
