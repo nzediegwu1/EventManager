@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 
 const apiLink =
   process.env.NODE_ENV === 'production'
-    ? 'https://eventmanager29.herokuapp.com'
+    ? 'https://eventmanageronline.herokuapp.com'
     : 'http://localhost:8080';
 
 localStorage.setItem('apiLink', apiLink);
