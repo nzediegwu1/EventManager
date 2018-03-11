@@ -3,7 +3,7 @@ export const signin = (res, history) => {
     value: res.data.data.Token,
     accountType: res.data.data.User.accountType,
     id: res.data.data.User.id,
-  }
+  };
   localStorage.setItem('token', JSON.stringify(token));
   history.push('/dashboard');
 };
@@ -14,11 +14,14 @@ export const logout = (id, history) => {
   history.push('/');
 };
 
+const apiLink = localStorage.getItem('apiLink');
 export const getCenters = (axios, populateCenters) => {
-  axios.get('http://localhost:8080/api/v1/centers')
+  axios
+    .get(`${apiLink}/api/v1/centers`)
     .then(res => {
       populateCenters(res.data.data);
-    }).catch(err => {
+    })
+    .catch(err => {
       alert(err);
     });
-}
+};
