@@ -3,10 +3,12 @@ import { SignIn } from './signinComponent';
 import { Dashboard } from './dashboardComponent';
 import { Route, Switch } from 'react-router-dom';
 
+const apiLink = 'http://localhost:8080';
+localStorage.setItem('apiLink', apiLink);
 
 export const App = () => (
-  <Switch >
-    <Route path='/dashboard' component={Dashboard} />
-    <Route path='/' component={SignIn} />
+  <Switch>
+    <Route path="/dashboard" component={Dashboard} />
+    <Route path="/" component={SignIn} />
   </Switch>
 );

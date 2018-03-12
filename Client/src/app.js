@@ -9,9 +9,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import store from './store';
 import { Provider } from 'react-redux';
 
-const apiLink = 'https://eventmanageronline.herokuapp.com';
-
-localStorage.setItem('apiLink', apiLink);
 
 const render = () => {
   reactDOM.render(

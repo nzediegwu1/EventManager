@@ -3,90 +3,123 @@ import editIcon from '../resources/images/glyphicons-151-edit.png';
 import removeIcon from '../resources/images/glyphicons-17-bin.png';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { setModalTitle, setRequired, setEventDefaults, setCenterDefaults } from '../actions/pageActions'
+import {
+  setModalTitle,
+  setRequired,
+  setEventDefaults,
+  setCenterDefaults,
+} from '../actions/pageActions';
 
 const mapStateToProps = state => {
-  let currentPage = state.page.currentPage;
-  let owner = (currentPage === 'centerDetails') && (state.centers.centerDetails[0]) ?
-    state.centers.centerDetails[0].user.id : (currentPage === 'manageEvent') && state.events.event[0] && state.events.event[0].user.id;
+  const currentPage = state.page.currentPage;
+  const owner =
+    currentPage === 'centerDetails' && state.centers.centerDetails[0]
+      ? state.centers.centerDetails[0].user.id
+      : currentPage === 'manageEvent' && state.events.event[0] && state.events.event[0].user.id;
   return {
-    owner: owner,
+    owner,
     currentPage: state.page.currentPage,
     eventDetails: state.events.event,
-    centerDetails: state.centers.centerDetails
+    centerDetails: state.centers.centerDetails,
   };
 };
-const mapDispatchToProps = dispatch => {
-  return {
-    setModalTitle: title => dispatch(setModalTitle(title)),
-    setRequired: value => dispatch(setRequired(value)),
-    setEventDefaults: data => dispatch(setEventDefaults(data)),
-    setCenterDefaults: data => dispatch(setCenterDefaults(data))
-  };
-};
-const Manager = (props) => {
+const mapDispatchToProps = dispatch => ({
+  setModalTitle: title => dispatch(setModalTitle(title)),
+  setRequired: value => dispatch(setRequired(value)),
+  setEventDefaults: data => dispatch(setEventDefaults(data)),
+  setCenterDefaults: data => dispatch(setCenterDefaults(data)),
+});
+const Manager = props => {
   const content = (
     <td>
       <div className="manage">
-        <button onClick={props.setModalProps} type="submit" id="editEvent" className="btn btn-success" data-toggle="modal" data-target={props.editModal}>
+        <button
+          onClick={props.setModalProps}
+          type="submit"
+          id="editEvent"
+          className="btn btn-success"
+          data-toggle="modal"
+          data-target={props.editModal}
+        >
           <img src={editIcon} alt="Edit" />
         </button>
-        <button onClick={props.deleteEvent} type="submit" className="btn btn-danger icon-margin-left" id="deleteEvent">
+        <button
+          onClick={props.deleteEvent}
+          type="submit"
+          className="btn btn-danger icon-margin-left"
+          id="deleteEvent"
+        >
           <img src={removeIcon} alt="delete" />
         </button>
       </div>
     </td>
   );
   return content;
-}
+};
 let param, currentPage, history, resource;
 const apiLink = localStorage.getItem('apiLink');
 class ManageDetails extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.delete = this.delete;
   }
   delete() {
     const validate = confirm('Confirm delete action?');
     if (validate) {
       const urlGenerator = () => {
-        const type = (currentPage === 'manageEvent') ? 'events' : 'centers';
-        return `${apiLink}/api/v1/${type}/${param}/?token=${JSON.parse(localStorage.token).value}&file=${resource.picture}`;
-      }
+        const type = currentPage === 'manageEvent' ? 'events' : 'centers';
+        return `${apiLink}/api/v1/${type}/${param}/?token=${
+          JSON.parse(localStorage.token).value
+        }&file=${resource.picture}`;
+      };
       const url = urlGenerator();
-      axios.delete(url).then(res => {
-        alert(res.data.data)
-        history.push('/dashboard/events');
-      }).catch(err => {
-        alert(err.response.data.message);
-        (err.response.status === 403 || err.response.status === 401) && logout('addNewEvent', history);
-      });
+      axios
+        .delete(url)
+        .then(res => {
+          alert(res.data.data);
+          history.push('/dashboard/events');
+        })
+        .catch(err => {
+          alert(err.response.data.message);
+          (err.response.status === 403 || err.response.status === 401) &&
+            logout('addNewEvent', history);
+        });
     }
   }
   render() {
     param = this.props.param;
     currentPage = this.props.currentPage;
     history = this.props.history;
-    resource = (currentPage === 'manageEvent') ? this.props.eventDetails[0] : this.props.centerDetails[0];
+    resource =
+      currentPage === 'manageEvent' ? this.props.eventDetails[0] : this.props.centerDetails[0];
 
     const setModalProps = title => {
       this.props.setModalTitle(title);
       this.props.setRequired(false);
-      (title === 'Modify Event') ? this.props.setEventDefaults(this.props.eventDetails[0])
+      title === 'Modify Event'
+        ? this.props.setEventDefaults(this.props.eventDetails[0])
         : this.props.setCenterDefaults(this.props.centerDetails[0]);
-    }
-    console.log(`JSON.parse(localStorage.token).id: ${JSON.parse(localStorage.token).id}`);
-    console.log(`this.props.owner: ${this.props.owner}`);
+    };
     const content = (
       <table className="table-responsive col-sm-12 bg-transparent  zero-padding">
         <tbody>
           <tr>
-            <td style={{ width: '80%' }}><h4 className="text-center"><b>{this.props.title}</b></h4></td>
-            {
-              (JSON.parse(localStorage.token).id === this.props.owner)
-              && <Manager setModalProps={() => (currentPage === 'manageEvent') ? setModalProps('Modify Event')
-                : setModalProps('Modify Center')} deleteEvent={this.delete} editModal={this.props.editModal} />
-            }
+            <td style={{ width: '80%' }}>
+              <h4 className="text-center">
+                <b>{this.props.title}</b>
+              </h4>
+            </td>
+            {JSON.parse(localStorage.token).id === this.props.owner && (
+              <Manager
+                setModalProps={() =>
+                  currentPage === 'manageEvent'
+                    ? setModalProps('Modify Event')
+                    : setModalProps('Modify Center')
+                }
+                deleteEvent={this.delete}
+                editModal={this.props.editModal}
+              />
+            )}
           </tr>
         </tbody>
       </table>

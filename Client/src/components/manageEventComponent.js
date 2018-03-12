@@ -8,18 +8,14 @@ import { setEventDetail } from '../actions/eventActions';
 import { setPage } from '../actions/pageActions';
 import { TableRow } from './table';
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setEventDetail: event => dispatch(setEventDetail(event)),
-    setPage: page => dispatch(setPage(page))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  setEventDetail: event => dispatch(setEventDetail(event)),
+  setPage: page => dispatch(setPage(page)),
+});
 
-const mapStateToProps = state => {
-  return {
-    eventDetails: state.events.event,
-  };
-};
+const mapStateToProps = state => ({
+  eventDetails: state.events.event,
+});
 const apiLink = localStorage.getItem('apiLink');
 class ManageEventComponent extends Component {
   constructor(props) {
@@ -27,15 +23,19 @@ class ManageEventComponent extends Component {
     this.id = this.props.match.params.id;
   }
   componentWillMount() {
-    axios.get(`${apiLink}/api/v1/events/${this.id}`)
+    axios
+      .get(`${apiLink}/api/v1/events/${this.id}`)
       .then(res => {
         this.props.setEventDetail(res.data.data);
         this.props.setPage('manageEvent');
-      }).catch(err => {
-        err.response.status === 500 ? alert(err.response.data.message.name) :
-          alert(err.response.data.message);
-        (err.response.status === 404 || err.response.status === 400) && this.props.history.push('/dashboard');
       })
+      .catch(err => {
+        err.response.status === 500
+          ? alert(err.response.data.message.name)
+          : alert(err.response.data.message);
+        (err.response.status === 404 || err.response.status === 400) &&
+          this.props.history.push('/dashboard');
+      });
   }
   componentWillUnmount() {
     this.props.setPage('dashboard');
@@ -43,24 +43,46 @@ class ManageEventComponent extends Component {
   render() {
     const event = this.props.eventDetails[0];
     if (!event || !apiLink) {
-      return <div><h2>Loading...</h2></div>
+      return (
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      );
     }
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-          <ManageDetailsHeader history={this.props.history} param={this.id} title={event.title} editModal='#addNewEvent' />
+          <ManageDetailsHeader
+            history={this.props.history}
+            param={this.id}
+            title={event.title}
+            editModal="#addNewEvent"
+          />
         </div>
         <div className="card-body">
           <div className="row">
             <div className="col-sm-5">
-              <img className="card-image" src={`${apiLink}/public/events/${event.picture}`} alt="eventImage" />
+              <img
+                className="card-image"
+                src={`${apiLink}/public/events/${event.picture}`}
+                alt="eventImage"
+              />
             </div>
             <div className="col-sm-7">
               <div className="table-responsive">
-                <table style={{ border: 'none' }} className="table table-hover table-striped table-bordered">
-                  <tbody className='thick'>
+                <table
+                  style={{ border: 'none' }}
+                  className="table table-hover table-striped table-bordered"
+                >
+                  <tbody className="thick">
                     <TableRow colNumber={2} columns={['Description', event.description]} />
-                    <TableRow colNumber={2} columns={['Venue', `${event.center.name}, ${event.center.address}, ${event.center.location}`]} />
+                    <TableRow
+                      colNumber={2}
+                      columns={[
+                        'Venue',
+                        `${event.center.name}, ${event.center.address}, ${event.center.location}`,
+                      ]}
+                    />
                     <TableRow colNumber={2} columns={['By', event.user.name]} />
                     <TableRow colNumber={2} columns={['Contact', event.user.email]} />
                   </tbody>
@@ -72,10 +94,12 @@ class ManageEventComponent extends Component {
         <div className="card-footer text-muted mg-event-header">
           <div className="row text-white">
             <div className="col-sm-6">
-              <img className="invert-color" src={calenderIcon} /> Date: {new Date(event.date).toDateString()}
+              <img className="invert-color" src={calenderIcon} /> Date:{' '}
+              {new Date(event.date).toDateString()}
             </div>
             <div className="col-sm-6">
-              <img className="invert-color" src={timeIcon} /> Start Time: {new Date(event.date).toLocaleTimeString()}
+              <img className="invert-color" src={timeIcon} /> Start Time:{' '}
+              {new Date(event.date).toLocaleTimeString()}
             </div>
           </div>
         </div>

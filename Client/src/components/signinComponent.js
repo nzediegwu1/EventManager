@@ -4,21 +4,24 @@ import { SignupForm } from './signupComponent';
 import usernameIcon from '../resources/images/glyphicons-522-user-lock.png';
 import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import { RecoverPassword } from './rePasswordComponent';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { signin } from '../reusables';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
 
-const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => {
-  return { inputType, inputName, placeholder, className, ref, required };
-};
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
+  inputType,
+  inputName,
+  placeholder,
+  className,
+  ref,
+  required,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setAccountType: (accountType) => dispatch(setAccountType(accountType)),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  setAccountType: accountType => dispatch(setAccountType(accountType)),
+});
 const apiLink = localStorage.getItem('apiLink');
 class SignInPage extends React.Component {
   constructor(props) {
@@ -33,8 +36,8 @@ class SignInPage extends React.Component {
   }
   changeState() {
     this.setState(prevState => ({
-      signinView: (prevState.signinView === 'block') ? 'none' : 'block',
-      signupView: (prevState.signupView === 'none') ? 'block' : 'none',
+      signinView: prevState.signinView === 'block' ? 'none' : 'block',
+      signupView: prevState.signupView === 'none' ? 'block' : 'none',
     }));
   }
   validate(username, password) {
@@ -50,11 +53,13 @@ class SignInPage extends React.Component {
     const username = this.username.value;
     const password = this.password.value;
     if (this.validate(username, password)) {
-      axios.post(`${apiLink}/api/v1/users/login`, { username, password })
+      axios
+        .post(`${apiLink}/api/v1/users/login`, { username, password })
         .then(res => {
           signin(res, this.props.history);
           this.props.setAccountType(JSON.parse(localStorage.token).accountType);
-        }).catch(err => {
+        })
+        .catch(err => {
           alert(err.response.data.message);
         });
     }
@@ -71,14 +76,56 @@ class SignInPage extends React.Component {
             <div style={{ display: this.state.signupView }}>
               <SignupForm history={this.props.history} changeState={this.changeState} />
             </div>
-            <form onSubmit={this.handleSubmit} role="form" className="formDiv" id="signinForm" style={{ display: this.state.signinView }}>
-              <h3 className="text-center panel-font"><b>Login</b></h3>
+            <form
+              onSubmit={this.handleSubmit}
+              role="form"
+              className="formDiv"
+              id="signinForm"
+              style={{ display: this.state.signinView }}
+            >
+              <h3 className="text-center panel-font">
+                <b>Login</b>
+              </h3>
               <br />
-              <FormGroup image={usernameIcon} alt='username' inputProps={inputAttrs('text', 'username', 'Username', 'form-control input-sm', (input) => this.username = input, 'required')} />
-              <FormGroup image={passwordIcon} alt='password' inputProps={inputAttrs('password', 'password', 'Password', 'form-control input-sm', (input) => this.password = input, 'required')} />
-              <button type="submit" id='login' className="btn btn-lg btn-primary btn-block submitButton">Login</button>
+              <FormGroup
+                image={usernameIcon}
+                alt="username"
+                inputProps={inputAttrs(
+                  'text',
+                  'username',
+                  'Username',
+                  'form-control input-sm',
+                  input => (this.username = input),
+                  'required'
+                )}
+              />
+              <FormGroup
+                image={passwordIcon}
+                alt="password"
+                inputProps={inputAttrs(
+                  'password',
+                  'password',
+                  'Password',
+                  'form-control input-sm',
+                  input => (this.password = input),
+                  'required'
+                )}
+              />
+              <button
+                type="submit"
+                id="login"
+                className="btn btn-lg btn-primary btn-block submitButton"
+              >
+                Login
+              </button>
               <div className="form-links">
-                <a href="#" className="welcome" onClick={this.changeState}>Create account</a> | <a href="#" data-toggle="modal" data-target="#resetPassword">reset password</a>
+                <a href="#" className="welcome" onClick={this.changeState}>
+                  Create account
+                </a>{' '}
+                |{' '}
+                <a href="#" data-toggle="modal" data-target="#resetPassword">
+                  reset password
+                </a>
               </div>
             </form>
           </div>
@@ -87,7 +134,7 @@ class SignInPage extends React.Component {
       </div>
     );
     const token = localStorage.token;
-    return token ? <Redirect to='/dashboard' /> : content;
+    return token ? <Redirect to="/dashboard" /> : content;
   }
 }
 
