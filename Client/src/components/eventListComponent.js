@@ -57,7 +57,7 @@ export class Events extends Component {
                   columns={[
                     <img
                       className="center-image"
-                      src={`${apiLink}/public/events/${event.picture}`}
+                      src={`${event.picture}`}
                       alt="event-view"
                     />,
                     <b onClick={() => this.props.setEventDetail(event)}>

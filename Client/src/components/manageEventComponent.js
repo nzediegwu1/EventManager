@@ -64,7 +64,7 @@ class ManageEventComponent extends Component {
             <div className="col-sm-5">
               <img
                 className="card-image"
-                src={`${apiLink}/public/events/${event.picture}`}
+                src={`${event.picture}`}
                 alt="eventImage"
               />
             </div>

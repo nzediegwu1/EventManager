@@ -50,7 +50,7 @@ class CenterList extends Component {
                   columns={[
                     <img
                       className="center-image"
-                      src={`${apiLink}/public/centers/${center.picture}`}
+                      src={`${center.picture}`}
                       alt="center-view"
                     />,
                     <Link className="event-detail" to={`${this.props.match.path}/${center.id}`}>
