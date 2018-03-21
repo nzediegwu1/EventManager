@@ -23,7 +23,9 @@ module.exports = {
     },
     picture: {
       type: Sequelize.STRING, // Image url
-      allowNull: true,
+    },
+    public_id: {
+      type: Sequelize.STRING, // cloudinary image public_id
     },
     availability: {
       type: Sequelize.STRING,
@@ -49,5 +51,5 @@ module.exports = {
       },
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Centers'),
+  down: (queryInterface) => queryInterface.dropTable('Centers'),
 };

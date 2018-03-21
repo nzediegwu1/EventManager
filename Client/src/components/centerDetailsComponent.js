@@ -63,7 +63,7 @@ class CenterDetailsComponent extends Component {
               <img
                 id="cardImage"
                 className="card-image"
-                src={`${apiLink}/public/centers/${center.picture}`}
+                src={`${center.picture}`}
                 alt="centerImage"
               />
             </div>
@@ -145,7 +145,7 @@ class CenterDetailsComponent extends Component {
                     columns={[
                       <img
                         className="center-image"
-                        src={`${apiLink}/public/events/${event.picture}`}
+                        src={`${event.picture}`}
                         alt="event-view"
                       />,
                       <b>
