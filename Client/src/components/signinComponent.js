@@ -22,7 +22,9 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
 });
-const apiLink = localStorage.getItem('apiLink');
+const apiLink = 'http://localhost:8080'; // 'https://eventmanageronline.herokuapp.com';
+localStorage.setItem('apiLink', apiLink);
+
 class SignInPage extends React.Component {
   constructor(props) {
     super(props);
