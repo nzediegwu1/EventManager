@@ -285,7 +285,7 @@ class Events {
         if (allEvents.length !== 0) {
           return validator.response(res, 'success', 200, allEvents);
         }
-        return validator.response(res, 'error', 200, 'No events available');
+        return validator.response(res, 'error', 404, 'No events available');
       })
       .catch(error => validator.response(res, 'error', 500, error));
   }

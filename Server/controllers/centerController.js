@@ -208,7 +208,7 @@ class Centers {
         if (allCenters.length !== 0) {
           return validator.response(res, 'success', 200, allCenters);
         }
-        return validator.response(res, 'error', 200, 'No centers available');
+        return validator.response(res, 'error', 404, 'No centers available');
       })
       .catch(error => validator.response(res, 'error', 500, error));
   }
