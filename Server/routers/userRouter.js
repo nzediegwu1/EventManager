@@ -1,9 +1,9 @@
 ﻿import express from 'express';
 import UsersController from '../controllers/userController';
-import val from '../middlewares/validator';
+import Val from '../middlewares/validator';
 
-const signupValidator = new val('users', 'signup');
-const siginValidator = new val('users', 'signin');
+const signupValidator = new Val('users', 'signup');
+const siginValidator = new Val('users', 'signin');
 const user = new UsersController();
 const router = express.Router();
 

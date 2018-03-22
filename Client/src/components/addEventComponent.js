@@ -196,7 +196,6 @@ class AddEventComponent extends Component {
                         }`}
                       />
                     ))}
-                    <Option value="100009" text="Invalid center" />
                   </select>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-success createEvent">

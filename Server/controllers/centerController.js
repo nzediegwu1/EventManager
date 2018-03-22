@@ -13,7 +13,7 @@ class Centers {
     }
     return models.Users.findById(req.decoded.id)
       .then(user => {
-        if (user.accountType === 'admin') {
+        if (user.accountType === 'admin' || 'super') {
           return model
             .findAll()
             .then(centers => {

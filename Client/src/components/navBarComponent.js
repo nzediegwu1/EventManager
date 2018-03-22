@@ -94,7 +94,7 @@ class NavBarItem extends Component {
               dataTarget="#addNewEvent"
               body="Add Event"
             />
-            {this.props.accountType === 'admin' && (
+            {(this.props.accountType === 'admin' || this.props.accountType === 'super') && (
               <NavbarList
                 setModalProps={() => setModalProps('New Center')}
                 id="addCenter"

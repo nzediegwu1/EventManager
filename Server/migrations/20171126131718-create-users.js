@@ -20,7 +20,7 @@ module.exports = {
         type: Sequelize.BIGINT(15),
       },
       accountType: {
-        // admin or regular only
+        // admin, super or regular
         allowNull: false,
         type: Sequelize.STRING(20),
         defaultValue: 'regular',
