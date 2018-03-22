@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { populateEvents, setEventDetail } from '../actions/eventActions';
 import { connect } from 'react-redux';
+import { apiLink } from '../reusables';
 
 const mapDispatchToProps = dispatch => ({
   populateEvents: events => dispatch(populateEvents(events)),
@@ -13,7 +14,6 @@ const mapStateToProps = state => ({
   events: state.events.eventList,
 });
 
-const apiLink = localStorage.getItem('apiLink');
 export class Events extends Component {
   constructor(props) {
     super(props);
@@ -55,11 +55,7 @@ export class Events extends Component {
                   key={event.id}
                   colNumber={4}
                   columns={[
-                    <img
-                      className="center-image"
-                      src={`${event.picture}`}
-                      alt="event-view"
-                    />,
+                    <img className="center-image" src={`${event.picture}`} alt="event-view" />,
                     <b onClick={() => this.props.setEventDetail(event)}>
                       <Link className="event-detail" to={`${this.props.match.path}/${event.id}`}>
                         {event.title}

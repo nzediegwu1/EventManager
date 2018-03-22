@@ -14,7 +14,9 @@ export const logout = (id, history) => {
   history.push('/');
 };
 
-export const getCenters = (axios, populateCenters, apiLink) => {
+export const apiLink = 'https://eventmanageronline.herokuapp.com'; // 'http://localhost:8080';
+
+export const getCenters = (axios, populateCenters) => {
   axios
     .get(`${apiLink}/api/v1/centers`)
     .then(res => {

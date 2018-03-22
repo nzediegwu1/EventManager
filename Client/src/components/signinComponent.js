@@ -6,7 +6,7 @@ import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import { RecoverPassword } from './rePasswordComponent';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { signin } from '../reusables';
+import { signin, apiLink } from '../reusables';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
 
@@ -22,7 +22,6 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
 });
-const apiLink = 'https://eventmanageronline.herokuapp.com'; // 'http://localhost:8080';
 
 class SignInPage extends React.Component {
   constructor(props) {
@@ -31,7 +30,6 @@ class SignInPage extends React.Component {
       signinView: 'block',
       signupView: 'none',
     };
-    localStorage.setItem('apiLink', apiLink);
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validate = this.validate.bind(this);

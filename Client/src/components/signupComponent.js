@@ -9,14 +9,21 @@ import axios from 'axios';
 import { signin } from '../reusables';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
+import { apiLink } from '../reusables';
 
 const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
 });
 
-const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({ inputType, inputName, placeholder, className, ref, required });
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
+  inputType,
+  inputName,
+  placeholder,
+  className,
+  ref,
+  required,
+});
 let history;
-const apiLink = localStorage.getItem('apiLink');
 class SignupComponent extends React.Component {
   constructor(props) {
     super(props);

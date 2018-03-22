@@ -9,6 +9,7 @@ import {
   setEventDefaults,
   setCenterDefaults,
 } from '../actions/pageActions';
+import { apiLink } from '../reusables';
 
 const mapStateToProps = state => {
   const currentPage = state.page.currentPage;
@@ -57,7 +58,6 @@ const Manager = props => {
   return content;
 };
 let param, currentPage, history, resource;
-const apiLink = localStorage.getItem('apiLink');
 class ManageDetails extends Component {
   constructor(props) {
     super(props);

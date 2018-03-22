@@ -7,6 +7,8 @@ import axios from 'axios';
 import { setEventDetail } from '../actions/eventActions';
 import { setPage } from '../actions/pageActions';
 import { TableRow } from './table';
+import { apiLink } from '../reusables';
+
 
 const mapDispatchToProps = dispatch => ({
   setEventDetail: event => dispatch(setEventDetail(event)),
@@ -16,7 +18,6 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   eventDetails: state.events.event,
 });
-const apiLink = localStorage.getItem('apiLink');
 class ManageEventComponent extends Component {
   constructor(props) {
     super(props);

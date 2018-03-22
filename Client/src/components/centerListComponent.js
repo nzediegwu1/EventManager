@@ -12,13 +12,13 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   centers: state.centers.centerList,
 });
-const apiLink = localStorage.getItem('apiLink');
+
 class CenterList extends Component {
   constructor(props) {
     super(props);
   }
   componentWillMount() {
-    getCenters(axios, this.props.populateCenters, apiLink);
+    getCenters(axios, this.props.populateCenters);
   }
 
   render() {
