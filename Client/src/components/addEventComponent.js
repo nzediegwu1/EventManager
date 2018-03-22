@@ -39,7 +39,7 @@ class AddEventComponent extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentWillMount() {
-    getCenters(axios, this.props.populateCenters);
+    getCenters(axios, this.props.populateCenters, apiLink);
   }
 
   handleSubmit(event) {

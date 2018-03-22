@@ -18,7 +18,7 @@ class CenterList extends Component {
     super(props);
   }
   componentWillMount() {
-    getCenters(axios, this.props.populateCenters);
+    getCenters(axios, this.props.populateCenters, apiLink);
   }
 
   render() {

@@ -23,7 +23,6 @@ const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
 });
 const apiLink = 'https://eventmanageronline.herokuapp.com'; // 'http://localhost:8080';
-localStorage.setItem('apiLink', apiLink);
 
 class SignInPage extends React.Component {
   constructor(props) {
@@ -32,6 +31,7 @@ class SignInPage extends React.Component {
       signinView: 'block',
       signupView: 'none',
     };
+    localStorage.setItem('apiLink', apiLink);
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validate = this.validate.bind(this);

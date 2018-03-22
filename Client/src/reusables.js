@@ -14,8 +14,7 @@ export const logout = (id, history) => {
   history.push('/');
 };
 
-const apiLink = localStorage.getItem('apiLink');
-export const getCenters = (axios, populateCenters) => {
+export const getCenters = (axios, populateCenters, apiLink) => {
   axios
     .get(`${apiLink}/api/v1/centers`)
     .then(res => {
