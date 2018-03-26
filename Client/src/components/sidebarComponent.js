@@ -8,18 +8,19 @@ import createHistory from 'history/createBrowserHistory';
 import { logout } from '../reusables';
 
 const history = createHistory();
-export const ListItem = (props) => {
+export const ListItem = props => {
   const content = (
     <li onClick={props.event} className={props.class}>
       <h6>
-        <a className="nav-link" href="#">{props.title}
+        <a className="nav-link" href="#">
+          {props.title}
           <img className="invert-color icon-margin-left" src={props.icon} alt={props.alt} />
         </a>
       </h6>
     </li>
   );
   return content;
-}
+};
 export class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,14 @@ export class Sidebar extends Component {
   }
   render() {
     const content = (
-      <div className="modal left fade" id="myModalSidebar" tabIndex="-1" role="dialog" aria-labelledby="myModalSidebarLabel" aria-hidden="true">
+      <div
+        className="modal left fade"
+        id="myModalSidebar"
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="myModalSidebarLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog">
           <div className="modal-content sidebar">
             <div className="modal-header  sidebar-header">
@@ -41,16 +49,40 @@ export class Sidebar extends Component {
             </div>
             <div className="modal-body">
               <ul className="nav flex-column nav-tabs">
-                <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}`)} class='nav-item' title='Events' icon={eventIcon} alt='myEvents' />
-                <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/centers`)} class='nav-item' title='Centers' icon={centerIcon} alt='myCenters' />
-                <ListItem event={this.changeLocation.bind(this, `${this.props.match.path}/profile`)} class='nav-item' title='MyProfile' icon={userIcon} alt='myProfile' />
-                <ListItem event={()=>logout('myModalSidebar', this.props.history)} class='nav-item logout' title='Logout' icon={logoutIcon} alt='logout' />
+                <ListItem
+                  event={this.changeLocation.bind(this, `${this.props.match.path}`)}
+                  class="nav-item"
+                  title="Events"
+                  icon={eventIcon}
+                  alt="myEvents"
+                />
+                <ListItem
+                  event={this.changeLocation.bind(this, `${this.props.match.path}/centers`)}
+                  class="nav-item"
+                  title="Centers"
+                  icon={centerIcon}
+                  alt="myCenters"
+                />
+                <ListItem
+                  event={this.changeLocation.bind(this, `${this.props.match.path}/profile`)}
+                  class="nav-item"
+                  title="MyProfile"
+                  icon={userIcon}
+                  alt="myProfile"
+                />
+                <ListItem
+                  event={() => logout('myModalSidebar', this.props.history)}
+                  class="nav-item logout"
+                  title="Logout"
+                  icon={logoutIcon}
+                  alt="logout"
+                />
               </ul>
             </div>
           </div>
         </div>
       </div>
     );
-    return content
+    return content;
   }
 }

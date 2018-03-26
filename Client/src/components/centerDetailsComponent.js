@@ -6,6 +6,7 @@ import { setCenterDetails } from '../actions/centerActions';
 import { setPage } from '../actions/pageActions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { apiLink } from '../reusables';
 
 const mapDispatchToProps = dispatch => ({
   setCenterDetails: center => dispatch(setCenterDetails(center)),
@@ -15,11 +16,10 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   centerDetails: state.centers.centerDetails,
 });
-let apiLink;
+
 class CenterDetailsComponent extends Component {
   constructor(props) {
     super(props);
-    apiLink = localStorage.getItem('apiLink');
     this.id = this.props.match.params.id;
   }
   componentWillMount() {
@@ -63,7 +63,7 @@ class CenterDetailsComponent extends Component {
               <img
                 id="cardImage"
                 className="card-image"
-                src={`${apiLink}/public/centers/${center.picture}`}
+                src={`${center.picture}`}
                 alt="centerImage"
               />
             </div>
@@ -145,7 +145,7 @@ class CenterDetailsComponent extends Component {
                     columns={[
                       <img
                         className="center-image"
-                        src={`${apiLink}/public/events/${event.picture}`}
+                        src={`${event.picture}`}
                         alt="event-view"
                       />,
                       <b>

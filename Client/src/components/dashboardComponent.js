@@ -20,7 +20,7 @@ class DashboardComponent extends Component {
         <div id="content" className="container custom-container">
           <Route path={`${this.props.match.path}`} component={Sidebar} />
           <Route path={`${this.props.match.path}`} component={AddEvent} />
-          {this.props.accountType === 'admin' && (
+          {(this.props.accountType === 'admin' || this.props.accountType === 'super') && (
             <Route path={`${this.props.match.path}`} component={AddCenter} />
           )}
           <Switch>

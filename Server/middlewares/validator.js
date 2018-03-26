@@ -44,6 +44,9 @@
         case 'users':
           this.verifyUser(req, res, this.context, next);
           break;
+        case 'facilities':
+          this.verifyFacilities(req, res, next);
+          break;
         default:
           break;
       }
@@ -164,13 +167,13 @@
     };
     this.verifyUser = (req, res, context, next) => {
       if (context === 'signup') {
-        return this.verifySinup(req, res, next);
+        return this.verifySignup(req, res, next);
       }
       return this.verifySignin(req, res, next);
     };
-    this.verifySinup = (req, res, next) => {
+    this.verifySignup = (req, res, next) => {
       // validate request username
-      const { username, name, email, phoneNo, accountType, password, confirmPassword } = req.body;
+      const { username, name, email, phoneNo, password, confirmPassword } = req.body;
       if (
         username === undefined ||
         typeof username !== 'string' ||
@@ -211,12 +214,6 @@
         phoneNo.length > 15
       ) {
         this.verificationError = this.errorMessage('Request has none or invalid phone no.', res);
-        // validate request account type
-      } else if (!(accountType === 'regular' || accountType === 'admin')) {
-        this.verificationError = this.errorMessage(
-          'Account type should either be conf[regular] or [adim]',
-          res
-        );
         // validate request password
       } else if (
         password === undefined ||
@@ -272,6 +269,36 @@
         next();
       }
       return this.verificationError;
+    };
+    this.verifyFacilities = (req, res, next) => {
+      const reqBody = JSON.parse(req.body.data);
+      const facilityArray = reqBody.content;
+      const facilityTable = [];
+      for (let index = 0; index < facilityArray.length; index++) {
+        const name =
+          facilityArray[index].name && facilityArray[index].name.trim().length > 0
+            ? facilityArray[index].name
+            : undefined;
+        const spec =
+          facilityArray[index].spec && facilityArray[index].spec.trim().length > 0
+            ? facilityArray[index].spec
+            : undefined;
+        const quantity =
+          facilityArray[index].quantity && !isNaN(facilityArray[index].quantity)
+            ? facilityArray[index].quantity
+            : undefined;
+        if (name && spec && quantity) {
+          facilityTable.push({ name, spec, quantity });
+        } else {
+          break;
+        }
+      }
+      if (facilityArray.length === facilityTable.length) {
+        next();
+      } else {
+        this.verificationError = this.errorMessage('Request contain invalid entry(s)', res);
+        return this.verificationError;
+      }
     };
   }
 }

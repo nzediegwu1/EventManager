@@ -7,7 +7,7 @@ import { FormGroup } from './formGroup';
 import { ModalHeader } from './modalHeader';
 import { Option } from './selectOption';
 import axios from 'axios';
-import { logout, getCenters } from '../reusables';
+import { logout, getCenters, apiLink } from '../reusables';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
 import { populateCenters } from '../actions/centerActions';
@@ -32,7 +32,6 @@ const mapStateToProps = state => ({
   centers: state.centers.centerList,
 });
 let eventId;
-const apiLink = localStorage.getItem('apiLink');
 class AddEventComponent extends Component {
   constructor(props) {
     super(props);
@@ -196,7 +195,6 @@ class AddEventComponent extends Component {
                         }`}
                       />
                     ))}
-                    <Option value="100009" text="Invalid center" />
                   </select>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-success createEvent">

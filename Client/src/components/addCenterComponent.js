@@ -12,7 +12,7 @@ import removeIcon from '../resources/images/glyphicons-198-remove-circle.png';
 import { Option } from './selectOption';
 import { TableHead, TableRow } from './table';
 import axios from 'axios';
-import { logout } from '../reusables';
+import { logout, apiLink } from '../reusables';
 import { connect } from 'react-redux';
 import { setCenterDetails } from '../actions/centerActions';
 
@@ -35,7 +35,6 @@ const mapStateToProps = state => ({
   centerDefaults: state.page.centerDefaults,
 });
 let centerId;
-const apiLink = localStorage.getItem('apiLink');
 
 class AddCenterComponent extends React.Component {
   constructor(props) {

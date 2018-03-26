@@ -4,10 +4,12 @@ import bodyParser from 'body-parser';
 import events from './routers/eventRouter';
 import centers from './routers/centerRouter';
 import users from './routers/userRouter';
+import facilities from './routers/facilityRouter';
 import swaggerTools from 'swagger-tools';
 import swaggerDoc from './swaggerDoc.json';
 import cors from 'cors';
 import history from 'connect-history-api-fallback';
+import * as http from 'http';
 
 const app = express();
 const options = {
@@ -24,11 +26,16 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to allow chai-http post and put tests to run
-app.use('/public', express.static(path.join(__dirname, './public')));
 app.use(history());
 app.use(express.static(path.join(__dirname, '../Client/dist')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
 app.use('/api/v1/users', users);
+app.use('/api/v1/facilities', facilities);
 
-export default app;
+const port = process.env.PORT || 8080;
+const server = http.createServer(app);
+
+server.listen(port, () => {
+  console.log(`Server is up at ${port}`);
+});
