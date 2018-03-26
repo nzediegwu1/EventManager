@@ -1,9 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+console.log(`process.env.PORT: ${process.env.PORT}`);
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:9876',
+    `webpack-dev-server/client?http://localhost:${process.env.PORT}`,
     'webpack/hot/only-dev-server',
     './Client/src/app.js',
   ],
