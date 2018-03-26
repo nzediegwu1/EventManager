@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import events from './routers/eventRouter';
 import centers from './routers/centerRouter';
 import users from './routers/userRouter';
+import facilities from './routers/facilityRouter';
 import swaggerTools from 'swagger-tools';
 import swaggerDoc from './swaggerDoc.json';
 import cors from 'cors';
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, '../Client/dist')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
 app.use('/api/v1/users', users);
+app.use('/api/v1/facilities', facilities);
 
 const port = process.env.PORT || 8080;
 const server = http.createServer(app);

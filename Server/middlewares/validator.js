@@ -44,6 +44,9 @@
         case 'users':
           this.verifyUser(req, res, this.context, next);
           break;
+        case 'facilities':
+          this.verifyFacilities(req, res, next);
+          break;
         default:
           break;
       }
@@ -266,6 +269,36 @@
         next();
       }
       return this.verificationError;
+    };
+    this.verifyFacilities = (req, res, next) => {
+      const reqBody = JSON.parse(req.body.data);
+      const facilityArray = reqBody.content;
+      const facilityTable = [];
+      for (let index = 0; index < facilityArray.length; index++) {
+        const name =
+          facilityArray[index].name && facilityArray[index].name.trim().length > 0
+            ? facilityArray[index].name
+            : undefined;
+        const spec =
+          facilityArray[index].spec && facilityArray[index].spec.trim().length > 0
+            ? facilityArray[index].spec
+            : undefined;
+        const quantity =
+          facilityArray[index].quantity && !isNaN(facilityArray[index].quantity)
+            ? facilityArray[index].quantity
+            : undefined;
+        if (name && spec && quantity) {
+          facilityTable.push({ name, spec, quantity });
+        } else {
+          break;
+        }
+      }
+      if (facilityArray.length === facilityTable.length) {
+        next();
+      } else {
+        this.verificationError = this.errorMessage('Request contain invalid entry(s)', res);
+        return this.verificationError;
+      }
     };
   }
 }

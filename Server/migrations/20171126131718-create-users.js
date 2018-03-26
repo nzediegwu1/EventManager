@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.STRING(100),
       },
       phoneNo: {
-        type: Sequelize.BIGINT(15),
+        type: Sequelize.BIGINT,
       },
       accountType: {
         // admin, super or regular
