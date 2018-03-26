@@ -25,7 +25,7 @@ class Facilities {
           )
         )
       )
-      .catch((error) => validator.response(res, 'error', 403, error));
+      .catch(() => validator.response(res, 'error', 403, 'Unauthorized transaction'));
   }
 }
 const facilityController = new Facilities();
