@@ -12,7 +12,7 @@ class Events {
       .findAll()
       .then(events => {
         // destructuring
-        const { title, date, time, description, centerId } = req.body;
+        const { title, date, time, picture, publicId, description, centerId } = req.body;
         const timestamp = new Date(`${date} ${time}`);
 
         if (events.length !== 0) {
@@ -20,7 +20,7 @@ class Events {
           const month = timestamp.getMonth();
           const year = timestamp.getFullYear();
           const occupiedDates = [];
-          let errorMessage = '';
+          let errorMessage;
           // console.log('Events were gotten from db');
           events.forEach(event => {
             const eventDate = event.date;
@@ -43,11 +43,12 @@ class Events {
               };
             }
           });
-          if (errorMessage !== '') {
-            return validator.response(res, 'error', 406, errorMessage);
+          if (errorMessage) {
+            return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+              validator.response(res, 'error', 406, errorMessage)
+            );
           }
         }
-        let newEntry;
         function createNewEvent(entry) {
           return model
             .create(entry)
@@ -61,69 +62,55 @@ class Events {
                   attributes: { exclude: ['centerId', 'userId'] },
                 })
                 .then(response => validator.response(res, 'success', 201, response))
-                .catch(err => validator.response(res, 'error', 500, err))
+                .catch(error =>
+                  cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                    validator.response(res, 'err', 500, error)
+                  )
+                )
             )
             .catch(error => {
               let errorMessage;
               if (error.name === 'SequelizeForeignKeyConstraintError') {
                 errorMessage = 'center selected for event does not exist in database';
               }
-              if (entry.public_id) {
-                return cloudinary.v2.uploader.destroy(entry.public_id, () =>
-                  validator.response(res, 'error', 400, errorMessage)
-                );
-              }
-              return validator.response(res, 'error', 400, errorMessage);
+              return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                validator.response(res, 'error', 400, errorMessage || error)
+              );
             });
         }
-        if (req.file) {
-          cloudinary.v2.uploader
-            .upload_stream(
-              { folder: 'events/', public_id: `${Date.now()}-${req.file.originalname}` },
-              (err, result) => {
-                if (err) {
-                  return validator.response(res, 'error', 500, 'Could not upload image');
-                }
-                newEntry = {
-                  title,
-                  date: timestamp,
-                  description,
-                  picture: result.secure_url,
-                  userId: req.decoded.id,
-                  centerId,
-                  public_id: result.public_id,
-                };
-                return createNewEvent(newEntry);
-              }
-            )
-            .end(req.file.buffer);
-        } else {
-          newEntry = { title, date: timestamp, description, userId: req.decoded.id, centerId };
-          return createNewEvent(newEntry);
-        }
+        const newEntry = {
+          title,
+          date: timestamp,
+          description,
+          picture,
+          publicId,
+          userId: req.decoded.id,
+          centerId,
+        };
+        return createNewEvent(newEntry);
       })
-      .catch(error => validator.response(res, 'error', 500, error));
+      .catch(error =>
+        cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+          validator.response(res, 'err', 500, error)
+        )
+      );
   }
 
   // modify an event
   modifyEvent(req, res) {
     // get event with same index as parameter and change the value
-    if (validator.confirmParams(req, res)) {
-      // destructuring
-      const { title, date, time, description, centerId } = req.body;
+    if (validator.confirmParams(req, res) === true) {
+      const { title, date, time, picture, publicId, description, centerId } = req.body;
       const timestamp = new Date(`${date} ${time}`);
-      // console.log(`Time stamp generated: ${timestamp}`);
-      model
+      return model
         .findAll()
         .then(events => {
-          // destructuring
           if (events.length !== 0) {
             const day = timestamp.getDate();
             const month = timestamp.getMonth();
             const year = timestamp.getFullYear();
             const occupiedDates = [];
-            let errorMessage = '';
-            // console.log('Events were gotten from db');
+            let errorMessage;
             events.forEach(event => {
               const eventDate = event.date;
               const eventDay = eventDate.getDate();
@@ -138,27 +125,25 @@ class Events {
                 eventMonth === month &&
                 eventYear === year
               ) {
-                // forbidden
-                // console.log(`Event ID is ${event.id} and req.params.id is ${req.params.id}`);
                 if (event.id !== parseInt(req.params.id, 10)) {
                   errorMessage = {
                     Sorry: `Selected date is already occupied for centerId: ${centerId}`,
                     OccupiedDates: occupiedDates,
                   };
-                  // console.log('unacceptable error here');
                 }
               }
             });
-            if (errorMessage !== '') {
-              return validator.response(res, 'err', 406, errorMessage);
+            if (errorMessage) {
+              return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                validator.response(res, 'err', 406, errorMessage)
+              );
             }
           }
           function modifyEvent(modified) {
             return model
               .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-              .then(found => {
-                const publicId = found.public_id;
-                return found
+              .then(found =>
+                found
                   .updateAttributes(modified)
                   .then(updatedEvent => {
                     function update() {
@@ -175,95 +160,60 @@ class Events {
                           attributes: { exclude: ['centerId', 'userId'] },
                         })
                         .then(response => validator.response(res, 'success', 201, response))
-                        .catch(err => validator.response(res, 'error', 500, err));
-                    }
-                    if (req.file) {
-                      return cloudinary.v2.uploader.destroy(publicId, () => update());
+                        .catch(error => cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                          validator.response(res, 'err', 500, error)
+                        ));
                     }
                     return update();
                   })
                   .catch(error => {
-                    let errorMessage = '';
+                    let errorMessage;
                     if (error.name === 'SequelizeForeignKeyConstraintError') {
                       errorMessage = 'center selected for event does not exist in table';
                     }
-                    if (modified.public_id) {
-                      return cloudinary.v2.uploader.destroy(modified.public_id, () =>
-                        validator.response(res, 'error', 400, errorMessage)
-                      );
-                    }
-                    return validator.response(res, 'error', 400, errorMessage);
-                  });
-              })
-              .catch(() => {
-                const response = validator.response(
+                    return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                      validator.response(res, 'error', 400, errorMessage || error)
+                    );
+                  })
+              )
+              .catch(() => cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                validator.response(
                   res,
                   'error',
                   403,
                   'Attempt to update unexisting or unauthorized item'
-                ); // trying to update a unexisting or unauthorized center
-                if (modified.public_id) {
-                  return cloudinary.v2.uploader.destroy(modified.public_id, () => response);
-                }
-                return response;
-              });
+                )
+              ));
           }
-          let modifiedEntry;
-          if (req.file) {
-            cloudinary.v2.uploader
-              .upload_stream(
-                { folder: 'events/', public_id: `${Date.now()}-${req.file.originalname}` },
-                (err, result) => {
-                  if (err) {
-                    return validator.response(res, 'error', 500, 'Could not upload image');
-                  }
-                  modifiedEntry = {
-                    title,
-                    date: timestamp,
-                    description,
-                    picture: result.secure_url,
-                    userId: req.decoded.id,
-                    centerId,
-                    public_id: result.public_id,
-                  };
-                  return modifyEvent(modifiedEntry);
-                }
-              )
-              .end(req.file.buffer);
-          } else {
-            modifiedEntry = {
-              title,
-              date: timestamp,
-              description,
-              userId: req.decoded.id,
-              centerId,
-            };
-            return modifyEvent(modifiedEntry);
-          }
+          const modifiedEntry = {
+            title,
+            date: timestamp,
+            description,
+            picture,
+            publicId,
+            userId: req.decoded.id,
+            centerId,
+          };
+          return modifyEvent(modifiedEntry);
         })
-        .catch(err => validator.response(res, 'error', 500, err));
+        .catch(error => cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+          validator.response(res, 'err', 500, error)
+        ));
     }
-    return validator.invalidParameter;
+    return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
   }
 
   // delete an event
   deleteEvent(req, res) {
     // get recipe where index is same as id parameter and delete
-    if (validator.confirmParams(req, res)) {
-      let imageToDelete;
+    if (validator.confirmParams(req, res) === true) {
       return model
-        .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-        .then(foundEvent => {
-          imageToDelete = foundEvent.public_id;
-          return foundEvent
-            .destroy()
-            .then(() =>
-              cloudinary.v2.uploader.destroy(imageToDelete, () =>
-                validator.response(res, 'success', 200, 'Successfully deleted')
-              )
-            )
-            .catch(error => validator.response(res, 'error', 500, error));
-        })
+        .destroy({ where: { id: req.params.id, userId: req.decoded.id } })
+        .then(() =>
+          cloudinary.v2.uploader.destroy(req.query.file, () =>
+            validator.response(res, 'success', 200, 'Successfully deleted')
+          )
+        )
         .catch(() => validator.response(res, 'error', 400, 'Invalid transaction'));
       // Event does not exist or User not priviledged to delete
     }
@@ -290,7 +240,7 @@ class Events {
       .catch(error => validator.response(res, 'error', 500, error));
   }
   getEventDetails(req, res) {
-    if (validator.confirmParams(req, res)) {
+    if (validator.confirmParams(req, res) === true) {
       return model
         .findById(req.params.id, {
           include: [

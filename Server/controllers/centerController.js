@@ -8,18 +8,45 @@ const model = models.Centers;
 class Centers {
   // add an event
   addCenter(req, res) {
-    if (req.file === undefined || typeof req.file !== 'object' || req.file.buffer === undefined) {
-      return validator.response(res, 'error', 400, 'Invalid or undefined Center Image');
+    const { name, address, location, picture, publicId, capacity, price, availability } = req.body;
+
+    if (
+      picture === undefined ||
+      typeof picture !== 'string' ||
+      picture.trim().length === 0 ||
+      picture.length > 254
+    ) {
+      return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+        validator.response(
+          res,
+          'error',
+          400,
+          'Center picture should be non-empty string less 255 characters'
+        )
+      );
+      // validate center image public_id
+    } else if (
+      publicId === undefined ||
+      typeof publicId !== 'string' ||
+      publicId.trim().length === 0 ||
+      publicId.length > 254
+    ) {
+      return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+        validator.response(
+          res,
+          'error',
+          400,
+          'Center image public_id should be non-empty string less 255 characters'
+        )
+      );
     }
     return models.Users.findById(req.decoded.id)
       .then(user => {
-        if (user.accountType === 'admin' || 'super') {
+        if (user.accountType === 'admin' || user.accountType === 'super') {
           return model
             .findAll()
             .then(centers => {
-              // destructuring
-              const { name, address, location, capacity, price, availability } = req.body;
-              let sameCenter = '';
+              let sameCenter;
               if (centers.length !== 0) {
                 centers.forEach(center => {
                   if (
@@ -32,69 +59,88 @@ class Centers {
                   }
                 });
               }
-              if (sameCenter !== '') {
-                return validator.response(res, 'err', 406, sameCenter);
+              if (sameCenter) {
+                return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                  validator.response(res, 'err', 406, sameCenter)
+                );
               }
-              cloudinary.v2.uploader
-                .upload_stream(
-                  { folder: 'centers/', public_id: `${Date.now()}-${req.file.originalname}` },
-                  (err, result) => {
-                    if (err) {
-                      return validator.response(res, 'error', 500, 'Could not upload image');
-                    }
-                    const newEntry = {
-                      name,
-                      address,
-                      location,
-                      availability,
-                      picture: result.secure_url,
-                      public_id: result.public_id,
-                      userId: req.decoded.id,
-                      capacity: parseInt(capacity, 10),
-                      price: parseInt(price, 10),
-                    };
-                    return model
-                      .create(newEntry)
-                      .then(created =>
-                        model
-                          .findById(created.id, {
-                            include: [
-                              { model: models.Events, as: 'events' },
-                              { model: models.Facilities, as: 'facilities' },
-                              {
-                                model: models.Users,
-                                as: 'user',
-                                attributes: { exclude: ['password'] },
-                              },
-                            ],
-                            attributes: { exclude: ['userId'] },
-                          })
-                          .then(response => validator.response(res, 'success', 201, response))
-                          .catch(error => validator.response(res, 'error', 500, error))
+              const newEntry = {
+                name,
+                address,
+                location,
+                availability,
+                picture,
+                publicId,
+                userId: req.decoded.id,
+                capacity: parseInt(capacity, 10),
+                price: parseInt(price, 10),
+              };
+              return model
+                .create(newEntry)
+                .then(created =>
+                  model
+                    .findById(created.id, {
+                      include: [
+                        { model: models.Events, as: 'events' },
+                        { model: models.Facilities, as: 'facilities' },
+                        {
+                          model: models.Users,
+                          as: 'user',
+                          attributes: { exclude: ['password'] },
+                        },
+                      ],
+                      attributes: { exclude: ['userId'] },
+                    })
+                    .then(response => validator.response(res, 'success', 201, response))
+                    .catch(error =>
+                      cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                        validator.response(res, 'err', 500, error)
                       )
-                      .catch(error => validator.response(res, 'error', 500, error));
-                  }
+                    )
                 )
-                .end(req.file.buffer);
+                .catch(error =>
+                  cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                    validator.response(res, 'err', 500, error)
+                  )
+                );
             })
-            .catch(error => validator.response(res, 'error', 500, error));
+            .catch(error =>
+              cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                validator.response(res, 'err', 500, error)
+              )
+            );
         }
-        return validator.response(res, 'error', 403, 'Only an admin can perform this action');
+        return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+          validator.response(res, 'err', 403, 'Only an admin can perform this action')
+        );
       })
-      .catch(error => validator.response(res, 'error', 500, error));
+      .catch(error =>
+        cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+          validator.response(res, 'err', 500, error)
+        )
+      );
   }
 
   // modify a center
   modifyCenter(req, res) {
     // get center with same index as parameter and change the value
-    if (validator.confirmParams(req, res)) {
+    if (validator.confirmParams(req, res) === true) {
       // destructuring
       return model
         .findAll()
         .then(centers => {
           // destructuring
-          const { name, address, location, capacity, price, availability } = req.body;
-          let sameCenter = '';
+          const {
+            name,
+            address,
+            location,
+            picture,
+            publicId,
+            capacity,
+            price,
+            availability,
+          } = req.body;
+          let sameCenter;
           if (centers.length !== 0) {
             centers.forEach(center => {
               if (
@@ -108,16 +154,17 @@ class Centers {
               }
             });
           }
-          if (sameCenter !== '') {
-            return validator.response(res, 'error', 406, sameCenter);
+          if (sameCenter) {
+            return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+              validator.response(res, 'err', 406, sameCenter)
+            );
           }
 
           function modifyCenter(modified) {
             return model
               .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-              .then(found => {
-                const publicId = found.public_id;
-                return found
+              .then(found =>
+                found
                   .updateAttributes(modified)
                   .then(updatedCenter => {
                     function update() {
@@ -135,68 +182,51 @@ class Centers {
                           attributes: { exclude: ['userId'] },
                         })
                         .then(response => validator.response(res, 'success', 201, response))
-                        .catch(err => validator.response(res, 'error', 500, err));
-                    }
-                    if (req.file) {
-                      return cloudinary.v2.uploader.destroy(publicId, () => update());
+                        .catch(error =>
+                          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                            validator.response(res, 'err', 500, error)
+                          )
+                        );
                     }
                     return update();
                   })
-                  .catch(error => validator.response(res, 'error', 500, error));
-              })
-              .catch(() => {
-                const response = validator.response(
-                  res,
-                  'error',
-                  403,
-                  'Attempt to update unexisting or unauthorized item'
-                );
-                if (modified.public_id) {
-                  return cloudinary.v2.uploader.destroy(modified.public_id, () => response);
-                }
-                return response;
-              });
-          }
-          let modifiedEntry;
-          if (req.file) {
-            cloudinary.v2.uploader
-              .upload_stream(
-                { folder: 'centers/', public_id: `${Date.now()}-${req.file.originalname}` },
-                (err, result) => {
-                  if (err) {
-                    return validator.response(res, 'error', 500, 'Could not upload image');
-                  }
-                  modifiedEntry = {
-                    name,
-                    address,
-                    location,
-                    availability,
-                    picture: result.secure_url,
-                    public_id: result.public_id,
-                    userId: req.decoded.id,
-                    capacity: parseInt(capacity, 10),
-                    price: parseInt(price, 10),
-                  };
-                  return modifyCenter(modifiedEntry);
-                }
+                  .catch(error =>
+                    cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                      validator.response(res, 'err', 500, error)
+                    )
+                  )
               )
-              .end(req.file.buffer);
-          } else {
-            modifiedEntry = {
-              name,
-              address,
-              location,
-              availability,
-              userId: req.decoded.id,
-              capacity: parseInt(capacity, 10),
-              price: parseInt(price, 10),
-            };
-            return modifyCenter(modifiedEntry);
+              .catch(() =>
+                cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                  validator.response(
+                    res,
+                    'error',
+                    403,
+                    'Attempt to update unexisting or unauthorized item'
+                  )
+                )
+              );
           }
+          const modifiedEntry = {
+            name,
+            address,
+            location,
+            availability,
+            picture,
+            publicId,
+            userId: req.decoded.id,
+            capacity: parseInt(capacity, 10),
+            price: parseInt(price, 10),
+          };
+          return modifyCenter(modifiedEntry);
         })
-        .catch(error => validator.response(res, 'error', 500, error));
+        .catch(error =>
+          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+            validator.response(res, 'err', 500, error)
+          )
+        );
     }
-    return validator.invalidParameter;
+    return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
   }
 
   // get all centers
@@ -214,7 +244,7 @@ class Centers {
   }
   // get center details
   getCenterDetails(req, res) {
-    if (validator.confirmParams(req, res)) {
+    if (validator.confirmParams(req, res) === true) {
       return model
         .findById(req.params.id, {
           include: [

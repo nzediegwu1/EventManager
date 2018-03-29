@@ -1,11 +1,18 @@
-﻿class Validator {
+﻿import cloudinary from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: 'eventmanager',
+  api_key: '789891965151338',
+  api_secret: 'ynezeVbgUnGIfNYKj19GvyrflSI',
+});
+
+class Validator {
   constructor(model, context) {
     this.model = model;
     this.context = context;
     this.invalidParameter = {};
     this.verificationError = {};
     this.errorMessage = (msg, res) => this.response(res, 'err', 400, msg);
-
     this.confirmParams = (req, res) => {
       if (isNaN(req.params.id)) {
         this.invalidParameter = this.errorMessage('invalid parameter', res);
@@ -97,13 +104,21 @@
         this.verificationError = this.errorMessage('Invalid center selected', res);
       } else {
         next();
+        return this.verificationError;
       }
-      return this.verificationError;
+      return cloudinary.v2.uploader.destroy(req.body.publicId, () => this.verificationError);
     };
 
     this.verifyCenter = (req, res, next) => {
       // validate center name
-      const { name, address, location, capacity, price, availability } = req.body;
+      const {
+        name,
+        address,
+        location,
+        capacity,
+        price,
+        availability,
+      } = req.body;
       if (
         name === undefined ||
         typeof name !== 'string' ||
@@ -162,8 +177,9 @@
         );
       } else {
         next();
+        return this.verificationError;
       }
-      return this.verificationError;
+      return cloudinary.v2.uploader.destroy(req.body.publicId, () => this.verificationError);
     };
     this.verifyUser = (req, res, context, next) => {
       if (context === 'signup') {

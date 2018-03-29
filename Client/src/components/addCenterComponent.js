@@ -40,40 +40,74 @@ class AddCenterComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.folder = apiLink === 'http://localhost:8000' ? 'dev/centers' : 'prod/centers';
   }
   handleSubmit(event) {
-    const newCenter = new FormData();
-    newCenter.append('name', this.name.value);
-    newCenter.append('picture', this.picture.files[0]);
-    newCenter.append('address', this.address.value);
-    newCenter.append('location', this.location.value);
-    newCenter.append('capacity', this.capacity.value);
-    newCenter.append('price', this.price.value);
-    newCenter.append('availability', this.availability.value);
-    newCenter.append('token', JSON.parse(localStorage.token).value);
-
-    let httpRequest;
-    if (this.props.modalTitle === 'New Center') {
-      httpRequest = axios.post(`${apiLink}/api/v1/centers`, newCenter);
-    } else {
-      httpRequest = axios.put(`${apiLink}/api/v1/centers/${centerId}`, newCenter);
-    }
-    httpRequest
-      .then(res => {
-        alert('Successful');
-        this.props.history.push(`/dashboard/centers/${res.data.data.id}`);
-        this.props.setCenterDetails(res.data.data);
-        if (this.props.modalTitle !== 'New Center') {
-          $('#addNewCenter').modal('hide');
-        }
-      })
-      .catch(err => {
-        typeof err.response.data.message !== 'object' &&
-          alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) &&
-          logout('addNewCenter', this.props.history);
-      });
     event.preventDefault();
+    const name = this.name.value;
+    const address = this.address.value;
+    const location = this.location.value;
+    const capacity = this.capacity.value;
+    const price = this.price.value;
+    const availability = this.availability.value;
+    const token = JSON.parse(localStorage.token).value;
+    const modalTitle = this.props.modalTitle;
+    const history = this.props.history;
+    const setCenter = this.props.setCenterDetails;
+
+    let postCenter;
+    function saveCenter(res) {
+      const centerData = {
+        name,
+        address,
+        location,
+        capacity,
+        price,
+        availability,
+        token,
+        picture: res ? res.data.secure_url : undefined,
+        publicId: res ? res.data.public_id : undefined,
+      };
+      if (modalTitle === 'New Center') {
+        postCenter = axios.post(`${apiLink}/api/v1/centers`, centerData);
+      } else {
+        postCenter = axios.put(`${apiLink}/api/v1/centers/${centerId}`, centerData);
+      }
+      postCenter
+        .then(response => {
+          alert('Transaction Successful');
+          history.push(`/dashboard/centers/${response.data.data.id}`);
+          setCenter(response.data.data);
+          if (modalTitle !== 'New Center') {
+            $('#addNewCenter').modal('hide');
+          }
+        })
+        .catch(err => {
+          typeof err.response.data.message !== 'object' &&
+            alert(JSON.stringify(err.response.data.message));
+          (err.response.status === 403 || err.response.status === 401) &&
+            logout('addNewCenter', history);
+        });
+    }
+    if (this.picture.files[0]) {
+      const imageData = new FormData();
+      const publicId = `${Date.now()}-${this.picture.files[0].name}`;
+      imageData.append('file', this.picture.files[0]);
+      imageData.append('tags', 'center, facilities, events');
+      imageData.append('upload_preset', 'm4vlbdts');
+      imageData.append('api_key', '789891965151338');
+      imageData.append('timestamp', (Date.now() / 1000) | 0);
+      imageData.append('folder', this.folder);
+      imageData.append('public_id', publicId);
+      axios
+        .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
+        .then(res => saveCenter(res))
+        .catch(err => {
+          alert(err.response); // unsuccessful image upload
+        });
+    } else {
+      saveCenter(undefined);
+    }
   }
   componentWillReceiveProps(nextState) {
     const centerDefaults = nextState.centerDefaults;

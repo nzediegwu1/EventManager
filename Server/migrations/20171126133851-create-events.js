@@ -20,7 +20,7 @@ module.exports = {
         type: Sequelize.STRING, // image url
         allowNull: true,
       },
-      public_id: {
+      publicId: {
         type: Sequelize.STRING, // cloudinary image public_id
         allowNull: true,
       },
