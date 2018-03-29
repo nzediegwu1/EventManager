@@ -70,7 +70,7 @@ class ManageDetails extends Component {
         const type = currentPage === 'manageEvent' ? 'events' : 'centers';
         return `${apiLink}/api/v1/${type}/${param}/?token=${
           JSON.parse(localStorage.token).value
-        }&file=${resource.picture}`;
+        }&file=${resource.publicId}`;
       };
       const url = urlGenerator();
       axios

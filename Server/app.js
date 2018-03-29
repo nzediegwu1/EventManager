@@ -33,7 +33,7 @@ app.use('/api/v1/centers', centers);
 app.use('/api/v1/users', users);
 app.use('/api/v1/facilities', facilities);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 const server = http.createServer(app);
 
 server.listen(port, () => {

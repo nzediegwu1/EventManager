@@ -36,52 +36,84 @@ class AddEventComponent extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.folder = apiLink === 'http://localhost:8000' ? 'dev/events' : 'prod/events';
   }
   componentWillMount() {
     getCenters(axios, this.props.populateCenters);
   }
 
   handleSubmit(event) {
-    const newEvent = new FormData();
-    newEvent.append('title', this.name.value);
-    newEvent.append('picture', this.picture.files[0]);
-    newEvent.append('date', this.date.value);
-    newEvent.append('time', this.time.value);
-    newEvent.append('description', this.description.value);
-    newEvent.append('centerId', this.center.value);
-    newEvent.append('token', JSON.parse(localStorage.token).value);
-    let httpRequest;
-    if (this.props.modalTitle === 'New Event') {
-      httpRequest = axios.post(`${apiLink}/api/v1/events`, newEvent);
-    } else {
-      httpRequest = axios.put(`${apiLink}/api/v1/events/${eventId}`, newEvent);
-    }
-    httpRequest
-      .then(res => {
-        alert('Successful');
-        this.props.history.push(`/dashboard/events/${res.data.data.id}`);
-        this.props.setEventDetail(res.data.data);
-        if (this.props.modalTitle !== 'New Event') {
-          $('#addNewEvent').modal('hide');
-        }
-      })
-      .catch(err => {
-        typeof err.response.data.message !== 'object' &&
-          alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) &&
-          logout('addNewEvent', this.props.history);
-        if (typeof err.response.data.message === 'object') {
-          let occupiedDates = '';
-          err.response.data.message.OccupiedDates.forEach(date => {
-            occupiedDates += `${new Date(date).toDateString()}\n`;
-          });
-          alert(
-            `MESSAGE:\n${err.response.data.message.Sorry}\n\nSELECTED DATES:\n${occupiedDates}`
-          );
-          occupiedDates = '';
-        }
-      });
     event.preventDefault();
+    let postEvent;
+    const title = this.name.value;
+    const date = this.date.value;
+    const time = this.time.value;
+    const description = this.description.value;
+    const centerId = this.center.value;
+    const token = JSON.parse(localStorage.token).value;
+    const modalTitle = this.props.modalTitle;
+    const history = this.props.history;
+    const setEvent = this.props.setEventDetail;
+    function saveEvent(res) {
+      const eventData = {
+        title,
+        picture: res ? res.data.secure_url : undefined,
+        publicId: res ? res.data.public_id : undefined,
+        date,
+        time,
+        description,
+        centerId,
+        token,
+      };
+      if (modalTitle === 'New Event') {
+        postEvent = axios.post(`${apiLink}/api/v1/events`, eventData);
+      } else {
+        postEvent = axios.put(`${apiLink}/api/v1/events/${eventId}`, eventData);
+      }
+      postEvent
+        .then(response => {
+          history.push(`/dashboard/events/${response.data.data.id}`);
+          setEvent(response.data.data);
+          if (modalTitle !== 'New Event') {
+            $('#addNewEvent').modal('hide');
+          }
+        })
+        .catch(err => {
+          typeof err.response.data.message !== 'object' &&
+            alert(JSON.stringify(err.response.data.message));
+          (err.response.status === 403 || err.response.status === 401) &&
+            logout('addNewEvent', history);
+          if (typeof err.response.data.message === 'object') {
+            let occupiedDates = '';
+            err.response.data.message.OccupiedDates.forEach(date => {
+              occupiedDates += `${new Date(date).toDateString()}\n`;
+            });
+            alert(
+              `MESSAGE:\n${err.response.data.message.Sorry}\n\nSELECTED DATES:\n${occupiedDates}`
+            );
+            occupiedDates = '';
+          }
+        });
+    }
+    if (this.picture.files[0]) {
+      const imageData = new FormData();
+      const publicId = `${Date.now()}-${this.picture.files[0].name}`;
+      imageData.append('file', this.picture.files[0]);
+      imageData.append('tags', 'center, facilities, events');
+      imageData.append('upload_preset', 'm4vlbdts');
+      imageData.append('api_key', '789891965151338');
+      imageData.append('timestamp', (Date.now() / 1000) | 0);
+      imageData.append('folder', this.folder);
+      imageData.append('public_id', publicId);
+      axios
+        .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
+        .then(res => saveEvent(res))
+        .catch(err => {
+          alert(err.response); // unsuccessful image upload
+        });
+    } else {
+      saveEvent(undefined);
+    }
   }
   componentWillReceiveProps(nextState) {
     const eventDefaults = nextState.eventDefaults;

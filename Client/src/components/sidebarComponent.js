@@ -28,6 +28,7 @@ export class Sidebar extends Component {
   }
   changeLocation(url) {
     history.push(url);
+    $('#myModalSidebar').modal('hide');
   }
   render() {
     const content = (

@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING, // image url
       allowNull: true,
     },
-    public_id: {
+    publicId: {
       type: DataTypes.STRING, // cloudinary image public_id
       allowNull: true,
     },

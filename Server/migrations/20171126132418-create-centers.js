@@ -24,7 +24,7 @@ module.exports = {
     picture: {
       type: Sequelize.STRING, // Image url
     },
-    public_id: {
+    publicId: {
       type: Sequelize.STRING, // cloudinary image public_id
     },
     availability: {
