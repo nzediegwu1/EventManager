@@ -17,6 +17,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   centerDetails: state.centers.centerDetails,
+  facilities: state.facilities.facilities,
 });
 
 class CenterDetailsComponent extends Component {
@@ -49,9 +50,10 @@ class CenterDetailsComponent extends Component {
         </div>
       );
     }
+    const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
-        <ManageFacilities />
+        <ManageFacilities data={facilities} />
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
             history={this.props.history}
@@ -97,7 +99,7 @@ class CenterDetailsComponent extends Component {
               <button
                 type="submit"
                 id="manageFacty"
-                className="btn btn-success"
+                className="btn btn-success manageFacility"
                 data-toggle="modal"
                 data-target="#manageFacilities"
               >
@@ -113,42 +115,17 @@ class CenterDetailsComponent extends Component {
                 class="table-header"
               />
               <tbody>
-                <TableRow
-                  colNumber={3}
-                  columns={[<b>Projector</b>, <b>200w...</b>, <span className="badge">150</span>]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Backup power</b>,
-                    <b>150kw...</b>,
-                    <span className="badge">450</span>,
-                  ]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Sound system</b>,
-                    <b>500w...</b>,
-                    <span className="badge">200</span>,
-                  ]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Smart lighting</b>,
-                    <b>Energy...</b>,
-                    <span className="badge">349</span>,
-                  ]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Airconditioner</b>,
-                    <b>2kw...</b>,
-                    <span className="badge">57</span>,
-                  ]}
-                />
+                {facilities.map(facility => (
+                  <TableRow
+                    key={facility.id}
+                    colNumber={3}
+                    columns={[
+                      <b>{facility.name}</b>,
+                      <b>{facility.spec}</b>,
+                      <span className="badge">{facility.quantity}</span>,
+                    ]}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
