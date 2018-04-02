@@ -316,7 +316,8 @@ a:hover {
   color: white;
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
-  padding-top: 0.3em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 .add-facility-icon {
@@ -366,12 +367,12 @@ select {
   font-weight: 500;
 }
 .table-fixed thead {
-  width: 97%;
+  width: 100%;
 }
 .table-fixed tbody {
   height: 200px;
   overflow-y: scroll;
-  width: 99%;
+  width: 100%;
 }
 .table-fixed thead,
 .table-fixed tbody,
@@ -390,13 +391,11 @@ select {
     width: 33.33333333333333%;
   }
 }
-.last {
-  margin-bottom: 2em;
-  border-bottom: solid;
-  border-bottom-left-radius: 2em;
-  border-bottom-right-radius: 2em;
-}
 .index {
   height: 100vh;
   background-color: lightgrey;
+}
+.manageFacility {
+  float: right;
+  margin-right: 0.5em;
 }

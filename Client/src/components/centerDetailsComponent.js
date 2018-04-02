@@ -7,6 +7,8 @@ import { setPage } from '../actions/pageActions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { apiLink } from '../reusables';
+import manageIcon from '../resources/images/glyphicons-281-settings.png';
+import { ManageFacilities } from './manageFacilityComponent';
 
 const mapDispatchToProps = dispatch => ({
   setCenterDetails: center => dispatch(setCenterDetails(center)),
@@ -15,6 +17,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   centerDetails: state.centers.centerDetails,
+  facilities: state.facilities.facilities,
 });
 
 class CenterDetailsComponent extends Component {
@@ -47,8 +50,10 @@ class CenterDetailsComponent extends Component {
         </div>
       );
     }
+    const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
+        <ManageFacilities history={this.props.history} data={facilities} centerId={this.id}/>
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
             history={this.props.history}
@@ -86,56 +91,47 @@ class CenterDetailsComponent extends Component {
             </div>
           </div>
           <br />
+          <div className="top-eight add-facility">
+            <div className="col-sm-10 zero-padding add-facility-90">
+              <b className="appTitle">Facilities</b>
+            </div>
+            <div className="col-sm-2 zero-padding" id="addFacility">
+              <button
+                type="submit"
+                id="manageFacty"
+                className="btn btn-success manageFacility"
+                data-toggle="modal"
+                data-target="#manageFacilities"
+              >
+                <img src={manageIcon} alt="Edit" />
+              </button>
+            </div>
+          </div>
           <div className="table-responsive">
-            <table className="table table-hover table-fixed">
+            <table className="table table-hover table-fixed table-striped">
               <TableHead
                 colNumber={3}
-                columns={['Facilities', 'Spec', 'Quantity']}
+                columns={['Name', 'Spec', 'Quantity']}
                 class="table-header"
               />
               <tbody>
-                <TableRow
-                  colNumber={3}
-                  columns={[<b>Projector</b>, <b>200w...</b>, <span className="badge">150</span>]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Backup power</b>,
-                    <b>150kw...</b>,
-                    <span className="badge">450</span>,
-                  ]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Sound system</b>,
-                    <b>500w...</b>,
-                    <span className="badge">200</span>,
-                  ]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Smart lighting</b>,
-                    <b>Energy...</b>,
-                    <span className="badge">349</span>,
-                  ]}
-                />
-                <TableRow
-                  colNumber={3}
-                  columns={[
-                    <b>Airconditioner</b>,
-                    <b>2kw...</b>,
-                    <span className="badge">57</span>,
-                  ]}
-                />
+                {facilities.map(facility => (
+                  <TableRow
+                    key={facility.id}
+                    colNumber={3}
+                    columns={[
+                      <b>{facility.name}</b>,
+                      <b>{facility.spec}</b>,
+                      <span className="badge">{facility.quantity}</span>,
+                    ]}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
           <br />
-          <div className="table-responsive last">
-            <table className="table table-hover table-fixed">
+          <div className="table-responsive">
+            <table className="table table-hover table-fixed table-striped">
               <TableHead colNumber={3} columns={['Events', 'Title', 'Date']} class="table-header" />
               <tbody>
                 {center.events.map(event => (
@@ -143,11 +139,7 @@ class CenterDetailsComponent extends Component {
                     key={event.id}
                     colNumber={3}
                     columns={[
-                      <img
-                        className="center-image"
-                        src={`${event.picture}`}
-                        alt="event-view"
-                      />,
+                      <img className="center-image" src={`${event.picture}`} alt="event-view" />,
                       <b>
                         <Link className="event-detail" to={`/dashboard/events/${event.id}`}>
                           {event.title}

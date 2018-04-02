@@ -6,11 +6,8 @@ import centerImageIcon from '../resources/images/glyphicons-139-picture.png';
 import addressIcon from '../resources/images/glyphicons-243-map-marker.png';
 import cityIcon from '../resources/images/glyphicons-740-cadastral-map.png';
 import capacityIcon from '../resources/images/glyphicons-44-group.png';
-import amountIcon from '../resources/images/glyphicons-548-bitcoin.png';
-import addIcon from '../resources/images/glyphicons-191-plus-sign.png';
-import removeIcon from '../resources/images/glyphicons-198-remove-circle.png';
+import amountIcon from '../resources/images/glyphicons-228-usd.png';
 import { Option } from './selectOption';
-import { TableHead, TableRow } from './table';
 import axios from 'axios';
 import { logout, apiLink } from '../reusables';
 import { connect } from 'react-redux';
@@ -216,89 +213,6 @@ class AddCenterComponent extends React.Component {
                     <Option value="open" text="open" />
                     <Option value="close" text="close" />
                   </select>
-                </div>
-                <div className="form-group">
-                  <div className="top-eight add-facility">
-                    <div className="col-sm-10 zero-padding add-facility-90">
-                      <b>Add facility</b>
-                    </div>
-                    <div className="col-sm-2 zero-padding" id="addFacility">
-                      <a href="#">
-                        <img className="invert-color add-facility-icon" src={addIcon} />
-                      </a>
-                    </div>
-                  </div>
-                  <div className="table-responsive centerSearch">
-                    <table className="table table-hover grey-color">
-                      <TableHead
-                        colNumber={4}
-                        columns={[
-                          'Facilities',
-                          'Spec',
-                          'Quantity',
-                          <img src={removeIcon} alt="delete" />,
-                        ]}
-                        class="table-header"
-                      />
-                      <tbody>
-                        <TableRow
-                          colNumber={4}
-                          columns={[
-                            <b>Projector</b>,
-                            <b>200w...</b>,
-                            <span className="badge">150</span>,
-                            <div className="checkbox">
-                              <input type="checkbox" name="mark" />
-                            </div>,
-                          ]}
-                        />
-                        <TableRow
-                          colNumber={4}
-                          columns={[
-                            <b>Backup power</b>,
-                            <b>150kw...</b>,
-                            <span className="badge">450</span>,
-                            <div className="checkbox">
-                              <input type="checkbox" name="mark" />
-                            </div>,
-                          ]}
-                        />
-                        <TableRow
-                          colNumber={4}
-                          columns={[
-                            <b>Sound system</b>,
-                            <b>500w...</b>,
-                            <span className="badge">200</span>,
-                            <div className="checkbox">
-                              <input type="checkbox" name="mark" />
-                            </div>,
-                          ]}
-                        />
-                        <TableRow
-                          colNumber={4}
-                          columns={[
-                            <b>Smart lighting</b>,
-                            <b>Energy...</b>,
-                            <span className="badge">349</span>,
-                            <div className="checkbox">
-                              <input type="checkbox" name="mark" />
-                            </div>,
-                          ]}
-                        />
-                        <TableRow
-                          colNumber={4}
-                          columns={[
-                            <b>Airconditioner</b>,
-                            <b>2kw...</b>,
-                            <span className="badge">57</span>,
-                            <div className="checkbox">
-                              <input type="checkbox" name="mark" />
-                            </div>,
-                          ]}
-                        />
-                      </tbody>
-                    </table>
-                  </div>
                 </div>
                 <div className="modal-footer">
                   <button type="submit" className="btn btn-success createCenter">
