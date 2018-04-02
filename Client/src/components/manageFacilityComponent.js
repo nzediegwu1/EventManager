@@ -9,6 +9,8 @@ import removeIcon from '../resources/images/glyphicons-17-bin.png';
 import { TableHead, TableRow } from './table';
 import { populateFacilities, setUndeletedFacilities } from '../actions/facilityAction';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import { apiLink } from '../reusables';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -39,7 +41,20 @@ export class ManageFacilityComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit() {
-    this.props.populateFacilities(this.props.undeleted);
+    const undeleted = this.props.undeleted;
+    const token = JSON.parse(localStorage.token).value;
+    axios
+      .post(`${apiLink}/api/v1/facilities/${this.props.centerId}?token=${token}`, {
+        data: JSON.stringify({ content: undeleted }),
+      })
+      .then(res => {
+        this.props.populateFacilities(undeleted);
+        console.log(res.data.data);
+      })
+      .catch(error => {
+        alert(error);
+        console.log(error.response);
+      });
   }
   deleteMarked() {
     toDelete.forEach(index => {
@@ -180,12 +195,13 @@ export class ManageFacilityComponent extends React.Component {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="submit" hidden>Save</button>
+                  <button type="submit" hidden>
+                    Save
+                  </button>
                   <button
                     type="button"
                     className="btn btn-success createCenter"
                     onClick={this.handleSubmit}
-                    data-dismiss="modal"
                   >
                     Save
                   </button>
