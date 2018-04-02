@@ -53,7 +53,7 @@ class CenterDetailsComponent extends Component {
     const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
     const content = (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
-        <ManageFacilities data={facilities} centerId={this.id}/>
+        <ManageFacilities history={this.props.history} data={facilities} centerId={this.id}/>
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
             history={this.props.history}

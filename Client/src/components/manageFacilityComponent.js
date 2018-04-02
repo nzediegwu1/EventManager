@@ -10,7 +10,7 @@ import { TableHead, TableRow } from './table';
 import { populateFacilities, setUndeletedFacilities } from '../actions/facilityAction';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { apiLink } from '../reusables';
+import { apiLink, logout } from '../reusables';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -32,6 +32,7 @@ const mapStateToProps = state => ({
 let toDelete = [];
 let facilities;
 let checker = 0;
+let id = 0;
 export class ManageFacilityComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -41,19 +42,22 @@ export class ManageFacilityComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit() {
-    const undeleted = this.props.undeleted;
+    const facilityData = this.props.undeleted;
     const token = JSON.parse(localStorage.token).value;
     axios
       .post(`${apiLink}/api/v1/facilities/${this.props.centerId}?token=${token}`, {
-        data: JSON.stringify({ content: undeleted }),
+        data: JSON.stringify({ content: facilityData }),
       })
-      .then(res => {
-        this.props.populateFacilities(undeleted);
-        console.log(res.data.data);
+      .then(() => {
+        alert('Successfully saved!');
+        this.props.populateFacilities(facilityData);
+        $('#manageFacilities').modal('hide');
       })
-      .catch(error => {
-        alert(error);
-        console.log(error.response);
+      .catch(err => {
+        typeof err.response.data.message !== 'object' &&
+          alert(JSON.stringify(err.response.data.message));
+        (err.response.status === 403 || err.response.status === 401) &&
+          logout('manageFacilities', this.props.history);
       });
   }
   deleteMarked() {
@@ -78,11 +82,12 @@ export class ManageFacilityComponent extends React.Component {
     }
   }
   addFacility(event) {
+    id++;
     event.preventDefault();
     const name = this.name.value;
     const spec = this.spec.value;
     const quantity = this.quantity.value;
-    const newFacility = [{ name, spec, quantity }];
+    const newFacility = [{ id, name, spec, quantity }];
     this.props.setUndeletedFacilities([...facilities, ...newFacility]);
   }
   render() {
