@@ -50,33 +50,42 @@ class Events {
           }
         }
         function createNewEvent(entry) {
-          return model
-            .create(entry)
-            .then(created =>
-              model
-                .findById(created.id, {
-                  include: [
-                    { model: models.Centers, as: 'center' },
-                    { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
-                  ],
-                  attributes: { exclude: ['centerId', 'userId'] },
-                })
-                .then(response => validator.response(res, 'success', 201, response))
-                .catch(error =>
-                  cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                    validator.response(res, 'err', 500, error)
+          return models.Centers.findById(centerId)
+            .then(center => {
+              if (center.availability === 'open') {
+                return model
+                  .create(entry)
+                  .then(created =>
+                    model
+                      .findById(created.id, {
+                        include: [
+                          { model: models.Centers, as: 'center' },
+                          { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
+                        ],
+                        attributes: { exclude: ['centerId', 'userId'] },
+                      })
+                      .then(response => validator.response(res, 'success', 201, response))
+                      .catch(error =>
+                        cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                          validator.response(res, 'err', 500, error)
+                        )
+                      )
                   )
-                )
-            )
-            .catch(error => {
-              let errorMessage;
-              if (error.name === 'SequelizeForeignKeyConstraintError') {
-                errorMessage = 'center selected for event does not exist in database';
+                  .catch(error =>
+                    cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                      validator.response(res, 'error', 400, error)
+                    )
+                  );
               }
               return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                validator.response(res, 'error', 400, errorMessage || error)
+                validator.response(res, 'error', 403, 'Selected center is unavailable')
               );
-            });
+            })
+            .catch(() =>
+              cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                validator.response(res, 'error', 400, 'center selected does not exist')
+              )
+            );
         }
         const newEntry = {
           title,
@@ -140,51 +149,65 @@ class Events {
             }
           }
           function modifyEvent(modified) {
-            return model
-              .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-              .then(found =>
-                found
-                  .updateAttributes(modified)
-                  .then(updatedEvent => {
-                    function update() {
-                      model
-                        .findById(updatedEvent.id, {
-                          include: [
-                            { model: models.Centers, as: 'center' },
-                            {
-                              model: models.Users,
-                              as: 'user',
-                              attributes: { exclude: ['password'] },
-                            },
-                          ],
-                          attributes: { exclude: ['centerId', 'userId'] },
+            return models.Centers.findById(centerId)
+              .then(center => {
+                if (center.availability === 'open') {
+                  return model
+                    .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
+                    .then(found =>
+                      found
+                        .updateAttributes(modified)
+                        .then(updatedEvent => {
+                          function update() {
+                            model
+                              .findById(updatedEvent.id, {
+                                include: [
+                                  { model: models.Centers, as: 'center' },
+                                  {
+                                    model: models.Users,
+                                    as: 'user',
+                                    attributes: { exclude: ['password'] },
+                                  },
+                                ],
+                                attributes: { exclude: ['centerId', 'userId'] },
+                              })
+                              .then(response => validator.response(res, 'success', 201, response))
+                              .catch(error =>
+                                cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                                  validator.response(res, 'err', 500, error)
+                                )
+                              );
+                          }
+                          return update();
                         })
-                        .then(response => validator.response(res, 'success', 201, response))
-                        .catch(error => cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                          validator.response(res, 'err', 500, error)
-                        ));
-                    }
-                    return update();
-                  })
-                  .catch(error => {
-                    let errorMessage;
-                    if (error.name === 'SequelizeForeignKeyConstraintError') {
-                      errorMessage = 'center selected for event does not exist in table';
-                    }
-                    return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                      validator.response(res, 'error', 400, errorMessage || error)
+                        .catch(error =>
+                          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                            validator.response(res, 'error', 400, error)
+                          )
+                        )
+                    )
+                    .catch(() =>
+                      cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                        validator.response(
+                          res,
+                          'error',
+                          403,
+                          'Attempt to update unexisting or unauthorized item'
+                        )
+                      )
                     );
-                  })
-              )
-              .catch(() => cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                validator.response(
-                  res,
-                  'error',
-                  403,
-                  'Attempt to update unexisting or unauthorized item'
+                }
+                return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                  validator.response(res, 'error', 403, 'Selected center is unavailable')
+                );
+              })
+              .catch(() =>
+                cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+                  validator.response(res, 'error', 400, 'Center selected does not exist')
                 )
-              ));
+              );
           }
+
           const modifiedEntry = {
             title,
             date: timestamp,
@@ -196,9 +219,11 @@ class Events {
           };
           return modifyEvent(modifiedEntry);
         })
-        .catch(error => cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-          validator.response(res, 'err', 500, error)
-        ));
+        .catch(error =>
+          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+            validator.response(res, 'err', 500, error)
+          )
+        );
     }
     return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
   }
