@@ -27,7 +27,15 @@ class Validator {
       }
       return res.status(statusCode).json({ status: 'error', message: value });
     };
-
+    this.responseWithCloudinary = (req, res, errorCode, errorMessage) => {
+      if (req.body.publicId) {
+        return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
+          this.response(res, 'error', errorCode, errorMessage)
+        );
+      }
+      return this.response(res, 'error', errorCode, errorMessage);
+    };
+    
     // validate time using 24-hours format 00:00
     this.formatTime = time => {
       let result = false;

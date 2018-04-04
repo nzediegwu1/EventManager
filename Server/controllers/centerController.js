@@ -16,14 +16,8 @@ class Centers {
       picture.trim().length === 0 ||
       picture.length > 254
     ) {
-      return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-        validator.response(
-          res,
-          'error',
-          400,
-          'Center picture should be non-empty string less 255 characters'
-        )
-      );
+      const errorMessage = 'Center picture should be non-empty string less 255 characters';
+      return validator.responseWithCloudinary(req, res, 400, errorMessage);
       // validate center image public_id
     } else if (
       publicId === undefined ||
@@ -31,14 +25,8 @@ class Centers {
       publicId.trim().length === 0 ||
       publicId.length > 254
     ) {
-      return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-        validator.response(
-          res,
-          'error',
-          400,
-          'Center image public_id should be non-empty string less 255 characters'
-        )
-      );
+      const errorMessage = 'Center image public_id should be non-empty string less 255 characters';
+      return validator.responseWithCloudinary(req, res, 400, errorMessage);
     }
     return models.Users.findById(req.decoded.id)
       .then(user => {
@@ -60,9 +48,7 @@ class Centers {
                 });
               }
               if (sameCenter) {
-                return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                  validator.response(res, 'err', 406, sameCenter)
-                );
+                return validator.responseWithCloudinary(req, res, 406, sameCenter);
               }
               const newEntry = {
                 name,
@@ -92,33 +78,16 @@ class Centers {
                       attributes: { exclude: ['userId'] },
                     })
                     .then(response => validator.response(res, 'success', 201, response))
-                    .catch(error =>
-                      cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                        validator.response(res, 'err', 500, error)
-                      )
-                    )
+                    .catch(error => validator.responseWithCloudinary(req, res, 500, error))
                 )
-                .catch(error =>
-                  cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                    validator.response(res, 'err', 500, error)
-                  )
-                );
+                .catch(error => validator.responseWithCloudinary(req, res, 500, error));
             })
-            .catch(error =>
-              cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                validator.response(res, 'err', 500, error)
-              )
-            );
+            .catch(error => validator.responseWithCloudinary(req, res, 500, error));
         }
-        return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-          validator.response(res, 'err', 403, 'Only an admin can perform this action')
-        );
+        const errorMessage = 'Only an admin can perform this action';
+        return validator.responseWithCloudinary(req, res, 403, errorMessage);
       })
-      .catch(error =>
-        cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-          validator.response(res, 'err', 500, error)
-        )
-      );
+      .catch(error => validator.responseWithCloudinary(req, res, 500, error));
   }
 
   // modify a center
@@ -155,9 +124,7 @@ class Centers {
             });
           }
           if (sameCenter) {
-            return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-              validator.response(res, 'err', 406, sameCenter)
-            );
+            return validator.responseWithCloudinary(req, res, 406, sameCenter);
           }
 
           function modifyCenter(modified) {
@@ -182,30 +149,16 @@ class Centers {
                           attributes: { exclude: ['userId'] },
                         })
                         .then(response => validator.response(res, 'success', 201, response))
-                        .catch(error =>
-                          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                            validator.response(res, 'err', 500, error)
-                          )
-                        );
+                        .catch(error => validator.responseWithCloudinary(req, res, 500, error));
                     }
                     return update();
                   })
-                  .catch(error =>
-                    cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                      validator.response(res, 'err', 500, error)
-                    )
-                  )
+                  .catch(error => validator.responseWithCloudinary(req, res, 500, error))
               )
-              .catch(() =>
-                cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                  validator.response(
-                    res,
-                    'error',
-                    403,
-                    'Attempt to update unexisting or unauthorized item'
-                  )
-                )
-              );
+              .catch(() => {
+                const errorMessage = 'Attempt to update unexisting or unauthorized item';
+                return validator.responseWithCloudinary(req, res, 403, errorMessage);
+              });
           }
           const modifiedEntry = {
             name,
@@ -220,11 +173,7 @@ class Centers {
           };
           return modifyCenter(modifiedEntry);
         })
-        .catch(error =>
-          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-            validator.response(res, 'err', 500, error)
-          )
-        );
+        .catch(error => validator.responseWithCloudinary(req, res, 500, error));
     }
     return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
   }

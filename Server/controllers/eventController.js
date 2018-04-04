@@ -44,9 +44,7 @@ class Events {
             }
           });
           if (errorMessage) {
-            return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-              validator.response(res, 'error', 406, errorMessage)
-            );
+            return validator.responseWithCloudinary(req, res, 406, errorMessage);
           }
         }
         function createNewEvent(entry) {
@@ -60,32 +58,22 @@ class Events {
                       .findById(created.id, {
                         include: [
                           { model: models.Centers, as: 'center' },
-                          { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
+                          {
+                            model: models.Users,
+                            as: 'user',
+                            attributes: { exclude: ['password'] },
+                          },
                         ],
                         attributes: { exclude: ['centerId', 'userId'] },
                       })
                       .then(response => validator.response(res, 'success', 201, response))
-                      .catch(error =>
-                        cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                          validator.response(res, 'err', 500, error)
-                        )
-                      )
+                      .catch(error => validator.responseWithCloudinary(req, res, 500, error))
                   )
-                  .catch(error =>
-                    cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                      validator.response(res, 'error', 400, error)
-                    )
-                  );
+                  .catch(error => validator.responseWithCloudinary(req, res, 400, error));
               }
-              return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                validator.response(res, 'error', 403, 'Selected center is unavailable')
-              );
+              return validator.responseWithCloudinary(req, res, 406, 'Selected center is unavailable');
             })
-            .catch(() =>
-              cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                validator.response(res, 'error', 400, 'center selected does not exist')
-              )
-            );
+            .catch(() => validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist'));
         }
         const newEntry = {
           title,
@@ -98,11 +86,7 @@ class Events {
         };
         return createNewEvent(newEntry);
       })
-      .catch(error =>
-        cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-          validator.response(res, 'err', 500, error)
-        )
-      );
+      .catch(error => validator.responseWithCloudinary(req, res, 500, error));
   }
 
   // modify an event
@@ -143,9 +127,7 @@ class Events {
               }
             });
             if (errorMessage) {
-              return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                validator.response(res, 'err', 406, errorMessage)
-              );
+              return validator.responseWithCloudinary(req, res, 406, errorMessage);
             }
           }
           function modifyEvent(modified) {
@@ -172,40 +154,17 @@ class Events {
                                 attributes: { exclude: ['centerId', 'userId'] },
                               })
                               .then(response => validator.response(res, 'success', 201, response))
-                              .catch(error =>
-                                cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                                  validator.response(res, 'err', 500, error)
-                                )
-                              );
+                              .catch(error => validator.responseWithCloudinary(req, res, 500, error));
                           }
                           return update();
                         })
-                        .catch(error =>
-                          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                            validator.response(res, 'error', 400, error)
-                          )
-                        )
+                        .catch(error => validator.responseWithCloudinary(req, res, 400, error))
                     )
-                    .catch(() =>
-                      cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                        validator.response(
-                          res,
-                          'error',
-                          403,
-                          'Attempt to update unexisting or unauthorized item'
-                        )
-                      )
-                    );
+                    .catch(() => validator.responseWithCloudinary(req, res, 403, 'Unexisting or unauthorized item'));
                 }
-                return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                  validator.response(res, 'error', 403, 'Selected center is unavailable')
-                );
+                return validator.responseWithCloudinary(req, res, 406, 'Selected center is unavailable');
               })
-              .catch(() =>
-                cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-                  validator.response(res, 'error', 400, 'Center selected does not exist')
-                )
-              );
+              .catch(() => validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist'));
           }
 
           const modifiedEntry = {
@@ -219,11 +178,7 @@ class Events {
           };
           return modifyEvent(modifiedEntry);
         })
-        .catch(error =>
-          cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-            validator.response(res, 'err', 500, error)
-          )
-        );
+        .catch(error => validator.responseWithCloudinary(req, res, 500, error));
     }
     return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
   }
