@@ -2,6 +2,11 @@
 import Val from '../middlewares/validator';
 import cloudinary from 'cloudinary';
 
+cloudinary.config({
+  cloud_name: 'eventmanager',
+  api_key: '789891965151338',
+  api_secret: 'ynezeVbgUnGIfNYKj19GvyrflSI',
+});
 const validator = new Val('centers');
 const model = models.Centers;
 
@@ -126,14 +131,20 @@ class Centers {
           if (sameCenter) {
             return validator.responseWithCloudinary(req, res, 406, sameCenter);
           }
-
+          let oldImage;
           function modifyCenter(modified) {
             return model
               .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-              .then(found =>
-                found
+              .then(found => {
+                if (req.body.publicId) {
+                  oldImage = found.publicId;
+                }
+                return found
                   .updateAttributes(modified)
                   .then(updatedCenter => {
+                    if (req.body.publicId) {
+                      cloudinary.v2.uploader.destroy(oldImage);
+                    }
                     function update() {
                       return model
                         .findById(updatedCenter.id, {
@@ -153,8 +164,8 @@ class Centers {
                     }
                     return update();
                   })
-                  .catch(error => validator.responseWithCloudinary(req, res, 500, error))
-              )
+                  .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+              })
               .catch(() => {
                 const errorMessage = 'Attempt to update unexisting or unauthorized item';
                 return validator.responseWithCloudinary(req, res, 403, errorMessage);

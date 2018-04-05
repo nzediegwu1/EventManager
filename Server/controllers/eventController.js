@@ -2,6 +2,12 @@
 import Val from '../middlewares/validator';
 import cloudinary from 'cloudinary';
 
+cloudinary.config({
+  cloud_name: 'eventmanager',
+  api_key: '789891965151338',
+  api_secret: 'ynezeVbgUnGIfNYKj19GvyrflSI',
+});
+
 const validator = new Val('events');
 const model = models.Events;
 
@@ -71,9 +77,16 @@ class Events {
                   )
                   .catch(error => validator.responseWithCloudinary(req, res, 400, error));
               }
-              return validator.responseWithCloudinary(req, res, 406, 'Selected center is unavailable');
+              return validator.responseWithCloudinary(
+                req,
+                res,
+                406,
+                'Selected center is unavailable'
+              );
             })
-            .catch(() => validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist'));
+            .catch(() =>
+              validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist')
+            );
         }
         const newEntry = {
           title,
@@ -130,16 +143,23 @@ class Events {
               return validator.responseWithCloudinary(req, res, 406, errorMessage);
             }
           }
+          let oldImage;
           function modifyEvent(modified) {
             return models.Centers.findById(centerId)
               .then(center => {
                 if (center.availability === 'open') {
                   return model
                     .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-                    .then(found =>
-                      found
+                    .then(found => {
+                      if (req.body.publicId) {
+                        oldImage = found.publicId;
+                      }
+                      return found
                         .updateAttributes(modified)
                         .then(updatedEvent => {
+                          if (req.body.publicId) {
+                            cloudinary.v2.uploader.destroy(oldImage);
+                          }
                           function update() {
                             model
                               .findById(updatedEvent.id, {
@@ -154,17 +174,33 @@ class Events {
                                 attributes: { exclude: ['centerId', 'userId'] },
                               })
                               .then(response => validator.response(res, 'success', 201, response))
-                              .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+                              .catch(error =>
+                                validator.responseWithCloudinary(req, res, 500, error)
+                              );
                           }
                           return update();
                         })
-                        .catch(error => validator.responseWithCloudinary(req, res, 400, error))
-                    )
-                    .catch(() => validator.responseWithCloudinary(req, res, 403, 'Unexisting or unauthorized item'));
+                        .catch(error => validator.responseWithCloudinary(req, res, 400, error));
+                    })
+                    .catch(() =>
+                      validator.responseWithCloudinary(
+                        req,
+                        res,
+                        403,
+                        'Unexisting or unauthorized item'
+                      )
+                    );
                 }
-                return validator.responseWithCloudinary(req, res, 406, 'Selected center is unavailable');
+                return validator.responseWithCloudinary(
+                  req,
+                  res,
+                  406,
+                  'Selected center is unavailable'
+                );
               })
-              .catch(() => validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist'));
+              .catch(() =>
+                validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist')
+              );
           }
 
           const modifiedEntry = {
@@ -185,7 +221,6 @@ class Events {
 
   // delete an event
   deleteEvent(req, res) {
-    // get recipe where index is same as id parameter and delete
     if (validator.confirmParams(req, res) === true) {
       return model
         .destroy({ where: { id: req.params.id, userId: req.decoded.id } })

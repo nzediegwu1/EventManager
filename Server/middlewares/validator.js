@@ -35,7 +35,7 @@ class Validator {
       }
       return this.response(res, 'error', errorCode, errorMessage);
     };
-    
+
     // validate time using 24-hours format 00:00
     this.formatTime = time => {
       let result = false;
@@ -119,14 +119,7 @@ class Validator {
 
     this.verifyCenter = (req, res, next) => {
       // validate center name
-      const {
-        name,
-        address,
-        location,
-        capacity,
-        price,
-        availability,
-      } = req.body;
+      const { name, address, location, capacity, price, availability } = req.body;
       if (
         name === undefined ||
         typeof name !== 'string' ||
