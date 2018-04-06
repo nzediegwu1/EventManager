@@ -2,7 +2,6 @@
   "name": "event-manager",
   "version": "1.0.0",
   "description": "Event manager application",
-  "main": "Server/bin",
   "scripts": {
     "start": "nodemon --watch server/ --exec babel-node  -- server/app.js",
     "test": "nyc --reporter=html --reporter=text mocha --timeout 250000 ./Server/tests/ --compilers js:babel-register",
