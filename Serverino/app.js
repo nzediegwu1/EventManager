@@ -13,7 +13,7 @@ import * as http from 'http';
 
 const app = express();
 const options = {
-  controllers: './Server/controllers',
+  controllers: './server/controllers',
   useStubs: true,
 };
 
@@ -27,7 +27,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to allow chai-http post and put tests to run
 app.use(history());
-app.use(express.static(path.join(__dirname, '../Client/dist')));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
 app.use('/api/v1/users', users);
