@@ -24,6 +24,11 @@ module.exports = {
         type: Sequelize.STRING, // cloudinary image public_id
         allowNull: true,
       },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'approved',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -53,5 +58,5 @@ module.exports = {
         },
       },
     }),
-  down: (queryInterface) => queryInterface.dropTable('Events'),
+  down: queryInterface => queryInterface.dropTable('Events'),
 };

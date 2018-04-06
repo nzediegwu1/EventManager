@@ -240,6 +240,7 @@ class Events {
     // gets all users' details excluding password
     return model
       .findAll({
+        where: { status: 'approved' },
         include: [
           { model: models.Centers, as: 'center' },
           { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
@@ -271,6 +272,34 @@ class Events {
           return validator.response(res, 'error', 404, 'Could not find Event');
         })
         .catch(error => validator.response(res, 'error', 500, error));
+    }
+    return validator.invalidParameter;
+  }
+
+  approveEvent(req, res) {
+    if (validator.confirmParams(req, res) === true) {
+      const status = req.query.status;
+      if (status === 'approved' || status === 'rejected') {
+        const eventId = parseInt(req.params.id, 10);
+        return model
+          .findById(eventId, {
+            include: [{ model: models.Centers, as: 'center' }],
+          })
+          .then(found => {
+            if (found.center.userId === req.decoded.id) {
+              const data = { status };
+              return model.update(data, { where: { id: eventId } }).then(updateStatus => {
+                if (updateStatus[0] === 1) {
+                  return validator.response(res, 'success', 200, 'Transaction successful');
+                }
+                return validator.response(res, 'error', 500, 'Unexpected error');
+              });
+            }
+            return validator.response(res, 'error', 403, 'Not priviledge to perform this action');
+          })
+          .catch(() => validator.response(res, 'error', 404, 'The event does not exist'));
+      }
+      return validator.response(res, 'error', 400, 'Status should be [approve] or [reject]');
     }
     return validator.invalidParameter;
   }
