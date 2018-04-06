@@ -4,7 +4,8 @@
   "description": "Event manager application",
   "scripts": {
     "start": "nodemon --watch server/ --exec babel-node  -- server/app.js",
-    "test": "nyc --reporter=html --reporter=text mocha --timeout 250000 ./Server/tests/ --compilers js:babel-register",
+    "test":
+      "nyc --reporter=html --reporter=text mocha --timeout 250000 ./server/tests/ --compilers js:babel-register",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
     "client": "webpack -d && webpack-dev-server --progress"
@@ -13,13 +14,7 @@
     "type": "git",
     "url": "https://github.com/nzediegwu1/EventManager.git"
   },
-  "keywords": [
-    "events",
-    "facility",
-    "centers",
-    "locations",
-    "fullstack"
-  ],
+  "keywords": ["events", "facility", "centers", "locations", "fullstack"],
   "author": "Anaeze Nsoffor",
   "license": "MIT",
   "bugs": {
