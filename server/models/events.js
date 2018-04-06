@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     centerId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
+    status: DataTypes.STRING,
   });
   Events.associate = models => {
     // associations can be defined here

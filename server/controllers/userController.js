@@ -20,7 +20,8 @@ class Users {
             // if username/email already exists
             if (
               members[item].username === req.body.username ||
-              members[item].email === req.body.email
+              members[item].email === req.body.email ||
+              members[item].phoneNo === req.body.phoneNo
             ) {
               // unacceptable
               return signupValidator.response(res, 'err', 406, 'User already exists');
