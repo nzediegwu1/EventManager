@@ -7,8 +7,7 @@ import axios from 'axios';
 import { setEventDetail } from '../actions/eventActions';
 import { setPage } from '../actions/pageActions';
 import { TableRow } from './table';
-import { apiLink } from '../reusables';
-
+import { apiLink, logout } from '../reusables';
 
 const mapDispatchToProps = dispatch => ({
   setEventDetail: event => dispatch(setEventDetail(event)),
@@ -22,6 +21,8 @@ class ManageEventComponent extends Component {
   constructor(props) {
     super(props);
     this.id = this.props.match.params.id;
+    this.approve = this.approve.bind(this);
+    this.loggedInUser = JSON.parse(localStorage.token).id;
   }
   componentWillMount() {
     axios
@@ -40,6 +41,27 @@ class ManageEventComponent extends Component {
   }
   componentWillUnmount() {
     this.props.setPage('dashboard');
+  }
+  approve(e) {
+    const token = JSON.parse(localStorage.token).value;
+    const value = e.target.checked;
+    const status = value === true ? 'approved' : 'rejected';
+    axios
+      .put(
+        `${apiLink}/api/v1/events/approve/${
+          this.props.match.params.id
+        }?status=${status}&token=${token}`
+      )
+      .then(res => {
+        this.props.setEventDetail(res.data.data);
+        alert(res.data.data.status);
+      })
+      .catch(err => {
+        typeof err.response.data.message !== 'object' &&
+          alert(JSON.stringify(err.response.data.message));
+        (err.response.status === 403 || err.response.status === 401) &&
+          logout('addNewCenter', this.props.history);
+      });
   }
   render() {
     const event = this.props.eventDetails[0];
@@ -63,11 +85,7 @@ class ManageEventComponent extends Component {
         <div className="card-body">
           <div className="row">
             <div className="col-sm-5">
-              <img
-                className="card-image"
-                src={`${event.picture}`}
-                alt="eventImage"
-              />
+              <img className="card-image" src={`${event.picture}`} alt="eventImage" />
             </div>
             <div className="col-sm-7">
               <div className="table-responsive">
@@ -86,6 +104,30 @@ class ManageEventComponent extends Component {
                     />
                     <TableRow colNumber={2} columns={['By', event.user.name]} />
                     <TableRow colNumber={2} columns={['Contact', event.user.email]} />
+                    {
+                      <TableRow
+                        colNumber={2}
+                        columns={[
+                          'Status',
+                          event.center.userId === this.loggedInUser ? (
+                            <div className="form-group">
+                              <span className="switch switch-sm">
+                                <input
+                                  onChange={this.approve}
+                                  type="checkbox"
+                                  checked={event.status === 'approved' ? 'checked' : false}
+                                  className="switch"
+                                  id="switch-sm"
+                                />
+                                <label htmlFor="switch-sm">Approve</label>
+                              </span>
+                            </div>
+                          ) : (
+                            event.status
+                          ),
+                        ]}
+                      />
+                    }
                   </tbody>
                 </table>
               </div>

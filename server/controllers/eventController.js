@@ -1,7 +1,15 @@
 ﻿import models from '../models';
 import Val from '../middlewares/validator';
 import cloudinary from 'cloudinary';
+import nodemailer from 'nodemailer';
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'eventmgronline@gmail.com',
+    pass: 'isikote657',
+  },
+});
 cloudinary.config({
   cloud_name: 'eventmanager',
   api_key: '789891965151338',
@@ -283,16 +291,36 @@ class Events {
         const eventId = parseInt(req.params.id, 10);
         return model
           .findById(eventId, {
-            include: [{ model: models.Centers, as: 'center' }],
+            include: [
+              { model: models.Centers, as: 'center' },
+              {
+                model: models.Users,
+                as: 'user',
+                attributes: { exclude: ['password'] },
+              },
+            ],
+            attributes: { exclude: ['centerId', 'userId'] },
           })
           .then(found => {
             if (found.center.userId === req.decoded.id) {
               const data = { status };
-              return model.update(data, { where: { id: eventId } }).then(updateStatus => {
-                if (updateStatus[0] === 1) {
-                  return validator.response(res, 'success', 200, 'Transaction successful');
-                }
-                return validator.response(res, 'error', 500, 'Unexpected error');
+              return found.updateAttributes(data).then(updatedEvent => {
+                const mailOption = {
+                  from: 'eventmgronline@gmail.com',
+                  to: updatedEvent.user.email,
+                  subject: `Event ${updatedEvent.status}`,
+                  text: `Dear ${
+                    updatedEvent.user.name
+                  },\n\nThis is to inform you that your event titled '${
+                    updatedEvent.title
+                  }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`,
+                };
+                return transporter.sendMail(mailOption, err => {
+                  if (err) {
+                    console.log(err);
+                  }
+                  return validator.response(res, 'success', 200, updatedEvent);
+                });
               });
             }
             return validator.response(res, 'error', 403, 'Not priviledge to perform this action');
