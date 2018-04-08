@@ -186,7 +186,8 @@ class Centers {
         })
         .catch(error => validator.responseWithCloudinary(req, res, 500, error));
     }
-    return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
+    cloudinary.v2.uploader.destroy(req.body.publicId);
+    return validator.invalidParameter;
   }
 
   // get all centers

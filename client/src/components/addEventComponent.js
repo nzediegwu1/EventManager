@@ -36,7 +36,7 @@ class AddEventComponent extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.folder = apiLink === 'http://localhost:8000' ? 'dev/events' : 'prod/events';
+    this.folder = apiLink === 'http://localhost:8080' ? 'dev/events' : 'prod/events';
   }
   componentWillMount() {
     getCenters(axios, this.props.populateCenters);

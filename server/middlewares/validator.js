@@ -29,9 +29,8 @@ class Validator {
     };
     this.responseWithCloudinary = (req, res, errorCode, errorMessage) => {
       if (req.body.publicId) {
-        return cloudinary.v2.uploader.destroy(req.body.publicId, () =>
-          this.response(res, 'error', errorCode, errorMessage)
-        );
+        cloudinary.v2.uploader.destroy(req.body.publicId);
+        return this.response(res, 'error', errorCode, errorMessage);
       }
       return this.response(res, 'error', errorCode, errorMessage);
     };
@@ -114,7 +113,8 @@ class Validator {
         next();
         return this.verificationError;
       }
-      return cloudinary.v2.uploader.destroy(req.body.publicId, () => this.verificationError);
+      cloudinary.v2.uploader.destroy(req.body.publicId);
+      return this.verificationError;
     };
 
     this.verifyCenter = (req, res, next) => {
@@ -180,7 +180,8 @@ class Validator {
         next();
         return this.verificationError;
       }
-      return cloudinary.v2.uploader.destroy(req.body.publicId, () => this.verificationError);
+      cloudinary.v2.uploader.destroy(req.body.publicId);
+      return this.verificationError;
     };
     this.verifyUser = (req, res, context, next) => {
       if (context === 'signup') {

@@ -224,7 +224,8 @@ class Events {
         })
         .catch(error => validator.responseWithCloudinary(req, res, 500, error));
     }
-    return cloudinary.v2.uploader.destroy(req.body.publicId, () => validator.invalidParameter);
+    cloudinary.v2.uploader.destroy(req.body.publicId);
+    return validator.invalidParameter;
   }
 
   // delete an event
@@ -232,11 +233,10 @@ class Events {
     if (validator.confirmParams(req, res) === true) {
       return model
         .destroy({ where: { id: req.params.id, userId: req.decoded.id } })
-        .then(() =>
-          cloudinary.v2.uploader.destroy(req.query.file, () =>
-            validator.response(res, 'success', 200, 'Successfully deleted')
-          )
-        )
+        .then(() => {
+          cloudinary.v2.uploader.destroy(req.query.file);
+          return validator.response(res, 'success', 200, 'Successfully deleted');
+        })
         .catch(() => validator.response(res, 'error', 400, 'Invalid transaction'));
       // Event does not exist or User not priviledged to delete
     }
@@ -315,12 +315,8 @@ class Events {
                     updatedEvent.title
                   }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`,
                 };
-                return transporter.sendMail(mailOption, err => {
-                  if (err) {
-                    console.log(err);
-                  }
-                  return validator.response(res, 'success', 200, updatedEvent);
-                });
+                transporter.sendMail(mailOption);
+                return validator.response(res, 'success', 200, updatedEvent);
               });
             }
             return validator.response(res, 'error', 403, 'Not priviledge to perform this action');
