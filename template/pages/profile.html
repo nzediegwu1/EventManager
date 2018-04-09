@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+  <link href="../resources/styles/bootstrap.css" rel="stylesheet" />
+  <script src="../resources/scripts/jquery.js"></script>
+  <script src="../resources/scripts/popper.min.js"></script>
+  <script src="../resources/scripts/bootstrap.js"></script>
+  <style>
+    .custom-container {
+      padding-top: 8em;
+      width: 100%;
+      background-color: white;
+    }
+
+    .appBackground {
+      background-color: lightgrey;
+    }
+
+    .profile-image {
+      margin: auto;
+      width: 100%;
+      height: 400px;
+    }
+
+    .custom-file-control {
+      background-color: lightgrey;
+    }
+
+    .custom-file {
+      text-align: center;
+      margin: auto;
+      width: 100%;
+    }
+
+    .image-div {
+      margin-bottom: 1em;
+    }
+
+    .edit-profile-form {
+      background-color: lightgrey;
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+
+    .tab-style {
+      background-color: lightgrey;
+      padding: 0.4em;
+      font-weight: 700;
+    }
+
+    .profile-edit-buttons {
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+    }
+    .right-margin {
+      margin-right: 0.5em;
+    }
+  </style>
+</head>
+
+<body class="appBackground">
+  <div id="content" class="container custom-container">
+    <div class="mx-sm-auto col-sm-11">
+      <div class="row">
+        <div class="col-lg-4 image-div">
+          <img src="../resources/images/beijing.jpg" class="profile-image img-circle" alt="avatar">
+          <h6 class="text-center">Upload a different photo</h6>
+          <label class="custom-file">
+              <input type="file" id="file" class="custom-file-input">
+              <span class="custom-file-control">Choose file</span>
+          </label>
+        </div>
+        <div class="col-lg-8">
+          <ul class="nav nav-tabs tab-style">
+            <li class="nav-item">
+              <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit</a>
+            </li>
+          </ul>
+          <br/>
+          <div class="tab-content">
+            <div class="tab-pane active" id="profile">
+              <h4 class="text-center">Anaeze Nsoffor</h4>
+              <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>Username</td>
+                      <td>nzediegwu1</td>
+                    </tr>
+                    <tr>
+                      <td>Phone</td>
+                      <td>2347067356519</td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>nzediegwu1@gmail.com</td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>1/2 Pound Road, Aba, Abia State</td>
+                    </tr>
+                    <tr>
+                      <td>Company</td>
+                      <td>Andela Inc</td>
+                    </tr>
+                    <tr>
+                      <td>Website</td>
+                      <td>www.anaeze1.andela.com</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--/row-->
+            </div>
+            <div class="tab-pane edit-profile-form" id="edit">
+              <h4 class="text-center">Edit Profile</h4>
+              <form role="form">
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">First name</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="text" value="Jane">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Last name</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="text" value="Bishop">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Email</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="email" value="email@gmail.com">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Company</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="text" value="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Website</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="url" value="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Address</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="text" value="" placeholder="Street">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label"></label>
+                  <div class="col-lg-6">
+                    <input class="form-control" type="text" value="" placeholder="City">
+                  </div>
+                  <div class="col-lg-3">
+                    <input class="form-control" type="text" value="" placeholder="State">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Username</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="text" value="janeuser">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Password</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="password" value="11111122333">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-lg-3 col-form-label form-control-label">Confirm password</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" type="password" value="11111122333">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="profile-edit-buttons">
+                    <input type="reset" class="btn btn-secondary right-margin" value="Cancel">
+                    <input type="button" class="btn btn-primary" value="Save">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+</body>
+
+</html>
