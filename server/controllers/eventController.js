@@ -283,7 +283,6 @@ class Events {
     }
     return validator.invalidParameter;
   }
-
   approveEvent(req, res) {
     if (validator.confirmParams(req, res) === true) {
       const status = req.query.status;

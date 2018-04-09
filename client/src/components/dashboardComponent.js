@@ -7,6 +7,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { EventRouter } from './eventRouter';
 import { CenterRouter } from './centerRouter';
 import { connect } from 'react-redux';
+import { Profile } from './profileComponent';
 
 const mapStateToProps = state => ({
   accountType: state.accountType.accountType,
@@ -24,6 +25,7 @@ class DashboardComponent extends Component {
             <Route path={`${this.props.match.path}`} component={AddCenter} />
           )}
           <Switch>
+            <Route path={`${this.props.match.path}/profile`} component={Profile} />
             <Route path={`${this.props.match.path}/centers`} component={CenterRouter} />
             <Route path={`${this.props.match.path}`} component={EventRouter} />
           </Switch>

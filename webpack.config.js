@@ -5,12 +5,12 @@ module.exports = {
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:9876',
     'webpack/hot/only-dev-server',
-    './Client/src/app.js',
+    './client/src/app.js',
   ],
   devServer: {
     hot: true,
     historyApiFallback: true,
-    contentBase: path.resolve(__dirname, 'Client/dist'),
+    contentBase: path.resolve(__dirname, 'client/dist'),
     publicPath: '/',
     port: 9876,
   },
@@ -28,14 +28,14 @@ module.exports = {
   ],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, './Client/dist'),
+    path: path.resolve(__dirname, './client/dist'),
     publicPath: '/',
   },
   module: {
     loaders: [
       {
         test: /\.js?$/,
-        include: [path.resolve(__dirname, './Client/src')],
+        include: [path.resolve(__dirname, './client/src')],
         exclude: [path.resolve(__dirname, 'node_modules')],
         use: {
           loader: 'babel-loader',
