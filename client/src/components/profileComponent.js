@@ -21,12 +21,12 @@ export class Profile extends Component {
             </div>
             <div className="col-lg-8">
               <ul className="nav nav-tabs tab-style">
-                <li className="nav-item">
+                <li className="nav-item profile-tab">
                   <a href="" data-target="#profile" data-toggle="tab" className="nav-link active">
                     Profile
                   </a>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item profile-tab">
                   <a href="" data-target="#edit" data-toggle="tab" className="nav-link">
                     Edit
                   </a>
@@ -75,7 +75,7 @@ export class Profile extends Component {
                         First name
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" value="Jane" />
+                        <input className="form-control" type="text" placeholder="First name" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -83,7 +83,7 @@ export class Profile extends Component {
                         Last name
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" value="Bishop" />
+                        <input className="form-control" type="text" placeholder="Last name" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -91,7 +91,7 @@ export class Profile extends Component {
                         Email
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="email" value="email@gmail.com" />
+                        <input className="form-control" type="email" placeholder="Email" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -99,7 +99,7 @@ export class Profile extends Component {
                         Company
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" value="" />
+                        <input className="form-control" type="text" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -107,7 +107,7 @@ export class Profile extends Component {
                         Website
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="url" value="" />
+                        <input className="form-control" type="url" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -115,16 +115,16 @@ export class Profile extends Component {
                         Address
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" value="" placeholder="Street" />
+                        <input className="form-control" type="text" placeholder="Street" />
                       </div>
                     </div>
                     <div className="form-group row">
                       <label className="col-lg-3 mx-sm-auto col-form-label form-control-label" />
                       <div className="col-lg-6">
-                        <input className="form-control" type="text" value="" placeholder="City" />
+                        <input className="form-control" type="text" placeholder="City" />
                       </div>
                       <div className="col-lg-3 mx-sm-auto">
-                        <input className="form-control" type="text" value="" placeholder="State" />
+                        <input className="form-control" type="text" placeholder="State" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -132,7 +132,7 @@ export class Profile extends Component {
                         Username
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" value="janeuser" />
+                        <input className="form-control" type="text" placeholder="Username" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -140,7 +140,7 @@ export class Profile extends Component {
                         Password
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="password" value="11111122333" />
+                        <input className="form-control" type="password" placeholder="Password" />
                       </div>
                     </div>
                     <div className="form-group row">
@@ -148,7 +148,7 @@ export class Profile extends Component {
                         Confirm password
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="password" value="11111122333" />
+                        <input className="form-control" type="password" placeholder="Confirm Password" />
                       </div>
                     </div>
                     <div className="form-group">

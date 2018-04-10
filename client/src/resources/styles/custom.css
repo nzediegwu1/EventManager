@@ -450,3 +450,11 @@ select {
   padding-top: 1em;
   padding-bottom: 1em;
 }
+.profile-tab .nav-item.show .nav-link, .profile-tab .nav-link.active {
+  color: white;
+  background-color: darkblue;
+}
+.profile-tab .nav-link {
+  background-color: white;
+  color: black;
+}
