@@ -22,44 +22,43 @@ const model = models.Events;
 class Events {
   // add an event
   addEvent(req, res) {
+    const { title, date, time, picture, publicId, description, centerId } = req.body;
     return model
-      .findAll()
+      .findAll({ where: { centerId: parseInt(centerId, 10) } })
       .then(events => {
         // destructuring
-        const { title, date, time, picture, publicId, description, centerId } = req.body;
         const timestamp = new Date(`${date} ${time}`);
-
-        if (events.length !== 0) {
-          const day = timestamp.getDate();
-          const month = timestamp.getMonth();
-          const year = timestamp.getFullYear();
-          const occupiedDates = [];
-          let errorMessage;
-          // console.log('Events were gotten from db');
-          events.forEach(event => {
-            const eventDate = event.date;
-            const eventDay = eventDate.getDate();
-            const eventMonth = eventDate.getMonth();
-            const eventYear = eventDate.getFullYear();
-            if (event.centerId === parseInt(centerId, 10)) {
-              occupiedDates.push(eventDate);
-            }
-            if (
-              event.centerId === parseInt(centerId, 10) &&
-              eventDay === day &&
-              eventMonth === month &&
-              eventYear === year
-            ) {
-              // forbidden
-              errorMessage = {
-                Sorry: 'Selected date is already occupied for selected center',
-                OccupiedDates: occupiedDates,
-              };
-            }
-          });
-          if (errorMessage) {
-            return validator.responseWithCloudinary(req, res, 406, errorMessage);
+        const day = timestamp.getDate();
+        const month = timestamp.getMonth();
+        const year = timestamp.getFullYear();
+        const occupiedDates = new Set();
+        let errorMessage;
+        // console.log('Events were gotten from db');
+        events.forEach(event => {
+          const eventDate = event.date;
+          const eventDay = eventDate.getDate();
+          const eventMonth = eventDate.getMonth();
+          const eventYear = eventDate.getFullYear();
+          const eventStatus = event.status;
+          if (event.id !== parseInt(req.params.id, 10)) {
+            occupiedDates.add(new Date(eventDate).toDateString());
           }
+          if (
+            event.id !== parseInt(req.params.id, 10) &&
+            eventStatus !== 'rejected' &&
+            eventDay === day &&
+            eventMonth === month &&
+            eventYear === year
+          ) {
+            // forbidden
+            errorMessage = {
+              Sorry: 'Selected date is already occupied for selected center',
+              OccupiedDates: Array.from(occupiedDates),
+            };
+          }
+        });
+        if (errorMessage) {
+          return validator.responseWithCloudinary(req, res, 406, errorMessage);
         }
         function createNewEvent(entry) {
           return models.Centers.findById(centerId)
@@ -78,7 +77,7 @@ class Events {
                             attributes: { exclude: ['password'] },
                           },
                         ],
-                        attributes: { exclude: ['centerId', 'userId'] },
+                        attributes: { exclude: ['userId'] },
                       })
                       .then(response => validator.response(res, 'success', 201, response))
                       .catch(error => validator.responseWithCloudinary(req, res, 500, error))
@@ -117,39 +116,38 @@ class Events {
       const { title, date, time, picture, publicId, description, centerId } = req.body;
       const timestamp = new Date(`${date} ${time}`);
       return model
-        .findAll()
+        .findAll({ where: { centerId: parseInt(centerId, 10) } })
         .then(events => {
-          if (events.length !== 0) {
-            const day = timestamp.getDate();
-            const month = timestamp.getMonth();
-            const year = timestamp.getFullYear();
-            const occupiedDates = [];
-            let errorMessage;
-            events.forEach(event => {
-              const eventDate = event.date;
-              const eventDay = eventDate.getDate();
-              const eventMonth = eventDate.getMonth();
-              const eventYear = eventDate.getFullYear();
-              if (event.centerId === parseInt(centerId, 10)) {
-                occupiedDates.push(eventDate);
-              }
-              if (
-                event.centerId === parseInt(centerId, 10) &&
-                eventDay === day &&
-                eventMonth === month &&
-                eventYear === year
-              ) {
-                if (event.id !== parseInt(req.params.id, 10)) {
-                  errorMessage = {
-                    Sorry: `Selected date is already occupied for centerId: ${centerId}`,
-                    OccupiedDates: occupiedDates,
-                  };
-                }
-              }
-            });
-            if (errorMessage) {
-              return validator.responseWithCloudinary(req, res, 406, errorMessage);
+          const day = timestamp.getDate();
+          const month = timestamp.getMonth();
+          const year = timestamp.getFullYear();
+          const occupiedDates = new Set();
+          let errorMessage;
+          events.forEach(event => {
+            const eventDate = event.date;
+            const eventDay = eventDate.getDate();
+            const eventMonth = eventDate.getMonth();
+            const eventYear = eventDate.getFullYear();
+            const eventStatus = event.status;
+            if (event.id !== parseInt(req.params.id, 10)) {
+              occupiedDates.add(new Date(eventDate).toDateString());
             }
+            if (
+              event.id !== parseInt(req.params.id, 10) &&
+              eventStatus !== 'rejected' &&
+              event.centerId === parseInt(centerId, 10) &&
+              eventDay === day &&
+              eventMonth === month &&
+              eventYear === year
+            ) {
+              errorMessage = {
+                Sorry: `Selected date is already occupied for centerId: ${centerId}`,
+                OccupiedDates: Array.from(occupiedDates),
+              };
+            }
+          });
+          if (errorMessage) {
+            return validator.responseWithCloudinary(req, res, 406, errorMessage);
           }
           let oldImage;
           function modifyEvent(modified) {
@@ -179,7 +177,7 @@ class Events {
                                     attributes: { exclude: ['password'] },
                                   },
                                 ],
-                                attributes: { exclude: ['centerId', 'userId'] },
+                                attributes: { exclude: ['userId'] },
                               })
                               .then(response => validator.response(res, 'success', 201, response))
                               .catch(error =>
@@ -271,7 +269,7 @@ class Events {
             { model: models.Centers, as: 'center' },
             { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
           ],
-          attributes: { exclude: ['centerId', 'userId'] },
+          attributes: { exclude: ['userId'] },
         })
         .then(event => {
           if (event !== null) {
@@ -285,42 +283,83 @@ class Events {
   }
   approveEvent(req, res) {
     if (validator.confirmParams(req, res) === true) {
-      const status = req.query.status;
+      const { date, time, status, centerId } = req.body;
+      const timestamp = new Date(`${date} ${time}`);
       if (status === 'approved' || status === 'rejected') {
         const eventId = parseInt(req.params.id, 10);
         return model
-          .findById(eventId, {
-            include: [
-              { model: models.Centers, as: 'center' },
-              {
-                model: models.Users,
-                as: 'user',
-                attributes: { exclude: ['password'] },
-              },
-            ],
-            attributes: { exclude: ['centerId', 'userId'] },
-          })
-          .then(found => {
-            if (found.center.userId === req.decoded.id) {
-              const data = { status };
-              return found.updateAttributes(data).then(updatedEvent => {
-                const mailOption = {
-                  from: 'eventmgronline@gmail.com',
-                  to: updatedEvent.user.email,
-                  subject: `Event ${updatedEvent.status}`,
-                  text: `Dear ${
-                    updatedEvent.user.name
-                  },\n\nThis is to inform you that your event titled '${
-                    updatedEvent.title
-                  }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`,
+          .findAll({ where: { centerId: parseInt(centerId, 10) } })
+          .then(events => {
+            const day = timestamp.getDate();
+            const month = timestamp.getMonth();
+            const year = timestamp.getFullYear();
+            const occupiedDates = new Set();
+            let errorMessage;
+            events.forEach(event => {
+              const eventDate = event.date;
+              const eventDay = eventDate.getDate();
+              const eventMonth = eventDate.getMonth();
+              const eventYear = eventDate.getFullYear();
+              const eventStatus = event.status;
+              if (event.id !== parseInt(req.params.id, 10)) {
+                occupiedDates.add(new Date(eventDate).toDateString());
+              }
+              if (
+                event.id !== parseInt(req.params.id, 10) &&
+                eventStatus !== 'rejected' &&
+                eventDay === day &&
+                eventMonth === month &&
+                eventYear === year
+              ) {
+                errorMessage = {
+                  Sorry: `Selected date is already occupied for centerId: ${centerId}`,
+                  OccupiedDates: Array.from(occupiedDates),
                 };
-                transporter.sendMail(mailOption);
-                return validator.response(res, 'success', 200, updatedEvent);
-              });
+              }
+            });
+            if (errorMessage) {
+              return validator.response(res, 'error', 406, errorMessage);
             }
-            return validator.response(res, 'error', 403, 'Not priviledge to perform this action');
+            return model
+              .findById(eventId, {
+                include: [
+                  { model: models.Centers, as: 'center' },
+                  {
+                    model: models.Users,
+                    as: 'user',
+                    attributes: { exclude: ['password'] },
+                  },
+                ],
+                attributes: { exclude: ['userId'] },
+              })
+              .then(found => {
+                if (found.center.userId === req.decoded.id) {
+                  const data = { status };
+                  return found.updateAttributes(data).then(updatedEvent => {
+                    const mailOption = {
+                      from: 'eventmgronline@gmail.com',
+                      to: updatedEvent.user.email,
+                      subject: `Event ${updatedEvent.status}`,
+                      text: `Dear ${
+                        updatedEvent.user.name
+                      },\n\nThis is to inform you that your event titled '${
+                        updatedEvent.title
+                      }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`,
+                    };
+                    transporter.sendMail(mailOption);
+                    return validator.response(res, 'success', 200, updatedEvent);
+                  });
+                }
+                return validator.response(
+                  res,
+                  'error',
+                  403,
+                  'Not priviledge to perform this action'
+                );
+              })
+              .catch(() => validator.response(res, 'error', 404, 'The event does not exist'));
           })
-          .catch(() => validator.response(res, 'error', 404, 'The event does not exist'));
+          .catch(error => validator.response(res, 'error', 500, error));
       }
       return validator.response(res, 'error', 400, 'Status should be [approve] or [reject]');
     }
