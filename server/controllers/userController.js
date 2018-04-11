@@ -21,14 +21,13 @@ class Users {
             if (
               members[item].username === req.body.username ||
               members[item].email === req.body.email ||
-              members[item].phoneNo === req.body.phoneNo
+              parseFloat(members[item].phoneNo) === req.body.phoneNo
             ) {
               // unacceptable
               return signupValidator.response(res, 'err', 406, 'User already exists');
             }
           }
         }
-        console.log(`members.length: ${members.length}`);
         if (members.length === 0) {
           accountType = 'super';
         }
@@ -110,6 +109,54 @@ class Users {
           return signinValidator.response(res, 'error', 404, 'User not found');
         })
         .catch(error => signinValidator.response(res, 'error', 500, error));
+    }
+    return signinValidator.invalidParameter;
+  }
+  modifyProfile(req, res) {
+    if (signinValidator.confirmParams(req, res) === true) {
+      const userId = parseInt(req.params.id, 10);
+      const { username, name, email, company, website, street, city, state, password } = req.body;
+      const phoneNo = parseFloat(req.body.phoneNo);
+      return users.findById(userId).then(user => {
+        if (user !== null) {
+          return users
+            .findAll()
+            .then(userDetails => {
+              for (const item in userDetails) {
+                if (userDetails[item].id !== userId) {
+                  if (userDetails[item].username === username) {
+                    return signupValidator.response(res, 'err', 406, 'Username already exists');
+                  } else if (userDetails[item].email === email) {
+                    return signupValidator.response(res, 'err', 406, 'Email already exists');
+                  } else if (parseFloat(userDetails[item].phoneNo) === phoneNo) {
+                    return signupValidator.response(res, 'err', 406, 'Phone No already exists');
+                  }
+                }
+              }
+              return user
+                .updateAttributes({
+                  username,
+                  name,
+                  email,
+                  phoneNo,
+                  company,
+                  website,
+                  street,
+                  city,
+                  state,
+                  password: bcrypt.hashSync(password, 10),
+                })
+                .then(updatedUser =>
+                  users
+                    .findById(updatedUser.id, { attributes: { exclude: ['password'] } })
+                    .then(response => signinValidator.response(res, 'success', 201, response))
+                    .catch(error => signinValidator.response(res, 'error', 500, error))
+                );
+            })
+            .catch(error => signinValidator.response(res, 'error', 500, error));
+        }
+        return signinValidator.response(res, 'error', 404, 'User not found');
+      });
     }
     return signinValidator.invalidParameter;
   }

@@ -72,18 +72,10 @@ export class Profile extends Component {
                   <form role="form">
                     <div className="form-group row">
                       <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        First name
+                        Name
                       </label>
                       <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" placeholder="First name" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Last name
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" placeholder="Last name" />
+                        <input className="form-control" type="text" placeholder="Full name" />
                       </div>
                     </div>
                     <div className="form-group row">
