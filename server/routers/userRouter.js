@@ -14,7 +14,7 @@ router.post('/login', siginValidator.verify, user.signIn);
 router.get('/', Auth.Verify, user.getUsers);
 router.get('/:id', Auth.Verify, user.getUserProfile);
 router.put('/:id', signupValidator.verify, Auth.Verify, user.modifyProfile);
-router.put('/upgrade/:id', Auth.Verify, user.upgradeAccount);
+router.put('/:id/upgrade', Auth.Verify, user.upgradeAccount);
 
 
 export default router;
