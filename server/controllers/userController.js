@@ -90,13 +90,28 @@ class Users {
         .findAll({ attributes: { exclude: ['password'] } })
         .then(allusers => {
           if (allusers.length > 0) {
-            return signupValidator.response(res, 'success', 200, allusers);
+            return signinValidator.response(res, 'success', 200, allusers);
           }
-          return signupValidator.response(res, 'error', 404, 'No user found');
+          return signinValidator.response(res, 'error', 404, 'No user found');
         })
-        .catch(error => signupValidator.response(res, 'error', 500, error));
+        .catch(error => signinValidator.response(res, 'error', 500, error));
     }
     return signinValidator.response(res, 'error', 403, 'You do not have access to this resource!');
+  }
+  getUserProfile(req, res) {
+    if (signinValidator.confirmParams(req, res) === true) {
+      const userId = parseInt(req.params.id, 10);
+      return users
+        .findById(userId, { attributes: { exclude: ['password'] } })
+        .then(userDetails => {
+          if (userDetails !== null) {
+            return signinValidator.response(res, 'success', 200, userDetails);
+          }
+          return signinValidator.response(res, 'error', 404, 'User not found');
+        })
+        .catch(error => signinValidator.response(res, 'error', 500, error));
+    }
+    return signinValidator.invalidParameter;
   }
 }
 
