@@ -19,6 +19,21 @@ module.exports = {
       phoneNo: {
         type: Sequelize.BIGINT,
       },
+      company: {
+        type: Sequelize.STRING(100),
+      },
+      website: {
+        type: Sequelize.STRING(100),
+      },
+      street: {
+        type: Sequelize.STRING,
+      },
+      city: {
+        type: Sequelize.STRING(100),
+      },
+      state: {
+        type: Sequelize.STRING(100),
+      },
       accountType: {
         // admin, super or regular
         allowNull: false,

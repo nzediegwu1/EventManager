@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING(100),
     email: DataTypes.STRING(100),
     phoneNo: DataTypes.BIGINT,
+    company: DataTypes.STRING(100),
+    website: DataTypes.STRING(100),
+    street: DataTypes.STRING,
+    city: DataTypes.STRING(100),
+    state: DataTypes.STRING(100),
     accountType: {
       // admin or regular only
       allowNull: false,
