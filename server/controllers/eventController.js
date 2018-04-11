@@ -40,11 +40,8 @@ class Events {
           const eventMonth = eventDate.getMonth();
           const eventYear = eventDate.getFullYear();
           const eventStatus = event.status;
-          if (event.id !== parseInt(req.params.id, 10)) {
-            occupiedDates.add(new Date(eventDate).toDateString());
-          }
+          occupiedDates.add(new Date(eventDate).toDateString());
           if (
-            event.id !== parseInt(req.params.id, 10) &&
             eventStatus !== 'rejected' &&
             eventDay === day &&
             eventMonth === month &&

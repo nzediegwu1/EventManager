@@ -70,7 +70,7 @@ class ManageEventComponent extends Component {
             occupiedDates += `${new Date(date).toDateString()}\n`;
           });
           alert(
-            `MESSAGE:\n${err.response.data.message.Sorry}\n\nSELECTED DATES:\n${occupiedDates}`
+            `MESSAGE:\n${err.response.data.message.Sorry}\n\nOCCUPIED DATES:\n${occupiedDates}`
           );
           occupiedDates = '';
         }
