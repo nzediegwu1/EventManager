@@ -43,15 +43,18 @@ class ManageEventComponent extends Component {
     this.props.setPage('dashboard');
   }
   approve(e) {
+    const event = this.props.eventDetails[0];
     const token = JSON.parse(localStorage.token).value;
     const value = e.target.checked;
     const status = value === true ? 'approved' : 'rejected';
+    const data = {
+      date: new Date(event.date).toDateString(),
+      time: new Date(event.date).toLocaleTimeString(),
+      status,
+      centerId: event.centerId,
+    };
     axios
-      .put(
-        `${apiLink}/api/v1/events/approve/${
-          this.props.match.params.id
-        }?status=${status}&token=${token}`
-      )
+      .put(`${apiLink}/api/v1/events/approve/${this.props.match.params.id}?token=${token}`, data)
       .then(res => {
         this.props.setEventDetail(res.data.data);
         alert(res.data.data.status);
@@ -61,6 +64,16 @@ class ManageEventComponent extends Component {
           alert(JSON.stringify(err.response.data.message));
         (err.response.status === 403 || err.response.status === 401) &&
           logout('addNewCenter', this.props.history);
+        if (typeof err.response.data.message === 'object') {
+          let occupiedDates = '';
+          err.response.data.message.OccupiedDates.forEach(date => {
+            occupiedDates += `${new Date(date).toDateString()}\n`;
+          });
+          alert(
+            `MESSAGE:\n${err.response.data.message.Sorry}\n\nOCCUPIED DATES:\n${occupiedDates}`
+          );
+          occupiedDates = '';
+        }
       });
   }
   render() {
