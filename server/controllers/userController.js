@@ -84,15 +84,19 @@ class Users {
   }
   getUsers(req, res) {
     // gets all users' details excluding password
-    return users
-      .findAll({ attributes: { exclude: ['password'] } })
-      .then(allusers => {
-        if (allusers.length > 0) {
-          return signupValidator.response(res, 'success', 200, allusers);
-        }
-        return signupValidator.response(res, 'error', 404, 'No user found');
-      })
-      .catch(error => signupValidator.response(res, 'error', 500, error));
+    const userId = req.decoded.id;
+    if (userId === 1) {
+      return users
+        .findAll({ attributes: { exclude: ['password'] } })
+        .then(allusers => {
+          if (allusers.length > 0) {
+            return signupValidator.response(res, 'success', 200, allusers);
+          }
+          return signupValidator.response(res, 'error', 404, 'No user found');
+        })
+        .catch(error => signupValidator.response(res, 'error', 500, error));
+    }
+    return signinValidator.response(res, 'error', 403, 'You do not have access to this resource!');
   }
 }
 
