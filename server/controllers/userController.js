@@ -163,7 +163,7 @@ class Users {
   upgradeAccount(req, res) {
     if (signinValidator.confirmParams(req, res) === true) {
       const requester = req.decoded.id;
-      const userId = req.params.id;
+      const userId = parseInt(req.params.id, 10);
       const accountType = req.query.accountType;
       if (requester === 1 && userId !== 1) {
         if (accountType === 'admin' || accountType === 'regular') {
