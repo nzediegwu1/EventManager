@@ -21,7 +21,7 @@ class Users {
             if (
               members[item].username === req.body.username ||
               members[item].email === req.body.email ||
-              parseFloat(members[item].phoneNo) === req.body.phoneNo
+              members[item].phoneNo === req.body.phoneNo
             ) {
               // unacceptable
               return signupValidator.response(res, 'err', 406, 'User already exists');
@@ -161,32 +161,35 @@ class Users {
     return signinValidator.invalidParameter;
   }
   upgradeAccount(req, res) {
-    const requester = req.decoded.id;
-    const userId = req.params.id;
-    const accountType = req.query.newAccountType;
-    if (requester === 1 && userId !== 1) {
-      if (accountType === 'admin' || accountType === 'regular') {
-        return models
-          .findById(userId)
-          .then(user => {
-            if (user !== null) {
-              return user
-                .updateAttributes({ accountType })
-                .then(updatedUser => signinValidator.response(res, 'success', 200, updatedUser))
-                .catch(error => signinValidator.response(res, 'error', 500, error));
-            }
-            return signinValidator.response(res, 'error', 404, 'User not found');
-          })
-          .catch(err => signinValidator.response(res, 'error', 500, err));
+    if (signinValidator.confirmParams(req, res) === true) {
+      const requester = req.decoded.id;
+      const userId = req.params.id;
+      const accountType = req.query.accountType;
+      if (requester === 1 && userId !== 1) {
+        if (accountType === 'admin' || accountType === 'regular') {
+          return users
+            .findById(userId, { attributes: { exclude: ['password'] } })
+            .then(user => {
+              if (user !== null) {
+                return user
+                  .updateAttributes({ accountType })
+                  .then(updatedUser => signinValidator.response(res, 'success', 200, updatedUser))
+                  .catch(error => signinValidator.response(res, 'error', 500, error));
+              }
+              return signinValidator.response(res, 'error', 404, 'User not found');
+            })
+            .catch(err => signinValidator.response(res, 'error', 500, err));
+        }
+        return signinValidator.response(
+          res,
+          'error',
+          400,
+          'AccountType must be [admin] or [regular]'
+        );
       }
-      return signinValidator.response(
-        res,
-        'error',
-        400,
-        'AccountType must be [admin] or [regular]'
-      );
+      return signinValidator.response(res, 'error', 403, 'Cannot perform this action');
     }
-    return signinValidator.response(res, 'error', 403, 'Cannot perform this action');
+    return signinValidator.invalidParameter;
   }
 }
 
