@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     street: DataTypes.STRING,
     city: DataTypes.STRING(100),
     state: DataTypes.STRING(100),
+    picture: DataTypes.STRING,
+    publicId: DataTypes.STRING,
     accountType: {
       // admin or regular only
       allowNull: false,

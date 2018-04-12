@@ -3,10 +3,18 @@ import Val from '../middlewares/validator';
 import jwt from 'jsonwebtoken';
 require('dotenv').config();
 import bcrypt from 'bcryptjs';
+import cloudinary from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: 'eventmanager',
+  api_key: '789891965151338',
+  api_secret: 'ynezeVbgUnGIfNYKj19GvyrflSI',
+});
 
 const key = process.env.SECRET_KEY;
 const signupValidator = new Val('users', 'signup');
 const signinValidator = new Val('users', 'signin');
+const profilePicValidator = new Val('users', 'changePic');
 
 const users = models.Users;
 class Users {
@@ -113,52 +121,49 @@ class Users {
     return signinValidator.invalidParameter;
   }
   modifyProfile(req, res) {
-    if (signinValidator.confirmParams(req, res) === true) {
-      const userId = parseInt(req.params.id, 10);
-      const { username, name, email, company, website, street, city, state, password } = req.body;
-      const phoneNo = parseFloat(req.body.phoneNo);
-      return users.findById(userId).then(user => {
-        if (user !== null) {
-          return users
-            .findAll()
-            .then(userDetails => {
-              for (const item in userDetails) {
-                if (userDetails[item].id !== userId) {
-                  if (userDetails[item].username === username) {
-                    return signupValidator.response(res, 'err', 406, 'Username already exists');
-                  } else if (userDetails[item].email === email) {
-                    return signupValidator.response(res, 'err', 406, 'Email already exists');
-                  } else if (parseFloat(userDetails[item].phoneNo) === phoneNo) {
-                    return signupValidator.response(res, 'err', 406, 'Phone No already exists');
-                  }
+    const userId = req.decoded.id;
+    const { username, name, email, company, website, street, city, state, password } = req.body;
+    const phoneNo = parseFloat(req.body.phoneNo);
+    return users.findById(userId).then(user => {
+      if (user !== null) {
+        return users
+          .findAll()
+          .then(userDetails => {
+            for (const item in userDetails) {
+              if (userDetails[item].id !== userId) {
+                if (userDetails[item].username === username) {
+                  return signupValidator.response(res, 'err', 406, 'Username already exists');
+                } else if (userDetails[item].email === email) {
+                  return signupValidator.response(res, 'err', 406, 'Email already exists');
+                } else if (parseFloat(userDetails[item].phoneNo) === phoneNo) {
+                  return signupValidator.response(res, 'err', 406, 'Phone No already exists');
                 }
               }
-              return user
-                .updateAttributes({
-                  username,
-                  name,
-                  email,
-                  phoneNo,
-                  company,
-                  website,
-                  street,
-                  city,
-                  state,
-                  password: bcrypt.hashSync(password, 10),
-                })
-                .then(updatedUser =>
-                  users
-                    .findById(updatedUser.id, { attributes: { exclude: ['password'] } })
-                    .then(response => signinValidator.response(res, 'success', 201, response))
-                    .catch(error => signinValidator.response(res, 'error', 500, error))
-                );
-            })
-            .catch(error => signinValidator.response(res, 'error', 500, error));
-        }
-        return signinValidator.response(res, 'error', 404, 'User not found');
-      });
-    }
-    return signinValidator.invalidParameter;
+            }
+            return user
+              .updateAttributes({
+                username,
+                name,
+                email,
+                phoneNo,
+                company,
+                website,
+                street,
+                city,
+                state,
+                password: bcrypt.hashSync(password, 10),
+              })
+              .then(updatedUser =>
+                users
+                  .findById(updatedUser.id, { attributes: { exclude: ['password'] } })
+                  .then(response => signinValidator.response(res, 'success', 201, response))
+                  .catch(error => signinValidator.response(res, 'error', 500, error))
+              );
+          })
+          .catch(error => signinValidator.response(res, 'error', 500, error));
+      }
+      return signinValidator.response(res, 'error', 404, 'User not found');
+    });
   }
   upgradeAccount(req, res) {
     if (signinValidator.confirmParams(req, res) === true) {
@@ -190,6 +195,25 @@ class Users {
       return signinValidator.response(res, 'error', 403, 'Cannot perform this action');
     }
     return signinValidator.invalidParameter;
+  }
+  changeProfilePic(req, res) {
+    const { picture, publicId } = req.body;
+    const userId = req.decoded.id;
+    return users
+      .findById(userId, { attributes: { exclude: ['password'] } })
+      .then(user => {
+        if (user !== null) {
+          return user
+            .updateAttributes({ picture, publicId })
+            .then(updatedUser => {
+              cloudinary.v2.uploader.destroy(user.publicId);
+              return profilePicValidator.response(res, 'success', 200, updatedUser);
+            })
+            .catch(error => profilePicValidator.responseWithCloudinary(req, res, 500, error));
+        }
+        return profilePicValidator.responseWithCloudinary(req, res, 404, 'User not found');
+      })
+      .catch(err => profilePicValidator.responseWithCloudinary(req, res, 500, err));
   }
 }
 

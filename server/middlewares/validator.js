@@ -186,8 +186,33 @@ class Validator {
     this.verifyUser = (req, res, context, next) => {
       if (context === 'signup') {
         return this.verifySignup(req, res, next);
+      } else if (context === 'signin') {
+        return this.verifySignup(req, res, next);
       }
-      return this.verifySignin(req, res, next);
+      return this.verifyProfilePic(req, res, next);
+    };
+    this.verifyProfilePic = (req, res, next) => {
+      const { picture, publicId } = req.body;
+      if (
+        picture === undefined ||
+        typeof picture !== 'string' ||
+        picture.trim().length === 0 ||
+        picture.length > 254
+      ) {
+        this.verificationError = this.errorMessage('Invalid Profile picture', res);
+      } else if (
+        publicId === undefined ||
+        typeof publicId !== 'string' ||
+        publicId.trim().length === 0 ||
+        publicId.length > 254
+      ) {
+        this.verificationError = this.errorMessage('Invalid public id', res);
+      } else {
+        next();
+        return this.verificationError;
+      }
+      cloudinary.v2.uploader.destroy(req.body.publicId);
+      return this.verificationError;
     };
     this.verifySignup = (req, res, next) => {
       // validate request username
