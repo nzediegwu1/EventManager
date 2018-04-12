@@ -6,6 +6,7 @@ import Auth from '../middlewares/authenticator';
 
 const signupValidator = new Val('users', 'signup');
 const siginValidator = new Val('users', 'signin');
+const profilePicValidator = new Val('users', 'changePic');
 const user = new UsersController();
 const router = express.Router();
 
@@ -13,8 +14,8 @@ router.post('/', signupValidator.verify, user.signUp);
 router.post('/login', siginValidator.verify, user.signIn);
 router.get('/', Auth.Verify, user.getUsers);
 router.get('/:id', Auth.Verify, user.getUserProfile);
-router.put('/:id', signupValidator.verify, Auth.Verify, user.modifyProfile);
+router.put('/', signupValidator.verify, Auth.Verify, user.modifyProfile);
 router.put('/:id/upgrade', Auth.Verify, user.upgradeAccount);
-
+router.put('/changePic', profilePicValidator.verify, Auth.Verify, user.changeProfilePic);
 
 export default router;

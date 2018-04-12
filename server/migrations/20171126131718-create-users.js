@@ -34,6 +34,12 @@ module.exports = {
       state: {
         type: Sequelize.STRING(100),
       },
+      picture: {
+        type: Sequelize.STRING,
+      },
+      publicId: {
+        type: Sequelize.STRING,
+      },
       accountType: {
         // admin, super or regular
         allowNull: false,
