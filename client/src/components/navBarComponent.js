@@ -12,7 +12,7 @@ import {
 import { initialState } from '../reducers/pageReducer';
 
 const mapStateToProps = state => ({
-  accountType: state.accountType.accountType,
+  accountType: state.user.accountType,
 });
 const mapDispatchToProps = dispatch => ({
   setModalTitle: title => dispatch(setModalTitle(title)),

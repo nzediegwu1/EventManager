@@ -25,14 +25,8 @@ module.exports = {
       website: {
         type: Sequelize.STRING(100),
       },
-      street: {
+      address: {
         type: Sequelize.STRING,
-      },
-      city: {
-        type: Sequelize.STRING(100),
-      },
-      state: {
-        type: Sequelize.STRING(100),
       },
       picture: {
         type: Sequelize.STRING,
