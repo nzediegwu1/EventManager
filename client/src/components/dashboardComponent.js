@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { Profile } from './profileComponent';
 
 const mapStateToProps = state => ({
-  accountType: state.accountType.accountType,
+  accountType: state.user.accountType,
 });
 
 class DashboardComponent extends Component {

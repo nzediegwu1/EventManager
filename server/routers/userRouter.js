@@ -13,7 +13,7 @@ const router = express.Router();
 router.post('/', signupValidator.verify, user.signUp);
 router.post('/login', siginValidator.verify, user.signIn);
 router.get('/', Auth.Verify, user.getUsers);
-router.get('/:id', Auth.Verify, user.getUserProfile);
+router.get('/:id', user.getUserProfile);
 router.put('/', signupValidator.verify, Auth.Verify, user.modifyProfile);
 router.put('/:id/upgrade', Auth.Verify, user.upgradeAccount);
 router.put('/changePic', profilePicValidator.verify, Auth.Verify, user.changeProfilePic);

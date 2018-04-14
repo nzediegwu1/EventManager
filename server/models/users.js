@@ -6,9 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     phoneNo: DataTypes.BIGINT,
     company: DataTypes.STRING(100),
     website: DataTypes.STRING(100),
-    street: DataTypes.STRING,
-    city: DataTypes.STRING(100),
-    state: DataTypes.STRING(100),
+    address: DataTypes.STRING,
     picture: DataTypes.STRING,
     publicId: DataTypes.STRING,
     accountType: {
