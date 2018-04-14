@@ -122,7 +122,7 @@ class Users {
   }
   modifyProfile(req, res) {
     const userId = req.decoded.id;
-    const { username, name, email, company, website, street, city, state, password } = req.body;
+    const { username, name, email, company, website, address, password } = req.body;
     const phoneNo = parseFloat(req.body.phoneNo);
     return users.findById(userId).then(user => {
       if (user !== null) {
@@ -148,9 +148,7 @@ class Users {
                 phoneNo,
                 company,
                 website,
-                street,
-                city,
-                state,
+                address,
                 password: bcrypt.hashSync(password, 10),
               })
               .then(updatedUser =>

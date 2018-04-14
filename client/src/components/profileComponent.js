@@ -3,7 +3,7 @@ import profileImage from '../resources/images/profile-image.png';
 import axios from 'axios';
 import { setProfileDetails } from '../actions/userActions';
 import { connect } from 'react-redux';
-import { apiLink } from '../reusables';
+import { apiLink, logout } from '../reusables';
 import { TableRow } from './table';
 
 const mapStateToProps = state => ({
@@ -22,27 +22,61 @@ const ProfileInput = props => {
           defaultValue={props.value}
           type={props.type}
           placeholder={props.placeholder}
+          ref={props.action}
         />
       </div>
     </div>
   );
   return content;
 };
-
+let profileData;
 class ProfileComponent extends Component {
   constructor(props) {
     super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.reset = this.reset.bind(this);
   }
   componentWillMount() {
-    const token = JSON.parse(localStorage.token);
+    const userId = JSON.parse(localStorage.token).id;
     axios
-      .get(`${apiLink}/api/v1/users/${token.id}`)
+      .get(`${apiLink}/api/v1/users/${userId}`)
       .then(res => {
-        this.props.setProfileDetails(res.data.data);
+        profileData = res.data.data
+        this.props.setProfileDetails(profileData);
       })
       .catch(error => {
         alert(error);
         console.log(error.response);
+      });
+  }
+  reset() {
+    this.props.setProfileDetails(profileData);
+  }
+  handleSubmit(event) {
+    event.preventDefault();
+    const token = JSON.parse(localStorage.token).value;
+    const profileData = {
+      username: this.username.value,
+      name: this.name.value,
+      email: this.email.value,
+      phoneNo: this.phoneNo.value,
+      company: this.company.value,
+      website: this.website.value,
+      address: this.address.value,
+      password: this.password.value,
+      confirmPassword: this.confirmPassword.value,
+    };
+    axios
+      .put(`${apiLink}/api/v1/users/?token=${token}`, profileData)
+      .then(response => {
+        this.props.setProfileDetails(response.data.data);
+        alert('Successfully saved!');
+      })
+      .catch(err => {
+        typeof err.response.data.message !== 'object' &&
+          alert(JSON.stringify(err.response.data.message));
+        (err.response.status === 403 || err.response.status === 401) &&
+          logout('addNewCenter', this.props.history);
       });
   }
   render() {
@@ -99,57 +133,77 @@ class ProfileComponent extends Component {
                 </div>
                 <div className="tab-pane edit-profile-form" id="edit">
                   <h4 className="text-center">Edit Profile</h4>
-                  <form role="form">
+                  <form role="form" onSubmit={this.handleSubmit}>
                     <ProfileInput
                       label="Name"
                       type="text"
                       placeholder="Full name"
                       value={user.name}
+                      action={input => (this.name = input)}
                     />
                     <ProfileInput
                       label="Email"
                       type="text"
                       placeholder="Email"
                       value={user.email}
+                      action={input => (this.email = input)}
+                    />
+                    <ProfileInput
+                      label="Phone"
+                      type="number"
+                      placeholder="Phone"
+                      value={user.phoneNo}
+                      action={input => (this.phoneNo = input)}
                     />
                     <ProfileInput
                       label="Company"
                       type="text"
                       placeholder="Company Name"
                       value={user.company}
+                      action={input => (this.company = input)}
                     />
                     <ProfileInput
                       label="Website"
                       type="url"
-                      placeholder="www.andela.com"
+                      placeholder="http://www.andela.com"
                       value={user.website}
+                      action={input => (this.website = input)}
                     />
                     <ProfileInput
                       label="Address"
                       type="text"
                       placeholder="Full Address"
                       value={user.address}
+                      action={input => (this.address = input)}
                     />
                     <ProfileInput
                       label="Username"
                       type="text"
                       placeholder="Username"
                       value={user.username}
+                      action={input => (this.username = input)}
                     />
-                    <ProfileInput label="Password" type="text" placeholder="Password" />
+                    <ProfileInput
+                      label="Password"
+                      type="text"
+                      placeholder="Password"
+                      action={input => (this.password = input)}
+                    />
                     <ProfileInput
                       label="Confirm password"
                       type="text"
                       placeholder="Confirm password"
+                      action={input => (this.confirmPassword = input)}
                     />
                     <div className="form-group">
                       <div className="profile-edit-buttons">
                         <input
                           type="reset"
                           className="btn btn-secondary right-margin"
-                          value="Cancel"
+                          value="Reset"
+                          onClick={this.reset}
                         />
-                        <input type="button" className="btn btn-primary" value="Save" />
+                        <input type="submit" className="btn btn-primary" value="Save" />
                       </div>
                     </div>
                   </form>
