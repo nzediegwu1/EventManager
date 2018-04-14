@@ -23,6 +23,7 @@ const ProfileInput = props => {
           type={props.type}
           placeholder={props.placeholder}
           ref={props.action}
+          required={!!props.require}
         />
       </div>
     </div>
@@ -41,7 +42,7 @@ class ProfileComponent extends Component {
     axios
       .get(`${apiLink}/api/v1/users/${userId}`)
       .then(res => {
-        profileData = res.data.data
+        profileData = res.data.data;
         this.props.setProfileDetails(profileData);
       })
       .catch(error => {
@@ -55,7 +56,7 @@ class ProfileComponent extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const token = JSON.parse(localStorage.token).value;
-    const profileData = {
+    const profileInputs = {
       username: this.username.value,
       name: this.name.value,
       email: this.email.value,
@@ -67,9 +68,10 @@ class ProfileComponent extends Component {
       confirmPassword: this.confirmPassword.value,
     };
     axios
-      .put(`${apiLink}/api/v1/users/?token=${token}`, profileData)
-      .then(response => {
-        this.props.setProfileDetails(response.data.data);
+      .put(`${apiLink}/api/v1/users/?token=${token}`, profileInputs)
+      .then(res => {
+        profileData = res.data.data;
+        this.props.setProfileDetails(profileData);
         alert('Successfully saved!');
       })
       .catch(err => {
@@ -140,6 +142,7 @@ class ProfileComponent extends Component {
                       placeholder="Full name"
                       value={user.name}
                       action={input => (this.name = input)}
+                      require="required"
                     />
                     <ProfileInput
                       label="Email"
@@ -147,6 +150,7 @@ class ProfileComponent extends Component {
                       placeholder="Email"
                       value={user.email}
                       action={input => (this.email = input)}
+                      require="required"
                     />
                     <ProfileInput
                       label="Phone"
@@ -154,6 +158,7 @@ class ProfileComponent extends Component {
                       placeholder="Phone"
                       value={user.phoneNo}
                       action={input => (this.phoneNo = input)}
+                      require="required"
                     />
                     <ProfileInput
                       label="Company"
@@ -182,18 +187,21 @@ class ProfileComponent extends Component {
                       placeholder="Username"
                       value={user.username}
                       action={input => (this.username = input)}
+                      require="required"
                     />
                     <ProfileInput
                       label="Password"
-                      type="text"
+                      type="password"
                       placeholder="Password"
                       action={input => (this.password = input)}
+                      require="required"
                     />
                     <ProfileInput
                       label="Confirm password"
-                      type="text"
+                      type="password"
                       placeholder="Confirm password"
                       action={input => (this.confirmPassword = input)}
+                      require="required"
                     />
                     <div className="form-group">
                       <div className="profile-edit-buttons">
