@@ -187,7 +187,7 @@ class Validator {
       if (context === 'signup') {
         return this.verifySignup(req, res, next);
       } else if (context === 'signin') {
-        return this.verifySignup(req, res, next);
+        return this.verifySignin(req, res, next);
       }
       return this.verifyProfilePic(req, res, next);
     };

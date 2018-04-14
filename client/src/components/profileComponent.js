@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
 import profileImage from '../resources/images/profile-image.png';
+import axios from 'axios';
+
+const ProfileInput = props => {
+  const content = (
+    <div className="form-group row">
+      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">{props.label}</label>
+      <div className="col-lg-9 mx-sm-auto">
+        <input className="form-control" type={props.type} placeholder={props.placeholder} />
+      </div>
+    </div>
+  );
+  return content;
+};
 
 export class Profile extends Component {
   constructor(props) {
@@ -70,46 +83,11 @@ export class Profile extends Component {
                 <div className="tab-pane edit-profile-form" id="edit">
                   <h4 className="text-center">Edit Profile</h4>
                   <form role="form">
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Name
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" placeholder="Full name" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Email
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="email" placeholder="Email" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Company
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Website
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="url" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Address
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" placeholder="Street" />
-                      </div>
-                    </div>
+                    <ProfileInput label="Name" type="text" placeholder="Full name" />
+                    <ProfileInput label="Email" type="text" placeholder="Email" />
+                    <ProfileInput label="Company" type="text" placeholder="Company Name" />
+                    <ProfileInput label="Website" type="url" placeholder="www.andela.com" />
+                    <ProfileInput label="Address" type="text" placeholder="Street" />
                     <div className="form-group row">
                       <label className="col-lg-3 mx-sm-auto col-form-label form-control-label" />
                       <div className="col-lg-6">
@@ -119,30 +97,13 @@ export class Profile extends Component {
                         <input className="form-control" type="text" placeholder="State" />
                       </div>
                     </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Username
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="text" placeholder="Username" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Password
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="password" placeholder="Password" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">
-                        Confirm password
-                      </label>
-                      <div className="col-lg-9 mx-sm-auto">
-                        <input className="form-control" type="password" placeholder="Confirm Password" />
-                      </div>
-                    </div>
+                    <ProfileInput label="Username" type="text" placeholder="Username" />
+                    <ProfileInput label="Password" type="text" placeholder="Password" />
+                    <ProfileInput
+                      label="Confirm password"
+                      type="text"
+                      placeholder="Confirm password"
+                    />
                     <div className="form-group">
                       <div className="profile-edit-buttons">
                         <input
