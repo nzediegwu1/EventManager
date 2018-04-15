@@ -6,15 +6,16 @@ import { AddCenter } from './addCenterComponent';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { EventRouter } from './eventRouter';
 import { CenterRouter } from './centerRouter';
+import { UserList } from './userListComponent';
 import { connect } from 'react-redux';
 import { Profile } from './profileComponent';
 
 const mapStateToProps = state => ({
-  accountType: state.user.accountType,
+  accountType: state.users.accountType,
 });
-
 class DashboardComponent extends Component {
   render() {
+    const userId = JSON.parse(localStorage.token).id;
     const content = (
       <div className="appBackground">
         <NavBar />
@@ -25,8 +26,11 @@ class DashboardComponent extends Component {
             <Route path={`${this.props.match.path}`} component={AddCenter} />
           )}
           <Switch>
-            <Route path={`${this.props.match.path}/profile`} component={Profile} />
+            <Route path={`${this.props.match.path}/profile/:id`} component={Profile} />
             <Route path={`${this.props.match.path}/centers`} component={CenterRouter} />
+            {userId === 1 && (
+              <Route path={`${this.props.match.path}/userList`} component={UserList} />
+            )}
             <Route path={`${this.props.match.path}`} component={EventRouter} />
           </Switch>
         </div>

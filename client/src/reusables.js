@@ -26,3 +26,15 @@ export const getCenters = (axios, populateCenters) => {
       alert(err);
     });
 };
+export const getUsers = (axios, populateUserList, token, history) => {
+  axios
+    .get(`${apiLink}/api/v1/users/?token=${token}`)
+    .then(res => {
+      populateUserList(res.data.data);
+    })
+    .catch(err => {
+      (err.response.status === 403 || err.response.status === 401) &&
+      history.push('/');
+      alert(err);
+    });
+};
