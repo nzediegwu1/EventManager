@@ -38,6 +38,26 @@ class ProfileComponent extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.reset = this.reset.bind(this);
+    this.upgradeAccount = this.upgradeAccount.bind(this);
+  }
+  upgradeAccount() {
+    const token = JSON.parse(localStorage.token).value;
+    axios
+      .put(
+        `${apiLink}/api/v1/users/${profileData.id}/upgrade/?token=${token}&accountType=${
+          this.account.value
+        }`
+      )
+      .then(res => {
+        profileData = res.data.data;
+        this.props.setProfileDetails(profileData);
+        alert('Successfully upgraded');
+      })
+      .catch(err => {
+        alert(error);
+        (err.response.status === 403 || err.response.status === 401) &&
+        logout('addNewCenter', this.props.history);
+      });
   }
   componentWillMount() {
     const userId = this.props.match.params.id;
@@ -101,6 +121,7 @@ class ProfileComponent extends Component {
           ref={input => (this.account = input)}
           defaultValue={user.accountType}
           className="custom-select-sm"
+          onChange={this.upgradeAccount}
         >
           <Option value="admin" text="admin" />
           <Option value="regular" text="regular" />
