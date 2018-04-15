@@ -33,12 +33,49 @@ const ProfileInput = props => {
 };
 let profileData;
 let accountType;
+let setProfData;
 class ProfileComponent extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.reset = this.reset.bind(this);
     this.upgradeAccount = this.upgradeAccount.bind(this);
+  }
+  uploadPic(e) {
+    const folder = apiLink === 'http://localhost:8080' ? 'dev/profile' : 'prod/profile';
+    const imageData = new FormData();
+    const publicId = `${Date.now()}-${e.target.files[0].name}`;
+    imageData.append('file', e.target.files[0]);
+    imageData.append('tags', 'profileImage');
+    imageData.append('upload_preset', 'm4vlbdts');
+    imageData.append('api_key', '789891965151338');
+    imageData.append('timestamp', (Date.now() / 1000) | 0);
+    imageData.append('folder', folder);
+    imageData.append('public_id', publicId);
+    const token = JSON.parse(localStorage.token).value;
+    axios
+      .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
+      .then(res => {
+        const profileUpdate = {
+          picture: res.data.secure_url,
+          publicId: res.data.public_id,
+          token,
+        };
+        axios
+          .put(`${apiLink}/api/v1/users/changePic`, profileUpdate)
+          .then(response => {
+            profileData = response.data.data;
+            setProfData(profileData);
+            alert('image upload successful');
+          })
+          .catch(err => {
+            alert(err);
+            console.log(err);
+          });
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
   upgradeAccount() {
     const token = JSON.parse(localStorage.token).value;
@@ -54,9 +91,9 @@ class ProfileComponent extends Component {
         alert('Successfully upgraded');
       })
       .catch(err => {
-        alert(error);
+        alert(err);
         (err.response.status === 403 || err.response.status === 401) &&
-        logout('addNewCenter', this.props.history);
+          logout('addNewCenter', this.props.history);
       });
   }
   componentWillMount() {
@@ -65,6 +102,7 @@ class ProfileComponent extends Component {
       .get(`${apiLink}/api/v1/users/${userId}`)
       .then(res => {
         profileData = res.data.data;
+        setProfData = this.props.setProfileDetails;
         this.props.setProfileDetails(profileData);
         // alert('user profile gotten!');
       })
@@ -130,19 +168,31 @@ class ProfileComponent extends Component {
     } else {
       accountType = user.accountType;
     }
-
     const content = (
       <div className="card mx-sm-auto col-sm-11 profile-panel">
         <div className="card-header mg-event-header text-center">Manage Profile</div>
         <div className="card-body">
           <div className="row">
             <div className="col-lg-4 image-div">
-              <img src={profileImage} className="profile-image img-circle" alt="avatar" />
-              <h6 className="text-center">Upload a different photo</h6>
-              <label className="custom-file">
-                <input type="file" id="file" className="custom-file-input" />
-                <span className="custom-file-control">Choose file</span>
-              </label>
+              <img
+                src={user.picture === null ? profileImage : user.picture}
+                className="profile-image img-circle"
+                alt="avatar"
+              />
+              {userId === user.id && (
+                <div>
+                  <h6 className="text-center">Upload a different photo</h6>
+                  <label className="custom-file">
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={this.uploadPic}
+                      className="custom-file-input"
+                    />
+                    <span className="custom-file-control">Choose file</span>
+                  </label>
+                </div>
+              )}
             </div>
             <div className="col-lg-8">
               <ul className="nav nav-tabs tab-style">
