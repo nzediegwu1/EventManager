@@ -8,7 +8,7 @@ import { TableRow } from './table';
 import { Option } from './selectOption';
 
 const mapStateToProps = state => ({
-  profileDetails: state.user.profileDetails,
+  profileDetails: state.users.profileDetails,
 });
 const mapDispatchToProps = dispatch => ({
   setProfileDetails: data => dispatch(setProfileDetails(data)),
@@ -40,7 +40,7 @@ class ProfileComponent extends Component {
     this.reset = this.reset.bind(this);
   }
   componentWillMount() {
-    const userId = JSON.parse(localStorage.token).id;
+    const userId = this.props.match.params.id;
     axios
       .get(`${apiLink}/api/v1/users/${userId}`)
       .then(res => {
@@ -86,6 +86,7 @@ class ProfileComponent extends Component {
   }
   render() {
     const user = this.props.profileDetails[0];
+    profileData = user;
     if (user === undefined) {
       return (
         <div>
@@ -131,7 +132,13 @@ class ProfileComponent extends Component {
                 </li>
                 {userId === user.id && (
                   <li className="nav-item profile-tab">
-                    <a href="" data-target="#edit" data-toggle="tab" className="nav-link">
+                    <a
+                      href=""
+                      onClick={() => $('#reset').click()}
+                      data-target="#edit"
+                      data-toggle="tab"
+                      className="nav-link"
+                    >
                       Edit
                     </a>
                   </li>
@@ -228,6 +235,7 @@ class ProfileComponent extends Component {
                     <div className="form-group">
                       <div className="profile-edit-buttons">
                         <input
+                          id="reset"
                           type="reset"
                           className="btn btn-secondary right-margin"
                           value="Reset"

@@ -7,7 +7,7 @@ import facilityReducer from './facilityReducer';
 
 const rootReducer = combineReducers({
   events: eventReducer,
-  user: userReducer,
+  users: userReducer,
   page: pageReducer,
   centers: centerReducer,
   facilities: facilityReducer,
