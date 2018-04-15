@@ -197,14 +197,16 @@ class Users {
   changeProfilePic(req, res) {
     const { picture, publicId } = req.body;
     const userId = req.decoded.id;
+    let picToDelete;
     return users
       .findById(userId, { attributes: { exclude: ['password'] } })
       .then(user => {
+        picToDelete = user.publicId;
         if (user !== null) {
           return user
             .updateAttributes({ picture, publicId })
             .then(updatedUser => {
-              cloudinary.v2.uploader.destroy(user.publicId);
+              cloudinary.v2.uploader.destroy(picToDelete);
               return profilePicValidator.response(res, 'success', 200, updatedUser);
             })
             .catch(error => profilePicValidator.responseWithCloudinary(req, res, 500, error));

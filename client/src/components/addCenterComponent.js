@@ -37,7 +37,7 @@ class AddCenterComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.folder = apiLink === 'http://localhost:8000' ? 'dev/centers' : 'prod/centers';
+    this.folder = apiLink === 'http://localhost:8080' ? 'dev/centers' : 'prod/centers';
   }
   handleSubmit(event) {
     event.preventDefault();
