@@ -5,6 +5,7 @@ import { setProfileDetails } from '../actions/userActions';
 import { connect } from 'react-redux';
 import { apiLink, logout } from '../reusables';
 import { TableRow } from './table';
+import { Option } from './selectOption';
 
 const mapStateToProps = state => ({
   profileDetails: state.user.profileDetails,
@@ -31,6 +32,7 @@ const ProfileInput = props => {
   return content;
 };
 let profileData;
+let accountType;
 class ProfileComponent extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +46,7 @@ class ProfileComponent extends Component {
       .then(res => {
         profileData = res.data.data;
         this.props.setProfileDetails(profileData);
+        // alert('user profile gotten!');
       })
       .catch(error => {
         alert(error);
@@ -90,6 +93,22 @@ class ProfileComponent extends Component {
         </div>
       );
     }
+    const userId = JSON.parse(localStorage.token).id;
+    if (userId === 1 && user.id !== 1) {
+      accountType = (
+        <select
+          ref={input => (this.account = input)}
+          defaultValue={user.accountType}
+          className="custom-select-sm"
+        >
+          <Option value="admin" text="admin" />
+          <Option value="regular" text="regular" />
+        </select>
+      );
+    } else {
+      accountType = user.accountType;
+    }
+
     const content = (
       <div className="card mx-sm-auto col-sm-11 profile-panel">
         <div className="card-header mg-event-header text-center">Manage Profile</div>
@@ -110,11 +129,13 @@ class ProfileComponent extends Component {
                     Profile
                   </a>
                 </li>
-                <li className="nav-item profile-tab">
-                  <a href="" data-target="#edit" data-toggle="tab" className="nav-link">
-                    Edit
-                  </a>
-                </li>
+                {userId === user.id && (
+                  <li className="nav-item profile-tab">
+                    <a href="" data-target="#edit" data-toggle="tab" className="nav-link">
+                      Edit
+                    </a>
+                  </li>
+                )}
               </ul>
               <br />
               <div className="tab-content">
@@ -129,6 +150,7 @@ class ProfileComponent extends Component {
                         <TableRow colNumber={2} columns={['Address', user.address]} />
                         <TableRow colNumber={2} columns={['Company', user.company]} />
                         <TableRow colNumber={2} columns={['Website', user.website]} />
+                        <TableRow colNumber={2} columns={['Account', accountType]} />
                       </tbody>
                     </table>
                   </div>
@@ -140,54 +162,54 @@ class ProfileComponent extends Component {
                       label="Name"
                       type="text"
                       placeholder="Full name"
-                      value={user.name}
                       action={input => (this.name = input)}
                       require="required"
+                      value={user.name}
                     />
                     <ProfileInput
                       label="Email"
                       type="text"
                       placeholder="Email"
-                      value={user.email}
                       action={input => (this.email = input)}
                       require="required"
+                      value={user.email}
                     />
                     <ProfileInput
                       label="Phone"
                       type="number"
                       placeholder="Phone"
-                      value={user.phoneNo}
                       action={input => (this.phoneNo = input)}
                       require="required"
+                      value={user.phoneNo}
                     />
                     <ProfileInput
                       label="Company"
                       type="text"
                       placeholder="Company Name"
-                      value={user.company}
                       action={input => (this.company = input)}
+                      value={user.company}
                     />
                     <ProfileInput
                       label="Website"
                       type="url"
                       placeholder="http://www.andela.com"
-                      value={user.website}
                       action={input => (this.website = input)}
+                      value={user.website}
                     />
                     <ProfileInput
                       label="Address"
                       type="text"
                       placeholder="Full Address"
-                      value={user.address}
                       action={input => (this.address = input)}
+                      value={user.address}
                     />
                     <ProfileInput
                       label="Username"
                       type="text"
                       placeholder="Username"
-                      value={user.username}
                       action={input => (this.username = input)}
                       require="required"
+                      value={user.username}
                     />
                     <ProfileInput
                       label="Password"
