@@ -24,7 +24,6 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 
 const mapDispatchToProps = dispatch => ({
   setCenterDetails: center => dispatch(setCenterDetails(center)),
-  // setCenterDefaults: data => dispatch(setCenterDefaults(data)),
 });
 const mapStateToProps = state => ({
   modalTitle: state.page.modalTitle,
@@ -41,27 +40,17 @@ class AddCenterComponent extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    const name = this.name.value;
-    const address = this.address.value;
-    const location = this.location.value;
-    const capacity = this.capacity.value;
-    const price = this.price.value;
-    const availability = this.availability.value;
-    const token = JSON.parse(localStorage.token).value;
-    const modalTitle = this.props.modalTitle;
-    const history = this.props.history;
-    const setCenter = this.props.setCenterDetails;
-
+    const { modalTitle, history, setCenterDetails } = this.props;
     let postCenter;
     function saveCenter(res) {
       const centerData = {
-        name,
-        address,
-        location,
-        capacity,
-        price,
-        availability,
-        token,
+        name: this.name.value,
+        address: this.address.value,
+        location: this.location.value,
+        capacity: this.capacity.value,
+        price: this.price.value,
+        availability: this.availability.value,
+        token: JSON.parse(localStorage.token).value,
         picture: res ? res.data.secure_url : undefined,
         publicId: res ? res.data.public_id : undefined,
       };
@@ -74,7 +63,7 @@ class AddCenterComponent extends React.Component {
         .then(response => {
           alert('Transaction Successful');
           history.push(`/dashboard/centers/${response.data.data.id}`);
-          setCenter(response.data.data);
+          setCenterDetails(response.data.data);
           if (modalTitle !== 'New Center') {
             $('#addNewCenter').modal('hide');
           }
