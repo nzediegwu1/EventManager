@@ -1,5 +1,4 @@
 {
-  /* See all the pre-defined configs here: https://www.npmjs.com/package/eslint-config-defaults */
   "extends": ["defaults/configurations/airbnb/es6", "plugin:react/recommended"],
   "parser": "babel-eslint",
   "root": true,
