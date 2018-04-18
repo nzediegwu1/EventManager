@@ -4,7 +4,6 @@
 
 Given you manage an events center, this app will help you accept applications to use your center/facilities, and will either decline events when the proposed day is already taken, or suggest an available day
 
-###### App's Documentation: https://eventmanager29.herokuapp.com/docs
 <hr>
 
 ## TECHNOLOGIES USED
@@ -15,7 +14,8 @@ Given you manage an events center, this app will help you accept applications to
   * Test: Mocha/Chai
 
 
-## Setup guide: Clone this repository. To install all dependencies, run;
+## Setup guide: Clone this repository: git clone https://github.com/nzediegwu1/EventManager.git
+## To install all dependencies, run;
 
 
 
@@ -27,7 +27,7 @@ To start server, run:
 
 
 
-``` npm run start:dev  ```
+``` npm run start  ```
 
 
 
@@ -92,7 +92,7 @@ To test, run:
   </tr>  
   <tr>
       <td>PUT</td>
-      <td>/api/v1/events/<eventId> </td>
+      <td>/api/v1/events/:eventId</td>
       <td>Edit an event</td>
       <td>
       <pre>{
@@ -109,7 +109,7 @@ To test, run:
   
   <tr>
       <td>DELETE</td>
-      <td>/api/v1/events/<eventId></td>
+      <td>/api/v1/events/:eventId</td>
       <td>Delete an event</td>
       <td>
       <pre>{
@@ -147,13 +147,13 @@ To test, run:
   </tr>
   <tr>
       <td>GET</td>
-      <td>/api/v1/centers/<centerId></td>
+      <td>/api/v1/centers/:centerId</td>
       <td>Get a single center</td>
       <td></td>
   </tr>
    <tr>
       <td>PUT</td>
-      <td>/api/v1/centers/<centerId></td>
+      <td>/api/v1/centers/:centerId</td>
       <td>Modify the details of center</td>
       <td>
       <pre>{
