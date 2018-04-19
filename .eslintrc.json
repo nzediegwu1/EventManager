@@ -1,5 +1,5 @@
 {
-  "extends": "defaults/configurations/airbnb/es6",
+  "extends": ["defaults/configurations/airbnb/es6", "plugin:react/recommended"],
   "parser": "babel-eslint",
   "root": true,
   "plugins": ["react", "import", "jsx-a11y"],
