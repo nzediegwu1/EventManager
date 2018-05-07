@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import profileImage from '../resources/images/profile-image.png';
-import axios from 'axios';
 import { setProfileDetails } from '../actions/userActions';
 import { connect } from 'react-redux';
-import { apiLink, logout } from '../reusables';
+import { apiLink, Transactions, getOne } from '../services';
 import { TableRow } from './table';
 import { Option } from './selectOption';
 
@@ -13,27 +12,24 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setProfileDetails: data => dispatch(setProfileDetails(data)),
 });
-const ProfileInput = props => {
-  const content = (
-    <div className="form-group row">
-      <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">{props.label}</label>
-      <div className="col-lg-9 mx-sm-auto">
-        <input
-          className="form-control"
-          defaultValue={props.value}
-          type={props.type}
-          placeholder={props.placeholder}
-          ref={props.action}
-          required={!!props.require}
-        />
-      </div>
+const ProfileInput = props => (
+  <div className="form-group row">
+    <label className="col-lg-3 mx-sm-auto col-form-label form-control-label">{props.label}</label>
+    <div className="col-lg-9 mx-sm-auto">
+      <input
+        className="form-control"
+        defaultValue={props.value}
+        type={props.type}
+        placeholder={props.placeholder}
+        ref={props.action}
+        required={!!props.require}
+      />
     </div>
-  );
-  return content;
-};
+  </div>
+);
 let profileData;
 let accountType;
-let setProfData;
+let properties;
 class ProfileComponent extends Component {
   constructor(props) {
     super(props);
@@ -53,70 +49,32 @@ class ProfileComponent extends Component {
     imageData.append('folder', folder);
     imageData.append('public_id', publicId);
     const token = JSON.parse(localStorage.token).value;
-    axios
-      .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
-      .then(res => {
-        const profileUpdate = {
-          picture: res.data.secure_url,
-          publicId: res.data.public_id,
-          token,
-        };
-        axios
-          .put(`${apiLink}/api/v1/users/changePic`, profileUpdate)
-          .then(response => {
-            profileData = response.data.data;
-            setProfData(profileData);
-            alert('image upload successful');
-          })
-          .catch(err => {
-            alert(err);
-            console.log(err);
-          });
-      })
-      .catch(error => {
-        alert(error);
-      });
+    const transactions = new Transactions(properties, 'profilePic');
+    const saveImage = res => {
+      const profileUpdate = {
+        picture: res.data.secure_url,
+        publicId: res.data.public_id,
+        token,
+      };
+      profileData = transactions.addOrUpdate(null, profileUpdate);
+    };
+    transactions.uploadImage(imageData, saveImage);
   }
   upgradeAccount() {
-    const token = JSON.parse(localStorage.token).value;
-    axios
-      .put(
-        `${apiLink}/api/v1/users/${profileData.id}/upgrade/?token=${token}&accountType=${
-          this.account.value
-        }`
-      )
-      .then(res => {
-        profileData = res.data.data;
-        this.props.setProfileDetails(profileData);
-        alert('Successfully upgraded');
-      })
-      .catch(err => {
-        alert(err);
-        (err.response.status === 403 || err.response.status === 401) &&
-          logout('addNewCenter', this.props.history);
-      });
+    const account = this.account.value;
+    const transactions = new Transactions(this.props, 'upgrade');
+    profileData = transactions.addOrUpdate(profileData.id, account);
   }
   componentWillMount() {
-    const userId = this.props.match.params.id;
-    axios
-      .get(`${apiLink}/api/v1/users/${userId}`)
-      .then(res => {
-        profileData = res.data.data;
-        setProfData = this.props.setProfileDetails;
-        this.props.setProfileDetails(profileData);
-        // alert('user profile gotten!');
-      })
-      .catch(error => {
-        alert(error);
-        console.log(error.response);
-      });
+    properties = this.props;
+    const userId = properties.match.params.id;
+    profileData = getOne(properties, userId, 'users');
   }
   reset() {
     this.props.setProfileDetails(profileData);
   }
   handleSubmit(event) {
     event.preventDefault();
-    const token = JSON.parse(localStorage.token).value;
     const profileInputs = {
       username: this.username.value,
       name: this.name.value,
@@ -128,19 +86,8 @@ class ProfileComponent extends Component {
       password: this.password.value,
       confirmPassword: this.confirmPassword.value,
     };
-    axios
-      .put(`${apiLink}/api/v1/users/?token=${token}`, profileInputs)
-      .then(res => {
-        profileData = res.data.data;
-        this.props.setProfileDetails(profileData);
-        alert('Successfully saved!');
-      })
-      .catch(err => {
-        typeof err.response.data.message !== 'object' &&
-          alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) &&
-          logout('addNewCenter', this.props.history);
-      });
+    const transactions = new Transactions(this.props, 'profile');
+    profileData = transactions.addOrUpdate(null, profileInputs);
   }
   render() {
     const user = this.props.profileDetails[0];
@@ -168,7 +115,7 @@ class ProfileComponent extends Component {
     } else {
       accountType = user.accountType;
     }
-    const content = (
+    return (
       <div className="card mx-sm-auto col-sm-11 profile-panel">
         <div className="card-header mg-event-header text-center">Manage Profile</div>
         <div className="card-body">
@@ -324,7 +271,6 @@ class ProfileComponent extends Component {
         <div className="card-footer mg-event-header text-center">@Event Manager 2018</div>
       </div>
     );
-    return content;
   }
 }
 export const Profile = connect(mapStateToProps, mapDispatchToProps)(ProfileComponent);

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import menuIcon from '../resources/images/glyphicons-517-menu-hamburger.png';
-import searchIcon from '../resources/images/glyphicons-28-search.png';
-import createIcon from '../resources/images/glyphicons-191-plus-sign.png';
+import Icon from './icon';
 import { connect } from 'react-redux';
 import {
   setModalTitle,
@@ -33,7 +31,7 @@ const NavbarList = props => {
         href="#"
       >
         {props.body}
-        <img src={createIcon} alt="add" className="invert-color sidebar-toggle" />
+        <Icon src="glyphicons-191-plus-sign.png" alt="add" class="invert-color sidebar-toggle" />
       </a>
     </li>
   );
@@ -54,7 +52,11 @@ class NavBarItem extends Component {
     const content = (
       <nav className="navbar fixed-top navbar-expand-sm navbar-background">
         <a href="#" data-toggle="modal" data-target="#myModalSidebar">
-          <img src={menuIcon} className="invert-color sidebar-toggle" id="menu-toggle" />
+          <Icon
+            src="glyphicons-517-menu-hamburger.png"
+            class="invert-color sidebar-toggle"
+            id="menu-toggle"
+          />
         </a>
         <h4 className="appTitle">EventMgr</h4>
         <button
@@ -64,7 +66,12 @@ class NavBarItem extends Component {
           aria-controls="navBody"
           aria-expanded="false"
         >
-          <img src={menuIcon} alt="hamburger" className="invert-color" />
+          <Icon
+            src="glyphicons-517-menu-hamburger.png"
+            class="invert-color"
+            id="menu-toggle"
+            alt="hamburger"
+          />
         </button>
         <div className="collapse navbar-collapse collapsible" id="navBody">
           <form className="form-inline my-lg-0" id="searchFormGroup">
@@ -80,7 +87,7 @@ class NavBarItem extends Component {
                 id="searchEvents"
                 type="submit"
               >
-                <img src={searchIcon} className="invert-color" />
+                <Icon src="glyphicons-28-search.png" class="invert-color" />
               </button>
             </div>
           </form>

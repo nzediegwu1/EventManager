@@ -1,15 +1,8 @@
 import React from 'react';
 import { FormGroup } from './formGroup';
-import usernameIcon from '../resources/images/glyphicons-522-user-lock.png';
-import userIcon from '../resources/images/glyphicons-4-user.png';
-import emailIcon from '../resources/images/glyphicons-11-envelope.png';
-import phoneIcon from '../resources/images/glyphicons-442-phone-alt.png';
-import passwordIcon from '../resources/images/glyphicons-204-lock.png';
-import axios from 'axios';
-import { signin } from '../reusables';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
-import { apiLink } from '../reusables';
+import { onboarding } from '../services';
 
 const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
@@ -23,13 +16,11 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
   ref,
   required,
 });
-let history;
 class SignupComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validate = this.validate.bind(this);
-    history = this.props.history;
   }
   validate(username, name, email, password, confirmPassword) {
     if (username.trim().length === 0) {
@@ -48,6 +39,7 @@ class SignupComponent extends React.Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
     const username = this.username.value;
     const name = this.name.value;
     const email = this.email.value;
@@ -56,26 +48,17 @@ class SignupComponent extends React.Component {
     const password = this.password.value;
     const confirmPassword = this.rePassword.value;
     if (this.validate(username, name, email, password, confirmPassword)) {
-      axios
-        .post(`${apiLink}/api/v1/users`, {
-          username,
-          name,
-          email,
-          phoneNo,
-          accountType,
-          password,
-          confirmPassword,
-        })
-        .then(res => {
-          alert('Successful');
-          signin(res, history);
-          this.props.setAccountType(JSON.parse(localStorage.token).accountType);
-        })
-        .catch(err => {
-          alert(err.response.data.message);
-        });
+      const data = {
+        username,
+        name,
+        email,
+        phoneNo,
+        accountType,
+        password,
+        confirmPassword,
+      };
+      onboarding(this.props, data, 'signup');
     }
-    event.preventDefault();
   }
 
   render() {
@@ -86,7 +69,7 @@ class SignupComponent extends React.Component {
         </h3>
         <br />
         <FormGroup
-          image={usernameIcon}
+          image="glyphicons-522-user-lock.png"
           alt="username"
           inputProps={inputAttrs(
             'text',
@@ -98,7 +81,7 @@ class SignupComponent extends React.Component {
           )}
         />
         <FormGroup
-          image={userIcon}
+          image="glyphicons-4-user.png"
           alt="fullname"
           inputProps={inputAttrs(
             'text',
@@ -110,7 +93,7 @@ class SignupComponent extends React.Component {
           )}
         />
         <FormGroup
-          image={emailIcon}
+          image="glyphicons-11-envelope.png"
           alt="email"
           inputProps={inputAttrs(
             'text',
@@ -122,7 +105,7 @@ class SignupComponent extends React.Component {
           )}
         />
         <FormGroup
-          image={phoneIcon}
+          image="glyphicons-442-phone-alt.png"
           alt="phone"
           inputProps={inputAttrs(
             'number',
@@ -134,7 +117,7 @@ class SignupComponent extends React.Component {
           )}
         />
         <FormGroup
-          image={passwordIcon}
+          image="glyphicons-204-lock.png"
           alt="password"
           inputProps={inputAttrs(
             'password',
@@ -146,7 +129,7 @@ class SignupComponent extends React.Component {
           )}
         />
         <FormGroup
-          image={passwordIcon}
+          image="glyphicons-204-lock.png"
           alt="password"
           inputProps={inputAttrs(
             'password',

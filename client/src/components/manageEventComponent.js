@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import calenderIcon from '../resources/images/glyphicons-46-calendar.png';
-import timeIcon from '../resources/images/glyphicons-54-alarm.png';
+import Icon from './icon';
 import { ManageDetailsHeader } from './manageDetailsHeader';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { setEventDetail } from '../actions/eventActions';
 import { setPage } from '../actions/pageActions';
 import { TableRow } from './table';
-import { apiLink, logout } from '../reusables';
+import { apiLink, getOne, Transactions } from '../services';
 
 const mapDispatchToProps = dispatch => ({
   setEventDetail: event => dispatch(setEventDetail(event)),
@@ -25,56 +23,24 @@ class ManageEventComponent extends Component {
     this.loggedInUser = JSON.parse(localStorage.token).id;
   }
   componentWillMount() {
-    axios
-      .get(`${apiLink}/api/v1/events/${this.id}`)
-      .then(res => {
-        this.props.setEventDetail(res.data.data);
-        this.props.setPage('manageEvent');
-      })
-      .catch(err => {
-        err.response.status === 500
-          ? alert(err.response.data.message.name)
-          : alert(err.response.data.message);
-        (err.response.status === 404 || err.response.status === 400) &&
-          this.props.history.push('/dashboard');
-      });
+    getOne(this.props, this.id, 'events');
   }
   componentWillUnmount() {
     this.props.setPage('dashboard');
   }
   approve(e) {
+    const transactions = new Transactions(this.props, 'event');
     const event = this.props.eventDetails[0];
-    const token = JSON.parse(localStorage.token).value;
     const value = e.target.checked;
     const status = value === true ? 'approved' : 'rejected';
+    const itemId = this.props.match.params.id;
     const data = {
       date: new Date(event.date).toDateString(),
       time: new Date(event.date).toLocaleTimeString(),
       status,
       centerId: event.centerId,
     };
-    axios
-      .put(`${apiLink}/api/v1/events/approve/${this.props.match.params.id}?token=${token}`, data)
-      .then(res => {
-        this.props.setEventDetail(res.data.data);
-        alert(res.data.data.status);
-      })
-      .catch(err => {
-        typeof err.response.data.message !== 'object' &&
-          alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) &&
-          logout('addNewCenter', this.props.history);
-        if (typeof err.response.data.message === 'object') {
-          let occupiedDates = '';
-          err.response.data.message.OccupiedDates.forEach(date => {
-            occupiedDates += `${new Date(date).toDateString()}\n`;
-          });
-          alert(
-            `MESSAGE:\n${err.response.data.message.Sorry}\n\nOCCUPIED DATES:\n${occupiedDates}`
-          );
-          occupiedDates = '';
-        }
-      });
+    transactions.addOrUpdate(itemId, data);
   }
   render() {
     const event = this.props.eventDetails[0];
@@ -85,7 +51,7 @@ class ManageEventComponent extends Component {
         </div>
       );
     }
-    const content = (
+    return (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
@@ -150,18 +116,17 @@ class ManageEventComponent extends Component {
         <div className="card-footer text-muted mg-event-header">
           <div className="row text-white">
             <div className="col-sm-6">
-              <img className="invert-color" src={calenderIcon} /> Date:{' '}
+              <Icon class="invert-color" src="glyphicons-46-calendar.png" alt="date" /> Date:{' '}
               {new Date(event.date).toDateString()}
             </div>
             <div className="col-sm-6">
-              <img className="invert-color" src={timeIcon} /> Start Time:{' '}
+              <Icon class="invert-color" src="glyphicons-54-alarm.png" alt="time" /> Start Time:{' '}
               {new Date(event.date).toLocaleTimeString()}
             </div>
           </div>
         </div>
       </div>
     );
-    return content;
   }
 }
 export const ManageEvent = connect(mapStateToProps, mapDispatchToProps)(ManageEventComponent);

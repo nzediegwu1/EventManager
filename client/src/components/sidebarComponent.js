@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import removeIcon from '../resources/images/glyphicons-198-remove-circle.png';
-import eventIcon from '../resources/images/glyphicons-619-mixed-buildings.png';
-import centerIcon from '../resources/images/glyphicons-503-map.png';
-import userIcon from '../resources/images/glyphicons-4-user.png';
-import logoutIcon from '../resources/images/glyphicons-64-power.png';
-import groupIcon from '../resources/images/glyphicons-44-group.png';
+import Icon from './icon';
 import createHistory from 'history/createBrowserHistory';
-import { logout, apiLink } from '../reusables';
+import { logout, apiLink } from '../services';
 import { connect } from 'react-redux';
 import { setProfileDetails } from '../actions/userActions';
 import axios from 'axios';
@@ -22,7 +17,7 @@ export const ListItem = props => {
       <h6>
         <a className="nav-link" href="#">
           {props.title}
-          <img className="invert-color icon-margin-left" src={props.icon} alt={props.alt} />
+          <Icon src={props.icon} alt={props.alt} class="invert-color icon-margin-left" />
         </a>
       </h6>
     </li>
@@ -67,7 +62,13 @@ class SidebarComponent extends Component {
               <h5 className="modal-title">
                 <b>Dashboard</b>
               </h5>
-              <img className="invert-color close" data-dismiss="modal" src={removeIcon} />
+              <div data-dismiss="modal">
+                <Icon
+                  src="glyphicons-198-remove-circle.png"
+                  alt="close"
+                  class="invert-color close"
+                />
+              </div>
             </div>
             <div className="modal-body">
               <ul className="nav flex-column nav-tabs">
@@ -75,14 +76,14 @@ class SidebarComponent extends Component {
                   event={this.changeLocation.bind(this, `${this.props.match.path}`)}
                   class="nav-item"
                   title="Events"
-                  icon={eventIcon}
+                  icon="glyphicons-619-mixed-buildings.png"
                   alt="myEvents"
                 />
                 <ListItem
                   event={this.changeLocation.bind(this, `${this.props.match.path}/centers`)}
                   class="nav-item"
                   title="Centers"
-                  icon={centerIcon}
+                  icon="glyphicons-503-map.png"
                   alt="myCenters"
                 />
                 <ListItem
@@ -92,7 +93,7 @@ class SidebarComponent extends Component {
                   )}
                   class="nav-item"
                   title="MyProfile"
-                  icon={userIcon}
+                  icon="glyphicons-4-user.png"
                   alt="myProfile"
                 />
                 {this.userId === 1 && (
@@ -100,7 +101,7 @@ class SidebarComponent extends Component {
                     event={this.changeLocation.bind(this, `${this.props.match.path}/userList`)}
                     class="nav-item"
                     title="All Users"
-                    icon={groupIcon}
+                    icon="glyphicons-44-group.png"
                     alt="userList"
                   />
                 )}
@@ -108,7 +109,7 @@ class SidebarComponent extends Component {
                   event={() => logout('myModalSidebar', this.props.history)}
                   class="nav-item logout"
                   title="Logout"
-                  icon={logoutIcon}
+                  icon="glyphicons-64-power.png"
                   alt="logout"
                 />
               </ul>
