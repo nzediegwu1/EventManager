@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { populateEvents, setEventDetail } from '../actions/eventActions';
 import { connect } from 'react-redux';
-import { apiLink } from '../reusables';
+import { getAll } from '../services';
 
 const mapDispatchToProps = dispatch => ({
   populateEvents: events => dispatch(populateEvents(events)),
@@ -19,14 +18,7 @@ export class Events extends Component {
     super(props);
   }
   componentWillMount() {
-    axios
-      .get(`${apiLink}/api/v1/events`)
-      .then(res => {
-        this.props.populateEvents(res.data.data);
-      })
-      .catch(err => {
-        alert(err);
-      });
+    getAll(this.props, 'events');
   }
   render() {
     const content = (

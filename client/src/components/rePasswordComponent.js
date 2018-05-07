@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormGroup } from './formGroup';
-import emailIcon from '../resources/images/glyphicons-11-envelope.png';
 import { ModalHeader } from './modalHeader';
 
 const inputAttrs = (inputType, inputName, placeholder, className, required) => ({
@@ -29,7 +28,7 @@ export class RecoverPassword extends React.Component {
               <form className="form">
                 <fieldset>
                   <FormGroup
-                    image={emailIcon}
+                    image="glyphicons-11-envelope.png"
                     alt="email"
                     inputProps={inputAttrs(
                       'text',

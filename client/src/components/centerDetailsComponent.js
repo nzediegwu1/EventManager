@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { ManageDetailsHeader } from './manageDetailsHeader';
 import { TableHead, TableRow } from './table';
-import axios from 'axios';
 import { setCenterDetails } from '../actions/centerActions';
 import { setPage } from '../actions/pageActions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { apiLink } from '../reusables';
-import manageIcon from '../resources/images/glyphicons-281-settings.png';
+import { getOne } from '../services';
+import Icon from './icon';
 import { ManageFacilities } from './manageFacilityComponent';
 
 const mapDispatchToProps = dispatch => ({
@@ -26,17 +25,7 @@ class CenterDetailsComponent extends Component {
     this.id = this.props.match.params.id;
   }
   componentWillMount() {
-    axios
-      .get(`${apiLink}/api/v1/centers/${this.id}`)
-      .then(res => {
-        this.props.setCenterDetails(res.data.data);
-        this.props.setPage('centerDetails');
-      })
-      .catch(err => {
-        alert(err.response.data.message);
-        (err.response.status === 404 || err.response.status === 400) &&
-          this.props.history.push('/dashboard/centers');
-      });
+    getOne(this.props, this.id, 'centers');
   }
   componentWillUnmount() {
     this.props.setPage('dashboard');
@@ -51,9 +40,9 @@ class CenterDetailsComponent extends Component {
       );
     }
     const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
-    const content = (
+    return (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
-        <ManageFacilities history={this.props.history} data={facilities} centerId={this.id}/>
+        <ManageFacilities history={this.props.history} data={facilities} centerId={this.id} />
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
             history={this.props.history}
@@ -103,7 +92,7 @@ class CenterDetailsComponent extends Component {
                 data-toggle="modal"
                 data-target="#manageFacilities"
               >
-                <img src={manageIcon} alt="Edit" />
+                <Icon src="glyphicons-281-settings.png" alt="Edit" />
               </button>
             </div>
           </div>
@@ -155,7 +144,6 @@ class CenterDetailsComponent extends Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 export const CenterDetails = connect(mapStateToProps, mapDispatchToProps)(CenterDetailsComponent);

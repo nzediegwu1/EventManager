@@ -1,12 +1,9 @@
 import React from 'react';
 import { FormGroup } from './formGroup';
 import { SignupForm } from './signupComponent';
-import usernameIcon from '../resources/images/glyphicons-522-user-lock.png';
-import passwordIcon from '../resources/images/glyphicons-204-lock.png';
 import { RecoverPassword } from './rePasswordComponent';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
-import { signin, apiLink } from '../reusables';
+import { onboarding } from '../services';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
 
@@ -50,20 +47,13 @@ class SignInPage extends React.Component {
     }
   }
   handleSubmit(event) {
+    event.preventDefault();
     const username = this.username.value;
     const password = this.password.value;
+    const data = { username, password };
     if (this.validate(username, password)) {
-      axios
-        .post(`${apiLink}/api/v1/users/login`, { username, password })
-        .then(res => {
-          signin(res, this.props.history);
-          this.props.setAccountType(JSON.parse(localStorage.token).accountType);
-        })
-        .catch(err => {
-          alert(err.response.data.message);
-        });
+      onboarding(this.props, data, 'login');
     }
-    event.preventDefault();
   }
   render() {
     const content = (
@@ -88,7 +78,7 @@ class SignInPage extends React.Component {
               </h3>
               <br />
               <FormGroup
-                image={usernameIcon}
+                image="glyphicons-522-user-lock.png"
                 alt="username"
                 inputProps={inputAttrs(
                   'text',
@@ -100,7 +90,7 @@ class SignInPage extends React.Component {
                 )}
               />
               <FormGroup
-                image={passwordIcon}
+                image="glyphicons-204-lock.png"
                 alt="password"
                 inputProps={inputAttrs(
                   'password',

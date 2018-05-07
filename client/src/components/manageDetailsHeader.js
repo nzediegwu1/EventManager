@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import editIcon from '../resources/images/glyphicons-151-edit.png';
-import removeIcon from '../resources/images/glyphicons-17-bin.png';
+import Icon from './icon';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import {
   setModalTitle,
   setRequired,
   setEventDefaults,
   setCenterDefaults,
 } from '../actions/pageActions';
-import { apiLink } from '../reusables';
+import { apiLink, deleteResource } from '../services';
 
 const mapStateToProps = state => {
   const currentPage = state.page.currentPage;
@@ -42,7 +40,7 @@ const Manager = props => {
           data-toggle="modal"
           data-target={props.editModal}
         >
-          <img src={editIcon} alt="Edit" />
+          <Icon src="glyphicons-151-edit.png" alt="Edit" />
         </button>
         <button
           onClick={props.deleteEvent}
@@ -50,7 +48,7 @@ const Manager = props => {
           className="btn btn-danger icon-margin-left"
           id="deleteEvent"
         >
-          <img src={removeIcon} alt="delete" />
+          <Icon src="glyphicons-17-bin.png" alt="delete" />
         </button>
       </div>
     </td>
@@ -73,17 +71,7 @@ class ManageDetails extends Component {
         }&file=${resource.publicId}`;
       };
       const url = urlGenerator();
-      axios
-        .delete(url)
-        .then(res => {
-          alert(res.data.data);
-          history.push('/dashboard/events');
-        })
-        .catch(err => {
-          alert(err.response.data.message);
-          (err.response.status === 403 || err.response.status === 401) &&
-            logout('addNewEvent', history);
-        });
+      deleteResource(url, history);
     }
   }
   render() {

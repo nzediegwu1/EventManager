@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import eventNameIcon from '../resources/images/glyphicons-619-mixed-buildings.png';
-import eventImageIcon from '../resources/images/glyphicons-139-picture.png';
-import eventDateIcon from '../resources/images/glyphicons-46-calendar.png';
-import eventTimeIcon from '../resources/images/glyphicons-54-alarm.png';
 import { FormGroup } from './formGroup';
 import { ModalHeader } from './modalHeader';
 import { Option } from './selectOption';
-import axios from 'axios';
-import { logout, getCenters, apiLink } from '../reusables';
+import { getAll, apiLink, Transactions } from '../services';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
 import { populateCenters } from '../actions/centerActions';
@@ -39,21 +34,18 @@ class AddEventComponent extends Component {
     this.folder = apiLink === 'http://localhost:8080' ? 'dev/events' : 'prod/events';
   }
   componentWillMount() {
-    getCenters(axios, this.props.populateCenters);
+    getAll(this.props, 'centers');
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let postEvent;
+    const transactions = new Transactions(this.props, 'event');
     const title = this.name.value;
     const date = this.date.value;
     const time = this.time.value;
     const description = this.description.value;
     const centerId = this.center.value;
     const token = JSON.parse(localStorage.token).value;
-    const modalTitle = this.props.modalTitle;
-    const history = this.props.history;
-    const setEvent = this.props.setEventDetail;
     function saveEvent(res) {
       const eventData = {
         title,
@@ -65,35 +57,7 @@ class AddEventComponent extends Component {
         centerId,
         token,
       };
-      if (modalTitle === 'New Event') {
-        postEvent = axios.post(`${apiLink}/api/v1/events`, eventData);
-      } else {
-        postEvent = axios.put(`${apiLink}/api/v1/events/${eventId}`, eventData);
-      }
-      postEvent
-        .then(response => {
-          history.push(`/dashboard/events/${response.data.data.id}`);
-          setEvent(response.data.data);
-          if (modalTitle !== 'New Event') {
-            $('#addNewEvent').modal('hide');
-          }
-        })
-        .catch(err => {
-          typeof err.response.data.message !== 'object' &&
-            alert(JSON.stringify(err.response.data.message));
-          (err.response.status === 403 || err.response.status === 401) &&
-            logout('addNewEvent', history);
-          if (typeof err.response.data.message === 'object') {
-            let occupiedDates = '';
-            err.response.data.message.OccupiedDates.forEach(date => {
-              occupiedDates += `${new Date(date).toDateString()}\n`;
-            });
-            alert(
-              `MESSAGE:\n${err.response.data.message.Sorry}\n\nOCCUPIED DATES:\n${occupiedDates}`
-            );
-            occupiedDates = '';
-          }
-        });
+      transactions.addOrUpdate(eventId, eventData);
     }
     if (this.picture.files[0]) {
       const imageData = new FormData();
@@ -105,12 +69,7 @@ class AddEventComponent extends Component {
       imageData.append('timestamp', (Date.now() / 1000) | 0);
       imageData.append('folder', this.folder);
       imageData.append('public_id', publicId);
-      axios
-        .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
-        .then(res => saveEvent(res))
-        .catch(err => {
-          alert(err.response); // unsuccessful image upload
-        });
+      transactions.uploadImage(imageData, saveEvent);
     } else {
       saveEvent(undefined);
     }
@@ -138,7 +97,8 @@ class AddEventComponent extends Component {
     this.center.value = eventDefaults.center.id;
   }
   render() {
-    const content = (
+    const { modalTitle, centers } = this.props;
+    return (
       <div
         className="modal fade"
         role="dialog"
@@ -149,11 +109,11 @@ class AddEventComponent extends Component {
       >
         <div className="modal-dialog">
           <div className="modal-content eventModal">
-            <ModalHeader id="addNewEventTitle" title={this.props.modalTitle} />
+            <ModalHeader id="addNewEventTitle" title={modalTitle} />
             <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup
-                  image={eventNameIcon}
+                  image="glyphicons-619-mixed-buildings.png"
                   alt="eventname"
                   inputProps={inputAttrs(
                     'text',
@@ -165,7 +125,7 @@ class AddEventComponent extends Component {
                   )}
                 />
                 <FormGroup
-                  image={eventImageIcon}
+                  image="glyphicons-139-picture.png"
                   alt="eventImage"
                   inputProps={inputAttrs(
                     'file',
@@ -176,7 +136,7 @@ class AddEventComponent extends Component {
                   )}
                 />
                 <FormGroup
-                  image={eventDateIcon}
+                  image="glyphicons-46-calendar.png"
                   alt="eventdate"
                   inputProps={inputAttrs(
                     'date',
@@ -188,7 +148,7 @@ class AddEventComponent extends Component {
                   )}
                 />
                 <FormGroup
-                  image={eventTimeIcon}
+                  image="glyphicons-54-alarm.png"
                   alt="eventTime"
                   inputProps={inputAttrs(
                     'time',
@@ -218,7 +178,7 @@ class AddEventComponent extends Component {
                     className="custom-select-sm"
                   >
                     <Option value="" text="Select Center" disabled selected />
-                    {this.props.centers.map(center => (
+                    {centers.map(center => (
                       <Option
                         key={center.id}
                         value={center.id}
@@ -243,7 +203,6 @@ class AddEventComponent extends Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 

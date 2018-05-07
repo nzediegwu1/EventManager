@@ -1,4 +1,5 @@
 import React from 'react';
+import { apiLink } from '../services';
 
 const Input = props => {
   if (props.params.required) {
@@ -28,7 +29,7 @@ export const FormGroup = props => {
     <div className="form-group">
       <div className="input-group">
         <span className="input-group-addon">
-          <img src={props.image} alt={props.alt} />
+          <img src={`${apiLink}/images/${props.image}`} alt={props.alt} />
         </span>
         <Input params={props.inputProps} />
       </div>

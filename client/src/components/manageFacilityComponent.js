@@ -1,16 +1,11 @@
 import React from 'react';
 import { ModalHeader } from './modalHeader';
 import { FormGroup } from './formGroup';
-import facilityIcon from '../resources/images/glyphicons-540-cart-tick.png';
-import specIcon from '../resources/images/glyphicons-249-asterisk.png';
-import countIcon from '../resources/images/glyphicons-710-list-numbered.png';
-import addIcon from '../resources/images/glyphicons-191-plus-sign.png';
-import removeIcon from '../resources/images/glyphicons-17-bin.png';
+import Icon from './icon';
 import { TableHead, TableRow } from './table';
 import { populateFacilities, setUndeletedFacilities } from '../actions/facilityAction';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { apiLink, logout } from '../reusables';
+import { Transactions } from '../services';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -43,22 +38,13 @@ export class ManageFacilityComponent extends React.Component {
   }
   handleSubmit() {
     const facilityData = this.props.undeleted;
-    const token = JSON.parse(localStorage.token).value;
-    axios
-      .post(`${apiLink}/api/v1/facilities/${this.props.centerId}?token=${token}`, {
-        data: JSON.stringify({ content: facilityData }),
-      })
-      .then(() => {
-        alert('Successfully saved!');
-        this.props.populateFacilities(facilityData);
-        $('#manageFacilities').modal('hide');
-      })
-      .catch(err => {
-        typeof err.response.data.message !== 'object' &&
-          alert(JSON.stringify(err.response.data.message));
-        (err.response.status === 403 || err.response.status === 401) &&
-          logout('manageFacilities', this.props.history);
-      });
+    const data = {
+      data: JSON.stringify({ content: facilityData }),
+      content: facilityData,
+    };
+    const itemId = this.props.centerId;
+    const transactions = new Transactions(this.props, 'facilities');
+    transactions.addOrUpdate(itemId, data);
   }
   deleteMarked() {
     toDelete.forEach(index => {
@@ -95,7 +81,7 @@ export class ManageFacilityComponent extends React.Component {
       checker++;
     }
     facilities = checker > 0 ? this.props.undeleted : this.props.data;
-    const content = (
+    return (
       <div
         className="modal fade"
         role="dialog"
@@ -110,7 +96,7 @@ export class ManageFacilityComponent extends React.Component {
             <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form" onSubmit={this.addFacility}>
                 <FormGroup
-                  image={facilityIcon}
+                  image="glyphicons-540-cart-tick.png"
                   alt="centername"
                   inputProps={inputAttrs(
                     'text',
@@ -122,7 +108,7 @@ export class ManageFacilityComponent extends React.Component {
                   )}
                 />
                 <FormGroup
-                  image={specIcon}
+                  image="glyphicons-249-asterisk.png"
                   alt="centerImage"
                   inputProps={inputAttrs(
                     'text',
@@ -134,7 +120,7 @@ export class ManageFacilityComponent extends React.Component {
                   )}
                 />
                 <FormGroup
-                  image={countIcon}
+                  image="glyphicons-710-list-numbered.png"
                   alt="address"
                   inputProps={inputAttrs(
                     'number',
@@ -152,10 +138,11 @@ export class ManageFacilityComponent extends React.Component {
                     </div>
                     <div className="col-sm-2 zero-padding" id="addFacility">
                       <a href="#">
-                        <img
-                          className="invert-color add-facility-icon"
-                          src={addIcon}
-                          onClick={this.addFacility}
+                        <Icon
+                          class="invert-color add-facility-icon"
+                          src="glyphicons-191-plus-sign.png"
+                          alt="add-facility"
+                          clickAction={this.addFacility}
                         />
                       </a>
                     </div>
@@ -168,7 +155,11 @@ export class ManageFacilityComponent extends React.Component {
                           'Name',
                           'Spec',
                           'Quantity',
-                          <img src={removeIcon} alt="delete" onClick={this.deleteMarked} />,
+                          <Icon
+                            src="glyphicons-17-bin.png"
+                            alt="delete"
+                            clickAction={this.deleteMarked}
+                          />,
                         ]}
                         class="table-header"
                       />
@@ -220,7 +211,6 @@ export class ManageFacilityComponent extends React.Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 export const ManageFacilities = connect(mapStateToProps, mapDispatchToProps)(

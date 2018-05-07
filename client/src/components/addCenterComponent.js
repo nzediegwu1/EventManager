@@ -1,15 +1,8 @@
 import React from 'react';
 import { ModalHeader } from './modalHeader';
 import { FormGroup } from './formGroup';
-import centerNameIcon from '../resources/images/glyphicons-21-home.png';
-import centerImageIcon from '../resources/images/glyphicons-139-picture.png';
-import addressIcon from '../resources/images/glyphicons-243-map-marker.png';
-import cityIcon from '../resources/images/glyphicons-740-cadastral-map.png';
-import capacityIcon from '../resources/images/glyphicons-44-group.png';
-import amountIcon from '../resources/images/glyphicons-228-usd.png';
 import { Option } from './selectOption';
-import axios from 'axios';
-import { logout, apiLink } from '../reusables';
+import { apiLink, Transactions } from '../services';
 import { connect } from 'react-redux';
 import { setCenterDetails } from '../actions/centerActions';
 
@@ -30,8 +23,8 @@ const mapStateToProps = state => ({
   required: state.page.required,
   centerDefaults: state.page.centerDefaults,
 });
-let centerId;
 
+let centerId;
 class AddCenterComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -40,9 +33,8 @@ class AddCenterComponent extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    const { modalTitle, history, setCenterDetails } = this.props;
-    let postCenter;
-    function saveCenter(res) {
+    const transactions = new Transactions(this.props, 'center');
+    const saveCenter = res => {
       const centerData = {
         name: this.name.value,
         address: this.address.value,
@@ -51,49 +43,21 @@ class AddCenterComponent extends React.Component {
         price: this.price.value,
         availability: this.availability.value,
         token: JSON.parse(localStorage.token).value,
-        picture: res ? res.data.secure_url : undefined,
-        publicId: res ? res.data.public_id : undefined,
+        picture: res.data.secure_url,
+        publicId: res.data.public_id,
       };
-      if (modalTitle === 'New Center') {
-        postCenter = axios.post(`${apiLink}/api/v1/centers`, centerData);
-      } else {
-        postCenter = axios.put(`${apiLink}/api/v1/centers/${centerId}`, centerData);
-      }
-      postCenter
-        .then(response => {
-          alert('Transaction Successful');
-          history.push(`/dashboard/centers/${response.data.data.id}`);
-          setCenterDetails(response.data.data);
-          if (modalTitle !== 'New Center') {
-            $('#addNewCenter').modal('hide');
-          }
-        })
-        .catch(err => {
-          typeof err.response.data.message !== 'object' &&
-            alert(JSON.stringify(err.response.data.message));
-          (err.response.status === 403 || err.response.status === 401) &&
-            logout('addNewCenter', history);
-        });
-    }
-    if (this.picture.files[0]) {
-      const imageData = new FormData();
-      const publicId = `${Date.now()}-${this.picture.files[0].name}`;
-      imageData.append('file', this.picture.files[0]);
-      imageData.append('tags', 'center, facilities, events');
-      imageData.append('upload_preset', 'm4vlbdts');
-      imageData.append('api_key', '789891965151338');
-      imageData.append('timestamp', (Date.now() / 1000) | 0);
-      imageData.append('folder', this.folder);
-      imageData.append('public_id', publicId);
-      axios
-        .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
-        .then(res => saveCenter(res))
-        .catch(err => {
-          alert(err.response); // unsuccessful image upload
-        });
-    } else {
-      saveCenter(undefined);
-    }
+      transactions.addOrUpdate(centerId, centerData);
+    };
+    const imageData = new FormData();
+    const publicId = `${Date.now()}-${this.picture.files[0].name}`;
+    imageData.append('file', this.picture.files[0]);
+    imageData.append('tags', 'center, facilities, events');
+    imageData.append('upload_preset', 'm4vlbdts');
+    imageData.append('api_key', '789891965151338');
+    imageData.append('timestamp', (Date.now() / 1000) | 0);
+    imageData.append('folder', this.folder);
+    imageData.append('public_id', publicId);
+    transactions.uploadImage(imageData, saveCenter);
   }
   componentWillReceiveProps(nextState) {
     const centerDefaults = nextState.centerDefaults;
@@ -106,7 +70,8 @@ class AddCenterComponent extends React.Component {
     centerId = centerDefaults.id;
   }
   render() {
-    const content = (
+    const { modalTitle, required } = this.props;
+    return (
       <div
         className="modal fade"
         role="dialog"
@@ -117,11 +82,11 @@ class AddCenterComponent extends React.Component {
       >
         <div className="modal-dialog">
           <div className="modal-content eventModal">
-            <ModalHeader id="addNewCenterTitle" title={this.props.modalTitle} />
+            <ModalHeader id="addNewCenterTitle" title={modalTitle} />
             <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup
-                  image={centerNameIcon}
+                  image="glyphicons-21-home.png"
                   alt="centername"
                   inputProps={inputAttrs(
                     'text',
@@ -133,7 +98,7 @@ class AddCenterComponent extends React.Component {
                   )}
                 />
                 <FormGroup
-                  image={centerImageIcon}
+                  image="glyphicons-139-picture.png"
                   alt="centerImage"
                   inputProps={inputAttrs(
                     'file',
@@ -141,11 +106,11 @@ class AddCenterComponent extends React.Component {
                     'Center Image',
                     'form-control input-sm',
                     input => (this.picture = input),
-                    this.props.required
+                    required
                   )}
                 />
                 <FormGroup
-                  image={addressIcon}
+                  image="glyphicons-243-map-marker.png"
                   alt="address"
                   inputProps={inputAttrs(
                     'text',
@@ -157,7 +122,7 @@ class AddCenterComponent extends React.Component {
                   )}
                 />
                 <FormGroup
-                  image={cityIcon}
+                  image="glyphicons-740-cadastral-map.png"
                   alt="city"
                   inputProps={inputAttrs(
                     'text',
@@ -169,7 +134,7 @@ class AddCenterComponent extends React.Component {
                   )}
                 />
                 <FormGroup
-                  image={capacityIcon}
+                  image="glyphicons-44-group.png"
                   alt="capacity"
                   inputProps={inputAttrs(
                     'number',
@@ -181,7 +146,7 @@ class AddCenterComponent extends React.Component {
                   )}
                 />
                 <FormGroup
-                  image={amountIcon}
+                  image="glyphicons-228-usd.png"
                   alt="bookingAmount"
                   inputProps={inputAttrs(
                     'number',
@@ -217,7 +182,6 @@ class AddCenterComponent extends React.Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 export const AddCenter = connect(mapStateToProps, mapDispatchToProps)(AddCenterComponent);

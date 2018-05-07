@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { populateCenters } from '../actions/centerActions';
 import { connect } from 'react-redux';
-import { getCenters } from '../reusables';
+import { getAll } from '../services';
 
 const mapDispatchToProps = dispatch => ({
   populateCenters: centers => dispatch(populateCenters(centers)),
@@ -18,7 +17,7 @@ class CenterList extends Component {
     super(props);
   }
   componentWillMount() {
-    getCenters(axios, this.props.populateCenters);
+    getAll(this.props, 'centers');
   }
 
   render() {

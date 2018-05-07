@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { populateUserList } from '../actions/userActions';
 import { connect } from 'react-redux';
-import { getUsers } from '../reusables';
+import { getAll } from '../services';
 
 const mapDispatchToProps = dispatch => ({
   populateUserList: users => dispatch(populateUserList(users)),
@@ -18,8 +17,7 @@ class UserListComponent extends Component {
     super(props);
   }
   componentWillMount() {
-    const token = JSON.parse(localStorage.token).value;
-    getUsers(axios, this.props.populateUserList, token, this.props.history);
+    getAll(this.props, 'users');
   }
 
   render() {
