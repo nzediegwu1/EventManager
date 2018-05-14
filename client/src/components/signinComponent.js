@@ -3,9 +3,12 @@ import { FormGroup } from './formGroup';
 import { SignupForm } from './signupComponent';
 import { RecoverPassword } from './rePasswordComponent';
 import { Redirect } from 'react-router-dom';
-import { onboarding } from '../services';
+import { onboarding, toastSettings, userValidator } from '../services';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
+import toastr from 'toastr';
+
+toastr.options = toastSettings;
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -26,10 +29,12 @@ class SignInPage extends React.Component {
     this.state = {
       signinView: 'block',
       signupView: 'none',
+      disabled: false,
+      visibility: 'none',
     };
     this.changeState = this.changeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.validate = this.validate.bind(this);
+    this.changeSubmitState = this.changeSubmitState.bind(this);
   }
   changeState() {
     this.setState(prevState => ({
@@ -37,22 +42,26 @@ class SignInPage extends React.Component {
       signupView: prevState.signupView === 'none' ? 'block' : 'none',
     }));
   }
-  validate(username, password) {
-    if (username.trim().length === 0) {
-      alert('Username must not be empty');
-    } else if (password.length < 6) {
-      alert('password must be up to 6 characters');
-    } else {
-      return true;
-    }
+  changeSubmitState(state) {
+    this.setState({
+      disabled: state === 'initial' ? false : 'disabled',
+      visibility: state === 'initial' ? 'none' : true,
+    });
   }
   handleSubmit(event) {
     event.preventDefault();
-    const username = this.username.value;
-    const password = this.password.value;
-    const data = { username, password };
-    if (this.validate(username, password)) {
-      onboarding(this.props, data, 'login');
+    const loginData = {
+      username: this.username.value,
+      password: this.password.value,
+    };
+    const validationStatus = userValidator(loginData, 'login');
+    if (validationStatus === true) {
+      this.changeSubmitState('processing');
+      onboarding(this.props, loginData, 'login', () => {
+        this.changeSubmitState('initial');
+      });
+    } else {
+      toastr.error(validationStatus);
     }
   }
   render() {
@@ -64,7 +73,12 @@ class SignInPage extends React.Component {
           </div>
           <div id="loginPanel" className="mx-sm-auto col-sm-6">
             <div style={{ display: this.state.signupView }}>
-              <SignupForm history={this.props.history} changeState={this.changeState} />
+              <SignupForm
+                history={this.props.history}
+                changeState={this.changeState}
+                state={this.state}
+                changeSubmitState={this.changeSubmitState}
+              />
             </div>
             <form
               onSubmit={this.handleSubmit}
@@ -105,8 +119,10 @@ class SignInPage extends React.Component {
                 type="submit"
                 id="login"
                 className="btn btn-lg btn-primary btn-block submitButton"
+                disabled={this.state.disabled}
               >
-                Login
+                <i className="fa fa-spinner fa-spin" style={{ display: this.state.visibility }} />
+                &nbsp; Login
               </button>
               <div className="form-links">
                 <a href="#" className="welcome" onClick={this.changeState}>

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import profileImage from '../resources/images/profile-image.png';
 import { setProfileDetails } from '../actions/userActions';
 import { connect } from 'react-redux';
-import { apiLink, Transactions, getOne } from '../services';
+import { apiLink, Transactions, getOne, userValidator } from '../services';
 import { TableRow } from './table';
 import { Option } from './selectOption';
+import toastr from 'toastr';
 
 const mapStateToProps = state => ({
   profileDetails: state.users.profileDetails,
@@ -30,35 +31,53 @@ const ProfileInput = props => (
 let profileData;
 let accountType;
 let properties;
+let changeSubmit;
 class ProfileComponent extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.reset = this.reset.bind(this);
     this.upgradeAccount = this.upgradeAccount.bind(this);
-  }
-  uploadPic(e) {
-    const folder = apiLink === 'http://localhost:8080' ? 'dev/profile' : 'prod/profile';
-    const imageData = new FormData();
-    const publicId = `${Date.now()}-${e.target.files[0].name}`;
-    imageData.append('file', e.target.files[0]);
-    imageData.append('tags', 'profileImage');
-    imageData.append('upload_preset', 'm4vlbdts');
-    imageData.append('api_key', '789891965151338');
-    imageData.append('timestamp', (Date.now() / 1000) | 0);
-    imageData.append('folder', folder);
-    imageData.append('public_id', publicId);
-    const token = JSON.parse(localStorage.token).value;
-    const transactions = new Transactions(properties, 'profilePic');
-    const saveImage = res => {
-      const profileUpdate = {
-        picture: res.data.secure_url,
-        publicId: res.data.public_id,
-        token,
-      };
-      profileData = transactions.addOrUpdate(null, profileUpdate);
+    this.changeSubmitState = this.changeSubmitState.bind(this);
+    this.state = {
+      disabled: false,
+      visibility: 'none',
     };
-    transactions.uploadImage(imageData, saveImage);
+  }
+  changeSubmitState(state) {
+    this.setState({
+      disabled: state === 'initial' ? false : 'disabled',
+      visibility: state === 'initial' ? 'none' : true,
+    });
+  }
+
+  uploadPic(e) {
+    if (e.target.files[0]) {
+      changeSubmit('processing');
+      const folder = apiLink === 'http://localhost:8080' ? 'dev/profile' : 'prod/profile';
+      const imageData = new FormData();
+      const publicId = `${Date.now()}-${e.target.files[0].name}`;
+      imageData.append('file', e.target.files[0]);
+      imageData.append('tags', 'profileImage');
+      imageData.append('upload_preset', 'm4vlbdts');
+      imageData.append('api_key', '789891965151338');
+      imageData.append('timestamp', (Date.now() / 1000) | 0);
+      imageData.append('folder', folder);
+      imageData.append('public_id', publicId);
+      const token = JSON.parse(localStorage.token).value;
+      const transactions = new Transactions(properties, 'profilePic');
+      const saveImage = res => {
+        const profileUpdate = {
+          picture: res.data.secure_url,
+          publicId: res.data.public_id,
+          token,
+        };
+        profileData = transactions.addOrUpdate(null, profileUpdate, () => {
+          changeSubmit('initial');
+        });
+      };
+      transactions.uploadImage(imageData, saveImage);
+    }
   }
   upgradeAccount() {
     const account = this.account.value;
@@ -73,6 +92,7 @@ class ProfileComponent extends Component {
   reset() {
     this.props.setProfileDetails(profileData);
   }
+
   handleSubmit(event) {
     event.preventDefault();
     const profileInputs = {
@@ -86,11 +106,20 @@ class ProfileComponent extends Component {
       password: this.password.value,
       confirmPassword: this.confirmPassword.value,
     };
-    const transactions = new Transactions(this.props, 'profile');
-    profileData = transactions.addOrUpdate(null, profileInputs);
+    const validationStatus = userValidator(profileInputs, 'profile');
+    if (validationStatus === true) {
+      changeSubmit('processing');
+      const transactions = new Transactions(this.props, 'profile');
+      profileData = transactions.addOrUpdate(null, profileInputs, () => {
+        changeSubmit('initial');
+      });
+    } else {
+      toastr.error(validationStatus);
+    }
   }
   render() {
     const user = this.props.profileDetails[0];
+    changeSubmit = this.changeSubmitState;
     profileData = user;
     if (user === undefined) {
       return (
@@ -135,8 +164,15 @@ class ProfileComponent extends Component {
                       id="file"
                       onChange={this.uploadPic}
                       className="custom-file-input"
+                      disabled={this.state.disabled}
                     />
-                    <span className="custom-file-control">Choose file</span>
+                    <span className="custom-file-control">
+                      <i
+                        className="fa fa-spinner fa-spin"
+                        style={{ display: this.state.visibility }}
+                      />
+                      &nbsp;Choose file
+                    </span>
                   </label>
                 </div>
               )}
@@ -169,13 +205,13 @@ class ProfileComponent extends Component {
                   <div className="table-responsive">
                     <table className="table table-hover table-striped table-bordered">
                       <tbody>
-                        <TableRow colNumber={2} columns={['Username', user.username]} />
-                        <TableRow colNumber={2} columns={['Phone', user.phoneNo]} />
-                        <TableRow colNumber={2} columns={['Email', user.email]} />
-                        <TableRow colNumber={2} columns={['Address', user.address]} />
-                        <TableRow colNumber={2} columns={['Company', user.company]} />
-                        <TableRow colNumber={2} columns={['Website', user.website]} />
-                        <TableRow colNumber={2} columns={['Account', accountType]} />
+                        <TableRow columns={['Username', user.username]} />
+                        <TableRow columns={['Phone', user.phoneNo]} />
+                        <TableRow columns={['Email', user.email]} />
+                        <TableRow columns={['Address', user.address]} />
+                        <TableRow columns={['Company', user.company]} />
+                        <TableRow columns={['Website', user.website]} />
+                        <TableRow columns={['Account', accountType]} />
                       </tbody>
                     </table>
                   </div>
@@ -193,7 +229,7 @@ class ProfileComponent extends Component {
                     />
                     <ProfileInput
                       label="Email"
-                      type="text"
+                      type="email"
                       placeholder="Email"
                       action={input => (this.email = input)}
                       require="required"
@@ -259,7 +295,17 @@ class ProfileComponent extends Component {
                           value="Reset"
                           onClick={this.reset}
                         />
-                        <input type="submit" className="btn btn-primary" value="Save" />
+                        <button
+                          type="submit"
+                          className="btn btn-primary"
+                          disabled={this.state.disabled}
+                        >
+                          <i
+                            className="fa fa-spinner fa-spin"
+                            style={{ display: this.state.visibility }}
+                          />
+                          &nbsp; Save
+                        </button>
                       </div>
                     </div>
                   </form>

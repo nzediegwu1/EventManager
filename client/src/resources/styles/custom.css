@@ -406,6 +406,7 @@ select {
   margin: auto;
   width: 100%;
   height: 400px;
+  object-fit: contain;
 }
 
 .custom-file-control {
@@ -450,7 +451,8 @@ select {
   padding-top: 1em;
   padding-bottom: 1em;
 }
-.profile-tab .nav-item.show .nav-link, .profile-tab .nav-link.active {
+.profile-tab .nav-item.show .nav-link,
+.profile-tab .nav-link.active {
   color: white;
   background-color: darkblue;
 }

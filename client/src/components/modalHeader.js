@@ -2,7 +2,7 @@ import React from 'react';
 
 export class ModalHeader extends React.Component {
   render() {
-    const content = (
+    return (
       <div className="modal-header">
         <h5 className="modal-title" id={this.props.id}>
           <b>{this.props.title}</b>
@@ -12,6 +12,5 @@ export class ModalHeader extends React.Component {
         </button>
       </div>
     );
-    return content;
   }
 }

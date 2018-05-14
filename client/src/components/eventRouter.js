@@ -5,13 +5,12 @@ import { ManageEvent } from './manageEventComponent';
 
 export class EventRouter extends Component {
   render() {
-    const content = (
+    return (
       <Switch>
         <Route path={`${this.props.match.path}/events/:id`} component={ManageEvent} />
         <Route path={`${this.props.match.path}/events`} component={EventList} />
         <Redirect to={`${this.props.match.path}/events`} />
       </Switch>
     );
-    return content;
   }
 }

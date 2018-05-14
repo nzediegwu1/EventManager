@@ -2,7 +2,10 @@ import React from 'react';
 import { FormGroup } from './formGroup';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
-import { onboarding } from '../services';
+import { onboarding, toastSettings, userValidator } from '../services';
+import toastr from 'toastr';
+
+toastr.options = toastSettings;
 
 const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
@@ -20,49 +23,32 @@ class SignupComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.validate = this.validate.bind(this);
-  }
-  validate(username, name, email, password, confirmPassword) {
-    if (username.trim().length === 0) {
-      alert('Username must not be empty');
-    } else if (name.trim().length === 0) {
-      alert('Name field must not be empty');
-    } else if (email.trim().length === 0) {
-      alert('Email field must not be empty');
-    } else if (password.length < 6) {
-      alert('Password must be up to 6 characters');
-    } else if (password !== confirmPassword) {
-      alert('passwords do not match');
-    } else {
-      return true;
-    }
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const username = this.username.value;
-    const name = this.name.value;
-    const email = this.email.value;
-    const phoneNo = this.phone.value;
-    const accountType = 'regular';
-    const password = this.password.value;
-    const confirmPassword = this.rePassword.value;
-    if (this.validate(username, name, email, password, confirmPassword)) {
-      const data = {
-        username,
-        name,
-        email,
-        phoneNo,
-        accountType,
-        password,
-        confirmPassword,
-      };
-      onboarding(this.props, data, 'signup');
+    const signupData = {
+      username: this.username.value,
+      password: this.password.value,
+      name: this.name.value,
+      confirmPassword: this.rePassword.value,
+      email: this.email.value,
+      phoneNo: this.phone.value,
+      accountType: 'regular',
+    };
+    const validationStatus = userValidator(signupData, 'signup');
+    if (validationStatus === true) {
+      this.props.changeSubmitState('processing');
+      onboarding(this.props, signupData, 'signup', () => {
+        this.props.changeSubmitState('initial');
+      });
+    } else {
+      toastr.error(validationStatus);
     }
   }
 
   render() {
-    const content = (
+    return (
       <form role="form" onSubmit={this.handleSubmit} className="formDiv" id="signupForm">
         <h3 className="text-center panel-font">
           <b>Register</b>
@@ -96,7 +82,7 @@ class SignupComponent extends React.Component {
           image="glyphicons-11-envelope.png"
           alt="email"
           inputProps={inputAttrs(
-            'text',
+            'email',
             'email',
             'Email',
             'form-control input-sm',
@@ -140,8 +126,13 @@ class SignupComponent extends React.Component {
             'required'
           )}
         />
-        <button type="submit" className="btn btn-lg btn-primary btn-block submitButton">
-          Signup
+        <button
+          type="submit"
+          disabled={this.props.state.disabled}
+          className="btn btn-lg btn-primary btn-block submitButton"
+        >
+          <i className="fa fa-spinner fa-spin" style={{ display: this.props.state.visibility }} />
+          &nbsp; Signup
         </button>
         <div className="form-links">
           <a href="#" className="welcome" onClick={this.props.changeState}>
@@ -150,7 +141,6 @@ class SignupComponent extends React.Component {
         </div>
       </form>
     );
-    return content;
   }
 }
 export const SignupForm = connect(null, mapDispatchToProps)(SignupComponent);

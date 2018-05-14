@@ -19,24 +19,21 @@ const mapDispatchToProps = dispatch => ({
   setCenterDefaults: data => dispatch(setCenterDefaults(data)),
 });
 
-const NavbarList = props => {
-  const content = (
-    <li className="nav-item">
-      <a
-        id={props.id}
-        onClick={props.setModalProps}
-        className="nav-link"
-        data-toggle="modal"
-        data-target={props.dataTarget}
-        href="#"
-      >
-        {props.body}
-        <Icon src="glyphicons-191-plus-sign.png" alt="add" class="invert-color sidebar-toggle" />
-      </a>
-    </li>
-  );
-  return content;
-};
+const NavbarList = props => (
+  <li className="nav-item">
+    <a
+      id={props.id}
+      onClick={props.setModalProps}
+      className="nav-link"
+      data-toggle="modal"
+      data-target={props.dataTarget}
+      href="#"
+    >
+      {props.body}
+      <Icon src="glyphicons-191-plus-sign.png" alt="add" class="invert-color sidebar-toggle" />
+    </a>
+  </li>
+);
 class NavBarItem extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +46,7 @@ class NavBarItem extends Component {
         ? this.props.setEventDefaults(initialState.eventDefaults)
         : this.props.setCenterDefaults(initialState.centerDefaults);
     };
-    const content = (
+    return (
       <nav className="navbar fixed-top navbar-expand-sm navbar-background">
         <a href="#" data-toggle="modal" data-target="#myModalSidebar">
           <Icon
@@ -113,7 +110,6 @@ class NavBarItem extends Component {
         </div>
       </nav>
     );
-    return content;
   }
 }
 export const NavBar = connect(mapStateToProps, mapDispatchToProps)(NavBarItem);

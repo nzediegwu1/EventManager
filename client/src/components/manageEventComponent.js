@@ -73,19 +73,17 @@ class ManageEventComponent extends Component {
                   className="table table-hover table-striped table-bordered"
                 >
                   <tbody className="thick">
-                    <TableRow colNumber={2} columns={['Description', event.description]} />
+                    <TableRow columns={['Description', event.description]} />
                     <TableRow
-                      colNumber={2}
                       columns={[
                         'Venue',
                         `${event.center.name}, ${event.center.address}, ${event.center.location}`,
                       ]}
                     />
-                    <TableRow colNumber={2} columns={['By', event.user.name]} />
-                    <TableRow colNumber={2} columns={['Contact', event.user.email]} />
+                    <TableRow columns={['By', event.user.name]} />
+                    <TableRow columns={['Contact', event.user.email]} />
                     {
                       <TableRow
-                        colNumber={2}
                         columns={[
                           'Status',
                           event.center.userId === this.loggedInUser ? (

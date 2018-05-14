@@ -28,33 +28,30 @@ const mapDispatchToProps = dispatch => ({
   setEventDefaults: data => dispatch(setEventDefaults(data)),
   setCenterDefaults: data => dispatch(setCenterDefaults(data)),
 });
-const Manager = props => {
-  const content = (
-    <td>
-      <div className="manage">
-        <button
-          onClick={props.setModalProps}
-          type="submit"
-          id="editEvent"
-          className="btn btn-success"
-          data-toggle="modal"
-          data-target={props.editModal}
-        >
-          <Icon src="glyphicons-151-edit.png" alt="Edit" />
-        </button>
-        <button
-          onClick={props.deleteEvent}
-          type="submit"
-          className="btn btn-danger icon-margin-left"
-          id="deleteEvent"
-        >
-          <Icon src="glyphicons-17-bin.png" alt="delete" />
-        </button>
-      </div>
-    </td>
-  );
-  return content;
-};
+const Manager = props => (
+  <td>
+    <div className="manage">
+      <button
+        onClick={props.setModalProps}
+        type="submit"
+        id="editEvent"
+        className="btn btn-success"
+        data-toggle="modal"
+        data-target={props.editModal}
+      >
+        <Icon src="glyphicons-151-edit.png" alt="Edit" />
+      </button>
+      <button
+        onClick={props.deleteEvent}
+        type="submit"
+        className="btn btn-danger icon-margin-left"
+        id="deleteEvent"
+      >
+        <Icon src="glyphicons-17-bin.png" alt="delete" />
+      </button>
+    </div>
+  </td>
+);
 let param, currentPage, history, resource;
 class ManageDetails extends Component {
   constructor(props) {
@@ -88,7 +85,7 @@ class ManageDetails extends Component {
         ? this.props.setEventDefaults(this.props.eventDetails[0])
         : this.props.setCenterDefaults(this.props.centerDetails[0]);
     };
-    const content = (
+    return (
       <table className="table-responsive col-sm-12 bg-transparent  zero-padding">
         <tbody>
           <tr>
@@ -112,7 +109,6 @@ class ManageDetails extends Component {
         </tbody>
       </table>
     );
-    return content;
   }
 }
 export const ManageDetailsHeader = connect(mapStateToProps, mapDispatchToProps)(ManageDetails);

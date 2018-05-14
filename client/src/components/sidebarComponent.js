@@ -1,29 +1,25 @@
 import React, { Component } from 'react';
 import Icon from './icon';
 import createHistory from 'history/createBrowserHistory';
-import { logout, apiLink } from '../services';
+import { logout, getOne } from '../services';
 import { connect } from 'react-redux';
 import { setProfileDetails } from '../actions/userActions';
-import axios from 'axios';
 
 const mapDispatchToProps = dispatch => ({
   setProfileDetails: data => dispatch(setProfileDetails(data)),
 });
 
 const history = createHistory();
-export const ListItem = props => {
-  const content = (
-    <li onClick={props.event} className={props.class}>
-      <h6>
-        <a className="nav-link" href="#">
-          {props.title}
-          <Icon src={props.icon} alt={props.alt} class="invert-color icon-margin-left" />
-        </a>
-      </h6>
-    </li>
-  );
-  return content;
-};
+export const ListItem = props => (
+  <li onClick={props.event} className={props.class}>
+    <h6>
+      <a className="nav-link" href="#">
+        {props.title}
+        <Icon src={props.icon} alt={props.alt} class="invert-color icon-margin-left" />
+      </a>
+    </h6>
+  </li>
+);
 class SidebarComponent extends Component {
   constructor(props) {
     super(props);
@@ -32,22 +28,15 @@ class SidebarComponent extends Component {
   }
   changeLocation(url) {
     if (url === `${this.props.match.path}/profile/${this.userId}`) {
-      axios
-        .get(`${apiLink}/api/v1/users/${this.userId}`)
-        .then(res => {
-          this.props.setProfileDetails(res.data.data);
-          // alert('user profile gotten!');
-        })
-        .catch(error => {
-          alert(error);
-          console.log(error.response);
-        });
+      const profileData = getOne(this.props, this.userId, 'users');
+      this.props.setProfileDetails(profileData);
     }
     history.push(url);
     $('#myModalSidebar').modal('hide');
   }
+
   render() {
-    const content = (
+    return (
       <div
         className="modal left fade"
         id="myModalSidebar"
@@ -118,7 +107,6 @@ class SidebarComponent extends Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 export const Sidebar = connect(null, mapDispatchToProps)(SidebarComponent);

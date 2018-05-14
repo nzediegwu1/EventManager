@@ -27,18 +27,31 @@ const mapStateToProps = state => ({
   centers: state.centers.centerList,
 });
 let eventId;
+let changeSubmit;
 class AddEventComponent extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeSubmitState = this.changeSubmitState.bind(this);
     this.folder = apiLink === 'http://localhost:8080' ? 'dev/events' : 'prod/events';
+    this.state = {
+      disabled: false,
+      visibility: 'none',
+    };
   }
   componentWillMount() {
     getAll(this.props, 'centers');
   }
-
+  changeSubmitState(state) {
+    this.setState({
+      disabled: state === 'initial' ? false : 'disabled',
+      visibility: state === 'initial' ? 'none' : true,
+    });
+  }
   handleSubmit(event) {
     event.preventDefault();
+    changeSubmit = this.changeSubmitState;
+    changeSubmit('processing');
     const transactions = new Transactions(this.props, 'event');
     const title = this.name.value;
     const date = this.date.value;
@@ -57,7 +70,9 @@ class AddEventComponent extends Component {
         centerId,
         token,
       };
-      transactions.addOrUpdate(eventId, eventData);
+      transactions.addOrUpdate(eventId, eventData, () => {
+        changeSubmit('initial');
+      });
     }
     if (this.picture.files[0]) {
       const imageData = new FormData();
@@ -189,8 +204,16 @@ class AddEventComponent extends Component {
                     ))}
                   </select>
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-success createEvent">
-                      Save
+                    <button
+                      type="submit"
+                      className="btn btn-success createEvent"
+                      disabled={this.state.disabled}
+                    >
+                      <i
+                        className="fa fa-spinner fa-spin"
+                        style={{ display: this.state.visibility }}
+                      />
+                      &nbsp; Save
                     </button>
                     <button className="btn btn-danger" data-dismiss="modal">
                       Cancel

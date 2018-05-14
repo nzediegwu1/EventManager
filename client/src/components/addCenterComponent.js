@@ -25,14 +25,30 @@ const mapStateToProps = state => ({
 });
 
 let centerId;
+let changeSubmit;
 class AddCenterComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.changeSubmitState = this.changeSubmitState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.folder = apiLink === 'http://localhost:8080' ? 'dev/centers' : 'prod/centers';
+    this.state = {
+      disabled: false,
+      visibility: 'none',
+    };
   }
+
+  changeSubmitState(state) {
+    this.setState({
+      disabled: state === 'initial' ? false : 'disabled',
+      visibility: state === 'initial' ? 'none' : true,
+    });
+  }
+
   handleSubmit(event) {
     event.preventDefault();
+    changeSubmit = this.changeSubmitState;
+    changeSubmit('processing');
     const transactions = new Transactions(this.props, 'center');
     const saveCenter = res => {
       const centerData = {
@@ -43,21 +59,27 @@ class AddCenterComponent extends React.Component {
         price: this.price.value,
         availability: this.availability.value,
         token: JSON.parse(localStorage.token).value,
-        picture: res.data.secure_url,
-        publicId: res.data.public_id,
+        picture: res ? res.data.secure_url : undefined,
+        publicId: res ? res.data.public_id : undefined,
       };
-      transactions.addOrUpdate(centerId, centerData);
+      transactions.addOrUpdate(centerId, centerData, () => {
+        changeSubmit('initial');
+      });
     };
-    const imageData = new FormData();
-    const publicId = `${Date.now()}-${this.picture.files[0].name}`;
-    imageData.append('file', this.picture.files[0]);
-    imageData.append('tags', 'center, facilities, events');
-    imageData.append('upload_preset', 'm4vlbdts');
-    imageData.append('api_key', '789891965151338');
-    imageData.append('timestamp', (Date.now() / 1000) | 0);
-    imageData.append('folder', this.folder);
-    imageData.append('public_id', publicId);
-    transactions.uploadImage(imageData, saveCenter);
+    if (this.picture.files[0]) {
+      const imageData = new FormData();
+      const publicId = `${Date.now()}-${this.picture.files[0].name}`;
+      imageData.append('file', this.picture.files[0]);
+      imageData.append('tags', 'center, facilities, events');
+      imageData.append('upload_preset', 'm4vlbdts');
+      imageData.append('api_key', '789891965151338');
+      imageData.append('timestamp', (Date.now() / 1000) | 0);
+      imageData.append('folder', this.folder);
+      imageData.append('public_id', publicId);
+      transactions.uploadImage(imageData, saveCenter);
+    } else {
+      saveCenter(undefined);
+    }
   }
   componentWillReceiveProps(nextState) {
     const centerDefaults = nextState.centerDefaults;
@@ -169,8 +191,16 @@ class AddCenterComponent extends React.Component {
                   </select>
                 </div>
                 <div className="modal-footer">
-                  <button type="submit" className="btn btn-success createCenter">
-                    Save
+                  <button
+                    type="submit"
+                    className="btn btn-success createCenter"
+                    disabled={this.state.disabled}
+                  >
+                    <i
+                      className="fa fa-spinner fa-spin"
+                      style={{ display: this.state.visibility }}
+                    />
+                    &nbsp; Save
                   </button>
                   <button className="btn btn-danger" data-dismiss="modal">
                     Cancel
