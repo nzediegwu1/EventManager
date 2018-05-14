@@ -37,7 +37,7 @@ class UserListComponent extends Component {
         <div className="table-responsive">
           <table className="table table-hover table-main">
             <TableHead
-              columns={['Name', 'Phone', 'Address', 'Account']}
+              columns={['Pic', 'Name', 'Phone', 'Account']}
               class="table-header table-header-main"
             />
             <tbody>
