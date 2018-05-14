@@ -1,4 +1,14 @@
 import axios from 'axios';
+import toastr from 'toastr';
+
+export const toastSettings = {
+  closeButton: true,
+  positionClass: 'toast-top-center',
+  timeOut: '1000',
+  showMethod: 'slideDown',
+  hideMethod: 'slideUp',
+};
+toastr.options = toastSettings;
 const signin = (res, history) => {
   const token = {
     value: res.data.data.Token,
@@ -9,14 +19,43 @@ const signin = (res, history) => {
   history.push('/dashboard');
 };
 
+export const userValidator = (userData, context) => {
+  const { username, password, name, confirmPassword } = userData;
+  /**
+   * @description A function to validate login details
+   * @param {string} usName username
+   * @param {string} pword password
+   * @returns true || validation error message
+   */
+  const checkLogin = (usName, pword) => {
+    if (usName.trim().length < 4) {
+      return 'Username must not be less than 4 characters';
+    } else if (pword.trim().length < 6) {
+      return 'Password must be up to 6 characters';
+    }
+    return true;
+  };
+  const loginStatus = checkLogin(username, password);
+  if (context === 'login') {
+    return loginStatus;
+  }
+  if (loginStatus !== true) {
+    return loginStatus;
+  } else if (name.length < 4) {
+    return 'Full name must not be less than 4 characters';
+  } else if (password !== confirmPassword) {
+    return 'passwords do not match';
+  }
+  return true;
+};
+
 export const logout = (id, history) => {
   localStorage.clear();
   $(`#${id}`).modal('hide');
   history.push('/');
 };
 
-export const apiLink = 'http://localhost:8080'; // 'https://eventmanageronline.herokuapp.com';
-
+export const apiLink = 'https://eventmanageronline.herokuapp.com'; // 'http://localhost:8080';
 export const getAll = (props, type) => {
   let dispatchAction;
   const { history } = props;
@@ -36,36 +75,38 @@ export const getAll = (props, type) => {
     .catch(err => {
       const status = err.response.status;
       if (status === 403 || status === 401) history.push('/');
-      alert(err);
+      toastr.error(err);
     });
 };
 export const deleteResource = (url, history) => {
   axios
     .delete(url)
     .then(res => {
-      alert(res.data.data);
+      toastr.success(res.data.data);
       history.push('/dashboard/events');
     })
     .catch(err => {
-      alert(err.response.data.message);
+      toastr.error(err.response.data.message);
       const status = err.response.status;
       if (status === 403 || status === 401) {
         logout('addNewEvent', history);
       }
     });
 };
-export const onboarding = (props, data, context) => {
+export const onboarding = (props, data, context, cb) => {
   const { history, setAccountType } = props;
   const url = context === 'signup' ? `${apiLink}/api/v1/users` : `${apiLink}/api/v1/users/login`;
   axios
     .post(url, data)
     .then(res => {
-      alert('Successful');
+      const message = context === 'signup' ? 'Signup successfull' : 'Login successfull';
+      toastr.success(message);
       signin(res, history);
       setAccountType(res.data.data.User.accountType);
     })
     .catch(err => {
-      alert(err.response.data.message);
+      toastr.error(err.response.data.message);
+      cb(err.response.data.message);
     });
 };
 
@@ -94,9 +135,9 @@ export const getOne = (props, itemId, type) => {
       const status = err.response.status;
       const errorMessage = err.response.data.message;
       if (status === 500) {
-        alert(errorMessage.name);
+        toastr.error(errorMessage.name);
       } else {
-        alert(errorMessage);
+        toastr.error(errorMessage);
       }
       if (status === 404 || status === 400) history.push(`/dashboard/${type}`);
     });
@@ -110,7 +151,7 @@ export class Transactions {
     this.props = props;
     this.target = target; // center or event or profile
   }
-  addOrUpdate(itemiId, data) {
+  addOrUpdate(itemiId, data, cb) {
     let http;
     const { modalTitle, history } = this.props;
     const token = JSON.parse(localStorage.token).value;
@@ -165,23 +206,31 @@ export class Transactions {
         } else if (this.target === 'event') {
           $('#addNewEvent').modal('hide');
         }
-        alert('Transaction Successful');
+        toastr.success('Action Successful');
+        if (cb) {
+          cb('success');
+        }
       })
       .catch(err => {
-        console.log(err);
-        const message = err.response.data.message;
-        if (typeof message !== 'object') {
-          alert(JSON.stringify(message));
-        } else {
+        // console.log(err);
+        const message = err.response ? err.response.data.message : undefined;
+        if (message && typeof message !== 'object') {
+          toastr.error(JSON.stringify(message));
+        } else if (message) {
           let occupiedDates = '';
           message.OccupiedDates.forEach(date => {
             occupiedDates += `${new Date(date).toDateString()}\n`;
           });
-          alert(`MESSAGE:\n${message.Sorry}\n\nOCCUPIED DATES:\n${occupiedDates}`);
+          toastr.info(`OCCUPIED DATES:\n${occupiedDates}`, `${message.Sorry}`);
           occupiedDates = '';
+        } else {
+          toastr.error(err);
         }
-        const status = err.response.status;
-        if (status === 403 || status === 401) {
+        if (cb) {
+          cb('error');
+        }
+        const status = err.response ? err.response.status : undefined;
+        if (status && (status === 403 || status === 401)) {
           if (this.target === 'center') {
             logout('addNewCenter', history);
           } else if (this.target === 'event') {
@@ -200,7 +249,7 @@ export class Transactions {
       .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
       .then(res => saveResource(res))
       .catch(err => {
-        alert(err.response); // unsuccessful image upload
+        toastr.error(err.response); // unsuccessful image upload
       });
   }
 }

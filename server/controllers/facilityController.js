@@ -15,17 +15,20 @@ class Facilities {
       centerId,
     }));
     return models.Centers.findOne({ where: { userId: req.decoded.id, id: centerId } })
-      .then(() =>
-        model.destroy({ where: { centerId } }).then(() =>
-          model.bulkCreate(newFacilities, { validate: true }).then(() =>
-            model
-              .findAll()
-              .then(facilities => validator.response(res, 'success', 200, facilities))
-              .catch(error => validator.response(res, 'error', 500, error))
-          )
-        )
-      )
-      .catch(() => validator.response(res, 'error', 403, 'Unauthorized transaction'));
+      .then(found => {
+        if (found) {
+          return model.destroy({ where: { centerId } }).then(() =>
+            model.bulkCreate(newFacilities, { validate: true }).then(() =>
+              model
+                .findAll()
+                .then(facilities => validator.response(res, 'success', 200, facilities))
+                .catch(error => validator.response(res, 'error', 500, error))
+            )
+          );
+        }
+        return validator.response(res, 'error', 403, 'Unauthorized transaction');
+      })
+      .catch(error => validator.response(res, 'error', 500, error));
   }
 }
 const facilityController = new Facilities();

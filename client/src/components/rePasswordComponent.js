@@ -11,7 +11,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, required) => (
 });
 export class RecoverPassword extends React.Component {
   render() {
-    const content = (
+    return (
       <div
         className="modal fade"
         id="resetPassword"
@@ -57,6 +57,5 @@ export class RecoverPassword extends React.Component {
         </div>
       </div>
     );
-    return content;
   }
 }

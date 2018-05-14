@@ -24,16 +24,13 @@ const Input = props => {
     />
   );
 };
-export const FormGroup = props => {
-  const content = (
-    <div className="form-group">
-      <div className="input-group">
-        <span className="input-group-addon">
-          <img src={`${apiLink}/images/${props.image}`} alt={props.alt} />
-        </span>
-        <Input params={props.inputProps} />
-      </div>
+export const FormGroup = props => (
+  <div className="form-group">
+    <div className="input-group">
+      <span className="input-group-addon">
+        <img src={`${apiLink}/images/${props.image}`} alt={props.alt} />
+      </span>
+      <Input params={props.inputProps} />
     </div>
-  );
-  return content;
-};
+  </div>
+);

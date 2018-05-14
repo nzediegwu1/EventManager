@@ -68,12 +68,12 @@ class CenterDetailsComponent extends Component {
                   className="table table-hover table-striped table-bordered"
                 >
                   <tbody>
-                    <TableRow colNumber={2} columns={['Street Address', center.address]} />
-                    <TableRow colNumber={2} columns={['City', center.location]} />
-                    <TableRow colNumber={2} columns={['Capacity', center.capacity]} />
-                    <TableRow colNumber={2} columns={['Booking price', center.price]} />
-                    <TableRow colNumber={2} columns={['Availability', center.availability]} />
-                    <TableRow colNumber={2} columns={['Contact', center.user.email]} />
+                    <TableRow columns={['Street Address', center.address]} />
+                    <TableRow columns={['City', center.location]} />
+                    <TableRow columns={['Capacity', center.capacity]} />
+                    <TableRow columns={['Booking price', center.price]} />
+                    <TableRow columns={['Availability', center.availability]} />
+                    <TableRow columns={['Contact', center.user.email]} />
                   </tbody>
                 </table>
               </div>
@@ -98,16 +98,11 @@ class CenterDetailsComponent extends Component {
           </div>
           <div className="table-responsive">
             <table className="table table-hover table-fixed table-striped">
-              <TableHead
-                colNumber={3}
-                columns={['Name', 'Spec', 'Quantity']}
-                class="table-header"
-              />
+              <TableHead columns={['Name', 'Spec', 'Quantity']} class="table-header" />
               <tbody>
                 {facilities.map(facility => (
                   <TableRow
                     key={facility.id}
-                    colNumber={3}
                     columns={[
                       <b>{facility.name}</b>,
                       <b>{facility.spec}</b>,
@@ -121,12 +116,11 @@ class CenterDetailsComponent extends Component {
           <br />
           <div className="table-responsive">
             <table className="table table-hover table-fixed table-striped">
-              <TableHead colNumber={3} columns={['Events', 'Title', 'Date']} class="table-header" />
+              <TableHead columns={['Events', 'Title', 'Date']} class="table-header" />
               <tbody>
                 {center.events.map(event => (
                   <TableRow
                     key={event.id}
-                    colNumber={3}
                     columns={[
                       <img className="center-image" src={`${event.picture}`} alt="event-view" />,
                       <b>

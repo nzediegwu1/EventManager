@@ -21,7 +21,7 @@ export class Events extends Component {
     getAll(this.props, 'events');
   }
   render() {
-    const content = (
+    return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Events</b>
         <ul className="nav nav-pills flex-column">
@@ -37,7 +37,6 @@ export class Events extends Component {
         <div className="table-responsive">
           <table className="table table-hover table-main">
             <TableHead
-              colNumber={4}
               columns={['View', 'Title', 'Venue', 'Date']}
               class="table-header table-header-main"
             />
@@ -45,7 +44,6 @@ export class Events extends Component {
               {this.props.events.map(event => (
                 <TableRow
                   key={event.id}
-                  colNumber={4}
                   columns={[
                     <img className="center-image" src={`${event.picture}`} alt="event-view" />,
                     <b onClick={() => this.props.setEventDetail(event)}>
@@ -63,7 +61,6 @@ export class Events extends Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 export const EventList = connect(mapStateToProps, mapDispatchToProps)(Events);

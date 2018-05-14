@@ -28,6 +28,7 @@ let toDelete = [];
 let facilities;
 let checker = 0;
 let id = 0;
+let changeSubmit;
 export class ManageFacilityComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -35,8 +36,22 @@ export class ManageFacilityComponent extends React.Component {
     this.setId = this.setId.bind(this);
     this.deleteMarked = this.deleteMarked.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeSubmitState = this.changeSubmitState.bind(this);
+    this.state = {
+      disabled: false,
+      visibility: 'none',
+    };
   }
+  changeSubmitState(state) {
+    this.setState({
+      disabled: state === 'initial' ? false : 'disabled',
+      visibility: state === 'initial' ? 'none' : true,
+    });
+  }
+
   handleSubmit() {
+    changeSubmit = this.changeSubmitState;
+    changeSubmit('processing');
     const facilityData = this.props.undeleted;
     const data = {
       data: JSON.stringify({ content: facilityData }),
@@ -44,7 +59,9 @@ export class ManageFacilityComponent extends React.Component {
     };
     const itemId = this.props.centerId;
     const transactions = new Transactions(this.props, 'facilities');
-    transactions.addOrUpdate(itemId, data);
+    transactions.addOrUpdate(itemId, data, () => {
+      changeSubmit('initial');
+    });
   }
   deleteMarked() {
     toDelete.forEach(index => {
@@ -150,7 +167,6 @@ export class ManageFacilityComponent extends React.Component {
                   <div className="table-responsive centerSearch">
                     <table className="table table-hover grey-color table-striped">
                       <TableHead
-                        colNumber={4}
                         columns={[
                           'Name',
                           'Spec',
@@ -169,7 +185,6 @@ export class ManageFacilityComponent extends React.Component {
                           return (
                             <TableRow
                               key={facility.id}
-                              colNumber={4}
                               columns={[
                                 <b onClick={this.setId}>{facility.name}</b>,
                                 <b>{facility.spec}</b>,
@@ -198,8 +213,13 @@ export class ManageFacilityComponent extends React.Component {
                     type="button"
                     className="btn btn-success createCenter"
                     onClick={this.handleSubmit}
+                    disabled={this.state.disabled}
                   >
-                    Save
+                    <i
+                      className="fa fa-spinner fa-spin"
+                      style={{ display: this.state.visibility }}
+                    />
+                    &nbsp; Save
                   </button>
                   <button className="btn btn-danger" data-dismiss="modal">
                     Cancel

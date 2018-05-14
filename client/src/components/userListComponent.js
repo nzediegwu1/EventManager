@@ -21,7 +21,7 @@ class UserListComponent extends Component {
   }
 
   render() {
-    const content = (
+    return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Users</b>
         <ul className="nav nav-pills flex-column">
@@ -37,7 +37,6 @@ class UserListComponent extends Component {
         <div className="table-responsive">
           <table className="table table-hover table-main">
             <TableHead
-              colNumber={4}
               columns={['Name', 'Phone', 'Address', 'Account']}
               class="table-header table-header-main"
             />
@@ -45,7 +44,6 @@ class UserListComponent extends Component {
               {this.props.userList.map(user => (
                 <TableRow
                   key={user.id}
-                  colNumber={4}
                   columns={[
                     <img className="center-image" src={`${user.picture}`} alt="center-view" />,
                     <Link className="event-detail" to={`profile/${user.id}`}>
@@ -61,7 +59,6 @@ class UserListComponent extends Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 

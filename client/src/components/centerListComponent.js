@@ -21,7 +21,7 @@ class CenterList extends Component {
   }
 
   render() {
-    const content = (
+    return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Centers</b>
         <ul className="nav nav-pills flex-column">
@@ -37,7 +37,6 @@ class CenterList extends Component {
         <div className="table-responsive">
           <table className="table table-hover table-main">
             <TableHead
-              colNumber={4}
               columns={['View', 'Name', 'Location', 'Capacity']}
               class="table-header table-header-main"
             />
@@ -45,13 +44,8 @@ class CenterList extends Component {
               {this.props.centers.map(center => (
                 <TableRow
                   key={center.id}
-                  colNumber={4}
                   columns={[
-                    <img
-                      className="center-image"
-                      src={`${center.picture}`}
-                      alt="center-view"
-                    />,
+                    <img className="center-image" src={`${center.picture}`} alt="center-view" />,
                     <Link className="event-detail" to={`${this.props.match.path}/${center.id}`}>
                       {center.name}
                     </Link>,
@@ -65,7 +59,6 @@ class CenterList extends Component {
         </div>
       </div>
     );
-    return content;
   }
 }
 
