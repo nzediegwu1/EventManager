@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Sidebar } from './sidebarComponent';
 import { NavBar } from './navBarComponent';
 import { AddEvent } from './addEventComponent';
@@ -13,7 +13,7 @@ import { Profile } from './profileComponent';
 const mapStateToProps = state => ({
   accountType: state.users.accountType,
 });
-class DashboardComponent extends Component {
+class DashboardComponent extends React.Component {
   render() {
     const userId = JSON.parse(localStorage.token).id;
     const content = (

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Icon from './icon';
 import createHistory from 'history/createBrowserHistory';
 import { logout, getOne } from '../services';
@@ -20,7 +20,7 @@ export const ListItem = props => (
     </h6>
   </li>
 );
-class SidebarComponent extends Component {
+class SidebarComponent extends React.Component {
   constructor(props) {
     super(props);
     this.changeLocation = this.changeLocation.bind(this);

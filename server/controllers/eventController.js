@@ -12,8 +12,8 @@ const transporter = nodemailer.createTransport({
 });
 cloudinary.config({
   cloud_name: 'eventmanager',
-  api_key: '789891965151338',
-  api_secret: 'ynezeVbgUnGIfNYKj19GvyrflSI',
+  api_key: `${process.env.API_KEY}`,
+  api_secret: `${process.env.API_SECRET}`,
 });
 
 const validator = new Val('events');
@@ -33,7 +33,6 @@ class Events {
         const year = timestamp.getFullYear();
         const occupiedDates = new Set();
         let errorMessage;
-        // console.log('Events were gotten from db');
         events.forEach(event => {
           const eventDate = event.date;
           const eventDay = eventDate.getDate();

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
 import { populateCenters } from '../actions/centerActions';
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
   centers: state.centers.centerList,
 });
 
-class CenterList extends Component {
+class CenterList extends React.Component {
   constructor(props) {
     super(props);
   }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { FormGroup } from './formGroup';
 import { ModalHeader } from './modalHeader';
 import { Option } from './selectOption';
@@ -28,7 +28,7 @@ const mapStateToProps = state => ({
 });
 let eventId;
 let changeSubmit;
-class AddEventComponent extends Component {
+class AddEventComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -79,8 +79,8 @@ class AddEventComponent extends Component {
       const publicId = `${Date.now()}-${this.picture.files[0].name}`;
       imageData.append('file', this.picture.files[0]);
       imageData.append('tags', 'center, facilities, events');
-      imageData.append('upload_preset', 'm4vlbdts');
-      imageData.append('api_key', '789891965151338');
+      imageData.append('upload_preset', `${process.env.UPLOAD_PRESET}`);
+      imageData.append('api_key', `${process.env.API_KEY}`);
       imageData.append('timestamp', (Date.now() / 1000) | 0);
       imageData.append('folder', this.folder);
       imageData.append('public_id', publicId);

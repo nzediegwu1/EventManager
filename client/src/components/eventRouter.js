@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { EventList } from './eventListComponent';
 import { ManageEvent } from './manageEventComponent';
 
-export class EventRouter extends Component {
+export class EventRouter extends React.Component {
   render() {
     return (
       <Switch>

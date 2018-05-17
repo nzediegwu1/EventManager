@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Icon from './icon';
 import { connect } from 'react-redux';
 import {
@@ -53,7 +53,7 @@ const Manager = props => (
   </td>
 );
 let param, currentPage, history, resource;
-class ManageDetails extends Component {
+class ManageDetails extends React.Component {
   constructor(props) {
     super(props);
     this.delete = this.delete;

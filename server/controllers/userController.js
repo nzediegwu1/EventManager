@@ -7,8 +7,8 @@ import cloudinary from 'cloudinary';
 
 cloudinary.config({
   cloud_name: 'eventmanager',
-  api_key: '789891965151338',
-  api_secret: 'ynezeVbgUnGIfNYKj19GvyrflSI',
+  api_key: `${process.env.API_KEY}`,
+  api_secret: `${process.env.API_SECRET}`,
 });
 
 const key = process.env.SECRET_KEY;

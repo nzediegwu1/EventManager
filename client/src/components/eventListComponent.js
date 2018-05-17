@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
 import { populateEvents, setEventDetail } from '../actions/eventActions';
@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
   events: state.events.eventList,
 });
 
-export class Events extends Component {
+export class Events extends React.Component {
   constructor(props) {
     super(props);
   }

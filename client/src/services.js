@@ -55,7 +55,10 @@ export const logout = (id, history) => {
   history.push('/');
 };
 
-export const apiLink = 'https://eventmanageronline.herokuapp.com'; // 'http://localhost:8080';
+export const apiLink =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'https://eventmanageronline.herokuapp.com';
 export const getAll = (props, type) => {
   let dispatchAction;
   const { history } = props;
@@ -73,7 +76,7 @@ export const getAll = (props, type) => {
       dispatchAction(res.data.data);
     })
     .catch(err => {
-      const status = err.response.status;
+      const status = err.response ? err.response.status : undefined;
       if (status === 403 || status === 401) history.push('/');
       toastr.error(err);
     });
@@ -86,8 +89,8 @@ export const deleteResource = (url, history) => {
       history.push('/dashboard/events');
     })
     .catch(err => {
-      toastr.error(err.response.data.message);
-      const status = err.response.status;
+      toastr.error(err.response.data.message || err);
+      const status = err.response ? err.response.status : undefined;
       if (status === 403 || status === 401) {
         logout('addNewEvent', history);
       }
@@ -105,8 +108,8 @@ export const onboarding = (props, data, context, cb) => {
       setAccountType(res.data.data.User.accountType);
     })
     .catch(err => {
-      toastr.error(err.response.data.message);
-      cb(err.response.data.message);
+      toastr.error(err.response.data.message || err);
+      cb(err.response.data.message || err);
     });
 };
 
@@ -132,8 +135,9 @@ export const getOne = (props, itemId, type) => {
       }
     })
     .catch(err => {
-      const status = err.response.status;
-      const errorMessage = err.response.data.message;
+      toastr.error(err);
+      const status = err.response ? err.response.status : undefined;
+      const errorMessage = err.response ? err.response.data.message : undefined;
       if (status === 500) {
         toastr.error(errorMessage.name);
       } else {
@@ -212,7 +216,6 @@ export class Transactions {
         }
       })
       .catch(err => {
-        // console.log(err);
         const message = err.response ? err.response.data.message : undefined;
         if (message && typeof message !== 'object') {
           toastr.error(JSON.stringify(message));
@@ -249,7 +252,7 @@ export class Transactions {
       .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
       .then(res => saveResource(res))
       .catch(err => {
-        toastr.error(err.response); // unsuccessful image upload
+        toastr.error(err.response || err); // unsuccessful image upload
       });
   }
 }

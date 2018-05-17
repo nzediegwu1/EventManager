@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import profileImage from '../resources/images/profile-image.png';
+import React from 'react';
 import { setProfileDetails } from '../actions/userActions';
 import { connect } from 'react-redux';
 import { apiLink, Transactions, getOne, userValidator } from '../services';
@@ -32,7 +31,7 @@ let profileData;
 let accountType;
 let properties;
 let changeSubmit;
-class ProfileComponent extends Component {
+class ProfileComponent extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,8 +58,8 @@ class ProfileComponent extends Component {
       const publicId = `${Date.now()}-${e.target.files[0].name}`;
       imageData.append('file', e.target.files[0]);
       imageData.append('tags', 'profileImage');
-      imageData.append('upload_preset', 'm4vlbdts');
-      imageData.append('api_key', '789891965151338');
+      imageData.append('upload_preset', `${process.env.UPLOAD_PRESET}`);
+      imageData.append('api_key', `${process.env.API_KEY}`);
       imageData.append('timestamp', (Date.now() / 1000) | 0);
       imageData.append('folder', folder);
       imageData.append('public_id', publicId);
@@ -151,7 +150,7 @@ class ProfileComponent extends Component {
           <div className="row">
             <div className="col-lg-4 image-div">
               <img
-                src={user.picture === null ? profileImage : user.picture}
+                src={user.picture === null ? `${apiLink}/images/profile-image.png` : user.picture}
                 className="profile-image img-circle"
                 alt="avatar"
               />
