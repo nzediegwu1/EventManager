@@ -13,8 +13,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      UPLOAD_PRESET: JSON.stringify(process.env.UPLOAD_PRESET),
-      API_KEY: JSON.stringify(process.env.API_KEY),
+      'process.env.UPLOAD_PRESET': JSON.stringify(process.env.UPLOAD_PRESET),
+      'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
