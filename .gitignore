@@ -16,4 +16,7 @@
 npm-debug.log.3159501567
 .DS_Store
 template/.DS_Store
-dist
+server/dist
+client/dist/style.css
+client/dist/style.css.br
+client/dist/style.css.gz
