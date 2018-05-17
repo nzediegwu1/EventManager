@@ -12,9 +12,9 @@ module.exports = {
     publicPath: '/',
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      UPLOAD_PRESET: process.env.UPLOAD_PRESET, // cloudinary configs
-      API_KEY: process.env.API_KEY,
+    new webpack.DefinePlugin({
+      UPLOAD_PRESET: JSON.stringify(process.env.UPLOAD_PRESET),
+      API_KEY: JSON.stringify(process.env.API_KEY),
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
