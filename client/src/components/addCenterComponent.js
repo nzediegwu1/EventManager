@@ -71,8 +71,8 @@ class AddCenterComponent extends React.Component {
       const publicId = `${Date.now()}-${this.picture.files[0].name}`;
       imageData.append('file', this.picture.files[0]);
       imageData.append('tags', 'center, facilities, events');
-      imageData.append('upload_preset', 'm4vlbdts');
-      imageData.append('api_key', '789891965151338');
+      imageData.append('upload_preset', `${process.env.UPLOAD_PRESET}`);
+      imageData.append('api_key', `${process.env.API_KEY}`);
       imageData.append('timestamp', (Date.now() / 1000) | 0);
       imageData.append('folder', this.folder);
       imageData.append('public_id', publicId);

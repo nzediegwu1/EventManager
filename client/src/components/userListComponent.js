@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
 import { populateUserList } from '../actions/userActions';
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
   userList: state.users.userList,
 });
 
-class UserListComponent extends Component {
+class UserListComponent extends React.Component {
   constructor(props) {
     super(props);
   }

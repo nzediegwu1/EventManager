@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { MyCenters } from './centerListComponent';
 import { CenterDetails } from './centerDetailsComponent';
 
-export class CenterRouter extends Component {
+export class CenterRouter extends React.Component {
   render() {
     return (
       <Switch>

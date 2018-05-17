@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Icon from './icon';
 import { ManageDetailsHeader } from './manageDetailsHeader';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   eventDetails: state.events.event,
 });
-class ManageEventComponent extends Component {
+class ManageEventComponent extends React.Component {
   constructor(props) {
     super(props);
     this.id = this.props.match.params.id;

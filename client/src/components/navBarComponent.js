@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Icon from './icon';
 import { connect } from 'react-redux';
 import {
@@ -34,7 +34,7 @@ const NavbarList = props => (
     </a>
   </li>
 );
-class NavBarItem extends Component {
+class NavBarItem extends React.Component {
   constructor(props) {
     super(props);
   }

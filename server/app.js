@@ -12,23 +12,26 @@ import history from 'connect-history-api-fallback';
 import * as http from 'http';
 
 const app = express();
+/*
+const environment = process.env.NODE_ENV;
 const options = {
-  controllers: './server/controllers',
+  controllers: environment === 'development' ? './server/controllers' : './server/dist/controllers',
   useStubs: true,
 };
 
-app.use(cors());
 swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
   app.use(middleware.swaggerMetadata());
   app.use(middleware.swaggerValidator());
   app.use(middleware.swaggerRouter(options));
   app.use(middleware.swaggerUi());
 });
+*/
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to allow chai-http post and put tests to run
 app.use(history());
-app.use(express.static(path.join(__dirname, '../client/dist')));
-app.use('/images', express.static(path.join(__dirname, '../client/src/resources/images')));
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.use('/images', express.static(path.join(__dirname, '../../client/src/resources/images')));
 app.use('/api/v1/events', events);
 app.use('/api/v1/centers', centers);
 app.use('/api/v1/users', users);

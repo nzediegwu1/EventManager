@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { ManageDetailsHeader } from './manageDetailsHeader';
 import { TableHead, TableRow } from './table';
 import { setCenterDetails } from '../actions/centerActions';
@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
   facilities: state.facilities.facilities,
 });
 
-class CenterDetailsComponent extends Component {
+class CenterDetailsComponent extends React.Component {
   constructor(props) {
     super(props);
     this.id = this.props.match.params.id;
@@ -39,10 +39,14 @@ class CenterDetailsComponent extends Component {
         </div>
       );
     }
+    const loggedInUser = JSON.parse(localStorage.token).id;
+    const centerOwner = center.userId;
     const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
     return (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
-        <ManageFacilities history={this.props.history} data={facilities} centerId={this.id} />
+        {loggedInUser === centerOwner && (
+          <ManageFacilities history={this.props.history} data={facilities} centerId={this.id} />
+        )}
         <div className="card-header mg-event-header card-header-body">
           <ManageDetailsHeader
             history={this.props.history}
@@ -84,17 +88,19 @@ class CenterDetailsComponent extends Component {
             <div className="col-sm-10 zero-padding add-facility-90">
               <b className="appTitle">Facilities</b>
             </div>
-            <div className="col-sm-2 zero-padding" id="addFacility">
-              <button
-                type="submit"
-                id="manageFacty"
-                className="btn btn-success manageFacility"
-                data-toggle="modal"
-                data-target="#manageFacilities"
-              >
-                <Icon src="glyphicons-281-settings.png" alt="Edit" />
-              </button>
-            </div>
+            {loggedInUser === centerOwner && (
+              <div className="col-sm-2 zero-padding" id="addFacility">
+                <button
+                  type="submit"
+                  id="manageFacty"
+                  className="btn btn-success manageFacility"
+                  data-toggle="modal"
+                  data-target="#manageFacilities"
+                >
+                  <Icon src="glyphicons-281-settings.png" alt="Edit" />
+                </button>
+              </div>
+            )}
           </div>
           <div className="table-responsive">
             <table className="table table-hover table-fixed table-striped">
