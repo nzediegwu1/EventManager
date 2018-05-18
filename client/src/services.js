@@ -27,6 +27,7 @@ const signin = (res, history) => {
 export const recoverPassword = data => {
   axios.post(`${apiLink}/api/v1/users/password`, data).then(res => {
     toastr.info(res.data.data);
+    $('#resetPassword').modal('hide');
   }).catch(err => {
     toastr.error(err.response.data.message || err);
   });

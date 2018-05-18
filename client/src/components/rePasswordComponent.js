@@ -19,7 +19,6 @@ export class RecoverPassword extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     recoverPassword({ email: this.email.value });
-    $('#resetPassword').modal('hide');
   }
   render() {
     return (
