@@ -15,10 +15,26 @@ export class RecoverPassword extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeSubmitState = this.changeSubmitState.bind(this);
+    this.state = {
+      disabled: false,
+      visibility: 'none',
+    };
   }
+  changeSubmitState(state) {
+    this.setState({
+      disabled: state === 'initial' ? false : 'disabled',
+      visibility: state === 'initial' ? 'none' : true,
+    });
+  }
+
   handleSubmit(e) {
+    const changeSubmit = this.changeSubmitState;
+    changeSubmit('processing');
     e.preventDefault();
-    recoverPassword({ email: this.email.value });
+    recoverPassword({ email: this.email.value }, () => {
+      changeSubmit('initial');
+    });
   }
   render() {
     return (
@@ -50,15 +66,21 @@ export class RecoverPassword extends React.Component {
                     )}
                   />
                   <div className="form-group">
-                    <input
-                      className="btn btn-lg btn-primary btn-block modal-theme send-password"
-                      value="Recover Password"
+                    <button
                       type="submit"
-                    />
+                      className="btn btn-lg btn-primary btn-block modal-theme send-password"
+                      disabled={this.state.disabled}
+                    >
+                      <i
+                        className="fa fa-spinner fa-spin"
+                        style={{ display: this.state.visibility }}
+                      />
+                      &nbsp; Recover Password
+                    </button>
                   </div>
                 </fieldset>
                 <div className="modal-footer modal-theme">
-                  <button type="submit" className="btn btn-danger">
+                  <button type="button" className="btn btn-danger" data-dismiss="modal">
                     Close
                   </button>
                 </div>

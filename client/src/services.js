@@ -24,12 +24,14 @@ const signin = (res, history) => {
   history.push('/dashboard');
 };
 
-export const recoverPassword = data => {
+export const recoverPassword = (data, cb) => {
   axios.post(`${apiLink}/api/v1/users/password`, data).then(res => {
     toastr.info(res.data.data);
     $('#resetPassword').modal('hide');
+    cb('success');
   }).catch(err => {
     toastr.error(err.response.data.message || err);
+    cb('error');
   });
 };
 
