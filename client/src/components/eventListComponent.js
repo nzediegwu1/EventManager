@@ -41,7 +41,7 @@ export class Events extends React.Component {
               class="table-header table-header-main"
             />
             <tbody>
-              {this.props.events.map(event => (
+              {this.props.events.map(event => event.center.availability !== 'close' && (
                 <TableRow
                   key={event.id}
                   columns={[

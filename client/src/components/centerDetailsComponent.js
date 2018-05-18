@@ -76,7 +76,11 @@ class CenterDetailsComponent extends React.Component {
                     <TableRow columns={['City', center.location]} />
                     <TableRow columns={['Capacity', center.capacity]} />
                     <TableRow columns={['Booking price', center.price]} />
-                    <TableRow columns={['Availability', center.availability]} />
+                    {center.availability === 'open' ? (
+                      <TableRow columns={['Availability', center.availability]} />
+                    ) : (
+                      <TableRow columns={['Availability', 'closed']} class="rejected" />
+                    )}
                     <TableRow columns={['Contact', center.user.email]} />
                   </tbody>
                 </table>
@@ -129,11 +133,22 @@ class CenterDetailsComponent extends React.Component {
                     key={event.id}
                     columns={[
                       <img className="center-image" src={`${event.picture}`} alt="event-view" />,
-                      <b>
-                        <Link className="event-detail" to={`/dashboard/events/${event.id}`}>
-                          {event.title}
-                        </Link>
-                      </b>,
+                      event.status === 'rejected' ? (
+                        <b>
+                          <Link
+                            className="event-detail rejected"
+                            to={`/dashboard/events/${event.id}`}
+                          >
+                            {event.title} (rejected)
+                          </Link>
+                        </b>
+                      ) : (
+                        <b>
+                          <Link className="event-detail" to={`/dashboard/events/${event.id}`}>
+                            {event.title}
+                          </Link>
+                        </b>
+                      ),
                       new Date(event.date).toDateString(),
                     ]}
                   />
