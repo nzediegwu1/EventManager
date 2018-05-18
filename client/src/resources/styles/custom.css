@@ -460,3 +460,9 @@ select {
   background-color: white;
   color: black;
 }
+.rejected {
+  color: red;
+}
+.switch.switch-sm input + label {
+  padding: 0em;
+}

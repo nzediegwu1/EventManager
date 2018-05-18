@@ -77,11 +77,19 @@ class ManageEventComponent extends React.Component {
                     <TableRow
                       columns={[
                         'Venue',
-                        `${event.center.name}, ${event.center.address}, ${event.center.location}`,
+                        event.center.availability === 'close' ? (
+                          <p className="rejected">
+                            {event.center.name}, {event.center.address}, {event.center.location}{' '}
+                            (closed)
+                          </p>
+                        ) : (
+                          `${event.center.name}, ${event.center.address}, ${event.center.location}`
+                        ),
                       ]}
                     />
                     <TableRow columns={['By', event.user.name]} />
                     <TableRow columns={['Contact', event.user.email]} />
+                    {/* eslint-disable */}
                     {
                       <TableRow
                         columns={[
@@ -96,11 +104,19 @@ class ManageEventComponent extends React.Component {
                                   className="switch"
                                   id="switch-sm"
                                 />
-                                <label htmlFor="switch-sm">Approve</label>
+                                <label htmlFor="switch-sm">
+                                  {event.status === 'approved' ? (
+                                    'Approved'
+                                  ) : (
+                                    <p className="rejected">Rejected</p>
+                                  )}
+                                </label>
                               </span>
                             </div>
+                          ) : event.status === 'approved' ? (
+                            'Approved'
                           ) : (
-                            event.status
+                            <p className="rejected">Rejected</p>
                           ),
                         ]}
                       />

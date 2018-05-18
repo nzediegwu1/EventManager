@@ -46,9 +46,18 @@ class CenterList extends React.Component {
                   key={center.id}
                   columns={[
                     <img className="center-image" src={`${center.picture}`} alt="center-view" />,
-                    <Link className="event-detail" to={`${this.props.match.path}/${center.id}`}>
-                      {center.name}
-                    </Link>,
+                    center.availability === 'open' ? (
+                      <Link className="event-detail" to={`${this.props.match.path}/${center.id}`}>
+                        {center.name}
+                      </Link>
+                    ) : (
+                      <Link
+                        className="event-detail rejected"
+                        to={`${this.props.match.path}/${center.id}`}
+                      >
+                        {center.name} (closed)
+                      </Link>
+                    ),
                     `${center.name}, ${center.address}`,
                     <span className="badge">{center.capacity}</span>,
                   ]}
