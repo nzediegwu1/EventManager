@@ -17,5 +17,6 @@ router.get('/:id', user.getUserProfile);
 router.put('/', signupValidator.verify, Auth.Verify, user.modifyProfile);
 router.put('/:id/upgrade', Auth.Verify, user.upgradeAccount);
 router.put('/changePic', profilePicValidator.verify, Auth.Verify, user.changeProfilePic);
+router.post('/password', user.recoverPassword);
 
 export default router;

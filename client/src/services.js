@@ -8,6 +8,11 @@ export const toastSettings = {
   showMethod: 'slideDown',
   hideMethod: 'slideUp',
 };
+export const apiLink =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'https://eventmanageronline.herokuapp.com';
+
 toastr.options = toastSettings;
 const signin = (res, history) => {
   const token = {
@@ -17,6 +22,14 @@ const signin = (res, history) => {
   };
   localStorage.setItem('token', JSON.stringify(token));
   history.push('/dashboard');
+};
+
+export const recoverPassword = data => {
+  axios.post(`${apiLink}/api/v1/users/password`, data).then(res => {
+    toastr.info(res.data.data);
+  }).catch(err => {
+    toastr.error(err.response.data.message || err);
+  });
 };
 
 export const userValidator = (userData, context) => {
@@ -55,10 +68,6 @@ export const logout = (id, history) => {
   history.push('/');
 };
 
-export const apiLink =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8080'
-    : 'https://eventmanageronline.herokuapp.com';
 export const getAll = (props, type) => {
   let dispatchAction;
   const { history } = props;

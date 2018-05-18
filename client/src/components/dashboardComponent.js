@@ -15,7 +15,7 @@ const mapStateToProps = state => ({
 });
 class DashboardComponent extends React.Component {
   render() {
-    const userId = JSON.parse(localStorage.token).id;
+    const userId = localStorage.token ? JSON.parse(localStorage.token).id : undefined;
     const content = (
       <div className="appBackground">
         <NavBar />

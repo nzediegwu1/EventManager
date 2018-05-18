@@ -1,15 +1,26 @@
 import React from 'react';
 import { FormGroup } from './formGroup';
 import { ModalHeader } from './modalHeader';
+import { recoverPassword } from '../services';
 
-const inputAttrs = (inputType, inputName, placeholder, className, required) => ({
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
   inputName,
   placeholder,
   className,
+  ref,
   required,
 });
 export class RecoverPassword extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    recoverPassword({ email: this.email.value });
+    $('#resetPassword').modal('hide');
+  }
   render() {
     return (
       <div
@@ -25,16 +36,17 @@ export class RecoverPassword extends React.Component {
             <ModalHeader id="resetPasswordLabel" title="Recover Password" />
             <div className="modal-body  text-center">
               <h6>Enter your email to recover password</h6>
-              <form className="form">
+              <form onSubmit={this.handleSubmit} className="form">
                 <fieldset>
                   <FormGroup
                     image="glyphicons-11-envelope.png"
                     alt="email"
                     inputProps={inputAttrs(
-                      'text',
+                      'email',
                       'email',
                       'email address',
                       'form-control input-sm',
+                      input => (this.email = input),
                       'required'
                     )}
                   />
@@ -46,12 +58,12 @@ export class RecoverPassword extends React.Component {
                     />
                   </div>
                 </fieldset>
+                <div className="modal-footer modal-theme">
+                  <button type="submit" className="btn btn-danger">
+                    Close
+                  </button>
+                </div>
               </form>
-            </div>
-            <div className="modal-footer modal-theme">
-              <button type="button" className="btn btn-danger" data-dismiss="modal">
-                Close
-              </button>
             </div>
           </div>
         </div>
