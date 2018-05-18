@@ -1,10 +1,12 @@
 import React from 'react';
 import { setProfileDetails } from '../actions/userActions';
 import { connect } from 'react-redux';
-import { apiLink, Transactions, getOne, userValidator } from '../services';
+import { apiLink, Transactions, getOne, userValidator, toastSettings } from '../services';
 import { TableRow } from './table';
 import { Option } from './selectOption';
 import toastr from 'toastr';
+
+toastr.options = toastSettings;
 
 const mapStateToProps = state => ({
   profileDetails: state.users.profileDetails,

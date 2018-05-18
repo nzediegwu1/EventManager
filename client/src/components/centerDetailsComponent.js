@@ -39,7 +39,7 @@ class CenterDetailsComponent extends React.Component {
         </div>
       );
     }
-    const loggedInUser = JSON.parse(localStorage.token).id;
+    const loggedInUser = localStorage.token ? JSON.parse(localStorage.token).id : undefined;
     const centerOwner = center.userId;
     const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
     return (

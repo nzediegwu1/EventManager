@@ -4,6 +4,16 @@ import jwt from 'jsonwebtoken';
 require('dotenv').config();
 import bcrypt from 'bcryptjs';
 import cloudinary from 'cloudinary';
+import nodemailer from 'nodemailer';
+import faker from 'faker';
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'eventmgronline@gmail.com',
+    pass: 'isikote657',
+  },
+});
 
 cloudinary.config({
   cloud_name: 'eventmanager',
@@ -214,6 +224,36 @@ class Users {
         return profilePicValidator.responseWithCloudinary(req, res, 404, 'User not found');
       })
       .catch(err => profilePicValidator.responseWithCloudinary(req, res, 500, err));
+  }
+  recoverPassword(req, res) {
+    const email = req.body.email;
+    if (email && typeof email === 'string' && email.length > 5) {
+      return users
+        .findOne({ where: { email } })
+        .then(foundUser => {
+          if (foundUser) {
+            const newPassword = faker.internet.password(10, false);
+            return foundUser
+              .updateAttributes({ password: bcrypt.hashSync(newPassword, 10) })
+              .then(() => {
+                const mailOption = {
+                  from: 'eventmgronline@gmail.com',
+                  to: email,
+                  subject: 'Email Recovery',
+                  text: `Dear ${
+                    foundUser.name
+                  },\n\nYour new password is: ${newPassword}. Kindly login to https://eventmanageronline.herokuapp.com and change your password!\n\nBest Regards,\nAdmin`,
+                };
+                transporter.sendMail(mailOption);
+                const message = 'New password has been sent to your email!';
+                return signinValidator.response(res, 'success', 200, message);
+              });
+          }
+          return signinValidator.response(res, 'error', 404, 'User not found');
+        })
+        .catch(error => signinValidator.response(res, 'error', 500, error));
+    }
+    return signinValidator.response(res, 'error', 400, 'Invalid email entry');
   }
 }
 
