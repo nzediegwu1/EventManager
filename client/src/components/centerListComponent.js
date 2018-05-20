@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { populateCenters } from '../actions/centerActions';
 import { connect } from 'react-redux';
 import { getAll } from '../services';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
   populateCenters: centers => dispatch(populateCenters(centers)),
@@ -41,6 +42,7 @@ class CenterList extends React.Component {
               class="table-header table-header-main"
             />
             <tbody>
+              {/* eslint-disable */}
               {this.props.centers.map(center => (
                 <TableRow
                   key={center.id}
@@ -72,3 +74,7 @@ class CenterList extends React.Component {
 }
 
 export const MyCenters = connect(mapStateToProps, mapDispatchToProps)(CenterList);
+CenterList.propTypes = {
+  centers: PropTypes.arrayOf(PropTypes.object),
+  match: PropTypes.object,
+};

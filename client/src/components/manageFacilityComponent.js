@@ -6,6 +6,7 @@ import { TableHead, TableRow } from './table';
 import { populateFacilities, setUndeletedFacilities } from '../actions/facilityAction';
 import { connect } from 'react-redux';
 import { Transactions } from '../services';
+import PropTypes from 'prop-types';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -29,7 +30,7 @@ let facilities;
 let checker = 0;
 let id = 0;
 let changeSubmit;
-export class ManageFacilityComponent extends React.Component {
+class ManageFacilityComponent extends React.Component {
   constructor(props) {
     super(props);
     this.addFacility = this.addFacility.bind(this);
@@ -77,11 +78,11 @@ export class ManageFacilityComponent extends React.Component {
     toDelete = [];
   }
   setId(e) {
-    const id = e.target.id;
+    const index = e.target.id;
     if (e.target.checked === true) {
-      toDelete.push(id);
+      toDelete.push(index);
     } else {
-      toDelete.splice(toDelete.indexOf(id), 1);
+      toDelete.splice(toDelete.indexOf(index), 1);
     }
   }
   addFacility(event) {
@@ -166,6 +167,7 @@ export class ManageFacilityComponent extends React.Component {
                   </div>
                   <div className="table-responsive centerSearch">
                     <table className="table table-hover grey-color table-striped">
+                      {/* eslint-disable */}
                       <TableHead
                         columns={[
                           'Name',
@@ -236,3 +238,9 @@ export class ManageFacilityComponent extends React.Component {
 export const ManageFacilities = connect(mapStateToProps, mapDispatchToProps)(
   ManageFacilityComponent
 );
+ManageFacilityComponent.propTypes = {
+  undeleted: PropTypes.arrayOf(PropTypes.object),
+  centerId: PropTypes.string,
+  setUndeletedFacilities: PropTypes.func,
+  data: PropTypes.arrayOf(PropTypes.object),
+};

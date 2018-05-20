@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { populateEvents, setEventDetail } from '../actions/eventActions';
 import { connect } from 'react-redux';
 import { getAll } from '../services';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
   populateEvents: events => dispatch(populateEvents(events)),
@@ -41,21 +42,28 @@ export class Events extends React.Component {
               class="table-header table-header-main"
             />
             <tbody>
-              {this.props.events.map(event => event.center.availability !== 'close' && (
-                <TableRow
-                  key={event.id}
-                  columns={[
-                    <img className="center-image" src={`${event.picture}`} alt="event-view" />,
-                    <b onClick={() => this.props.setEventDetail(event)}>
-                      <Link className="event-detail" to={`${this.props.match.path}/${event.id}`}>
-                        {event.title}
-                      </Link>
-                    </b>,
-                    `${event.center.name}, ${event.center.address}`,
-                    new Date(event.date).toDateString(),
-                  ]}
-                />
-              ))}
+              {/* eslint-disable */}
+              {this.props.events.map(
+                event =>
+                  event.center.availability !== 'close' && (
+                    <TableRow
+                      key={event.id}
+                      columns={[
+                        <img className="center-image" src={`${event.picture}`} alt="event-view" />,
+                        <b onClick={() => this.props.setEventDetail(event)}>
+                          <Link
+                            className="event-detail"
+                            to={`${this.props.match.path}/${event.id}`}
+                          >
+                            {event.title}
+                          </Link>
+                        </b>,
+                        `${event.center.name}, ${event.center.address}`,
+                        new Date(event.date).toDateString(),
+                      ]}
+                    />
+                  )
+              )}
             </tbody>
           </table>
         </div>
@@ -64,3 +72,8 @@ export class Events extends React.Component {
   }
 }
 export const EventList = connect(mapStateToProps, mapDispatchToProps)(Events);
+Events.propTypes = {
+  events: PropTypes.arrayOf(PropTypes.object),
+  match: PropTypes.object,
+  setEventDetail: PropTypes.func,
+};

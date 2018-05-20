@@ -1,5 +1,6 @@
 import React from 'react';
 import { apiLink } from '../services';
+import PropTypes from 'prop-types';
 
 const Input = props => {
   if (props.params.required) {
@@ -34,3 +35,11 @@ export const FormGroup = props => (
     </div>
   </div>
 );
+Input.propTypes = {
+  params: PropTypes.object,
+};
+FormGroup.propTypes = {
+  image: PropTypes.string,
+  alt: PropTypes.string,
+  inputProps: PropTypes.object,
+};

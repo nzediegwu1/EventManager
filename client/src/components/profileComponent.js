@@ -5,6 +5,7 @@ import { apiLink, Transactions, getOne, userValidator, toastSettings } from '../
 import { TableRow } from './table';
 import { Option } from './selectOption';
 import toastr from 'toastr';
+import PropTypes from 'prop-types';
 
 toastr.options = toastSettings;
 
@@ -77,7 +78,9 @@ class ProfileComponent extends React.Component {
           changeSubmit('initial');
         });
       };
-      transactions.uploadImage(imageData, saveImage);
+      transactions.uploadImage(imageData, saveImage, () => {
+        changeSubmit('initial');
+      });
     }
   }
   upgradeAccount() {
@@ -321,3 +324,15 @@ class ProfileComponent extends React.Component {
   }
 }
 export const Profile = connect(mapStateToProps, mapDispatchToProps)(ProfileComponent);
+ProfileComponent.propTypes = {
+  setProfileDetails: PropTypes.func,
+  profileDetails: PropTypes.arrayOf(PropTypes.object),
+};
+ProfileInput.propTypes = {
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  require: PropTypes.string,
+  action: PropTypes.func,
+  value: PropTypes.string,
+  label: PropTypes.string,
+};

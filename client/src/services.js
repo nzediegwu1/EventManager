@@ -25,14 +25,17 @@ const signin = (res, history) => {
 };
 
 export const recoverPassword = (data, cb) => {
-  axios.post(`${apiLink}/api/v1/users/password`, data).then(res => {
-    toastr.info(res.data.data);
-    $('#resetPassword').modal('hide');
-    cb('success');
-  }).catch(err => {
-    toastr.error(err.response.data.message || err);
-    cb('error');
-  });
+  axios
+    .post(`${apiLink}/api/v1/users/password`, data)
+    .then(res => {
+      toastr.info(res.data.data);
+      $('#resetPassword').modal('hide');
+      cb('success');
+    })
+    .catch(err => {
+      toastr.error(err.response.data.message || err);
+      cb('error');
+    });
 };
 
 export const userValidator = (userData, context) => {
@@ -259,12 +262,15 @@ export class Transactions {
       return details;
     }
   }
-  uploadImage(imageData, saveResource) {
+  uploadImage(imageData, saveResource, cb) {
     axios
       .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
       .then(res => saveResource(res))
       .catch(err => {
-        toastr.error(err.response || err); // unsuccessful image upload
+        const status = err.response && err.response.status;
+        // unsuccessful image upload
+        toastr.error((status === 400 && 'Invalid image file format') || err);
+        cb(err);
       });
   }
 }

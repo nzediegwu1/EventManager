@@ -8,6 +8,7 @@ import {
   setCenterDefaults,
 } from '../actions/pageActions';
 import { initialState } from '../reducers/pageReducer';
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => ({
   accountType: state.users.accountType,
@@ -42,9 +43,8 @@ class NavBarItem extends React.Component {
     const setModalProps = title => {
       this.props.setModalTitle(title);
       this.props.setRequired(true);
-      title === 'New Event'
-        ? this.props.setEventDefaults(initialState.eventDefaults)
-        : this.props.setCenterDefaults(initialState.centerDefaults);
+      if (title === 'New Event') this.props.setEventDefaults(initialState.eventDefaults);
+      else this.props.setCenterDefaults(initialState.centerDefaults);
     };
     return (
       <nav className="navbar fixed-top navbar-expand-sm navbar-background">
@@ -113,3 +113,17 @@ class NavBarItem extends React.Component {
   }
 }
 export const NavBar = connect(mapStateToProps, mapDispatchToProps)(NavBarItem);
+
+NavbarList.propTypes = {
+  id: PropTypes.string,
+  setModalProps: PropTypes.func,
+  dataTarget: PropTypes.string,
+  body: PropTypes.string,
+};
+NavBarItem.propTypes = {
+  setModalTitle: PropTypes.func,
+  setRequired: PropTypes.func,
+  setEventDefaults: PropTypes.func,
+  setCenterDefaults: PropTypes.func,
+  accountType: PropTypes.string,
+};

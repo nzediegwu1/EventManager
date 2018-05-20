@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { getOne } from '../services';
 import Icon from './icon';
 import { ManageFacilities } from './manageFacilityComponent';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
   setCenterDetails: center => dispatch(setCenterDetails(center)),
@@ -106,6 +107,7 @@ class CenterDetailsComponent extends React.Component {
               </div>
             )}
           </div>
+          {/* eslint-disable */}
           <div className="table-responsive">
             <table className="table table-hover table-fixed table-striped">
               <TableHead columns={['Name', 'Spec', 'Quantity']} class="table-header" />
@@ -162,3 +164,10 @@ class CenterDetailsComponent extends React.Component {
   }
 }
 export const CenterDetails = connect(mapStateToProps, mapDispatchToProps)(CenterDetailsComponent);
+CenterDetailsComponent.propTypes = {
+  match: PropTypes.object,
+  setPage: PropTypes.func,
+  centerDetails: PropTypes.arrayOf(PropTypes.object),
+  facilities: PropTypes.array,
+  history: PropTypes.object,
+};

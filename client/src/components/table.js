@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const tableColumns = (columnArray, type) => {
   const colNumber = columnArray.length;
@@ -23,3 +24,11 @@ export const TableHead = props => (
   </thead>
 );
 export const TableRow = props => <tr className={props.class}>{tableColumns(props.columns)}</tr>;
+TableHead.propTypes = {
+  class: PropTypes.string,
+  columns: PropTypes.array,
+};
+TableRow.propTypes = {
+  class: PropTypes.string,
+  columns: PropTypes.array,
+};

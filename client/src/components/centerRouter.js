@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { MyCenters } from './centerListComponent';
 import { CenterDetails } from './centerDetailsComponent';
+import PropTypes from 'prop-types';
 
 export class CenterRouter extends React.Component {
   render() {
@@ -13,3 +14,6 @@ export class CenterRouter extends React.Component {
     );
   }
 }
+CenterRouter.propTypes = {
+  match: PropTypes.object,
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export class ModalHeader extends React.Component {
   render() {
@@ -14,3 +15,7 @@ export class ModalHeader extends React.Component {
     );
   }
 }
+ModalHeader.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+};

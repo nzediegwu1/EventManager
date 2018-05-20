@@ -7,6 +7,7 @@ import { onboarding, toastSettings, userValidator } from '../services';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
 import toastr from 'toastr';
+import PropTypes from 'prop-types';
 
 toastr.options = toastSettings;
 
@@ -127,8 +128,7 @@ class SignInPage extends React.Component {
               <div className="form-links">
                 <a href="#" className="welcome" onClick={this.changeState}>
                   Create account
-                </a>{' '}
-                |{' '}
+                </a>&nbsp; |&nbsp;
                 <a href="#" data-toggle="modal" data-target="#resetPassword">
                   reset password
                 </a>
@@ -145,3 +145,6 @@ class SignInPage extends React.Component {
 }
 
 export const SignIn = connect(null, mapDispatchToProps)(SignInPage);
+SignInPage.propTypes = {
+  history: PropTypes.object,
+};

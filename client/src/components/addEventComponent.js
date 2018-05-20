@@ -6,6 +6,7 @@ import { getAll, apiLink, Transactions } from '../services';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
 import { populateCenters } from '../actions/centerActions';
+import PropTypes from 'prop-types';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -84,7 +85,9 @@ class AddEventComponent extends React.Component {
       imageData.append('timestamp', (Date.now() / 1000) | 0);
       imageData.append('folder', this.folder);
       imageData.append('public_id', publicId);
-      transactions.uploadImage(imageData, saveEvent);
+      transactions.uploadImage(imageData, saveEvent, () => {
+        changeSubmit('initial');
+      });
     } else {
       saveEvent(undefined);
     }
@@ -230,3 +233,7 @@ class AddEventComponent extends React.Component {
 }
 
 export const AddEvent = connect(mapStateToProps, mapDispatchToProps)(AddEventComponent);
+AddEventComponent.propTypes = {
+  modalTitle: PropTypes.string,
+  centers: PropTypes.arrayOf(PropTypes.object),
+};

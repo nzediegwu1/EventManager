@@ -6,6 +6,7 @@ import { setEventDetail } from '../actions/eventActions';
 import { setPage } from '../actions/pageActions';
 import { TableRow } from './table';
 import { apiLink, getOne, Transactions } from '../services';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
   setEventDetail: event => dispatch(setEventDetail(event)),
@@ -79,8 +80,8 @@ class ManageEventComponent extends React.Component {
                         'Venue',
                         event.center.availability === 'close' ? (
                           <p className="rejected">
-                            {event.center.name}, {event.center.address}, {event.center.location}{' '}
-                            (closed)
+                            {event.center.name}, {event.center.address}, {event.center.location}
+                            &nbsp;(closed)
                           </p>
                         ) : (
                           `${event.center.name}, ${event.center.address}, ${event.center.location}`
@@ -144,3 +145,9 @@ class ManageEventComponent extends React.Component {
   }
 }
 export const ManageEvent = connect(mapStateToProps, mapDispatchToProps)(ManageEventComponent);
+ManageEventComponent.propTypes = {
+  match: PropTypes.object,
+  setPage: PropTypes.func,
+  eventDetails: PropTypes.arrayOf(PropTypes.object),
+  history: PropTypes.object,
+}

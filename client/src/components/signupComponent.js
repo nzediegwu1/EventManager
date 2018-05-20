@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
 import { onboarding, toastSettings, userValidator } from '../services';
 import toastr from 'toastr';
+import PropTypes from 'prop-types';
 
 toastr.options = toastSettings;
 
@@ -144,3 +145,8 @@ class SignupComponent extends React.Component {
   }
 }
 export const SignupForm = connect(null, mapDispatchToProps)(SignupComponent);
+SignupComponent.propTypes = {
+  changeSubmitState: PropTypes.func,
+  state: PropTypes.object,
+  changeState: PropTypes.func,
+};
