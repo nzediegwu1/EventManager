@@ -41,6 +41,7 @@ class UserListComponent extends React.Component {
               class="table-header table-header-main"
             />
             <tbody>
+              {/* eslint-disable */}
               {this.props.userList.map(user => (
                 <TableRow
                   key={user.id}

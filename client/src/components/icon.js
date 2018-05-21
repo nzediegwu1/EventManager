@@ -1,5 +1,6 @@
 import React from 'react';
 import { apiLink } from '../services';
+import PropTypes from 'prop-types';
 
 const Icon = props => (
   <img
@@ -11,3 +12,10 @@ const Icon = props => (
   />
 );
 export default Icon;
+Icon.propTypes = {
+  clickAction: PropTypes.func,
+  class: PropTypes.string,
+  src: PropTypes.string,
+  alt: PropTypes.string,
+  id: PropTypes.string,
+};

@@ -5,6 +5,7 @@ import { Option } from './selectOption';
 import { apiLink, Transactions } from '../services';
 import { connect } from 'react-redux';
 import { setCenterDetails } from '../actions/centerActions';
+import PropTypes from 'prop-types';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -76,7 +77,9 @@ class AddCenterComponent extends React.Component {
       imageData.append('timestamp', (Date.now() / 1000) | 0);
       imageData.append('folder', this.folder);
       imageData.append('public_id', publicId);
-      transactions.uploadImage(imageData, saveCenter);
+      transactions.uploadImage(imageData, saveCenter, () => {
+        changeSubmit('initial');
+      });
     } else {
       saveCenter(undefined);
     }
@@ -215,3 +218,7 @@ class AddCenterComponent extends React.Component {
   }
 }
 export const AddCenter = connect(mapStateToProps, mapDispatchToProps)(AddCenterComponent);
+AddCenterComponent.propTypes = {
+  modalTitle: PropTypes.string,
+  required: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+};

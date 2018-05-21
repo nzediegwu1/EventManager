@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { EventList } from './eventListComponent';
 import { ManageEvent } from './manageEventComponent';
+import PropTypes from 'prop-types';
 
 export class EventRouter extends React.Component {
   render() {
@@ -14,3 +15,6 @@ export class EventRouter extends React.Component {
     );
   }
 }
+EventRouter.propTypes = {
+  match: PropTypes.object,
+};

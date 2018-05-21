@@ -7,6 +7,7 @@ import { onboarding, toastSettings, userValidator } from '../services';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
 import toastr from 'toastr';
+import PropTypes from 'prop-types';
 
 toastr.options = toastSettings;
 
@@ -36,12 +37,14 @@ class SignInPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.changeSubmitState = this.changeSubmitState.bind(this);
   }
+  // When user clicks signup link, display signup component and hide signin component
   changeState() {
     this.setState(prevState => ({
       signinView: prevState.signinView === 'block' ? 'none' : 'block',
       signupView: prevState.signupView === 'none' ? 'block' : 'none',
     }));
   }
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',
@@ -57,6 +60,7 @@ class SignInPage extends React.Component {
     const validationStatus = userValidator(loginData, 'login');
     if (validationStatus === true) {
       this.changeSubmitState('processing');
+      // http request to signin
       onboarding(this.props, loginData, 'login', () => {
         this.changeSubmitState('initial');
       });
@@ -127,8 +131,7 @@ class SignInPage extends React.Component {
               <div className="form-links">
                 <a href="#" className="welcome" onClick={this.changeState}>
                   Create account
-                </a>{' '}
-                |{' '}
+                </a>&nbsp; |&nbsp;
                 <a href="#" data-toggle="modal" data-target="#resetPassword">
                   reset password
                 </a>
@@ -145,3 +148,6 @@ class SignInPage extends React.Component {
 }
 
 export const SignIn = connect(null, mapDispatchToProps)(SignInPage);
+SignInPage.propTypes = {
+  history: PropTypes.object,
+};

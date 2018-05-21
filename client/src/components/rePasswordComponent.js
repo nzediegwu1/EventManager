@@ -21,6 +21,8 @@ export class RecoverPassword extends React.Component {
       visibility: 'none',
     };
   }
+
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',

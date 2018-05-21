@@ -9,6 +9,7 @@ import { CenterRouter } from './centerRouter';
 import { UserList } from './userListComponent';
 import { connect } from 'react-redux';
 import { Profile } from './profileComponent';
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => ({
   accountType: state.users.accountType,
@@ -42,3 +43,7 @@ class DashboardComponent extends React.Component {
 }
 
 export const Dashboard = connect(mapStateToProps)(DashboardComponent);
+DashboardComponent.propTypes = {
+  accountType: PropTypes.string,
+  match: PropTypes.object,
+};

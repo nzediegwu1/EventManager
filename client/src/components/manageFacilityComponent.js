@@ -6,6 +6,7 @@ import { TableHead, TableRow } from './table';
 import { populateFacilities, setUndeletedFacilities } from '../actions/facilityAction';
 import { connect } from 'react-redux';
 import { Transactions } from '../services';
+import PropTypes from 'prop-types';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -29,7 +30,7 @@ let facilities;
 let checker = 0;
 let id = 0;
 let changeSubmit;
-export class ManageFacilityComponent extends React.Component {
+class ManageFacilityComponent extends React.Component {
   constructor(props) {
     super(props);
     this.addFacility = this.addFacility.bind(this);
@@ -42,6 +43,8 @@ export class ManageFacilityComponent extends React.Component {
       visibility: 'none',
     };
   }
+
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',
@@ -63,6 +66,8 @@ export class ManageFacilityComponent extends React.Component {
       changeSubmit('initial');
     });
   }
+
+  // delete facilities marked in table
   deleteMarked() {
     toDelete.forEach(index => {
       delete facilities[index];
@@ -76,14 +81,18 @@ export class ManageFacilityComponent extends React.Component {
     this.props.setUndeletedFacilities(newFacilities);
     toDelete = [];
   }
+
+  // Collect id of facilities to be deleted upon check event
   setId(e) {
-    const id = e.target.id;
+    const index = e.target.id;
     if (e.target.checked === true) {
-      toDelete.push(id);
+      toDelete.push(index);
     } else {
-      toDelete.splice(toDelete.indexOf(id), 1);
+      toDelete.splice(toDelete.indexOf(index), 1);
     }
   }
+
+  // Handle dynamic adding of new facility to dynamic facility table
   addFacility(event) {
     id++;
     event.preventDefault();
@@ -97,6 +106,7 @@ export class ManageFacilityComponent extends React.Component {
     if (this.props.undeleted.length > 0) {
       checker++;
     }
+    // facilities == undeleted or Facility data on centerDetails component load
     facilities = checker > 0 ? this.props.undeleted : this.props.data;
     return (
       <div
@@ -166,6 +176,7 @@ export class ManageFacilityComponent extends React.Component {
                   </div>
                   <div className="table-responsive centerSearch">
                     <table className="table table-hover grey-color table-striped">
+                      {/* eslint-disable */}
                       <TableHead
                         columns={[
                           'Name',
@@ -236,3 +247,9 @@ export class ManageFacilityComponent extends React.Component {
 export const ManageFacilities = connect(mapStateToProps, mapDispatchToProps)(
   ManageFacilityComponent
 );
+ManageFacilityComponent.propTypes = {
+  undeleted: PropTypes.arrayOf(PropTypes.object),
+  centerId: PropTypes.string,
+  setUndeletedFacilities: PropTypes.func,
+  data: PropTypes.arrayOf(PropTypes.object),
+};

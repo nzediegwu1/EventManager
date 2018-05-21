@@ -8,6 +8,7 @@ import {
   setCenterDefaults,
 } from '../actions/pageActions';
 import { apiLink, deleteResource } from '../services';
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => {
   const currentPage = state.page.currentPage;
@@ -52,15 +53,28 @@ const Manager = props => (
     </div>
   </td>
 );
-let param, currentPage, history, resource;
+let param;
+let currentPage;
+let history;
+let resource;
 class ManageDetails extends React.Component {
   constructor(props) {
     super(props);
     this.delete = this.delete;
   }
+  /**
+   * @description - Handle deletion of an event or center
+   *
+   * @memberof ManageDetails
+   */
   delete() {
     const validate = confirm('Confirm delete action?');
     if (validate) {
+      /**
+       * @description - Generate url for route handling deletion of resource
+       *
+       * @returns {string} - Url of resource to delete
+       */
       const urlGenerator = () => {
         const type = currentPage === 'manageEvent' ? 'events' : 'centers';
         return `${apiLink}/api/v1/${type}/${param}/?token=${
@@ -81,9 +95,11 @@ class ManageDetails extends React.Component {
     const setModalProps = title => {
       this.props.setModalTitle(title);
       this.props.setRequired(false);
-      title === 'Modify Event'
-        ? this.props.setEventDefaults(this.props.eventDetails[0])
-        : this.props.setCenterDefaults(this.props.centerDetails[0]);
+      if (title === 'Modify Event') {
+        this.props.setEventDefaults(this.props.eventDetails[0]);
+      } else {
+        this.props.setCenterDefaults(this.props.centerDetails[0]);
+      }
     };
     return (
       <table className="table-responsive col-sm-12 bg-transparent  zero-padding">
@@ -112,3 +128,22 @@ class ManageDetails extends React.Component {
   }
 }
 export const ManageDetailsHeader = connect(mapStateToProps, mapDispatchToProps)(ManageDetails);
+Manager.propTypes = {
+  setModalProps: PropTypes.func,
+  editModal: PropTypes.string,
+  deleteEvent: PropTypes.func,
+};
+ManageDetails.propTypes = {
+  param: PropTypes.string,
+  currentPage: PropTypes.string,
+  history: PropTypes.object,
+  eventDetails: PropTypes.arrayOf(PropTypes.object),
+  centerDetails: PropTypes.arrayOf(PropTypes.object),
+  setModalTitle: PropTypes.func,
+  setRequired: PropTypes.func,
+  editModal: PropTypes.string,
+  title: PropTypes.string,
+  owner: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  setEventDefaults: PropTypes.func,
+  setCenterDefaults: PropTypes.func,
+};

@@ -4,6 +4,7 @@ import createHistory from 'history/createBrowserHistory';
 import { logout, getOne } from '../services';
 import { connect } from 'react-redux';
 import { setProfileDetails } from '../actions/userActions';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
   setProfileDetails: data => dispatch(setProfileDetails(data)),
@@ -26,6 +27,12 @@ class SidebarComponent extends React.Component {
     this.changeLocation = this.changeLocation.bind(this);
     this.userId = JSON.parse(localStorage.token).id;
   }
+  /**
+   * @description - Method for navigating within app
+   *
+   * @param {string} url - Url to the component path
+   * @memberof SidebarComponent
+   */
   changeLocation(url) {
     if (url === `${this.props.match.path}/profile/${this.userId}`) {
       const profileData = getOne(this.props, this.userId, 'users');
@@ -110,3 +117,15 @@ class SidebarComponent extends React.Component {
   }
 }
 export const Sidebar = connect(null, mapDispatchToProps)(SidebarComponent);
+ListItem.propTypes = {
+  event: PropTypes.func,
+  class: PropTypes.string,
+  title: PropTypes.string,
+  icon: PropTypes.string,
+  alt: PropTypes.string,
+};
+SidebarComponent.propTypes = {
+  match: PropTypes.object,
+  setProfileDetails: PropTypes.func,
+  history: PropTypes.object,
+};
