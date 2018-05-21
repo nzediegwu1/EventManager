@@ -103,15 +103,29 @@ class Users {
     // gets all users' details excluding password
     const userId = req.decoded.id;
     if (userId === 1) {
-      return users
-        .findAll({ attributes: { exclude: ['password'] } })
-        .then(allusers => {
-          if (allusers.length > 0) {
-            return signinValidator.response(res, 'success', 200, allusers);
-          }
-          return signinValidator.response(res, 'error', 404, 'No user found');
-        })
-        .catch(error => signinValidator.response(res, 'error', 500, error));
+      const rawPage = req.query.pageNumber;
+      const rawLimit = req.query.limit;
+      const page = isNaN(rawPage) || !rawPage ? 1 : parseInt(rawPage, 10);
+      const limit = isNaN(rawLimit) || !rawLimit ? 5 : parseInt(req.query.limit, 10);
+      return users.findAndCountAll().then(data => {
+        const count = data.count;
+        const pages = Math.ceil(count / limit);
+        const offset = page > pages ? (pages - 1) * limit : (page - 1) * limit;
+        return users
+          .findAll({
+            attributes: { exclude: ['password'] },
+            offset,
+            limit,
+            order: [['name', 'ASC']],
+          })
+          .then(allusers => {
+            if (allusers.length > 0) {
+              return signinValidator.response(res, 'success', 200, allusers);
+            }
+            return signinValidator.response(res, 'error', 404, 'No user found');
+          })
+          .catch(error => signinValidator.response(res, 'error', 500, error));
+      });
     }
     return signinValidator.response(res, 'error', 403, 'You do not have access to this resource!');
   }
