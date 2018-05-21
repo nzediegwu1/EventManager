@@ -3,7 +3,7 @@ import reactDOM from 'react-dom';
 import { App } from './components/routerComponent';
 import { AppContainer } from 'react-hot-loader';
 import '../src/resources/styles/bootstrap.min.css';
-import '../src/resources/styles/custom.css';
+import '../src/resources/styles/custom.scss';
 import '../src/resources/styles/bootstrap4switches.css';
 import '../src/resources/styles/toastr.css';
 import 'font-awesome/css/font-awesome.min.css';

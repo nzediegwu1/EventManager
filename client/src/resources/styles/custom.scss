@@ -19,10 +19,9 @@
 .form-links {
   text-align: center;
   margin-top: 1em;
-}
-
-.form-links a {
-  color: white;
+  a {
+    color: white;
+  }
 }
 
 .formDiv {
@@ -102,11 +101,13 @@ label {
   padding-top: 0.4em;
   margin-left: 0.5em;
 }
+
 .visibility {
   display: none;
 }
 
 /*MY CENTERS PAGE STYLES*/
+
 .input-group-addon {
   padding: 0em;
 }
@@ -118,6 +119,7 @@ label {
 .table-header {
   background-color: grey;
 }
+
 .custom-select-sm {
   width: 100%;
 }
@@ -174,13 +176,15 @@ a:hover {
   color: lightgreen;
   text-decoration: none;
 }
+
 .event-detail {
   color: darkblue;
   font-weight: 500;
+  &:hover {
+    color: darkred;
+  }
 }
-.event-detail:hover {
-  color: darkred;
-}
+
 .top-eight {
   display: flex;
 }
@@ -232,29 +236,36 @@ a:hover {
 }
 
 /*join #nav-body and nav-background*/
+
 #nav-body {
   background-color: darkblue;
 }
+
 /*SIDEBAR STYLES*/
-.modal.left .modal-body,
-.modal.right .modal-body {
-  padding: 15px 15px 80px;
+
+.modal {
+  &.left .modal-body,
+  &.right .modal-body {
+    padding: 15px 15px 80px;
+  }
+  &.left {
+    .modal-dialog {
+      margin: auto;
+      max-width: 25%;
+      transform: translate3d(0%, 0, 0);
+    }
+    &.fade {
+      .modal-dialog {
+        left: -38%;
+        transition: opacity 2s linear, left 2s ease-out;
+      }
+      &.in .modal-dialog {
+        left: 0;
+      }
+    }
+  }
 }
 
-.modal.left .modal-dialog {
-  margin: auto;
-  max-width: 25%;
-  transform: translate3d(0%, 0, 0);
-}
-
-.modal.left.fade .modal-dialog {
-  left: -38%;
-  transition: opacity 2s linear, left 2s ease-out;
-}
-
-.modal.left.fade.in .modal-dialog {
-  left: 0;
-}
 .sidebar {
   background-color: black;
   color: white;
@@ -268,10 +279,7 @@ a:hover {
   color: white;
 }
 
-.sidebar-toggle {
-  margin-left: 0.5em;
-}
-
+.sidebar-toggle,
 .icon-margin-left {
   margin-left: 0.5em;
 }
@@ -292,6 +300,7 @@ a:hover {
   background-color: darkblue;
   color: white;
 }
+
 .table {
   background-color: white;
   margin-bottom: 0em;
@@ -327,74 +336,92 @@ a:hover {
 .center-image {
   width: 50px;
 }
+
 .navbar-toggler {
   width: auto;
 }
-button.close {
-  width: 1em;
+
+button {
+  &.close {
+    width: 1em;
+  }
+  width: auto;
 }
-button,
+
 select {
   width: auto;
 }
+
 .search-list {
   width: 100%;
 }
+
 .search-input {
   margin-top: 0.3em;
   height: 2.6em;
 }
+
 .manage {
   display: flex;
   float: right;
 }
+
 .card-header-body {
   padding-left: 0.5em;
   padding-right: 0.5em;
 }
+
 .mg-event-header {
   background-color: darkblue;
   color: white;
   margin: auto;
   width: 100%;
 }
+
 .card-image {
   width: 100%;
   border-radius: 1em;
   margin-bottom: 1em;
 }
+
 .thick {
   font-weight: 500;
 }
-.table-fixed thead {
-  width: 100%;
+
+.table-fixed {
+  thead {
+    width: 100%;
+  }
+  tbody {
+    height: 200px;
+    overflow-y: scroll;
+    width: 100%;
+  }
+  thead,
+  tbody,
+  tr,
+  td,
+  th {
+    display: block;
+  }
+  tbody td,
+  thead > tr > th {
+    display: inline-block;
+    border-bottom-width: 0;
+  }
 }
-.table-fixed tbody {
-  height: 200px;
-  overflow-y: scroll;
-  width: 100%;
-}
-.table-fixed thead,
-.table-fixed tbody,
-.table-fixed tr,
-.table-fixed td,
-.table-fixed th {
-  display: block;
-}
-.table-fixed tbody td,
-.table-fixed thead > tr > th {
-  display: inline-block;
-  border-bottom-width: 0;
-}
+
 @media (max-width: 760px) {
   .col-sm-4 {
     width: 33.33333333333333%;
   }
 }
+
 .index {
   height: 100vh;
   background-color: lightgrey;
 }
+
 .manageFacility {
   float: right;
   margin-right: 0.5em;
@@ -443,26 +470,36 @@ select {
   justify-content: flex-end;
   width: 70%;
 }
+
 .right-margin {
   margin-right: 0.5em;
 }
+
 .profile-panel {
   background-color: white;
   padding-top: 1em;
   padding-bottom: 1em;
 }
-.profile-tab .nav-item.show .nav-link,
-.profile-tab .nav-link.active {
-  color: white;
-  background-color: darkblue;
+
+.profile-tab {
+  .nav-item.show .nav-link {
+    color: white;
+    background-color: darkblue;
+  }
+  .nav-link {
+    &.active {
+      color: white;
+      background-color: darkblue;
+    }
+    background-color: white;
+    color: black;
+  }
 }
-.profile-tab .nav-link {
-  background-color: white;
-  color: black;
-}
+
 .rejected {
   color: red;
 }
+
 .switch.switch-sm input + label {
   padding: 0em;
 }

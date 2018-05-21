@@ -35,7 +35,7 @@ const signin = (res, history) => {
  * @param {object} data - Request body (email) to be sent to server
  * @param {function} cb - Callback function to reset loading submitButton state
  */
-const recoverPassword = (data, cb) => {
+export const recoverPassword = (data, cb) => {
   axios
     .post(`${apiLink}/api/v1/users/password`, data)
     .then(res => {
@@ -55,7 +55,7 @@ const recoverPassword = (data, cb) => {
  * @param {string} context - The content to check: login or signup
  * @returns {bool} - True or validation error message
  */
-const userValidator = (userData, context) => {
+export const userValidator = (userData, context) => {
   const { username, password, name, confirmPassword } = userData;
   /**
    * @description - A function to validate login details
@@ -91,7 +91,7 @@ const userValidator = (userData, context) => {
  * @param {string} id - Id of html modal to be closed before logout
  * @param {object} history - History prop from react component
  */
-const logout = (id, history) => {
+export const logout = (id, history) => {
   localStorage.clear();
   $(`#${id}`).modal('hide');
   history.push('/');
@@ -102,7 +102,7 @@ const logout = (id, history) => {
  * @param {object} props - Component props
  * @param {string} type - The kind of resource to get: event, center or user?
  */
-const getAll = (props, type) => {
+export const getAll = (props, type) => {
   let dispatchAction;
   const { history } = props;
   const token = JSON.parse(localStorage.token).value;
@@ -130,7 +130,7 @@ const getAll = (props, type) => {
  * @param {string} url - Api link to resource to be deleted
  * @param {object} history - History prop from react component
  */
-const deleteResource = (url, history) => {
+export const deleteResource = (url, history) => {
   axios
     .delete(url)
     .then(res => {
@@ -153,7 +153,7 @@ const deleteResource = (url, history) => {
  * @param {string} context - Signup or login
  * @param {function} cb - Callback function to reset submitButton loading state
  */
-const onboarding = (props, data, context, cb) => {
+export const onboarding = (props, data, context, cb) => {
   const { history, setAccountType } = props;
   const url = context === 'signup' ? `${apiLink}/api/v1/users` : `${apiLink}/api/v1/users/login`;
   axios
@@ -177,7 +177,7 @@ const onboarding = (props, data, context, cb) => {
  * @param {string} type - Type of resource to get
  * @returns {void} - Or response data (details) for user profile
  */
-const getOne = (props, itemId, type) => {
+export const getOne = (props, itemId, type) => {
   let dispatchAction;
   let details;
   if (type === 'centers') {
