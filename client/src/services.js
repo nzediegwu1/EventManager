@@ -13,7 +13,12 @@ export const apiLink =
     ? 'http://localhost:8080'
     : 'https://eventmanageronline.herokuapp.com';
 
-toastr.options = toastSettings;
+/**
+ * @description - Handles setting of token object and redirection to dashboard
+ *
+ * @param {object} res - Response from axios request to login endpoint
+ * @param {object} history - History object from signinComponent
+ */
 const signin = (res, history) => {
   const token = {
     value: res.data.data.Token,
@@ -24,7 +29,13 @@ const signin = (res, history) => {
   history.push('/dashboard');
 };
 
-export const recoverPassword = (data, cb) => {
+/**
+ * @description - Handles password recovery http request
+ *
+ * @param {object} data - Request body (email) to be sent to server
+ * @param {function} cb - Callback function to reset loading submitButton state
+ */
+const recoverPassword = (data, cb) => {
   axios
     .post(`${apiLink}/api/v1/users/password`, data)
     .then(res => {
@@ -37,14 +48,21 @@ export const recoverPassword = (data, cb) => {
       cb('error');
     });
 };
-
-export const userValidator = (userData, context) => {
+/**
+ * @description - Validate for user signup and login
+ *
+ * @param {object} userData - From login/signup form
+ * @param {string} context - The content to check: login or signup
+ * @returns {bool} - True or validation error message
+ */
+const userValidator = (userData, context) => {
   const { username, password, name, confirmPassword } = userData;
   /**
-   * @description A function to validate login details
-   * @param {string} usName username
-   * @param {string} pword password
-   * @returns true || validation error message
+   * @description - A function to validate login details
+   *
+   * @param {string} usName - Username
+   * @param {string} pword - Password
+   * @returns {bool} - True or validation error message
    */
   const checkLogin = (usName, pword) => {
     if (usName.trim().length < 4) {
@@ -67,14 +85,24 @@ export const userValidator = (userData, context) => {
   }
   return true;
 };
-
-export const logout = (id, history) => {
+/**
+ * @description - Clear localstorage and logout user
+ *
+ * @param {string} id - Id of html modal to be closed before logout
+ * @param {object} history - History prop from react component
+ */
+const logout = (id, history) => {
   localStorage.clear();
   $(`#${id}`).modal('hide');
   history.push('/');
 };
-
-export const getAll = (props, type) => {
+/**
+ * @description - Get center, event or user list
+ *
+ * @param {object} props - Component props
+ * @param {string} type - The kind of resource to get: event, center or user?
+ */
+const getAll = (props, type) => {
   let dispatchAction;
   const { history } = props;
   const token = JSON.parse(localStorage.token).value;
@@ -96,7 +124,13 @@ export const getAll = (props, type) => {
       toastr.error(err);
     });
 };
-export const deleteResource = (url, history) => {
+/**
+ * @description - Handles deletion of an event
+ *
+ * @param {string} url - Api link to resource to be deleted
+ * @param {object} history - History prop from react component
+ */
+const deleteResource = (url, history) => {
   axios
     .delete(url)
     .then(res => {
@@ -111,7 +145,15 @@ export const deleteResource = (url, history) => {
       }
     });
 };
-export const onboarding = (props, data, context, cb) => {
+/**
+ * @description - Handles signup and login to the app
+ *
+ * @param {object} props - Compoinent props
+ * @param {object} data - Request body
+ * @param {string} context - Signup or login
+ * @param {function} cb - Callback function to reset submitButton loading state
+ */
+const onboarding = (props, data, context, cb) => {
   const { history, setAccountType } = props;
   const url = context === 'signup' ? `${apiLink}/api/v1/users` : `${apiLink}/api/v1/users/login`;
   axios
@@ -127,8 +169,15 @@ export const onboarding = (props, data, context, cb) => {
       cb(err.response.data.message || err);
     });
 };
-
-export const getOne = (props, itemId, type) => {
+/**
+ * @description - Hanldes http requests to get one resource
+ *
+ * @param {object} props - Component props
+ * @param {number} itemId - Item id to get
+ * @param {string} type - Type of resource to get
+ * @returns {void} - Or response data (details) for user profile
+ */
+const getOne = (props, itemId, type) => {
   let dispatchAction;
   let details;
   if (type === 'centers') {
@@ -164,12 +213,32 @@ export const getOne = (props, itemId, type) => {
     return details;
   }
 };
-
+/**
+ * @description - Handles all http post and put requests
+ *
+ * @export
+ * @class Transactions
+ */
 export class Transactions {
+  /**
+   * Creates an instance of Transactions.
+   * @param {object} props - Component props
+   * @param {string} target - The resource to put or post // event, center, profile, etc
+   * @memberof Transactions
+   */
   constructor(props, target) {
     this.props = props;
-    this.target = target; // center or event or profile
+    this.target = target;
   }
+  /**
+   * @description Method to handle post or put http requests
+   *
+   * @param {number} itemiId - Id of item resource to update
+   * @param {object} data - Request body
+   * @param {function} cb - Callback function to reset submitButton loading state
+   * @returns {viod} - Or response data if target is user profile related
+   * @memberof Transactions
+   */
   addOrUpdate(itemiId, data, cb) {
     let http;
     const { modalTitle, history } = this.props;
@@ -262,6 +331,14 @@ export class Transactions {
       return details;
     }
   }
+  /**
+   * @description - Handles image upload
+   *
+   * @param {formData} imageData
+   * @param {function} saveResource - Saves data to db after image upload
+   * @param {function} cb - Callback function to reset submitButton loading state
+   * @memberof Transactions
+   */
   uploadImage(imageData, saveResource, cb) {
     axios
       .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)

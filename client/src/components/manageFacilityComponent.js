@@ -43,6 +43,8 @@ class ManageFacilityComponent extends React.Component {
       visibility: 'none',
     };
   }
+
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',
@@ -64,6 +66,8 @@ class ManageFacilityComponent extends React.Component {
       changeSubmit('initial');
     });
   }
+
+  // delete facilities marked in table
   deleteMarked() {
     toDelete.forEach(index => {
       delete facilities[index];
@@ -77,6 +81,8 @@ class ManageFacilityComponent extends React.Component {
     this.props.setUndeletedFacilities(newFacilities);
     toDelete = [];
   }
+
+  // Collect id of facilities to be deleted upon check event
   setId(e) {
     const index = e.target.id;
     if (e.target.checked === true) {
@@ -85,6 +91,8 @@ class ManageFacilityComponent extends React.Component {
       toDelete.splice(toDelete.indexOf(index), 1);
     }
   }
+
+  // Handle dynamic adding of new facility to dynamic facility table
   addFacility(event) {
     id++;
     event.preventDefault();
@@ -98,6 +106,7 @@ class ManageFacilityComponent extends React.Component {
     if (this.props.undeleted.length > 0) {
       checker++;
     }
+    // facilities == undeleted or Facility data on centerDetails component load
     facilities = checker > 0 ? this.props.undeleted : this.props.data;
     return (
       <div

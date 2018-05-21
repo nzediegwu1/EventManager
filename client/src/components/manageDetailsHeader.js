@@ -62,9 +62,19 @@ class ManageDetails extends React.Component {
     super(props);
     this.delete = this.delete;
   }
+  /**
+   * @description - Handle deletion of an event or center
+   *
+   * @memberof ManageDetails
+   */
   delete() {
     const validate = confirm('Confirm delete action?');
     if (validate) {
+      /**
+       * @description - Generate url for route handling deletion of resource
+       *
+       * @returns {string} - Url of resource to delete
+       */
       const urlGenerator = () => {
         const type = currentPage === 'manageEvent' ? 'events' : 'centers';
         return `${apiLink}/api/v1/${type}/${param}/?token=${

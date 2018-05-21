@@ -37,12 +37,14 @@ class SignInPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.changeSubmitState = this.changeSubmitState.bind(this);
   }
+  // When user clicks signup link, display signup component and hide signin component
   changeState() {
     this.setState(prevState => ({
       signinView: prevState.signinView === 'block' ? 'none' : 'block',
       signupView: prevState.signupView === 'none' ? 'block' : 'none',
     }));
   }
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',
@@ -58,6 +60,7 @@ class SignInPage extends React.Component {
     const validationStatus = userValidator(loginData, 'login');
     if (validationStatus === true) {
       this.changeSubmitState('processing');
+      // http request to signin
       onboarding(this.props, loginData, 'login', () => {
         this.changeSubmitState('initial');
       });

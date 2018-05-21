@@ -20,6 +20,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
   ref,
   required,
 });
+// all props are from signin component
 class SignupComponent extends React.Component {
   constructor(props) {
     super(props);

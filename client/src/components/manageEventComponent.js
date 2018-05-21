@@ -29,6 +29,8 @@ class ManageEventComponent extends React.Component {
   componentWillUnmount() {
     this.props.setPage('dashboard');
   }
+
+  // Handle approval or rejection of event
   approve(e) {
     const transactions = new Transactions(this.props, 'event');
     const event = this.props.eventDetails[0];

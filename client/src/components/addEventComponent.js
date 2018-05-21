@@ -43,6 +43,8 @@ class AddEventComponent extends React.Component {
   componentWillMount() {
     getAll(this.props, 'centers');
   }
+
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',
@@ -92,6 +94,8 @@ class AddEventComponent extends React.Component {
       saveEvent(undefined);
     }
   }
+
+  // Bind input controls with data when user wants to modify event
   componentWillReceiveProps(nextState) {
     const eventDefaults = nextState.eventDefaults;
     eventId = eventDefaults.id;

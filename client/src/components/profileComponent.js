@@ -46,6 +46,8 @@ class ProfileComponent extends React.Component {
       visibility: 'none',
     };
   }
+
+  // Set and reset submitButton state: initial || processing
   changeSubmitState(state) {
     this.setState({
       disabled: state === 'initial' ? false : 'disabled',
@@ -53,6 +55,7 @@ class ProfileComponent extends React.Component {
     });
   }
 
+  // Handle profile image upload
   uploadPic(e) {
     if (e.target.files[0]) {
       changeSubmit('processing');
@@ -68,6 +71,11 @@ class ProfileComponent extends React.Component {
       imageData.append('public_id', publicId);
       const token = JSON.parse(localStorage.token).value;
       const transactions = new Transactions(properties, 'profilePic');
+      /**
+       * @description - Handle image commit to database
+       *
+       * @param {object} res
+       */
       const saveImage = res => {
         const profileUpdate = {
           picture: res.data.secure_url,

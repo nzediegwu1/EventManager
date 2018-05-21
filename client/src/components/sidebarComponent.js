@@ -27,6 +27,12 @@ class SidebarComponent extends React.Component {
     this.changeLocation = this.changeLocation.bind(this);
     this.userId = JSON.parse(localStorage.token).id;
   }
+  /**
+   * @description - Method for navigating within app
+   *
+   * @param {string} url - Url to the component path
+   * @memberof SidebarComponent
+   */
   changeLocation(url) {
     if (url === `${this.props.match.path}/profile/${this.userId}`) {
       const profileData = getOne(this.props, this.userId, 'users');
