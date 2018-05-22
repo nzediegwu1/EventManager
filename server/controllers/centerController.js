@@ -192,14 +192,12 @@ class Centers {
 
   // get all centers
   getAllCenters(req, res) {
-    // gets all users' details excluding password
     const rawPage = req.query.pageNumber;
     const rawLimit = req.query.limit;
     const page = isNaN(rawPage) || !rawPage ? 1 : parseInt(rawPage, 10);
     const limit = isNaN(rawLimit) || !rawLimit ? 5 : parseInt(req.query.limit, 10);
     return model.findAndCountAll().then(data => {
       const count = data.count;
-      console.log('count of items', count);
       const pages = Math.ceil(count / limit);
       const offset = page > pages ? (pages - 1) * limit : (page - 1) * limit;
       return model
@@ -210,7 +208,7 @@ class Centers {
         })
         .then(allCenters => {
           if (allCenters.length !== 0) {
-            return validator.response(res, 'success', 200, allCenters);
+            return validator.response(res, 'success', 200, { data: allCenters, count });
           }
           return validator.response(res, 'error', 404, 'No centers available');
         })

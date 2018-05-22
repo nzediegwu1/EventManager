@@ -120,7 +120,7 @@ class Users {
           })
           .then(allusers => {
             if (allusers.length > 0) {
-              return signinValidator.response(res, 'success', 200, allusers);
+              return signinValidator.response(res, 'success', 200, { data: allusers, count });
             }
             return signinValidator.response(res, 'error', 404, 'No user found');
           })
