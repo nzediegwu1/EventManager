@@ -4,6 +4,7 @@ import {
   SET_REQUIRED,
   SET_EVENT_DEFAULTS,
   SET_CENTER_DEFAULTS,
+  SET_DATA_COUNT,
 } from '../constants/actionTypes';
 
 export const setPage = page => ({
@@ -24,5 +25,9 @@ export const setEventDefaults = data => ({
 });
 export const setCenterDefaults = data => ({
   type: SET_CENTER_DEFAULTS,
+  payload: data,
+});
+export const setDataCount = data => ({
+  type: SET_DATA_COUNT,
   payload: data,
 });
