@@ -57,7 +57,6 @@ class AddEventComponent extends React.Component {
 
   checkValidation() {
     if (this.center.value === '') {
-      // console.log('this.center.value', this.center.value);
       toastr.error('No center selected');
     }
   }

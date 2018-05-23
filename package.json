@@ -23,6 +23,9 @@
     "locations",
     "fullstack"
   ],
+  "engines": {
+    "node": "9.10.1"
+  },
   "author": "Anaeze Nsoffor",
   "license": "MIT",
   "bugs": {

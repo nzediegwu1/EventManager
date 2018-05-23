@@ -61,6 +61,7 @@ export class Events extends React.Component {
             />
             <tbody>
               {/* eslint-disable */}
+              {console.log('this.props.events', this.props.events)}
               {this.props.events.map(event => (
                 <TableRow
                   key={event.id}
