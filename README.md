@@ -15,8 +15,8 @@ Given you manage an events center, this app will help you accept applications to
 
 
 ## Setup guide:
-  * Clone this repository: git clone https://github.com/nzediegwu1/EventManager.git
-  
+  * Clone this repository: ```git clone https://github.com/nzediegwu1/EventManager.git```
+
 ## To install all dependencies, run;
 
 
