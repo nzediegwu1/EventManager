@@ -77,23 +77,6 @@ class NavBarItem extends React.Component {
           />
         </button>
         <div className="collapse navbar-collapse collapsible" id="navBody">
-          <form className="form-inline my-lg-0" id="searchFormGroup">
-            <div style={{ display: 'flex' }}>
-              <input
-                className="form-control mr-sm-2 search-input"
-                type="search"
-                placeholder="Search an Event"
-                aria-label="Search"
-              />
-              <button
-                className="btn btn-outline-success search-events"
-                id="searchEvents"
-                type="submit"
-              >
-                <Icon src="glyphicons-28-search.png" class="invert-color" />
-              </button>
-            </div>
-          </form>
           <ul
             className="navbar-nav nav-pills nav-fill my-lg-0 ml-auto justify-content-center"
             id="nav-body"

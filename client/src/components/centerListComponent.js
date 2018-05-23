@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import { populateCenters } from '../actions/centerActions';
 import { setDataCount } from '../actions/pageActions';
 import { connect } from 'react-redux';
-import { getAll } from '../services';
+import { getAll, searchFunction } from '../services';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import { LIMIT } from '../constants/actionTypes';
+import { Filter } from './filterComponent';
+
 
 const mapDispatchToProps = dispatch => ({
   populateCenters: centers => dispatch(populateCenters(centers)),
@@ -25,7 +27,13 @@ class CenterList extends React.Component {
       activePage: 1,
     };
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.searchEvents = this.searchEvents.bind(this);
   }
+
+  searchEvents(e) {
+    searchFunction(e, 'centerTable');
+  }
+
   componentWillMount() {
     getAll(this.props, 'centers');
   }
@@ -41,18 +49,9 @@ class CenterList extends React.Component {
     return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Centers</b>
-        <ul className="nav nav-pills flex-column">
-          <li className="list-group-item sidebar-header text-center">
-            <input
-              className="form-control search-input search-list"
-              type="search"
-              placeholder="Filter"
-              aria-label="Search"
-            />
-          </li>
-        </ul>
+        <Filter placeholder="Filter by name or location..." handleSearch={this.searchEvents} />
         <div className="table-responsive">
-          <table className="table table-hover table-main">
+          <table id="centerTable" className="table table-hover table-main">
             <TableHead
               columns={['View', 'Name', 'Location', 'Capacity']}
               class="table-header table-header-main"

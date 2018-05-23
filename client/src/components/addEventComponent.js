@@ -12,6 +12,7 @@ import { TableRow, TableHead } from './table';
 import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import toastr from 'toastr';
+import { ModalFooter } from './modalFooter';
 
 toastr.options = toastSettings;
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
@@ -318,27 +319,13 @@ class AddEventComponent extends React.Component {
                     itemClass="page-item"
                     linkClass="page-link"
                   />
-                  <div className="modal-footer">
-                    <button
-                      type="submit"
-                      className="btn btn-success createEvent"
-                      disabled={this.state.disabled}
-                      onClick={this.checkValidation}
-                    >
-                      <i
-                        className="fa fa-spinner fa-spin"
-                        style={{ display: this.state.visibility }}
-                      />
-                      &nbsp; Save
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={this.closeModal}
-                      data-dismiss="modal"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <ModalFooter
+                    type="submit"
+                    disabled={this.state.disabled}
+                    checkValidation={this.checkValidation}
+                    display={this.state.visibility}
+                    closeModal={this.closeModal}
+                  />
                 </div>
               </form>
             </div>

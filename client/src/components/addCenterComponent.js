@@ -6,6 +6,7 @@ import { apiLink, Transactions } from '../services';
 import { connect } from 'react-redux';
 import { setCenterDetails } from '../actions/centerActions';
 import PropTypes from 'prop-types';
+import { ModalFooter } from './modalFooter';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -193,22 +194,11 @@ class AddCenterComponent extends React.Component {
                     <Option value="close" text="close" />
                   </select>
                 </div>
-                <div className="modal-footer">
-                  <button
-                    type="submit"
-                    className="btn btn-success createCenter"
-                    disabled={this.state.disabled}
-                  >
-                    <i
-                      className="fa fa-spinner fa-spin"
-                      style={{ display: this.state.visibility }}
-                    />
-                    &nbsp; Save
-                  </button>
-                  <button className="btn btn-danger" data-dismiss="modal">
-                    Cancel
-                  </button>
-                </div>
+                <ModalFooter
+                  type="submit"
+                  disabled={this.state.disabled}
+                  display={this.state.visibility}
+                />
               </form>
             </div>
           </div>

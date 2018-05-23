@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import { populateEvents, setEventDetail } from '../actions/eventActions';
 import { setDataCount } from '../actions/pageActions';
 import { connect } from 'react-redux';
-import { getAll } from '../services';
+import { getAll, searchFunction } from '../services';
 import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import { LIMIT } from '../constants/actionTypes';
+import { Filter } from './filterComponent';
 
 const mapDispatchToProps = dispatch => ({
   populateEvents: events => dispatch(populateEvents(events)),
@@ -26,10 +27,15 @@ export class Events extends React.Component {
       activePage: 1,
     };
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.searchEvents = this.searchEvents.bind(this);
   }
 
   componentWillMount() {
     getAll(this.props, 'events');
+  }
+
+  searchEvents(e) {
+    searchFunction(e, 'eventTable');
   }
 
   handlePageChange(pageNumber) {
@@ -43,18 +49,9 @@ export class Events extends React.Component {
     return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Events</b>
-        <ul className="nav nav-pills flex-column">
-          <li className="list-group-item sidebar-header text-center">
-            <input
-              className="form-control search-input search-list"
-              type="search"
-              placeholder="Filter"
-              aria-label="Search"
-            />
-          </li>
-        </ul>
+        <Filter placeholder="Filter by title or venue..." handleSearch={this.searchEvents} />
         <div className="table-responsive">
-          <table className="table table-hover table-main">
+          <table id="eventTable" className="table table-hover table-main">
             <TableHead
               columns={['View', 'Title', 'Venue', 'Date']}
               class="table-header table-header-main"
@@ -68,7 +65,11 @@ export class Events extends React.Component {
                     <img className="center-image" src={`${event.picture}`} alt="event-view" />,
                     <b onClick={() => this.props.setEventDetail(event)}>
                       <Link className="event-detail" to={`${this.props.match.path}/${event.id}`}>
-                        {event.center.availability !== 'close' ? event.title : <p className="rejected">{event.title} (closed)</p>}
+                        {event.center.availability !== 'close' ? (
+                          event.title
+                        ) : (
+                          <p className="rejected">{event.title} (closed)</p>
+                        )}
                       </Link>
                     </b>,
                     `${event.center.name}, ${event.center.address}`,
