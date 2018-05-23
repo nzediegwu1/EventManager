@@ -14,6 +14,27 @@ export const apiLink =
     ? 'http://localhost:8080'
     : 'https://eventmanageronline.herokuapp.com';
 
+export function searchFunction(event, tableId) {
+  const input = event.target.value.toUpperCase();
+  const table = document.getElementById(tableId);
+  const tableRows = table.getElementsByTagName('tr');
+  // Loop through all table rows, and hide those who don't match the search query
+  for (let i = 0; i < tableRows.length; i++) {
+    const col2 = tableRows[i].getElementsByTagName('td')[1];
+    const col3 = tableRows[i].getElementsByTagName('td')[2];
+    if (col2 && col3) {
+      if (
+        col2.innerHTML.toUpperCase().indexOf(input) > -1 ||
+        col3.innerHTML.toUpperCase().indexOf(input) > -1
+      ) {
+        tableRows[i].style.display = '';
+      } else {
+        tableRows[i].style.display = 'none';
+      }
+    }
+  }
+}
+
 /**
  * @description - Handles setting of token object and redirection to dashboard
  *
