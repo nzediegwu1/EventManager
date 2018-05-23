@@ -310,6 +310,7 @@ class AddEventComponent extends React.Component {
                   </div>
                   <Pagination
                     activePage={this.state.activePage}
+                    innerClass="pagination add-event"
                     itemsCountPerPage={2}
                     totalItemsCount={this.props.dataCount}
                     pageRangeDisplayed={3}
