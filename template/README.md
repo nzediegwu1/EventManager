@@ -11,8 +11,10 @@ Given you manage an events center, this app will help you accept applications to
   * Test: Mocha/Chai
 
 
-Setup guide: Clone this repository: git clone https://github.com/nzediegwu1/EventManager.git
-Access Template files at: https://github.com/nzediegwu1/EventManager/tree/gh-pages
+## Setup guide:
+
+  * Clone this repository: git clone https://github.com/nzediegwu1/EventManager.git
+  * Access Template files at: https://github.com/nzediegwu1/EventManager/tree/gh-pages
 
 
 

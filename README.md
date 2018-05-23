@@ -14,7 +14,9 @@ Given you manage an events center, this app will help you accept applications to
   * Test: Mocha/Chai
 
 
-## Setup guide: Clone this repository: git clone https://github.com/nzediegwu1/EventManager.git
+## Setup guide:
+  * Clone this repository: git clone https://github.com/nzediegwu1/EventManager.git
+  
 ## To install all dependencies, run;
 
 
