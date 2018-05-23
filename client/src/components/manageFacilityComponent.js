@@ -7,6 +7,7 @@ import { populateFacilities, setUndeletedFacilities } from '../actions/facilityA
 import { connect } from 'react-redux';
 import { Transactions } from '../services';
 import PropTypes from 'prop-types';
+import { ModalFooter } from './modalFooter';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -216,26 +217,13 @@ class ManageFacilityComponent extends React.Component {
                     </table>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="submit" hidden>
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-success createCenter"
-                    onClick={this.handleSubmit}
-                    disabled={this.state.disabled}
-                  >
-                    <i
-                      className="fa fa-spinner fa-spin"
-                      style={{ display: this.state.visibility }}
-                    />
-                    &nbsp; Save
-                  </button>
-                  <button className="btn btn-danger" data-dismiss="modal">
-                    Cancel
-                  </button>
-                </div>
+                <ModalFooter
+                  type="button"
+                  disabled={this.state.disabled}
+                  checkValidation={this.handleSubmit}
+                  display={this.state.visibility}
+                  closeModal={this.closeModal}
+                />
               </form>
             </div>
           </div>
