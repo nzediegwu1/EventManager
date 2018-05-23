@@ -1,7 +1,8 @@
 ﻿{
-  "presets": [ "env", "react" ],
+  "presets": ["env", "react", "es2015", "stage-0"],
   "plugins": [
     "react-hot-loader/babel",
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    "transform-react-remove-prop-types"
   ]
 }

@@ -239,24 +239,39 @@ class Events {
 
   // Get all events
   getEvents(req, res) {
-    // gets all users' details excluding password
+    const rawPage = req.query.pageNumber;
+    const rawLimit = req.query.limit;
+    const page = isNaN(rawPage) || !rawPage ? 1 : parseInt(rawPage, 10);
+    const limit = isNaN(rawLimit) || !rawLimit ? 5 : parseInt(req.query.limit, 10);
     return model
-      .findAll({
-        where: { status: 'approved' },
-        include: [
-          { model: models.Centers, as: 'center' },
-          { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
-        ],
-        attributes: { exclude: ['centerId', 'userId'] },
-      })
-      .then(allEvents => {
-        if (allEvents.length !== 0) {
-          return validator.response(res, 'success', 200, allEvents);
-        }
-        return validator.response(res, 'error', 404, 'No events available');
+      .findAndCountAll({ where: { status: 'approved' } })
+      .then(data => {
+        const count = data.count;
+        const pages = Math.ceil(count / limit);
+        const offset = page > pages ? (pages - 1) * limit : (page - 1) * limit;
+        return model
+          .findAll({
+            where: { status: 'approved' },
+            include: [
+              { model: models.Centers, as: 'center' },
+              { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
+            ],
+            attributes: { exclude: ['centerId', 'userId'] },
+            offset,
+            limit,
+            order: [['date', 'ASC']],
+          })
+          .then(allEvents => {
+            if (allEvents.length !== 0) {
+              return validator.response(res, 'success', 200, { data: allEvents, count });
+            }
+            return validator.response(res, 'error', 404, 'No events available');
+          })
+          .catch(error => validator.response(res, 'error', 500, error));
       })
       .catch(error => validator.response(res, 'error', 500, error));
   }
+
   getEventDetails(req, res) {
     if (validator.confirmParams(req, res) === true) {
       return model

@@ -2,23 +2,39 @@ import React from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
 import { populateCenters } from '../actions/centerActions';
+import { setDataCount } from '../actions/pageActions';
 import { connect } from 'react-redux';
 import { getAll } from '../services';
 import PropTypes from 'prop-types';
+import Pagination from 'react-js-pagination';
+import { LIMIT } from '../constants/actionTypes';
 
 const mapDispatchToProps = dispatch => ({
   populateCenters: centers => dispatch(populateCenters(centers)),
+  setDataCount: count => dispatch(setDataCount(count)),
 });
 const mapStateToProps = state => ({
   centers: state.centers.centerList,
+  dataCount: state.page.dataCount,
 });
 
 class CenterList extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      activePage: 1,
+    };
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
   componentWillMount() {
     getAll(this.props, 'centers');
+  }
+
+  handlePageChange(pageNumber) {
+    this.setState({
+      activePage: pageNumber,
+    });
+    getAll(this.props, 'centers', pageNumber);
   }
 
   render() {
@@ -67,6 +83,16 @@ class CenterList extends React.Component {
               ))}
             </tbody>
           </table>
+          <br />
+          <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={LIMIT}
+            totalItemsCount={this.props.dataCount}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </div>
       </div>
     );

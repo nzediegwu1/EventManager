@@ -1,12 +1,15 @@
 import React from 'react';
 import Icon from './icon';
 import { connect } from 'react-redux';
+import { getAll } from '../services';
 import {
   setModalTitle,
   setRequired,
   setEventDefaults,
   setCenterDefaults,
+  setDataCount,
 } from '../actions/pageActions';
+import { getEventCenters } from '../actions/centerActions';
 import { initialState } from '../reducers/pageReducer';
 import PropTypes from 'prop-types';
 
@@ -18,6 +21,8 @@ const mapDispatchToProps = dispatch => ({
   setRequired: value => dispatch(setRequired(value)),
   setEventDefaults: data => dispatch(setEventDefaults(data)),
   setCenterDefaults: data => dispatch(setCenterDefaults(data)),
+  getEventCenters: centers => dispatch(getEventCenters(centers)),
+  setDataCount: count => dispatch(setDataCount(count)),
 });
 
 const NavbarList = props => (
@@ -43,6 +48,7 @@ class NavBarItem extends React.Component {
     const setModalProps = title => {
       this.props.setModalTitle(title);
       this.props.setRequired(true);
+      getAll(this.props, 'eventCenters', 1, 2);
       if (title === 'New Event') this.props.setEventDefaults(initialState.eventDefaults);
       else this.props.setCenterDefaults(initialState.centerDefaults);
     };

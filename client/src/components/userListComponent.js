@@ -2,20 +2,37 @@ import React from 'react';
 import { TableHead, TableRow } from './table';
 import { Link } from 'react-router-dom';
 import { populateUserList } from '../actions/userActions';
+import { setDataCount } from '../actions/pageActions';
 import { connect } from 'react-redux';
 import { getAll } from '../services';
+import Pagination from 'react-js-pagination';
+import { LIMIT } from '../constants/actionTypes';
 
 const mapDispatchToProps = dispatch => ({
   populateUserList: users => dispatch(populateUserList(users)),
+  setDataCount: count => dispatch(setDataCount(count)),
 });
 const mapStateToProps = state => ({
   userList: state.users.userList,
+  dataCount: state.page.dataCount,
 });
 
 class UserListComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      activePage: 1,
+    };
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
+
+  handlePageChange(pageNumber) {
+    this.setState({
+      activePage: pageNumber,
+    });
+    getAll(this.props, 'users', pageNumber);
+  }
+
   componentWillMount() {
     getAll(this.props, 'users');
   }
@@ -57,6 +74,16 @@ class UserListComponent extends React.Component {
               ))}
             </tbody>
           </table>
+          <br />
+          <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={LIMIT}
+            totalItemsCount={this.props.dataCount}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </div>
       </div>
     );

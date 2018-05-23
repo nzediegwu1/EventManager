@@ -1,5 +1,6 @@
 import axios from 'axios';
 import toastr from 'toastr';
+import { LIMIT } from './constants/actionTypes';
 
 export const toastSettings = {
   closeButton: true,
@@ -96,13 +97,14 @@ export const logout = (id, history) => {
   $(`#${id}`).modal('hide');
   history.push('/');
 };
+
 /**
  * @description - Get center, event or user list
  *
  * @param {object} props - Component props
  * @param {string} type - The kind of resource to get: event, center or user?
  */
-export const getAll = (props, type) => {
+export const getAll = (props, type, pageNumber, limit) => {
   let dispatchAction;
   const { history } = props;
   const token = JSON.parse(localStorage.token).value;
@@ -110,13 +112,21 @@ export const getAll = (props, type) => {
     dispatchAction = props.populateCenters;
   } else if (type === 'events') {
     dispatchAction = props.populateEvents;
+  } else if (type === 'eventCenters') {
+    dispatchAction = props.getEventCenters;
   } else {
     dispatchAction = props.populateUserList;
   }
+  const url =
+    type !== 'eventCenters'
+      ? `${apiLink}/api/v1/${type}/?token=${token}&pageNumber=${pageNumber}&limit=${limit || LIMIT}`
+      : `${apiLink}/api/v1/centers/?pageNumber=${pageNumber}&limit=${limit || LIMIT}`;
   axios
-    .get(`${apiLink}/api/v1/${type}/?token=${token}`)
+    .get(url)
     .then(res => {
-      dispatchAction(res.data.data);
+      const response = res.data.data;
+      props.setDataCount(response.count);
+      dispatchAction(response.data);
     })
     .catch(err => {
       const status = err.response ? err.response.status : undefined;
