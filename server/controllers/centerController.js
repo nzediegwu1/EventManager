@@ -1,13 +1,14 @@
 ﻿import models from '../models';
-import Val from '../middlewares/validator';
 import cloudinary from 'cloudinary';
+import {
+  cloudinaryConfig,
+  errorResponseWithCloudinary,
+  restResponse,
+  invalidParameter,
+  confirmParams,
+} from '../util';
 
-cloudinary.config({
-  cloud_name: 'eventmanager',
-  api_key: `${process.env.API_KEY}`,
-  api_secret: `${process.env.API_SECRET}`,
-});
-const validator = new Val('centers');
+cloudinary.config({ cloudinaryConfig });
 const model = models.Centers;
 
 class Centers {
@@ -22,7 +23,7 @@ class Centers {
       picture.length > 254
     ) {
       const errorMessage = 'Center picture should be non-empty string less 255 characters';
-      return validator.responseWithCloudinary(req, res, 400, errorMessage);
+      return errorResponseWithCloudinary(req, res, 400, errorMessage);
       // validate center image public_id
     } else if (
       publicId === undefined ||
@@ -31,7 +32,7 @@ class Centers {
       publicId.length > 254
     ) {
       const errorMessage = 'Center image public_id should be non-empty string less 255 characters';
-      return validator.responseWithCloudinary(req, res, 400, errorMessage);
+      return errorResponseWithCloudinary(req, res, 400, errorMessage);
     }
     return models.Users.findById(req.decoded.id)
       .then(user => {
@@ -53,7 +54,7 @@ class Centers {
                 });
               }
               if (sameCenter) {
-                return validator.responseWithCloudinary(req, res, 406, sameCenter);
+                return errorResponseWithCloudinary(req, res, 406, sameCenter);
               }
               const newEntry = {
                 name,
@@ -82,23 +83,23 @@ class Centers {
                       ],
                       attributes: { exclude: ['userId'] },
                     })
-                    .then(response => validator.response(res, 'success', 201, response))
-                    .catch(error => validator.responseWithCloudinary(req, res, 500, error))
+                    .then(response => restResponse(res, 'success', 201, response))
+                    .catch(error => errorResponseWithCloudinary(req, res, 500, error))
                 )
-                .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+                .catch(error => errorResponseWithCloudinary(req, res, 500, error));
             })
-            .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+            .catch(error => errorResponseWithCloudinary(req, res, 500, error));
         }
         const errorMessage = 'Only an admin can perform this action';
-        return validator.responseWithCloudinary(req, res, 403, errorMessage);
+        return errorResponseWithCloudinary(req, res, 403, errorMessage);
       })
-      .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+      .catch(error => errorResponseWithCloudinary(req, res, 500, error));
   }
 
   // modify a center
   modifyCenter(req, res) {
     // get center with same index as parameter and change the value
-    if (validator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       // destructuring
       return model
         .findAll()
@@ -129,7 +130,7 @@ class Centers {
             });
           }
           if (sameCenter) {
-            return validator.responseWithCloudinary(req, res, 406, sameCenter);
+            return errorResponseWithCloudinary(req, res, 406, sameCenter);
           }
           let oldImage;
           function modifyCenter(modified) {
@@ -159,16 +160,16 @@ class Centers {
                           ],
                           attributes: { exclude: ['userId'] },
                         })
-                        .then(response => validator.response(res, 'success', 201, response))
-                        .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+                        .then(response => restResponse(res, 'success', 201, response))
+                        .catch(error => errorResponseWithCloudinary(req, res, 500, error));
                     }
                     return update();
                   })
-                  .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+                  .catch(error => errorResponseWithCloudinary(req, res, 500, error));
               })
               .catch(() => {
                 const errorMessage = 'Attempt to update unexisting or unauthorized item';
-                return validator.responseWithCloudinary(req, res, 403, errorMessage);
+                return errorResponseWithCloudinary(req, res, 403, errorMessage);
               });
           }
           const modifiedEntry = {
@@ -184,10 +185,10 @@ class Centers {
           };
           return modifyCenter(modifiedEntry);
         })
-        .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+        .catch(error => errorResponseWithCloudinary(req, res, 500, error));
     }
     cloudinary.v2.uploader.destroy(req.body.publicId);
-    return validator.invalidParameter;
+    return invalidParameter;
   }
 
   // get all centers
@@ -208,16 +209,16 @@ class Centers {
         })
         .then(allCenters => {
           if (allCenters.length !== 0) {
-            return validator.response(res, 'success', 200, { data: allCenters, count });
+            return restResponse(res, 'success', 200, { data: allCenters, count });
           }
-          return validator.response(res, 'error', 404, 'No centers available');
+          return restResponse(res, 'error', 404, 'No centers available');
         })
-        .catch(error => validator.response(res, 'error', 500, error));
+        .catch(error => restResponse(res, 'error', 500, error));
     });
   }
   // get center details
   getCenterDetails(req, res) {
-    if (validator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       return model
         .findById(req.params.id, {
           include: [
@@ -228,13 +229,13 @@ class Centers {
         })
         .then(center => {
           if (center !== null) {
-            return validator.response(res, 'success', 200, center);
+            return restResponse(res, 'success', 200, center);
           }
-          return validator.response(res, 'error', 404, 'Could not find Center');
+          return restResponse(res, 'error', 404, 'Could not find Center');
         })
-        .catch(error => validator.response(res, 'error', 500, error));
+        .catch(error => restResponse(res, 'error', 500, error));
     }
-    return validator.invalidParameter;
+    return invalidParameter;
   }
 }
 

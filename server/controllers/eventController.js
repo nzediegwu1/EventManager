@@ -1,22 +1,17 @@
 ﻿import models from '../models';
-import Val from '../middlewares/validator';
 import cloudinary from 'cloudinary';
 import nodemailer from 'nodemailer';
+import {
+  cloudinaryConfig,
+  errorResponseWithCloudinary,
+  restResponse,
+  invalidParameter,
+  confirmParams,
+  emailConfig,
+} from '../util';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-cloudinary.config({
-  cloud_name: 'eventmanager',
-  api_key: `${process.env.API_KEY}`,
-  api_secret: `${process.env.API_SECRET}`,
-});
-
-const validator = new Val('events');
+const transporter = nodemailer.createTransport(emailConfig);
+cloudinary.config({ cloudinaryConfig });
 const model = models.Events;
 
 class Events {
@@ -54,7 +49,7 @@ class Events {
           }
         });
         if (errorMessage) {
-          return validator.responseWithCloudinary(req, res, 406, errorMessage);
+          return errorResponseWithCloudinary(req, res, 406, errorMessage);
         }
         function createNewEvent(entry) {
           return models.Centers.findById(centerId)
@@ -75,20 +70,15 @@ class Events {
                         ],
                         attributes: { exclude: ['userId'] },
                       })
-                      .then(response => validator.response(res, 'success', 201, response))
-                      .catch(error => validator.responseWithCloudinary(req, res, 500, error))
+                      .then(response => restResponse(res, 'success', 201, response))
+                      .catch(error => errorResponseWithCloudinary(req, res, 500, error))
                   )
-                  .catch(error => validator.responseWithCloudinary(req, res, 400, error));
+                  .catch(error => errorResponseWithCloudinary(req, res, 400, error));
               }
-              return validator.responseWithCloudinary(
-                req,
-                res,
-                406,
-                'Selected center is unavailable'
-              );
+              return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
             })
             .catch(() =>
-              validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist')
+              errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
             );
         }
         const newEntry = {
@@ -102,13 +92,13 @@ class Events {
         };
         return createNewEvent(newEntry);
       })
-      .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+      .catch(error => errorResponseWithCloudinary(req, res, 500, error));
   }
 
   // modify an event
   modifyEvent(req, res) {
     // get event with same index as parameter and change the value
-    if (validator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       const { title, date, time, picture, publicId, description, centerId } = req.body;
       const timestamp = new Date(`${date} ${time}`);
       return model
@@ -143,7 +133,7 @@ class Events {
             }
           });
           if (errorMessage) {
-            return validator.responseWithCloudinary(req, res, 406, errorMessage);
+            return errorResponseWithCloudinary(req, res, 406, errorMessage);
           }
           let oldImage;
           function modifyEvent(modified) {
@@ -175,33 +165,22 @@ class Events {
                                 ],
                                 attributes: { exclude: ['userId'] },
                               })
-                              .then(response => validator.response(res, 'success', 201, response))
-                              .catch(error =>
-                                validator.responseWithCloudinary(req, res, 500, error)
-                              );
+                              .then(response => restResponse(res, 'success', 201, response))
+                              .catch(error => errorResponseWithCloudinary(req, res, 500, error));
                           }
                           return update();
                         })
-                        .catch(error => validator.responseWithCloudinary(req, res, 400, error));
+                        .catch(error => errorResponseWithCloudinary(req, res, 400, error));
                     })
-                    .catch(() =>
-                      validator.responseWithCloudinary(
-                        req,
-                        res,
-                        403,
-                        'Unexisting or unauthorized item'
-                      )
-                    );
+                    .catch(() => {
+                      const message = 'Unexisting or unauthorized item';
+                      return errorResponseWithCloudinary(req, res, 403, message);
+                    });
                 }
-                return validator.responseWithCloudinary(
-                  req,
-                  res,
-                  406,
-                  'Selected center is unavailable'
-                );
+                return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
               })
               .catch(() =>
-                validator.responseWithCloudinary(req, res, 400, 'Center selected does not exist')
+                errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
               );
           }
 
@@ -216,25 +195,25 @@ class Events {
           };
           return modifyEvent(modifiedEntry);
         })
-        .catch(error => validator.responseWithCloudinary(req, res, 500, error));
+        .catch(error => errorResponseWithCloudinary(req, res, 500, error));
     }
     cloudinary.v2.uploader.destroy(req.body.publicId);
-    return validator.invalidParameter;
+    return invalidParameter;
   }
 
   // delete an event
   deleteEvent(req, res) {
-    if (validator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       return model
         .destroy({ where: { id: req.params.id, userId: req.decoded.id } })
         .then(() => {
           cloudinary.v2.uploader.destroy(req.query.file);
-          return validator.response(res, 'success', 200, 'Successfully deleted');
+          return restResponse(res, 'success', 200, 'Successfully deleted');
         })
-        .catch(() => validator.response(res, 'error', 400, 'Invalid transaction'));
+        .catch(() => restResponse(res, 'error', 400, 'Invalid transaction'));
       // Event does not exist or User not priviledged to delete
     }
-    return validator.invalidParameter;
+    return invalidParameter;
   }
 
   // Get all events
@@ -263,17 +242,17 @@ class Events {
           })
           .then(allEvents => {
             if (allEvents.length !== 0) {
-              return validator.response(res, 'success', 200, { data: allEvents, count });
+              return restResponse(res, 'success', 200, { data: allEvents, count });
             }
-            return validator.response(res, 'error', 404, 'No events available');
+            return restResponse(res, 'error', 404, 'No events available');
           })
-          .catch(error => validator.response(res, 'error', 500, error));
+          .catch(error => restResponse(res, 'error', 500, error));
       })
-      .catch(error => validator.response(res, 'error', 500, error));
+      .catch(error => restResponse(res, 'error', 500, error));
   }
 
   getEventDetails(req, res) {
-    if (validator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       return model
         .findById(req.params.id, {
           include: [
@@ -284,16 +263,16 @@ class Events {
         })
         .then(event => {
           if (event !== null) {
-            return validator.response(res, 'success', 200, event);
+            return restResponse(res, 'success', 200, event);
           }
-          return validator.response(res, 'error', 404, 'Could not find Event');
+          return restResponse(res, 'error', 404, 'Could not find Event');
         })
-        .catch(error => validator.response(res, 'error', 500, error));
+        .catch(error => restResponse(res, 'error', 500, error));
     }
-    return validator.invalidParameter;
+    return invalidParameter;
   }
   approveEvent(req, res) {
-    if (validator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       const { date, time, status, centerId } = req.body;
       const timestamp = new Date(`${date} ${time}`);
       if (status === 'approved' || status === 'rejected') {
@@ -329,7 +308,7 @@ class Events {
               }
             });
             if (errorMessage) {
-              return validator.response(res, 'error', 406, errorMessage);
+              return restResponse(res, 'error', 406, errorMessage);
             }
             return model
               .findById(eventId, {
@@ -358,23 +337,18 @@ class Events {
                       }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`,
                     };
                     transporter.sendMail(mailOption);
-                    return validator.response(res, 'success', 200, updatedEvent);
+                    return restResponse(res, 'success', 200, updatedEvent);
                   });
                 }
-                return validator.response(
-                  res,
-                  'error',
-                  403,
-                  'Not priviledge to perform this action'
-                );
+                return restResponse(res, 'error', 403, 'Not priviledge to perform this action');
               })
-              .catch(() => validator.response(res, 'error', 404, 'The event does not exist'));
+              .catch(() => restResponse(res, 'error', 404, 'The event does not exist'));
           })
-          .catch(error => validator.response(res, 'error', 500, error));
+          .catch(error => restResponse(res, 'error', 500, error));
       }
-      return validator.response(res, 'error', 400, 'Status should be [approve] or [reject]');
+      return restResponse(res, 'error', 400, 'Status should be [approve] or [reject]');
     }
-    return validator.invalidParameter;
+    return invalidParameter;
   }
 }
 

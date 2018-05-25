@@ -5,7 +5,7 @@ import { LIMIT } from './constants/actionTypes';
 export const toastSettings = {
   closeButton: true,
   positionClass: 'toast-top-center',
-  timeOut: '1000',
+  timeOut: '2500',
   showMethod: 'slideDown',
   hideMethod: 'slideUp',
 };
@@ -14,6 +14,13 @@ export const apiLink =
     ? 'http://localhost:8080'
     : 'https://eventmanageronline.herokuapp.com';
 
+/**
+ * @description Handle client-side search on HTML table
+ *
+ * @export
+ * @param {any} event - Input control event
+ * @param {any} tableId - Index of the table to be searched
+ */
 export function searchFunction(event, tableId) {
   const input = event.target.value.toUpperCase();
   const table = document.getElementById(tableId);
@@ -27,9 +34,9 @@ export function searchFunction(event, tableId) {
         col2.innerHTML.toUpperCase().indexOf(input) > -1 ||
         col3.innerHTML.toUpperCase().indexOf(input) > -1
       ) {
-        tableRows[i].style.display = '';
+        tableRows[i].style.display = ''; // show row
       } else {
-        tableRows[i].style.display = 'none';
+        tableRows[i].style.display = 'none'; // hide row
       }
     }
   }
@@ -54,6 +61,7 @@ const signin = (res, history) => {
 /**
  * @description - Handles password recovery http request
  *
+ * @export
  * @param {object} data - Request body (email) to be sent to server
  * @param {function} cb - Callback function to reset loading submitButton state
  */
@@ -73,6 +81,7 @@ export const recoverPassword = (data, cb) => {
 /**
  * @description - Validate for user signup and login
  *
+ * @export
  * @param {object} userData - From login/signup form
  * @param {string} context - The content to check: login or signup
  * @returns {bool} - True or validation error message
@@ -110,6 +119,7 @@ export const userValidator = (userData, context) => {
 /**
  * @description - Clear localstorage and logout user
  *
+ * @export
  * @param {string} id - Id of html modal to be closed before logout
  * @param {object} history - History prop from react component
  */
@@ -122,6 +132,7 @@ export const logout = (id, history) => {
 /**
  * @description - Get center, event or user list
  *
+ * @export
  * @param {object} props - Component props
  * @param {string} type - The kind of resource to get: event, center or user?
  */
@@ -158,6 +169,7 @@ export const getAll = (props, type, pageNumber, limit) => {
 /**
  * @description - Handles deletion of an event
  *
+ * @export
  * @param {string} url - Api link to resource to be deleted
  * @param {object} history - History prop from react component
  */
@@ -179,6 +191,7 @@ export const deleteResource = (url, history) => {
 /**
  * @description - Handles signup and login to the app
  *
+ * @export
  * @param {object} props - Compoinent props
  * @param {object} data - Request body
  * @param {string} context - Signup or login
@@ -203,6 +216,7 @@ export const onboarding = (props, data, context, cb) => {
 /**
  * @description - Hanldes http requests to get one resource
  *
+ * @export
  * @param {object} props - Component props
  * @param {number} itemId - Item id to get
  * @param {string} type - Type of resource to get
@@ -252,7 +266,8 @@ export const getOne = (props, itemId, type) => {
  */
 export class Transactions {
   /**
-   * Creates an instance of Transactions.
+   * @description Creates an instance of Transactions.
+   *
    * @param {object} props - Component props
    * @param {string} target - The resource to put or post // event, center, profile, etc
    * @memberof Transactions

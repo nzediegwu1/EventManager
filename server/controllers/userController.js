@@ -1,32 +1,24 @@
 ﻿import models from '../models';
-import Val from '../middlewares/validator';
 import jwt from 'jsonwebtoken';
 require('dotenv').config();
 import bcrypt from 'bcryptjs';
-import cloudinary from 'cloudinary';
 import nodemailer from 'nodemailer';
 import faker from 'faker';
+import cloudinary from 'cloudinary';
+import {
+  cloudinaryConfig,
+  errorResponseWithCloudinary,
+  restResponse,
+  invalidParameter,
+  confirmParams,
+  emailConfig,
+} from '../util';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-cloudinary.config({
-  cloud_name: 'eventmanager',
-  api_key: `${process.env.API_KEY}`,
-  api_secret: `${process.env.API_SECRET}`,
-});
-
+cloudinary.config({ cloudinaryConfig });
+const transporter = nodemailer.createTransport(emailConfig);
 const key = process.env.SECRET_KEY;
-const signupValidator = new Val('users', 'signup');
-const signinValidator = new Val('users', 'signin');
-const profilePicValidator = new Val('users', 'changePic');
-
 const users = models.Users;
+
 class Users {
   signUp(req, res) {
     return users
@@ -42,7 +34,7 @@ class Users {
               members[item].phoneNo === req.body.phoneNo
             ) {
               // unacceptable
-              return signupValidator.response(res, 'err', 406, 'User already exists');
+              return restResponse(res, 'err', 406, 'User already exists');
             }
           }
         }
@@ -73,31 +65,34 @@ class Users {
             const token = jwt.sign({ id: createdUser.id }, key, {
               expiresIn: 60 * 60 * 24,
             });
-            return signupValidator.response(res, 'success', 201, {
+            return restResponse(res, 'success', 201, {
               User: newUser,
               Token: token,
             });
           })
-          .catch(error => signupValidator.response(res, 'error', 500, error));
+          .catch(error => restResponse(res, 'error', 500, error));
       })
-      .catch(error => signupValidator.response(res, 'error', 500, error));
+      .catch(error => restResponse(res, 'error', 500, error));
   }
   signIn(req, res) {
     return users
       .findOne({ where: { username: req.body.username } })
       .then(loggedInUser => {
-        if (bcrypt.compareSync(req.body.password, loggedInUser.password)) {
-          const token = jwt.sign({ id: loggedInUser.id }, key, {
-            expiresIn: 60 * 60 * 24,
-          });
-          return signinValidator.response(res, 'success', 200, {
-            User: loggedInUser,
-            Token: token,
-          });
+        if (loggedInUser) {
+          if (bcrypt.compareSync(req.body.password, loggedInUser.password)) {
+            const token = jwt.sign({ id: loggedInUser.id }, key, {
+              expiresIn: 60 * 60 * 24,
+            });
+            return restResponse(res, 'success', 200, {
+              User: loggedInUser,
+              Token: token,
+            });
+          }
+          return restResponse(res, 'err', 401, 'Invalid Login Details');
         }
-        return signinValidator.response(res, 'err', 401, 'Invalid Login Details');
+        return restResponse(res, 'err', 404, 'User not found');
       })
-      .catch(() => signinValidator.response(res, 'err', 404, 'User not found'));
+      .catch((err) => restResponse(res, 'err', 500, err));
   }
   getUsers(req, res) {
     // gets all users' details excluding password
@@ -120,29 +115,29 @@ class Users {
           })
           .then(allusers => {
             if (allusers.length > 0) {
-              return signinValidator.response(res, 'success', 200, { data: allusers, count });
+              return restResponse(res, 'success', 200, { data: allusers, count });
             }
-            return signinValidator.response(res, 'error', 404, 'No user found');
+            return restResponse(res, 'error', 404, 'No user found');
           })
-          .catch(error => signinValidator.response(res, 'error', 500, error));
+          .catch(error => restResponse(res, 'error', 500, error));
       });
     }
-    return signinValidator.response(res, 'error', 403, 'You do not have access to this resource!');
+    return restResponse(res, 'error', 403, 'You do not have access to this resource!');
   }
   getUserProfile(req, res) {
-    if (signinValidator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       const userId = parseInt(req.params.id, 10);
       return users
         .findById(userId, { attributes: { exclude: ['password'] } })
         .then(userDetails => {
           if (userDetails !== null) {
-            return signinValidator.response(res, 'success', 200, userDetails);
+            return restResponse(res, 'success', 200, userDetails);
           }
-          return signinValidator.response(res, 'error', 404, 'User not found');
+          return restResponse(res, 'error', 404, 'User not found');
         })
-        .catch(error => signinValidator.response(res, 'error', 500, error));
+        .catch(error => restResponse(res, 'error', 500, error));
     }
-    return signinValidator.invalidParameter;
+    return invalidParameter;
   }
   modifyProfile(req, res) {
     const userId = req.decoded.id;
@@ -156,11 +151,11 @@ class Users {
             for (const item in userDetails) {
               if (userDetails[item].id !== userId) {
                 if (userDetails[item].username === username) {
-                  return signupValidator.response(res, 'err', 406, 'Username already exists');
+                  return restResponse(res, 'err', 406, 'Username already exists');
                 } else if (userDetails[item].email === email) {
-                  return signupValidator.response(res, 'err', 406, 'Email already exists');
+                  return restResponse(res, 'err', 406, 'Email already exists');
                 } else if (parseFloat(userDetails[item].phoneNo) === phoneNo) {
-                  return signupValidator.response(res, 'err', 406, 'Phone No already exists');
+                  return restResponse(res, 'err', 406, 'Phone No already exists');
                 }
               }
             }
@@ -178,17 +173,17 @@ class Users {
               .then(updatedUser =>
                 users
                   .findById(updatedUser.id, { attributes: { exclude: ['password'] } })
-                  .then(response => signinValidator.response(res, 'success', 201, response))
-                  .catch(error => signinValidator.response(res, 'error', 500, error))
+                  .then(response => restResponse(res, 'success', 201, response))
+                  .catch(error => restResponse(res, 'error', 500, error))
               );
           })
-          .catch(error => signinValidator.response(res, 'error', 500, error));
+          .catch(error => restResponse(res, 'error', 500, error));
       }
-      return signinValidator.response(res, 'error', 404, 'User not found');
+      return restResponse(res, 'error', 404, 'User not found');
     });
   }
   upgradeAccount(req, res) {
-    if (signinValidator.confirmParams(req, res) === true) {
+    if (confirmParams(req, res) === true) {
       const requester = req.decoded.id;
       const userId = parseInt(req.params.id, 10);
       const accountType = req.query.accountType;
@@ -200,23 +195,18 @@ class Users {
               if (user !== null) {
                 return user
                   .updateAttributes({ accountType })
-                  .then(updatedUser => signinValidator.response(res, 'success', 200, updatedUser))
-                  .catch(error => signinValidator.response(res, 'error', 500, error));
+                  .then(updatedUser => restResponse(res, 'success', 200, updatedUser))
+                  .catch(error => restResponse(res, 'error', 500, error));
               }
-              return signinValidator.response(res, 'error', 404, 'User not found');
+              return restResponse(res, 'error', 404, 'User not found');
             })
-            .catch(err => signinValidator.response(res, 'error', 500, err));
+            .catch(err => restResponse(res, 'error', 500, err));
         }
-        return signinValidator.response(
-          res,
-          'error',
-          400,
-          'AccountType must be [admin] or [regular]'
-        );
+        return restResponse(res, 'error', 400, 'AccountType must be [admin] or [regular]');
       }
-      return signinValidator.response(res, 'error', 403, 'Cannot perform this action');
+      return restResponse(res, 'error', 403, 'Cannot perform this action');
     }
-    return signinValidator.invalidParameter;
+    return invalidParameter;
   }
   changeProfilePic(req, res) {
     const { picture, publicId } = req.body;
@@ -231,13 +221,13 @@ class Users {
             .updateAttributes({ picture, publicId })
             .then(updatedUser => {
               cloudinary.v2.uploader.destroy(picToDelete);
-              return profilePicValidator.response(res, 'success', 200, updatedUser);
+              return restResponse(res, 'success', 200, updatedUser);
             })
-            .catch(error => profilePicValidator.responseWithCloudinary(req, res, 500, error));
+            .catch(error => errorResponseWithCloudinary(req, res, 500, error));
         }
-        return profilePicValidator.responseWithCloudinary(req, res, 404, 'User not found');
+        return errorResponseWithCloudinary(req, res, 404, 'User not found');
       })
-      .catch(err => profilePicValidator.responseWithCloudinary(req, res, 500, err));
+      .catch(err => errorResponseWithCloudinary(req, res, 500, err));
   }
   recoverPassword(req, res) {
     const email = req.body.email;
@@ -260,14 +250,14 @@ class Users {
                 };
                 transporter.sendMail(mailOption);
                 const message = 'New password has been sent to your email!';
-                return signinValidator.response(res, 'success', 200, message);
+                return restResponse(res, 'success', 200, message);
               });
           }
-          return signinValidator.response(res, 'error', 404, 'User not found');
+          return restResponse(res, 'error', 404, 'User not found');
         })
-        .catch(error => signinValidator.response(res, 'error', 500, error));
+        .catch(error => restResponse(res, 'error', 500, error));
     }
-    return signinValidator.response(res, 'error', 400, 'Invalid email entry');
+    return restResponse(res, 'error', 400, 'Invalid email entry');
   }
 }
 
