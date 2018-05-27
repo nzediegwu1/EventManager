@@ -8,48 +8,35 @@ import {
   invalidParameter,
   confirmParams,
   emailConfig,
+  eventEntry,
+  checkAvailability,
 } from '../util';
+import { findById, update, getAll } from '../services';
 
+const include = [
+  { model: models.Centers, as: 'center' },
+  {
+    model: models.Users,
+    as: 'user',
+    attributes: { exclude: ['password'] },
+  },
+];
+const attributes = { exclude: ['userId'] };
 const transporter = nodemailer.createTransport(emailConfig);
-cloudinary.config({ cloudinaryConfig });
+cloudinary.config(cloudinaryConfig);
 const model = models.Events;
 
 class Events {
   // add an event
   addEvent(req, res) {
-    const { title, date, time, picture, publicId, description, centerId } = req.body;
+    const { date, time, centerId } = req.body;
     return model
       .findAll({ where: { centerId: parseInt(centerId, 10) } })
       .then(events => {
-        // destructuring
         const timestamp = new Date(`${date} ${time}`);
-        const day = timestamp.getDate();
-        const month = timestamp.getMonth();
-        const year = timestamp.getFullYear();
-        const occupiedDates = new Set();
-        let errorMessage;
-        events.forEach(event => {
-          const eventDate = event.date;
-          const eventDay = eventDate.getDate();
-          const eventMonth = eventDate.getMonth();
-          const eventYear = eventDate.getFullYear();
-          const eventStatus = event.status;
-          occupiedDates.add(new Date(eventDate).toDateString());
-          if (
-            eventStatus !== 'rejected' &&
-            eventDay === day &&
-            eventMonth === month &&
-            eventYear === year
-          ) {
-            // forbidden
-            errorMessage = {
-              Sorry: 'Selected date is already occupied for selected center',
-              OccupiedDates: Array.from(occupiedDates),
-            };
-          }
-        });
-        if (errorMessage) {
-          return errorResponseWithCloudinary(req, res, 406, errorMessage);
+        const availability = checkAvailability(req, res, timestamp, events);
+        if (availability !== true) {
+          return availability;
         }
         function createNewEvent(entry) {
           return models.Centers.findById(centerId)
@@ -57,22 +44,7 @@ class Events {
               if (center.availability === 'open') {
                 return model
                   .create(entry)
-                  .then(created =>
-                    model
-                      .findById(created.id, {
-                        include: [
-                          { model: models.Centers, as: 'center' },
-                          {
-                            model: models.Users,
-                            as: 'user',
-                            attributes: { exclude: ['password'] },
-                          },
-                        ],
-                        attributes: { exclude: ['userId'] },
-                      })
-                      .then(response => restResponse(res, 'success', 201, response))
-                      .catch(error => errorResponseWithCloudinary(req, res, 500, error))
-                  )
+                  .then(created => findById(req, res, model, created, attributes, include))
                   .catch(error => errorResponseWithCloudinary(req, res, 400, error));
               }
               return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
@@ -81,15 +53,7 @@ class Events {
               errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
             );
         }
-        const newEntry = {
-          title,
-          date: timestamp,
-          description,
-          picture,
-          publicId,
-          userId: req.decoded.id,
-          centerId,
-        };
+        const newEntry = eventEntry(req, timestamp);
         return createNewEvent(newEntry);
       })
       .catch(error => errorResponseWithCloudinary(req, res, 500, error));
@@ -97,85 +61,22 @@ class Events {
 
   // modify an event
   modifyEvent(req, res) {
-    // get event with same index as parameter and change the value
     if (confirmParams(req, res) === true) {
-      const { title, date, time, picture, publicId, description, centerId } = req.body;
+      const { date, time, centerId } = req.body;
       const timestamp = new Date(`${date} ${time}`);
       return model
-        .findAll({ where: { centerId: parseInt(centerId, 10) } })
+        .findAll({ where: { centerId: parseInt(centerId, 10), id: { $ne: req.params.id } } })
         .then(events => {
-          const day = timestamp.getDate();
-          const month = timestamp.getMonth();
-          const year = timestamp.getFullYear();
-          const occupiedDates = new Set();
-          let errorMessage;
-          events.forEach(event => {
-            const eventDate = event.date;
-            const eventDay = eventDate.getDate();
-            const eventMonth = eventDate.getMonth();
-            const eventYear = eventDate.getFullYear();
-            const eventStatus = event.status;
-            if (event.id !== parseInt(req.params.id, 10)) {
-              occupiedDates.add(new Date(eventDate).toDateString());
-            }
-            if (
-              event.id !== parseInt(req.params.id, 10) &&
-              eventStatus !== 'rejected' &&
-              event.centerId === parseInt(centerId, 10) &&
-              eventDay === day &&
-              eventMonth === month &&
-              eventYear === year
-            ) {
-              errorMessage = {
-                Sorry: `Selected date is already occupied for centerId: ${centerId}`,
-                OccupiedDates: Array.from(occupiedDates),
-              };
-            }
-          });
-          if (errorMessage) {
-            return errorResponseWithCloudinary(req, res, 406, errorMessage);
+          const availability = checkAvailability(req, res, timestamp, events);
+          if (availability !== true) {
+            return availability;
           }
-          let oldImage;
           function modifyEvent(modified) {
             return models.Centers.findById(centerId)
               .then(center => {
                 if (center.availability === 'open') {
-                  return model
-                    .findOne({ where: { id: req.params.id, userId: req.decoded.id } })
-                    .then(found => {
-                      if (req.body.publicId) {
-                        oldImage = found.publicId;
-                      }
-                      return found
-                        .updateAttributes(modified)
-                        .then(updatedEvent => {
-                          if (req.body.publicId) {
-                            cloudinary.v2.uploader.destroy(oldImage);
-                          }
-                          function update() {
-                            model
-                              .findById(updatedEvent.id, {
-                                include: [
-                                  { model: models.Centers, as: 'center' },
-                                  {
-                                    model: models.Users,
-                                    as: 'user',
-                                    attributes: { exclude: ['password'] },
-                                  },
-                                ],
-                                attributes: { exclude: ['userId'] },
-                              })
-                              .then(response => restResponse(res, 'success', 201, response))
-                              .catch(error => errorResponseWithCloudinary(req, res, 500, error));
-                          }
-                          return update();
-                        })
-                        .catch(error => errorResponseWithCloudinary(req, res, 400, error));
-                    })
-                    .catch(() => {
-                      const message = 'Unexisting or unauthorized item';
-                      return errorResponseWithCloudinary(req, res, 403, message);
-                    });
+                  const condition = { id: req.params.id, userId: req.decoded.id };
+                  return update(req, res, model, modified, condition, attributes, include);
                 }
                 return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
               })
@@ -183,16 +84,7 @@ class Events {
                 errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
               );
           }
-
-          const modifiedEntry = {
-            title,
-            date: timestamp,
-            description,
-            picture,
-            publicId,
-            userId: req.decoded.id,
-            centerId,
-          };
+          const modifiedEntry = eventEntry(req, timestamp);
           return modifyEvent(modifiedEntry);
         })
         .catch(error => errorResponseWithCloudinary(req, res, 500, error));
@@ -218,59 +110,17 @@ class Events {
 
   // Get all events
   getEvents(req, res) {
-    const rawPage = req.query.pageNumber;
-    const rawLimit = req.query.limit;
-    const page = isNaN(rawPage) || !rawPage ? 1 : parseInt(rawPage, 10);
-    const limit = isNaN(rawLimit) || !rawLimit ? 5 : parseInt(req.query.limit, 10);
-    return model
-      .findAndCountAll({ where: { status: 'approved' } })
-      .then(data => {
-        const count = data.count;
-        const pages = Math.ceil(count / limit);
-        const offset = page > pages ? (pages - 1) * limit : (page - 1) * limit;
-        return model
-          .findAll({
-            where: { status: 'approved' },
-            include: [
-              { model: models.Centers, as: 'center' },
-              { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
-            ],
-            attributes: { exclude: ['centerId', 'userId'] },
-            offset,
-            limit,
-            order: [['date', 'ASC']],
-          })
-          .then(allEvents => {
-            if (allEvents.length !== 0) {
-              return restResponse(res, 'success', 200, { data: allEvents, count });
-            }
-            return restResponse(res, 'error', 404, 'No events available');
-          })
-          .catch(error => restResponse(res, 'error', 500, error));
-      })
-      .catch(error => restResponse(res, 'error', 500, error));
+    const excludes = { exclude: ['centerId', 'userId'] };
+    return getAll(req, res, model, [['date', 'ASC']], { status: 'approved' }, include, excludes);
   }
 
   getEventDetails(req, res) {
     if (confirmParams(req, res) === true) {
-      return model
-        .findById(req.params.id, {
-          include: [
-            { model: models.Centers, as: 'center' },
-            { model: models.Users, as: 'user', attributes: { exclude: ['password'] } },
-          ],
-          attributes: { exclude: ['userId'] },
-        })
-        .then(event => {
-          if (event !== null) {
-            return restResponse(res, 'success', 200, event);
-          }
-          return restResponse(res, 'error', 404, 'Could not find Event');
-        })
-        .catch(error => restResponse(res, 'error', 500, error));
+      return findById(req, res, model, req.params, attributes, include);
     }
     return invalidParameter;
   }
+
   approveEvent(req, res) {
     if (confirmParams(req, res) === true) {
       const { date, time, status, centerId } = req.body;
@@ -278,63 +128,31 @@ class Events {
       if (status === 'approved' || status === 'rejected') {
         const eventId = parseInt(req.params.id, 10);
         return model
-          .findAll({ where: { centerId: parseInt(centerId, 10) } })
+          .findAll({ where: { centerId: parseInt(centerId, 10), id: { $ne: req.params.id } } })
           .then(events => {
-            const day = timestamp.getDate();
-            const month = timestamp.getMonth();
-            const year = timestamp.getFullYear();
-            const occupiedDates = new Set();
-            let errorMessage;
-            events.forEach(event => {
-              const eventDate = event.date;
-              const eventDay = eventDate.getDate();
-              const eventMonth = eventDate.getMonth();
-              const eventYear = eventDate.getFullYear();
-              const eventStatus = event.status;
-              if (event.id !== parseInt(req.params.id, 10)) {
-                occupiedDates.add(new Date(eventDate).toDateString());
-              }
-              if (
-                event.id !== parseInt(req.params.id, 10) &&
-                eventStatus !== 'rejected' &&
-                eventDay === day &&
-                eventMonth === month &&
-                eventYear === year
-              ) {
-                errorMessage = {
-                  Sorry: `Selected date is already occupied for centerId: ${centerId}`,
-                  OccupiedDates: Array.from(occupiedDates),
-                };
-              }
-            });
-            if (errorMessage) {
-              return restResponse(res, 'error', 406, errorMessage);
+            const availability = checkAvailability(req, res, timestamp, events);
+            if (availability !== true) {
+              return availability;
             }
             return model
               .findById(eventId, {
-                include: [
-                  { model: models.Centers, as: 'center' },
-                  {
-                    model: models.Users,
-                    as: 'user',
-                    attributes: { exclude: ['password'] },
-                  },
-                ],
-                attributes: { exclude: ['userId'] },
+                include,
+                attributes,
               })
               .then(found => {
                 if (found.center.userId === req.decoded.id) {
                   const data = { status };
                   return found.updateAttributes(data).then(updatedEvent => {
+                    const text = `Dear ${
+                      updatedEvent.user.name
+                    },\n\nThis is to inform you that your event titled '${
+                      updatedEvent.title
+                    }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`;
                     const mailOption = {
                       from: 'eventmgronline@gmail.com',
                       to: updatedEvent.user.email,
                       subject: `Event ${updatedEvent.status}`,
-                      text: `Dear ${
-                        updatedEvent.user.name
-                      },\n\nThis is to inform you that your event titled '${
-                        updatedEvent.title
-                      }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`,
+                      text,
                     };
                     transporter.sendMail(mailOption);
                     return restResponse(res, 'success', 200, updatedEvent);

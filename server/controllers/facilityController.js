@@ -16,14 +16,15 @@ class Facilities {
     return models.Centers.findOne({ where: { userId: req.decoded.id, id: centerId } })
       .then(found => {
         if (found) {
-          return model.destroy({ where: { centerId } }).then(() =>
-            model.bulkCreate(newFacilities, { validate: true }).then(() =>
+          return model
+            .destroy({ where: { centerId } })
+            .then(() =>
               model
-                .findAll()
-                .then(facilities => restResponse(res, 'success', 200, facilities))
+                .bulkCreate(newFacilities, { validate: true })
+                .then(() => restResponse(res, 'success', 200, newFacilities))
                 .catch(error => restResponse(res, 'error', 500, error))
             )
-          );
+            .catch(error => restResponse(res, 'error', 500, error));
         }
         return restResponse(res, 'error', 403, 'Unauthorized transaction');
       })

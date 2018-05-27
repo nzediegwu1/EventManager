@@ -22,6 +22,7 @@ class Validator {
     this.verifySignin = this.verifySignin.bind(this);
     this.isJSON = this.isJSON.bind(this);
     this.verifyFacilities = this.verifyFacilities.bind(this);
+    this.validateImage = this.validateImage.bind(this);
   }
   // validate time using 24-hours format 00:00
   formatTime(time) {
@@ -79,7 +80,7 @@ class Validator {
 
   verifyEvent(req, res, next) {
     const today = new Date();
-    const { title, date, time, description, centerId } = req.body;
+    const { title, date, time, description, centerId, publicId } = req.body;
     // validate event title
     if (!this.isSentence(title, 3, 99)) {
       const message = 'Event title should be within 4-99 characters';
@@ -101,13 +102,13 @@ class Validator {
       next();
       return this.verificationError;
     }
-    cloudinary.v2.uploader.destroy(req.body.publicId);
+    cloudinary.v2.uploader.destroy(publicId);
     return this.verificationError;
   }
 
   verifyCenter(req, res, next) {
     // validate center name
-    const { name, address, location, capacity, price, availability } = req.body;
+    const { name, address, location, capacity, price, availability, publicId } = req.body;
     if (!this.isSentence(name, 3, 99)) {
       const message = 'Center name should be within 4-99 characters';
       this.verificationError = validationErrorMessage(message, res);
@@ -134,21 +135,29 @@ class Validator {
       next();
       return this.verificationError;
     }
-    cloudinary.v2.uploader.destroy(req.body.publicId);
+    cloudinary.v2.uploader.destroy(publicId);
     return this.verificationError;
+  }
+
+  validateImage(picture, publicId) {
+    if (typeof picture !== 'string' || !val.isURL(picture)) {
+      return 'Invalid picture';
+    } else if (!this.isSentence(publicId, 3, 254)) {
+      return 'Invalid public id';
+    }
+    return true;
   }
 
   verifyProfilePic(req, res, next) {
     const { picture, publicId } = req.body;
-    if (typeof picture !== 'string' || !val.isURL(picture)) {
-      this.verificationError = validationErrorMessage('Invalid Profile picture', res);
-    } else if (!this.isSentence(publicId, 3, 254)) {
-      this.verificationError = validationErrorMessage('Invalid public id', res);
+    const result = this.validateImage(picture, publicId);
+    if (result !== true) {
+      this.verificationError = validationErrorMessage(result, res);
     } else {
       next();
       return this.verificationError;
     }
-    cloudinary.v2.uploader.destroy(req.body.publicId);
+    cloudinary.v2.uploader.destroy(publicId);
     return this.verificationError;
   }
 
@@ -246,8 +255,8 @@ class Validator {
       next();
     } else {
       this.verificationError = validationErrorMessage('Request contain invalid entry(s)', res);
-      return this.verificationError;
     }
+    return this.verificationError;
   }
 }
 
