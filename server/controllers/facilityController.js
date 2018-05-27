@@ -1,7 +1,6 @@
 import models from '../models';
-import Val from '../middlewares/validator';
+import { restResponse } from '../util';
 
-const validator = new Val('facilities');
 const model = models.Facilities;
 
 class Facilities {
@@ -17,18 +16,19 @@ class Facilities {
     return models.Centers.findOne({ where: { userId: req.decoded.id, id: centerId } })
       .then(found => {
         if (found) {
-          return model.destroy({ where: { centerId } }).then(() =>
-            model.bulkCreate(newFacilities, { validate: true }).then(() =>
+          return model
+            .destroy({ where: { centerId } })
+            .then(() =>
               model
-                .findAll()
-                .then(facilities => validator.response(res, 'success', 200, facilities))
-                .catch(error => validator.response(res, 'error', 500, error))
+                .bulkCreate(newFacilities, { validate: true })
+                .then(() => restResponse(res, 'success', 200, newFacilities))
+                .catch(error => restResponse(res, 'error', 500, error))
             )
-          );
+            .catch(error => restResponse(res, 'error', 500, error));
         }
-        return validator.response(res, 'error', 403, 'Unauthorized transaction');
+        return restResponse(res, 'error', 403, 'Unauthorized transaction');
       })
-      .catch(error => validator.response(res, 'error', 500, error));
+      .catch(error => restResponse(res, 'error', 500, error));
   }
 }
 const facilityController = new Facilities();

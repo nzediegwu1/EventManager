@@ -2,13 +2,7 @@
 import Events from '../controllers/eventController';
 import Val from '../middlewares/validator';
 import Auth from '../middlewares/authenticator';
-import cloudinary from 'cloudinary';
 
-cloudinary.config({
-  cloud_name: 'eventmanager',
-  api_key: `${process.env.API_KEY}`,
-  api_secret: `${process.env.API_SECRET}`,
-});
 const Validator = new Val('events');
 const router = express.Router();
 
