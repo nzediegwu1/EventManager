@@ -1,4 +1,3 @@
 version: "2"
 exclude_paths:
-- "client"
 - "server/migrations"
