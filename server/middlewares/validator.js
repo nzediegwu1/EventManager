@@ -24,7 +24,6 @@ class Validator {
     this.verifyFacilities = this.verifyFacilities.bind(this);
     this.validateImage = this.validateImage.bind(this);
     this.verifyApproval = this.verifyApproval.bind(this);
-    this.isEventType = this.isEventType.bind(this);
   }
   // validate time using 24-hours format 00:00
   formatTime(time) {
@@ -94,28 +93,21 @@ class Validator {
     return this.verificationError;
   }
 
-  isEventType(req) {
-    const { date, title, description, time, centerId } = req.body;
-    const today = new Date();
-    if (!this.isSentence(title, 3, 99)) {
-      return 'Event title should be within 4-99 characters';
-    } else if (!this.isSentence(description, 7, 254)) {
-      return 'Event description should be within 8-254 characters';
-    } else if (isNaN(Date.parse(date)) || Date.parse(date) < Date.parse(today)) {
-      return 'Event has none or invalid date';
-    } else if (!time || !this.formatTime(time)) {
-      return 'Event has none or invalid time';
-    } else if (!this.isNumberRange(centerId, 2000000)) {
-      return 'Invalid center selected';
-    }
-    return true;
-  }
-
   verifyEvent(req, res, next) {
-    const isEventType = this.isEventType(req);
-    const { publicId } = req.body;
-    if (isEventType !== true) {
-      this.verificationError = validationErrorMessage(isEventType, res);
+    const today = new Date();
+    const { title, date, time, description, centerId, publicId } = req.body;
+    if (!this.isSentence(title, 3, 99)) {
+      const message = 'Event title should be within 4-99 characters';
+      this.verificationError = validationErrorMessage(message, res);
+    } else if (isNaN(Date.parse(date)) || Date.parse(date) < Date.parse(today)) {
+      this.verificationError = validationErrorMessage('Event has none or invalid date', res);
+    } else if (!time || !this.formatTime(time)) {
+      this.verificationError = validationErrorMessage('Event has none or invalid time', res);
+    } else if (!this.isSentence(description, 7, 254)) {
+      const message = 'Event description should be within 8-254 characters';
+      this.verificationError = validationErrorMessage(message, res);
+    } else if (!this.isNumberRange(centerId, 2000000)) {
+      this.verificationError = validationErrorMessage('Invalid center selected', res);
     } else {
       next();
       return this.verificationError;
