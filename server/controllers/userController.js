@@ -2,7 +2,6 @@
 import jwt from 'jsonwebtoken';
 require('dotenv').config();
 import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
 import faker from 'faker';
 import cloudinary from 'cloudinary';
 import {
@@ -10,13 +9,11 @@ import {
   restResponse,
   invalidParameter,
   confirmParams,
-  emailConfig,
   userEntry,
 } from '../util';
-import { findById, update, getAll, updateImmediate } from '../services';
+import { findById, update, getAll, updateImmediate, updateAndEmail } from '../services';
 
 cloudinary.config(cloudinaryConfig);
-const transporter = nodemailer.createTransport(emailConfig);
 const key = process.env.SECRET_KEY;
 const users = models.Users;
 const attributes = { exclude: ['password'] };
@@ -102,7 +99,7 @@ class Users {
             return restResponse(res, 'err', 406, message);
           }
           const profileData = userEntry(req);
-          return updateImmediate(req, res, user, profileData);
+          return updateImmediate(req, res, users, user, profileData, null, attributes);
         })
         .catch(error => restResponse(res, 'error', 500, error));
     });
@@ -125,8 +122,9 @@ class Users {
   }
 
   changeProfilePic(req, res) {
+    const { picture, publicId } = req.body;
     const condition = { id: req.decoded.id };
-    return update(req, res, users, req.body, condition, attributes);
+    return update(req, res, users, { picture, publicId }, condition, attributes);
   }
 
   recoverPassword(req, res) {
@@ -139,21 +137,11 @@ class Users {
             return restResponse(res, 'error', 404, 'User not found');
           }
           const newPassword = faker.internet.password(10, false);
-          return foundUser
-            .updateAttributes({ password: bcrypt.hashSync(newPassword, 10) })
-            .then(() => {
-              const text = `Dear ${foundUser.name},
-                \nYour new password is: ${newPassword}. Kindly login to https://eventmanageronline.herokuapp.com and change your password!\n\nBest Regards,\nAdmin`;
-              const mailOption = {
-                from: 'eventmgronline@gmail.com',
-                to: email,
-                subject: 'Email Recovery',
-                text,
-              };
-              transporter.sendMail(mailOption);
-              const message = 'New password has been sent to your email!';
-              return restResponse(res, 'success', 200, message);
-            });
+          const data = { password: bcrypt.hashSync(newPassword, 10) };
+          const text = `Dear ${foundUser.name},
+          \nYour new password is: ${newPassword}. Kindly login to https://eventmanageronline.herokuapp.com and change your password!
+          \nBest Regards,\nAdmin`;
+          return updateAndEmail(foundUser, res, text, email, data, 'Email Recovery');
         })
         .catch(error => restResponse(res, 'error', 500, error));
     }

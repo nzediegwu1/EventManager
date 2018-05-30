@@ -35,7 +35,7 @@ class SignupComponent extends React.Component {
       name: this.name.value,
       confirmPassword: this.rePassword.value,
       email: this.email.value,
-      phoneNo: this.phone.value,
+      phoneNo: `+${this.phone.value}`,
       accountType: 'regular',
     };
     const validationStatus = userValidator(signupData, 'signup');

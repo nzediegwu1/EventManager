@@ -9,7 +9,7 @@ import {
   centerEntry,
 } from '../util';
 import Val from '../middlewares/validator';
-import { findById, getAll, update } from '../services';
+import { findById, getAll, update, create } from '../services';
 
 const picValidator = new Val('users', 'changePic');
 
@@ -37,23 +37,20 @@ class Centers {
     }
     return models.Users.findById(req.decoded.id)
       .then(user => {
-        if (user.accountType === 'admin' || user.accountType === 'super') {
-          return model
-            .findAll()
-            .then(centers => {
-              const newEntry = centerEntry(req);
-              function createNew() {
-                return model
-                  .create(newEntry)
-                  .then(created => findById(req, res, model, created, attributes, include))
-                  .catch(error => errorResponseWithCloudinary(req, res, 500, error));
-              }
-              return compareCenters(req, res, centers, createNew);
-            })
-            .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+        if (!(user.accountType === 'admin' || user.accountType === 'super')) {
+          const errorMessage = 'Only an admin can perform this action';
+          return errorResponseWithCloudinary(req, res, 403, errorMessage);
         }
-        const errorMessage = 'Only an admin can perform this action';
-        return errorResponseWithCloudinary(req, res, 403, errorMessage);
+        return model
+          .findAll()
+          .then(centers => {
+            const newEntry = centerEntry(req);
+            function createNew() {
+              return create(req, res, model, newEntry, attributes, include);
+            }
+            return compareCenters(req, res, centers, createNew);
+          })
+          .catch(error => errorResponseWithCloudinary(req, res, 500, error));
       })
       .catch(error => errorResponseWithCloudinary(req, res, 500, error));
   }

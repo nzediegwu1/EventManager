@@ -102,7 +102,7 @@ class SidebarComponent extends React.Component {
                   />
                 )}
                 <ListItem
-                  event={() => logout('myModalSidebar', this.props.history)}
+                  event={() => logout('#myModalSidebar', this.props.history)}
                   class="nav-item logout"
                   title="Logout"
                   icon="glyphicons-64-power.png"

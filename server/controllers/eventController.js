@@ -1,17 +1,15 @@
 ﻿import models from '../models';
 import cloudinary from 'cloudinary';
-import nodemailer from 'nodemailer';
 import {
   cloudinaryConfig,
   errorResponseWithCloudinary,
   restResponse,
   invalidParameter,
   confirmParams,
-  emailConfig,
   eventEntry,
   checkAvailability,
 } from '../util';
-import { findById, update, getAll } from '../services';
+import { findById, update, getAll, create, modifyEvent, updateAndEmail } from '../services';
 
 const include = [
   { model: models.Centers, as: 'center' },
@@ -22,7 +20,6 @@ const include = [
   },
 ];
 const attributes = { exclude: ['userId'] };
-const transporter = nodemailer.createTransport(emailConfig);
 cloudinary.config(cloudinaryConfig);
 const model = models.Events;
 
@@ -38,23 +35,17 @@ class Events {
         if (availability !== true) {
           return availability;
         }
-        function createNewEvent(entry) {
-          return models.Centers.findById(centerId)
-            .then(center => {
-              if (center.availability === 'open') {
-                return model
-                  .create(entry)
-                  .then(created => findById(req, res, model, created, attributes, include))
-                  .catch(error => errorResponseWithCloudinary(req, res, 400, error));
-              }
-              return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
-            })
-            .catch(() =>
-              errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
-            );
-        }
         const newEntry = eventEntry(req, timestamp);
-        return createNewEvent(newEntry);
+        return models.Centers.findById(centerId)
+          .then(center => {
+            if (center.availability === 'open') {
+              return create(req, res, model, newEntry, attributes, include);
+            }
+            return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
+          })
+          .catch(() =>
+            errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
+          );
       })
       .catch(error => errorResponseWithCloudinary(req, res, 500, error));
   }
@@ -64,30 +55,19 @@ class Events {
     if (confirmParams(req, res) === true) {
       const { date, time, centerId } = req.body;
       const timestamp = new Date(`${date} ${time}`);
-      return model
-        .findAll({ where: { centerId: parseInt(centerId, 10), id: { $ne: req.params.id } } })
-        .then(events => {
-          const availability = checkAvailability(req, res, timestamp, events);
-          if (availability !== true) {
-            return availability;
-          }
-          function modifyEvent(modified) {
-            return models.Centers.findById(centerId)
-              .then(center => {
-                if (center.availability === 'open') {
-                  const condition = { id: req.params.id, userId: req.decoded.id };
-                  return update(req, res, model, modified, condition, attributes, include);
-                }
-                return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
-              })
-              .catch(() =>
-                errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
-              );
-          }
-          const modifiedEntry = eventEntry(req, timestamp);
-          return modifyEvent(modifiedEntry);
-        })
-        .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+      const then = modified =>
+        models.Centers.findById(centerId)
+          .then(center => {
+            if (center.availability === 'open') {
+              const condition = { id: req.params.id, userId: req.decoded.id };
+              return update(req, res, model, modified, condition, attributes, include);
+            }
+            return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
+          })
+          .catch(() =>
+            errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
+          );
+      return modifyEvent(req, res, model, centerId, timestamp, then);
     }
     cloudinary.v2.uploader.destroy(req.body.publicId);
     return invalidParameter;
@@ -98,12 +78,15 @@ class Events {
     if (confirmParams(req, res) === true) {
       return model
         .destroy({ where: { id: req.params.id, userId: req.decoded.id } })
-        .then(() => {
+        .then(response => {
+          if (response === 0) {
+            // Event does not exist or User not priviledged to delete
+            return restResponse(res, 'error', 401, 'Invalid transaction');
+          }
           cloudinary.v2.uploader.destroy(req.query.file);
           return restResponse(res, 'success', 200, 'Successfully deleted');
         })
-        .catch(() => restResponse(res, 'error', 400, 'Invalid transaction'));
-      // Event does not exist or User not priviledged to delete
+        .catch(err => restResponse(res, 'error', 500, err));
     }
     return invalidParameter;
   }
@@ -123,48 +106,25 @@ class Events {
 
   approveEvent(req, res) {
     if (confirmParams(req, res) === true) {
-      const { date, time, status, centerId } = req.body;
-      const timestamp = new Date(`${date} ${time}`);
-      if (status === 'approved' || status === 'rejected') {
-        const eventId = parseInt(req.params.id, 10);
-        return model
-          .findAll({ where: { centerId: parseInt(centerId, 10), id: { $ne: req.params.id } } })
-          .then(events => {
-            const availability = checkAvailability(req, res, timestamp, events);
-            if (availability !== true) {
-              return availability;
-            }
-            return model
-              .findById(eventId, {
-                include,
-                attributes,
-              })
-              .then(found => {
-                if (found.center.userId === req.decoded.id) {
-                  const data = { status };
-                  return found.updateAttributes(data).then(updatedEvent => {
-                    const text = `Dear ${
-                      updatedEvent.user.name
-                    },\n\nThis is to inform you that your event titled '${
-                      updatedEvent.title
-                    }' has been ${updatedEvent.status}!\n\nBest Regards,\nAdmin`;
-                    const mailOption = {
-                      from: 'eventmgronline@gmail.com',
-                      to: updatedEvent.user.email,
-                      subject: `Event ${updatedEvent.status}`,
-                      text,
-                    };
-                    transporter.sendMail(mailOption);
-                    return restResponse(res, 'success', 200, updatedEvent);
-                  });
-                }
-                return restResponse(res, 'error', 403, 'Not priviledge to perform this action');
-              })
-              .catch(() => restResponse(res, 'error', 404, 'The event does not exist'));
-          })
-          .catch(error => restResponse(res, 'error', 500, error));
-      }
-      return restResponse(res, 'error', 400, 'Status should be [approve] or [reject]');
+      const eventId = req.params.id;
+      const { status } = req.body;
+      const then = foundEvent => {
+        const text = `Dear ${foundEvent.user.name},
+        \nThis is to inform you that your event titled '${foundEvent.title}' has been ${status}!
+        \nBest Regards,\nAdmin`;
+        return updateAndEmail(foundEvent, res, text, foundEvent.user.email, { status });
+      };
+      return model
+        .findById(eventId, { include, attributes })
+        .then(found => {
+          if (!found) {
+            return restResponse(res, 'error', 404, 'Event does not exist');
+          } else if (found.center.userId !== req.decoded.id) {
+            return restResponse(res, 'error', 403, 'No proviledge to perform action');
+          }
+          return modifyEvent(req, res, model, found.centerId, found.date, then, found);
+        })
+        .catch(err => restResponse(res, 'error', 500, err));
     }
     return invalidParameter;
   }

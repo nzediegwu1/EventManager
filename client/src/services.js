@@ -125,7 +125,7 @@ export const userValidator = (userData, context) => {
  */
 export const logout = (id, history) => {
   localStorage.clear();
-  $(`#${id}`).modal('hide');
+  $(`${id}`).modal('hide');
   history.push('/');
 };
 
@@ -184,7 +184,7 @@ export const deleteResource = (url, history) => {
       toastr.error(err.response.data.message || err);
       const status = err.response ? err.response.status : undefined;
       if (status === 403 || status === 401) {
-        logout('addNewEvent', history);
+        logout('#addNewEvent', history);
       }
     });
 };
@@ -328,17 +328,12 @@ export class Transactions {
         details = response.data.data;
         if (this.target === 'facilities') {
           dispatchAction(data.content);
-          $('#manageFacilities').modal('hide');
         } else {
           dispatchAction(details);
         }
         if (this.target === 'center' || this.target === 'event') {
           history.push(`/dashboard/${this.target}s/${details.id}`);
-        }
-        if (this.target === 'center') {
-          $('#addNewCenter').modal('hide');
-        } else if (this.target === 'event') {
-          $('#addNewEvent').modal('hide');
+          $('#addNewCenter, #addNewEvent, #manageFacilities').modal('hide');
         }
         toastr.success('Action Successful');
         if (cb) {
@@ -364,13 +359,7 @@ export class Transactions {
         }
         const status = err.response ? err.response.status : undefined;
         if (status && (status === 403 || status === 401)) {
-          if (this.target === 'center') {
-            logout('addNewCenter', history);
-          } else if (this.target === 'event') {
-            logout('addNewEvent', history);
-          } else {
-            logout('manageFacilities', history);
-          }
+          logout('#addNewCenter, #addNewEvent, #manageFacilities', history);
         }
       });
     if (this.target === 'profilePic' || this.target === 'upgrade' || this.target === 'profile') {

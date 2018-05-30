@@ -111,7 +111,7 @@ class ProfileComponent extends React.Component {
       username: this.username.value,
       name: this.name.value,
       email: this.email.value,
-      phoneNo: this.phoneNo.value,
+      phoneNo: `+${this.phoneNo.value}`,
       company: this.company.value,
       website: this.website.value,
       address: this.address.value,
