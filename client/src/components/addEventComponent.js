@@ -6,13 +6,14 @@ import { apiLink, Transactions, getAll, toastSettings } from '../services';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
 import { getEventCenters } from '../actions/centerActions';
-import { setDataCount } from '../actions/pageActions';
+import { setDataCount, setActivePage, setEventDefaults } from '../actions/pageActions';
+import { setSubmitState } from '../actions/submitAction';
 import PropTypes from 'prop-types';
-import { TableRow, TableHead } from './table';
-import { Link } from 'react-router-dom';
+import { TableRow } from './table';
 import Pagination from 'react-js-pagination';
 import toastr from 'toastr';
 import { ModalFooter } from './modalFooter';
+import { initialState } from '../reducers/pageReducer';
 
 toastr.options = toastSettings;
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
@@ -27,6 +28,9 @@ const mapDispatchToProps = dispatch => ({
   setEventDetail: event => dispatch(setEventDetail(event)),
   getEventCenters: centers => dispatch(getEventCenters(centers)),
   setDataCount: count => dispatch(setDataCount(count)),
+  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
+  setActivePage: pageNumber => dispatch(setActivePage(pageNumber)),
+  setEventDefaults: data => dispatch(setEventDefaults(data)),
 });
 const mapStateToProps = state => ({
   modalTitle: state.page.modalTitle,
@@ -34,66 +38,54 @@ const mapStateToProps = state => ({
   eventDefaults: state.page.eventDefaults,
   centers: state.centers.eventCenters,
   dataCount: state.page.dataCount,
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
+  activePage: state.page.activePage,
+  random: state.page.random,
 });
 
 let eventId;
-let changeSubmit;
-let centerIndex;
+const folder = apiLink === 'http://localhost:8080' ? 'dev/events' : 'prod/events';
 class AddEventComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.changeSubmitState = this.changeSubmitState.bind(this);
-    this.folder = apiLink === 'http://localhost:8080' ? 'dev/events' : 'prod/events';
-    this.handlePageChange = this.handlePageChange.bind(this);
-    this.selectCenter = this.selectCenter.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.checkValidation = this.checkValidation.bind(this);
     this.state = {
-      activePage: 1,
-      disabled: false,
-      visibility: 'none',
+      selectedClass: 'custom-select-sm btn btn-info',
     };
   }
-
-  checkValidation() {
+  checkValidation = () => {
     if (this.center.value === '') {
       toastr.error('No center selected');
     }
-  }
+  };
 
-  closeModal() {
-    this.name.value = null;
-    this.date.value = null;
-    this.time.value = null;
-    this.description.value = null;
-    this.center.value = null;
-  }
-
-  selectCenter(e) {
-    centerIndex = e.target.id;
-    this.center.value = centerIndex;
-  }
-
-  // Set and reset submitButton state: initial || processing
-  changeSubmitState(state) {
+  closeModal = () => {
     this.setState({
-      disabled: state === 'initial' ? false : 'disabled',
-      visibility: state === 'initial' ? 'none' : true,
+      selectedClass: 'custom-select-sm btn btn-info',
     });
-  }
+    this.props.setEventDefaults(initialState);
+  };
 
-  handlePageChange(pageNumber) {
+  selectCenter = e => {
     this.setState({
-      activePage: pageNumber,
+      selectedClass: 'custom-select-sm btn btn-success',
     });
-    getAll(this.props, 'eventCenters', pageNumber, 2);
-  }
+    this.center.value = e.target.id;
+  };
 
-  handleSubmit(event) {
+  handlePageChange = pageNumber => {
+    this.setState({
+      selectedClass: 'custom-select-sm btn btn-info',
+    });
+    getAll(this.props, 'eventCenters', pageNumber, 1);
+    this.props.setActivePage(pageNumber);
+  };
+
+  handleSubmit = event => {
     event.preventDefault();
-    changeSubmit = this.changeSubmitState;
-    changeSubmit('processing');
+    const props = this.props;
+    const closeModal = this.closeModal;
+    props.setSubmitState('processing');
     const transactions = new Transactions(this.props, 'event');
     const title = this.name.value;
     const date = this.date.value;
@@ -112,8 +104,11 @@ class AddEventComponent extends React.Component {
         centerId,
         token,
       };
-      transactions.addOrUpdate(eventId, eventData, () => {
-        changeSubmit('initial');
+      transactions.addOrUpdate(eventId, eventData, err => {
+        props.setSubmitState('initial');
+        if (!err) {
+          closeModal();
+        }
       });
     }
     if (this.picture.files[0]) {
@@ -124,39 +119,45 @@ class AddEventComponent extends React.Component {
       imageData.append('upload_preset', `${process.env.UPLOAD_PRESET}`);
       imageData.append('api_key', `${process.env.API_KEY}`);
       imageData.append('timestamp', (Date.now() / 1000) | 0);
-      imageData.append('folder', this.folder);
+      imageData.append('folder', folder);
       imageData.append('public_id', publicId);
       transactions.uploadImage(imageData, saveEvent, () => {
-        changeSubmit('initial');
+        props.setSubmitState('initial');
       });
     } else {
       saveEvent(undefined);
     }
-  }
+  };
+
+  generateDate = eventDefaults => {
+    const date = new Date(eventDefaults.date); // The Date object lets you work with dates.
+    const year = date.getFullYear(); // This method gets the four digit year.
+    let month = date.getMonth() + 1; // This method gets the month and Jan is 0.
+    let day = date.getDate(); // This method gets the day of month as a number.
+    let hour = date.getHours(); // This method gets the hour
+    let min = date.getMinutes(); // This method gets the minutes
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+    hour = hour < 10 ? `0${hour}` : hour;
+    // It adds a 0 to number less than 10 because input[type=time] only accepts 00:00 format.
+    min = min < 10 ? `0${min}` : min;
+    const eventDate = `${year}-${month}-${day}`;
+    const eventTime = `${hour}:${min}`;
+    return { eventDate, eventTime };
+  };
 
   // Bind input controls with data when user wants to modify event
+  // use get_derived_state_from_props
   componentWillReceiveProps(nextState) {
-    if (nextState.eventDefaults.title !== null) {
+    if (nextState.eventDefaults.title !== '') {
       const eventDefaults = nextState.eventDefaults;
       eventId = eventDefaults.id;
       this.name.value = eventDefaults.title;
-      const date = new Date(eventDefaults.date); // The Date object lets you work with dates.
-      const year = date.getFullYear(); // This method gets the four digit year.
-      let month = date.getMonth() + 1; // This method gets the month and Jan is 0.
-      let day = date.getDate(); // This method gets the day of month as a number.
-      let hour = date.getHours(); // This method gets the hour
-      let min = date.getMinutes(); // This method gets the minutes
-      month = month < 10 ? `0${month}` : month;
-      day = day < 10 ? `0${day}` : day;
-      hour = hour < 10 ? `0${hour}` : hour;
-      // It adds a 0 to number less than 10 because input[type=time] only accepts 00:00 format.
-      min = min < 10 ? `0${min}` : min;
-      const eventDate = `${year}-${month}-${day}`;
-      const eventTime = `${hour}:${min}`;
-      this.date.value = eventDate;
-      this.time.value = eventTime;
+      const dateObject = this.generateDate(eventDefaults);
+      this.date.value = dateObject.eventDate;
+      this.time.value = dateObject.eventTime;
       this.description.value = eventDefaults.description;
-      this.center.value = eventDefaults.center.id;
+      this.center = eventDefaults.centerId;
     }
   }
   render() {
@@ -225,7 +226,7 @@ class AddEventComponent extends React.Component {
                   )}
                 />
                 <div className="form-group">
-                  <label htmlFor="description" className="control-label">
+                  <label id="description" htmlFor="description" className="control-label">
                     Description
                   </label>
                   <textarea
@@ -241,89 +242,81 @@ class AddEventComponent extends React.Component {
                     required
                     ref={input => (this.center = input)}
                     className="custom-select-sm"
-                    style={{ display: 'none' }}
+                    // style={{ display: 'none' }}
                   >
                     <Option value="" text="Select Center" disabled selected />
-                    {/* if center availability is close, dont render */}
                     {centers.map(center => (
                       <Option
                         key={center.id}
                         value={center.id}
-                        text={`${center.name}, ${center.address}, ${center.location}. Capacity: ${
-                          center.capacity
-                        }`}
+                        text={`${center.name}, ${center.address}, ${center.location}`}
                       />
                     ))}
                   </select>
-                  <div className="table-responsive">
-                    <table className="table table-hover table-striped">
-                      <TableHead
-                        columns={[
-                          'View',
-                          'Name',
-                          'Location',
-                          'Capacity',
-                          <span className="fa fa-check" />,
-                        ]}
-                        class="table-header"
-                      />
-                      <tbody>
-                        {/* eslint-disable */}
-                        {centers.map(center => (
-                          <TableRow
-                            key={center.id}
-                            columns={[
-                              <img
-                                className="center-image"
-                                src={`${center.picture}`}
-                                alt="center-view"
-                              />,
-                              center.availability === 'open' ? (
-                                <Link
-                                  className="event-detail"
-                                  to={`${this.props.match.path}/${center.id}`}
-                                >
-                                  {center.name}
-                                </Link>
-                              ) : (
-                                <Link
-                                  className="event-detail rejected"
-                                  to={`${this.props.match.path}/${center.id}`}
-                                >
-                                  {center.name} (closed)
-                                </Link>
-                              ),
-                              `${center.name}, ${center.address}`,
-                              <span className="badge">{center.capacity}</span>,
-                              <div className="checkbox">
-                                <input
-                                  type="radio"
-                                  name="mark"
-                                  id={center.id}
-                                  onChange={this.selectCenter}
-                                />
-                              </div>,
-                            ]}
+                  {centers.map(center => (
+                    <div key={center.id}>
+                      <div>
+                        <div>
+                          <img
+                            id="cardImage"
+                            className="event-center-Image"
+                            src={`${center.picture}`}
+                            alt="centerImage"
                           />
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </div>
+                        <div>
+                          <div className="table-responsive">
+                            <table
+                              style={{ border: 'none' }}
+                              className="table table-hover table-striped table-bordered"
+                            >
+                              <tbody>
+                                <TableRow
+                                  columns={[
+                                    'name',
+                                    center.availability === 'open' ? (
+                                      <p>{center.name}</p>
+                                    ) : (
+                                      <p className="rejected">{center.name} (closed)</p>
+                                    ),
+                                  ]}
+                                />
+                                <TableRow
+                                  columns={['Location', `${center.address} ${center.location}`]}
+                                />
+                                <TableRow columns={['Capacity', center.capacity]} />
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        id={center.id}
+                        type="button"
+                        onClick={this.selectCenter}
+                        className={this.state.selectedClass}
+                        style={{ borderRadius: '0em' }}
+                      >
+                        select
+                      </button>
+                      &nbsp;
+                    </div>
+                  ))}
                   <Pagination
-                    activePage={this.state.activePage}
+                    activePage={this.props.activePage}
                     innerClass="pagination add-event"
-                    itemsCountPerPage={2}
+                    itemsCountPerPage={1}
                     totalItemsCount={this.props.dataCount}
-                    pageRangeDisplayed={3}
+                    pageRangeDisplayed={5}
                     onChange={this.handlePageChange}
                     itemClass="page-item"
                     linkClass="page-link"
                   />
                   <ModalFooter
                     type="submit"
-                    disabled={this.state.disabled}
+                    disabled={this.props.disabled}
                     checkValidation={this.checkValidation}
-                    display={this.state.visibility}
+                    display={this.props.visibility}
                     closeModal={this.closeModal}
                   />
                 </div>
@@ -340,4 +333,10 @@ export const AddEvent = connect(mapStateToProps, mapDispatchToProps)(AddEventCom
 AddEventComponent.propTypes = {
   modalTitle: PropTypes.string,
   centers: PropTypes.arrayOf(PropTypes.object),
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  dataCount: PropTypes.number,
+  match: PropTypes.object,
+  activePage: PropTypes.number,
+  setActivePage: PropTypes.func,
 };

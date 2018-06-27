@@ -6,6 +6,7 @@ const initialState = {
   eventCenters: [],
 };
 
+// readup about immutable.js
 const centerReducer = (state = initialState, action) => {
   switch (action.type) {
     case POPULATE_CENTERS:

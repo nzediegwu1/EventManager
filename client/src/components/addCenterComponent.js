@@ -5,52 +5,44 @@ import { Option } from './selectOption';
 import { apiLink, Transactions } from '../services';
 import { connect } from 'react-redux';
 import { setCenterDetails } from '../actions/centerActions';
+import { setSubmitState } from '../actions/submitAction';
+import { setCenterDefaults } from '../actions/pageActions';
 import PropTypes from 'prop-types';
 import { ModalFooter } from './modalFooter';
+import { initialState } from '../reducers/pageReducer';
 
-const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
+const inputAttrs = (inputType, inputName, placeholder, className, ref, required, autocomplete) => ({
   inputType,
   inputName,
   placeholder,
   className,
   ref,
   required,
+  autocomplete,
 });
 
 const mapDispatchToProps = dispatch => ({
   setCenterDetails: center => dispatch(setCenterDetails(center)),
+  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
+  setCenterDefaults: submitState => dispatch(setCenterDefaults(submitState)),
 });
+
 const mapStateToProps = state => ({
   modalTitle: state.page.modalTitle,
   required: state.page.required,
   centerDefaults: state.page.centerDefaults,
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
 });
 
 let centerId;
-let changeSubmit;
+const folder = apiLink === 'http://localhost:8080' ? 'dev/centers' : 'prod/centers';
 class AddCenterComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.changeSubmitState = this.changeSubmitState.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.folder = apiLink === 'http://localhost:8080' ? 'dev/centers' : 'prod/centers';
-    this.state = {
-      disabled: false,
-      visibility: 'none',
-    };
-  }
-
-  changeSubmitState(state) {
-    this.setState({
-      disabled: state === 'initial' ? false : 'disabled',
-      visibility: state === 'initial' ? 'none' : true,
-    });
-  }
-
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
-    changeSubmit = this.changeSubmitState;
-    changeSubmit('processing');
+    const props = this.props;
+    props.setSubmitState('processing');
+    const closeModal = this.closeModal;
     const transactions = new Transactions(this.props, 'center');
     const saveCenter = res => {
       const centerData = {
@@ -64,8 +56,11 @@ class AddCenterComponent extends React.Component {
         picture: res ? res.data.secure_url : undefined,
         publicId: res ? res.data.public_id : undefined,
       };
-      transactions.addOrUpdate(centerId, centerData, () => {
-        changeSubmit('initial');
+      transactions.addOrUpdate(centerId, centerData, err => {
+        props.setSubmitState('initial');
+        if (!err) {
+          closeModal();
+        }
       });
     };
     if (this.picture.files[0]) {
@@ -76,15 +71,19 @@ class AddCenterComponent extends React.Component {
       imageData.append('upload_preset', `${process.env.UPLOAD_PRESET}`);
       imageData.append('api_key', `${process.env.API_KEY}`);
       imageData.append('timestamp', (Date.now() / 1000) | 0);
-      imageData.append('folder', this.folder);
+      imageData.append('folder', folder);
       imageData.append('public_id', publicId);
       transactions.uploadImage(imageData, saveCenter, () => {
-        changeSubmit('initial');
+        props.setSubmitState('initial');
       });
     } else {
       saveCenter(undefined);
     }
-  }
+  };
+  closeModal = () => {
+    // this.picture.value = null;
+    this.props.setCenterDefaults(initialState);
+  };
   componentWillReceiveProps(nextState) {
     const centerDefaults = nextState.centerDefaults;
     this.name.value = centerDefaults.name;
@@ -105,10 +104,12 @@ class AddCenterComponent extends React.Component {
         tabIndex="-1"
         aria-labelledby="addNewCenterLabel"
         aria-hidden="true"
+        data-keyboard="false"
+        data-backdrop="static"
       >
         <div className="modal-dialog">
           <div className="modal-content eventModal">
-            <ModalHeader id="addNewCenterTitle" title={modalTitle} />
+            <ModalHeader id="addNewCenterTitle" title={modalTitle} action={this.closeModal} />
             <div className="modal-body mx-sm-auto col-sm-10">
               <form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup
@@ -144,7 +145,8 @@ class AddCenterComponent extends React.Component {
                     'Address',
                     'form-control input-sm',
                     input => (this.address = input),
-                    'required'
+                    'required',
+                    'street-address'
                   )}
                 />
                 <FormGroup
@@ -156,7 +158,8 @@ class AddCenterComponent extends React.Component {
                     'State/City',
                     'form-control input-sm',
                     input => (this.location = input),
-                    'required'
+                    'required',
+                    'address-level2'
                   )}
                 />
                 <FormGroup
@@ -196,8 +199,9 @@ class AddCenterComponent extends React.Component {
                 </div>
                 <ModalFooter
                   type="submit"
-                  disabled={this.state.disabled}
-                  display={this.state.visibility}
+                  disabled={this.props.disabled}
+                  display={this.props.visibility}
+                  closeModal={this.closeModal}
                 />
               </form>
             </div>
@@ -211,4 +215,6 @@ export const AddCenter = connect(mapStateToProps, mapDispatchToProps)(AddCenterC
 AddCenterComponent.propTypes = {
   modalTitle: PropTypes.string,
   required: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };

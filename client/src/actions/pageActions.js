@@ -5,6 +5,8 @@ import {
   SET_EVENT_DEFAULTS,
   SET_CENTER_DEFAULTS,
   SET_DATA_COUNT,
+  SET_ACTIVE_PAGE,
+  SET_RANDOM,
 } from '../constants/actionTypes';
 
 export const setPage = page => ({
@@ -31,3 +33,13 @@ export const setDataCount = data => ({
   type: SET_DATA_COUNT,
   payload: data,
 });
+export const setActivePage = data => ({
+  type: SET_ACTIVE_PAGE,
+  payload: data,
+});
+
+export const setRandom = data => ({
+  type: SET_RANDOM,
+  payload: data,
+});
+

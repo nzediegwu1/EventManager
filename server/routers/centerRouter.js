@@ -1,5 +1,5 @@
 ﻿import express from 'express';
-import Centers from '../controllers/centerController';
+import Centers, {} from '../controllers/centerController';
 import Val from '../middlewares/validator';
 import Auth from '../middlewares/authenticator';
 

@@ -20,7 +20,6 @@ class ManageEventComponent extends React.Component {
   constructor(props) {
     super(props);
     this.id = this.props.match.params.id;
-    this.approve = this.approve.bind(this);
     this.loggedInUser = JSON.parse(localStorage.token).id;
   }
   componentWillMount() {
@@ -31,7 +30,7 @@ class ManageEventComponent extends React.Component {
   }
 
   // Handle approval or rejection of event
-  approve(e) {
+  approve = e => {
     const transactions = new Transactions(this.props, 'event');
     const event = this.props.eventDetails[0];
     const value = e.target.checked;
@@ -44,7 +43,7 @@ class ManageEventComponent extends React.Component {
       centerId: event.centerId,
     };
     transactions.addOrUpdate(itemId, data);
-  }
+  };
   render() {
     const event = this.props.eventDetails[0];
     if (!event || !apiLink) {
@@ -152,4 +151,4 @@ ManageEventComponent.propTypes = {
   setPage: PropTypes.func,
   eventDetails: PropTypes.arrayOf(PropTypes.object),
   history: PropTypes.object,
-}
+};

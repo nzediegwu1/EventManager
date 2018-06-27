@@ -5,7 +5,7 @@ import { LIMIT } from './constants/actionTypes';
 export const toastSettings = {
   closeButton: true,
   positionClass: 'toast-top-center',
-  timeOut: '2500',
+  timeOut: '3500',
   showMethod: 'slideDown',
   hideMethod: 'slideUp',
 };
@@ -181,7 +181,7 @@ export const deleteResource = (url, history) => {
       history.push('/dashboard/events');
     })
     .catch(err => {
-      toastr.error(err.response.data.message || err);
+      toastr.error(err.response ? err.response.data.message : err);
       const status = err.response ? err.response.status : undefined;
       if (status === 403 || status === 401) {
         logout('#addNewEvent', history);
@@ -231,13 +231,20 @@ export const getOne = (props, itemId, type) => {
     dispatchAction = props.setEventDetail;
   } else if (type === 'users') {
     dispatchAction = props.setProfileDetails;
+  } else {
+    dispatchAction = props.getEventCenters;
   }
   const pageTitle = type === 'centers' ? 'centerDetails' : 'manageEvent';
   const { setPage, history } = props;
   axios
-    .get(`${apiLink}/api/v1/${type}/${itemId}`)
+    .get(`${apiLink}/api/v1/${type !== 'eventCenter' ? type : 'centers'}/${itemId}`)
     .then(res => {
-      details = res.data.data;
+      if (type === 'eventCenter') {
+        details = [res.data.data];
+        props.setDataCount(3);
+      } else {
+        details = res.data.data;
+      }
       dispatchAction(details);
       if (type === 'events' || type === 'centers') {
         setPage(pageTitle);
@@ -337,7 +344,7 @@ export class Transactions {
         }
         toastr.success('Action Successful');
         if (cb) {
-          cb('success');
+          cb();
         }
       })
       .catch(err => {

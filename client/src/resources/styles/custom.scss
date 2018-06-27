@@ -504,11 +504,18 @@ select {
   padding: 0em;
 }
 .pagination {
-  margin: auto;
-  width: 28%;
+  justify-content: center;
   margin-bottom: 1em;
   margin-top: 0.5em;
 }
 .pagination.add-event {
   width: auto;
+}
+.col-sm-7,
+.col-sm-5 {
+  padding: 0em;
+}
+.event-center-Image {
+  width: 100%;
+  height: 100%;
 }

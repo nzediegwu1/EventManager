@@ -1,4 +1,3 @@
-import models from './models';
 import cloudinary from 'cloudinary';
 import nodemailer from 'nodemailer';
 import {
@@ -32,7 +31,7 @@ export function getAll(req, res, model, order, condition, include, attributes) {
   const rawLimit = req.query.limit;
   const page = isNaN(rawPage) || !rawPage ? 1 : parseInt(rawPage, 10);
   const limit = isNaN(rawLimit) || !rawLimit ? 5 : parseInt(req.query.limit, 10);
-  return model.findAndCountAll().then(data => {
+  return model.findAndCountAll({ where: condition }).then(data => {
     const count = data.count;
     const pages = Math.ceil(count / limit);
     const offset = page > pages ? (pages - 1) * limit : (page - 1) * limit;

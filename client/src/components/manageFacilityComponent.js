@@ -4,6 +4,7 @@ import { FormGroup } from './formGroup';
 import Icon from './icon';
 import { TableHead, TableRow } from './table';
 import { populateFacilities, setUndeletedFacilities } from '../actions/facilityAction';
+import { setSubmitState } from '../actions/submitAction';
 import { connect } from 'react-redux';
 import { Transactions } from '../services';
 import PropTypes from 'prop-types';
@@ -20,42 +21,23 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 const mapDispatchToProps = dispatch => ({
   populateFacilities: facilities => dispatch(populateFacilities(facilities)),
   setUndeletedFacilities: data => dispatch(setUndeletedFacilities(data)),
+  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
 });
 
 const mapStateToProps = state => ({
   facilities: state.facilities.facilities,
   undeleted: state.facilities.undeleted,
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
 });
 let toDelete = [];
 let facilities;
 let checker = 0;
 let id = 0;
-let changeSubmit;
 class ManageFacilityComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.addFacility = this.addFacility.bind(this);
-    this.setId = this.setId.bind(this);
-    this.deleteMarked = this.deleteMarked.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.changeSubmitState = this.changeSubmitState.bind(this);
-    this.state = {
-      disabled: false,
-      visibility: 'none',
-    };
-  }
-
-  // Set and reset submitButton state: initial || processing
-  changeSubmitState(state) {
-    this.setState({
-      disabled: state === 'initial' ? false : 'disabled',
-      visibility: state === 'initial' ? 'none' : true,
-    });
-  }
-
-  handleSubmit() {
-    changeSubmit = this.changeSubmitState;
-    changeSubmit('processing');
+  handleSubmit = () => {
+    const props = this.props;
+    props.setSubmitState('processing');
     const facilityData = this.props.undeleted;
     const data = {
       data: JSON.stringify({ content: facilityData }),
@@ -64,12 +46,12 @@ class ManageFacilityComponent extends React.Component {
     const itemId = this.props.centerId;
     const transactions = new Transactions(this.props, 'facilities');
     transactions.addOrUpdate(itemId, data, () => {
-      changeSubmit('initial');
+      props.setSubmitState('initial');
     });
-  }
+  };
 
   // delete facilities marked in table
-  deleteMarked() {
+  deleteMarked = () => {
     toDelete.forEach(index => {
       delete facilities[index];
     });
@@ -81,20 +63,20 @@ class ManageFacilityComponent extends React.Component {
     });
     this.props.setUndeletedFacilities(newFacilities);
     toDelete = [];
-  }
+  };
 
   // Collect id of facilities to be deleted upon check event
-  setId(e) {
+  setId = e => {
     const index = e.target.id;
     if (e.target.checked === true) {
       toDelete.push(index);
     } else {
       toDelete.splice(toDelete.indexOf(index), 1);
     }
-  }
+  };
 
   // Handle dynamic adding of new facility to dynamic facility table
-  addFacility(event) {
+  addFacility = event => {
     id++;
     event.preventDefault();
     const name = this.name.value;
@@ -102,7 +84,7 @@ class ManageFacilityComponent extends React.Component {
     const quantity = this.quantity.value;
     const newFacility = [{ id, name, spec, quantity }];
     this.props.setUndeletedFacilities([...facilities, ...newFacility]);
-  }
+  };
   render() {
     if (this.props.undeleted.length > 0) {
       checker++;
@@ -177,13 +159,13 @@ class ManageFacilityComponent extends React.Component {
                   </div>
                   <div className="table-responsive centerSearch">
                     <table className="table table-hover grey-color table-striped">
-                      {/* eslint-disable */}
                       <TableHead
                         columns={[
                           'Name',
                           'Spec',
                           'Quantity',
                           <Icon
+                            key="odogwuakataka"
                             src="glyphicons-17-bin.png"
                             alt="delete"
                             clickAction={this.deleteMarked}
@@ -198,14 +180,18 @@ class ManageFacilityComponent extends React.Component {
                             <TableRow
                               key={facility.id}
                               columns={[
-                                <b onClick={this.setId}>{facility.name}</b>,
-                                <b>{facility.spec}</b>,
-                                <span className="badge">{facility.quantity}</span>,
-                                <div className="checkbox">
+                                <b onClick={this.setId} key="facilitynjsdfname">
+                                  {facility.name}
+                                </b>,
+                                <b key="facilitynjsdfspec">{facility.spec}</b>,
+                                <span className="badge" key="facilitynjsdfqty">
+                                  {facility.quantity}
+                                </span>,
+                                <div className="checkbox" key="facilitynjsdselector">
                                   <input
                                     type="checkbox"
                                     name="mark"
-                                    id={facilities.findIndex(facility => facility.name === name)}
+                                    id={facilities.findIndex(fcty => fcty.name === name)}
                                     onChange={this.setId}
                                   />
                                 </div>,
@@ -219,9 +205,9 @@ class ManageFacilityComponent extends React.Component {
                 </div>
                 <ModalFooter
                   type="button"
-                  disabled={this.state.disabled}
+                  disabled={this.props.disabled}
                   checkValidation={this.handleSubmit}
-                  display={this.state.visibility}
+                  display={this.props.visibility}
                   closeModal={this.closeModal}
                 />
               </form>
@@ -240,4 +226,6 @@ ManageFacilityComponent.propTypes = {
   centerId: PropTypes.string,
   setUndeletedFacilities: PropTypes.func,
   data: PropTypes.arrayOf(PropTypes.object),
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };

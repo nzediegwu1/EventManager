@@ -15,3 +15,6 @@ export const POPULATE_USERLIST = 'POPULATE_USERLIST';
 export const SET_DATA_COUNT = 'SET_DATA_COUNT';
 export const LIMIT = 4;
 export const GET_EVENT_CENTERS = 'GET_EVENT_CENTERS';
+export const SET_SUBMIT_STATE = 'SET_SUBMIT_STATE';
+export const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE';
+export const SET_RANDOM = 'SET_RANDOM';

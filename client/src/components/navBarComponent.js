@@ -41,16 +41,14 @@ const NavbarList = props => (
   </li>
 );
 class NavBarItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     const setModalProps = title => {
       this.props.setModalTitle(title);
       this.props.setRequired(true);
-      getAll(this.props, 'eventCenters', 1, 2);
-      if (title === 'New Event') this.props.setEventDefaults(initialState.eventDefaults);
-      else this.props.setCenterDefaults(initialState.centerDefaults);
+      if (title === 'New Event') {
+        getAll(this.props, 'eventCenters', 1, 1);
+        this.props.setEventDefaults(initialState.eventDefaults);
+      } else this.props.setCenterDefaults(initialState.centerDefaults);
     };
     return (
       <nav className="navbar fixed-top navbar-expand-sm navbar-background">

@@ -22,12 +22,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 });
 // all props are from signin component
 class SignupComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     const signupData = {
       username: this.username.value,
@@ -47,6 +42,10 @@ class SignupComponent extends React.Component {
     } else {
       toastr.error(validationStatus);
     }
+  };
+
+  componentWillUnmount() {
+    this.props.changeSubmitState('initial');
   }
 
   render() {
@@ -130,10 +129,10 @@ class SignupComponent extends React.Component {
         />
         <button
           type="submit"
-          disabled={this.props.state.disabled}
+          disabled={this.props.disabled}
           className="btn btn-lg btn-primary btn-block submitButton"
         >
-          <i className="fa fa-spinner fa-spin" style={{ display: this.props.state.visibility }} />
+          <i className="fa fa-spinner fa-spin" style={{ display: this.props.visibility }} />
           &nbsp; Signup
         </button>
         <div className="form-links">
@@ -146,8 +145,10 @@ class SignupComponent extends React.Component {
   }
 }
 export const SignupForm = connect(null, mapDispatchToProps)(SignupComponent);
-SignupComponent.propTypes = {
+const validations = {
   changeSubmitState: PropTypes.func,
-  state: PropTypes.object,
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   changeState: PropTypes.func,
 };
+SignupComponent.propTypes = validations;
