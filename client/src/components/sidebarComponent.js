@@ -24,7 +24,6 @@ export const ListItem = props => (
 class SidebarComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.changeLocation = this.changeLocation.bind(this);
     this.userId = JSON.parse(localStorage.token).id;
   }
   /**
@@ -33,14 +32,14 @@ class SidebarComponent extends React.Component {
    * @param {string} url - Url to the component path
    * @memberof SidebarComponent
    */
-  changeLocation(url) {
+  changeLocation = url => {
     if (url === `${this.props.match.path}/profile/${this.userId}`) {
       const profileData = getOne(this.props, this.userId, 'users');
       this.props.setProfileDetails(profileData);
     }
     history.push(url);
     $('#myModalSidebar').modal('hide');
-  }
+  };
 
   render() {
     return (

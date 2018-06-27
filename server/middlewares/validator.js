@@ -10,23 +10,9 @@ class Validator {
     this.model = model;
     this.context = context;
     this.verificationError = {};
-    this.formatTime = this.formatTime.bind(this);
-    this.verify = this.verify.bind(this);
-    this.verifyUser = this.verifyUser.bind(this);
-    this.isSentence = this.isSentence.bind(this);
-    this.isNumberRange = this.isNumberRange.bind(this);
-    this.verifyEvent = this.verifyEvent.bind(this);
-    this.verifyCenter = this.verifyCenter.bind(this);
-    this.verifyProfilePic = this.verifyProfilePic.bind(this);
-    this.verifySignup = this.verifySignup.bind(this);
-    this.verifySignin = this.verifySignin.bind(this);
-    this.isJSON = this.isJSON.bind(this);
-    this.verifyFacilities = this.verifyFacilities.bind(this);
-    this.validateImage = this.validateImage.bind(this);
-    this.verifyApproval = this.verifyApproval.bind(this);
   }
   // validate time using 24-hours format 00:00
-  formatTime(time) {
+  formatTime = time => {
     let result = false;
     const re = /^\s*([01]?\d|2[0-3]):?([0-5]\d)\s*$/;
     const m = time.match(re);
@@ -34,9 +20,9 @@ class Validator {
       result = `${m[1].length === 2 ? '' : '0'}${m[1]}:${m[2]}`;
     }
     return result;
-  }
+  };
 
-  verify(req, res, next) {
+  verify = (req, res, next) => {
     switch (this.model) {
       case 'events':
         this.verifyEvent(req, res, next);
@@ -56,32 +42,32 @@ class Validator {
       default:
         break;
     }
-  }
+  };
 
-  verifyUser(req, res, context, next) {
+  verifyUser = (req, res, context, next) => {
     if (context === 'signup') {
       return this.verifySignup(req, res, next);
     } else if (context === 'signin') {
       return this.verifySignin(req, res, next);
     }
     return this.verifyProfilePic(req, res, next);
-  }
+  };
 
-  isSentence(input, min, max) {
+  isSentence = (input, min, max) => {
     if (typeof input === 'string' && input.trim().length > min && input.length < max) {
       return true;
     }
     return undefined;
-  }
+  };
 
-  isNumberRange(input, max) {
+  isNumberRange = (input, max) => {
     if (!isNaN(input) && parseInt(input, 10) < max) {
       return true;
     }
     return undefined;
-  }
+  };
 
-  verifyApproval(req, res, next) {
+  verifyApproval = (req, res, next) => {
     const { status } = req.body;
     if (!(status === 'approved' || status === 'rejected')) {
       const message = 'Status should be [approved] or [rejected]';
@@ -91,9 +77,9 @@ class Validator {
       return this.verificationError;
     }
     return this.verificationError;
-  }
+  };
 
-  verifyEvent(req, res, next) {
+  verifyEvent = (req, res, next) => {
     const today = new Date();
     const { title, date, time, description, centerId, publicId } = req.body;
     if (!this.isSentence(title, 3, 99)) {
@@ -114,9 +100,9 @@ class Validator {
     }
     cloudinary.v2.uploader.destroy(publicId);
     return this.verificationError;
-  }
+  };
 
-  verifyCenter(req, res, next) {
+  verifyCenter = (req, res, next) => {
     // validate center name
     const { name, address, location, capacity, price, availability, publicId } = req.body;
     if (!this.isSentence(name, 3, 99)) {
@@ -143,18 +129,18 @@ class Validator {
     }
     cloudinary.v2.uploader.destroy(publicId);
     return this.verificationError;
-  }
+  };
 
-  validateImage(picture, publicId) {
+  validateImage = (picture, publicId) => {
     if (typeof picture !== 'string' || !val.isURL(picture)) {
       return 'Invalid picture';
     } else if (!this.isSentence(publicId, 3, 254)) {
       return 'Invalid public id';
     }
     return true;
-  }
+  };
 
-  verifyProfilePic(req, res, next) {
+  verifyProfilePic = (req, res, next) => {
     const { picture, publicId } = req.body;
     const result = this.validateImage(picture, publicId);
     if (result !== true) {
@@ -165,9 +151,9 @@ class Validator {
     }
     cloudinary.v2.uploader.destroy(publicId);
     return this.verificationError;
-  }
+  };
 
-  verifySignup(req, res, next) {
+  verifySignup = (req, res, next) => {
     const { username, name, email, phoneNo, password, confirmPassword } = req.body;
     if (
       typeof username !== 'string' ||
@@ -200,9 +186,9 @@ class Validator {
       next();
     }
     return this.verificationError;
-  }
+  };
 
-  verifySignin(req, res, next) {
+  verifySignin = (req, res, next) => {
     const { username, password } = req.body;
     if (typeof username !== 'string' || !val.isAlphanumeric(username)) {
       const message = 'Username should be non-empty string';
@@ -214,17 +200,17 @@ class Validator {
       next();
     }
     return this.verificationError;
-  }
+  };
 
-  isJSON(data) {
+  isJSON = data => {
     try {
       return typeof JSON.parse(data) === 'object';
     } catch (error) {
       return undefined;
     }
-  }
+  };
 
-  verifyFacilities(req, res, next) {
+  verifyFacilities = (req, res, next) => {
     const { data } = req.body;
     // TEST DATA: {"content":[{"name":"fish","spec":"golden","quantity":6}]}
     if (typeof data !== 'string' || !this.isJSON(data)) {
@@ -257,7 +243,6 @@ class Validator {
       this.verificationError = validationErrorMessage('Request contain invalid entry(s)', res);
     }
     return this.verificationError;
-  }
+  };
 }
-
 export default Validator;

@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { onboarding, toastSettings, userValidator } from '../services';
 import { connect } from 'react-redux';
 import { setAccountType } from '../actions/userActions';
+import { setSubmitState } from '../actions/submitAction';
 import toastr from 'toastr';
 import PropTypes from 'prop-types';
 
@@ -22,6 +23,12 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
 
 const mapDispatchToProps = dispatch => ({
   setAccountType: accountType => dispatch(setAccountType(accountType)),
+  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
+});
+
+const mapStateToProps = state => ({
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
 });
 
 class SignInPage extends React.Component {
@@ -30,28 +37,20 @@ class SignInPage extends React.Component {
     this.state = {
       signinView: 'block',
       signupView: 'none',
-      disabled: false,
-      visibility: 'none',
     };
-    this.changeState = this.changeState.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.changeSubmitState = this.changeSubmitState.bind(this);
+  }
+  componentWillUnmount() {
+    this.props.setSubmitState('initial');
   }
   // When user clicks signup link, display signup component and hide signin component
-  changeState() {
+  changeState = () => {
     this.setState(prevState => ({
       signinView: prevState.signinView === 'block' ? 'none' : 'block',
       signupView: prevState.signupView === 'none' ? 'block' : 'none',
     }));
-  }
-  // Set and reset submitButton state: initial || processing
-  changeSubmitState(state) {
-    this.setState({
-      disabled: state === 'initial' ? false : 'disabled',
-      visibility: state === 'initial' ? 'none' : true,
-    });
-  }
-  handleSubmit(event) {
+  };
+
+  handleSubmit = event => {
     event.preventDefault();
     const loginData = {
       username: this.username.value,
@@ -59,15 +58,15 @@ class SignInPage extends React.Component {
     };
     const validationStatus = userValidator(loginData, 'login');
     if (validationStatus === true) {
-      this.changeSubmitState('processing');
+      this.props.setSubmitState('processing');
       // http request to signin
       onboarding(this.props, loginData, 'login', () => {
-        this.changeSubmitState('initial');
+        this.props.setSubmitState('initial');
       });
     } else {
       toastr.error(validationStatus);
     }
-  }
+  };
   render() {
     const content = (
       <div className="background-image" id="signinPage">
@@ -80,8 +79,9 @@ class SignInPage extends React.Component {
               <SignupForm
                 history={this.props.history}
                 changeState={this.changeState}
-                state={this.state}
-                changeSubmitState={this.changeSubmitState}
+                visibility={this.props.visibility}
+                disabled={this.props.disabled}
+                changeSubmitState={this.props.setSubmitState}
               />
             </div>
             <form
@@ -123,9 +123,9 @@ class SignInPage extends React.Component {
                 type="submit"
                 id="login"
                 className="btn btn-lg btn-primary btn-block submitButton"
-                disabled={this.state.disabled}
+                disabled={this.props.disabled}
               >
-                <i className="fa fa-spinner fa-spin" style={{ display: this.state.visibility }} />
+                <i className="fa fa-spinner fa-spin" style={{ display: this.props.visibility }} />
                 &nbsp; Login
               </button>
               <div className="form-links">
@@ -139,7 +139,11 @@ class SignInPage extends React.Component {
             </form>
           </div>
         </div>
-        <RecoverPassword />
+        <RecoverPassword
+          visibility={this.props.visibility}
+          disabled={this.props.disabled}
+          changeSubmitState={this.props.setSubmitState}
+        />
       </div>
     );
     const token = localStorage.token;
@@ -147,7 +151,10 @@ class SignInPage extends React.Component {
   }
 }
 
-export const SignIn = connect(null, mapDispatchToProps)(SignInPage);
+export const SignIn = connect(mapStateToProps, mapDispatchToProps)(SignInPage);
 SignInPage.propTypes = {
   history: PropTypes.object,
+  setSubmitState: PropTypes.func,
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { setProfileDetails } from '../actions/userActions';
+import { setSubmitState } from '../actions/submitAction';
 import { connect } from 'react-redux';
 import { apiLink, Transactions, getOne, userValidator, toastSettings } from '../services';
 import { TableRow } from './table';
@@ -11,9 +12,12 @@ toastr.options = toastSettings;
 
 const mapStateToProps = state => ({
   profileDetails: state.users.profileDetails,
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
 });
 const mapDispatchToProps = dispatch => ({
   setProfileDetails: data => dispatch(setProfileDetails(data)),
+  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
 });
 const ProfileInput = props => (
   <div className="form-group row">
@@ -32,33 +36,12 @@ const ProfileInput = props => (
 );
 let profileData;
 let accountType;
-let properties;
-let changeSubmit;
 class ProfileComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.reset = this.reset.bind(this);
-    this.upgradeAccount = this.upgradeAccount.bind(this);
-    this.changeSubmitState = this.changeSubmitState.bind(this);
-    this.state = {
-      disabled: false,
-      visibility: 'none',
-    };
-  }
-
-  // Set and reset submitButton state: initial || processing
-  changeSubmitState(state) {
-    this.setState({
-      disabled: state === 'initial' ? false : 'disabled',
-      visibility: state === 'initial' ? 'none' : true,
-    });
-  }
-
   // Handle profile image upload
-  uploadPic(e) {
+  uploadPic = e => {
     if (e.target.files[0]) {
-      changeSubmit('processing');
+      const props = this.props;
+      props.setSubmitState('processing');
       const folder = apiLink === 'http://localhost:8080' ? 'dev/profile' : 'prod/profile';
       const imageData = new FormData();
       const publicId = `${Date.now()}-${e.target.files[0].name}`;
@@ -70,7 +53,7 @@ class ProfileComponent extends React.Component {
       imageData.append('folder', folder);
       imageData.append('public_id', publicId);
       const token = JSON.parse(localStorage.token).value;
-      const transactions = new Transactions(properties, 'profilePic');
+      const transactions = new Transactions(props, 'profilePic');
       /**
        * @description - Handle image commit to database
        *
@@ -83,30 +66,30 @@ class ProfileComponent extends React.Component {
           token,
         };
         profileData = transactions.addOrUpdate(null, profileUpdate, () => {
-          changeSubmit('initial');
+          props.setSubmitState('initial');
         });
       };
       transactions.uploadImage(imageData, saveImage, () => {
-        changeSubmit('initial');
+        props.setSubmitState('initial');
       });
     }
-  }
-  upgradeAccount() {
+  };
+  upgradeAccount = () => {
     const account = this.account.value;
     const transactions = new Transactions(this.props, 'upgrade');
     profileData = transactions.addOrUpdate(profileData.id, account);
+  };
+  componentDidMount() {
+    const userId = this.props.match.params.id;
+    profileData = getOne(this.props, userId, 'users');
   }
-  componentWillMount() {
-    properties = this.props;
-    const userId = properties.match.params.id;
-    profileData = getOne(properties, userId, 'users');
-  }
-  reset() {
+  reset = () => {
     this.props.setProfileDetails(profileData);
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
+    const props = this.props;
     const profileInputs = {
       username: this.username.value,
       name: this.name.value,
@@ -120,18 +103,17 @@ class ProfileComponent extends React.Component {
     };
     const validationStatus = userValidator(profileInputs, 'profile');
     if (validationStatus === true) {
-      changeSubmit('processing');
-      const transactions = new Transactions(this.props, 'profile');
+      props.setSubmitState('processing');
+      const transactions = new Transactions(props, 'profile');
       profileData = transactions.addOrUpdate(null, profileInputs, () => {
-        changeSubmit('initial');
+        props.setSubmitState('initial');
       });
     } else {
       toastr.error(validationStatus);
     }
-  }
+  };
   render() {
     const user = this.props.profileDetails[0];
-    changeSubmit = this.changeSubmitState;
     profileData = user;
     if (user === undefined) {
       return (
@@ -176,12 +158,12 @@ class ProfileComponent extends React.Component {
                       id="file"
                       onChange={this.uploadPic}
                       className="custom-file-input"
-                      disabled={this.state.disabled}
+                      disabled={this.props.disabled}
                     />
                     <span className="custom-file-control">
                       <i
                         className="fa fa-spinner fa-spin"
-                        style={{ display: this.state.visibility }}
+                        style={{ display: this.props.visibility }}
                       />
                       &nbsp;Choose file
                     </span>
@@ -310,11 +292,11 @@ class ProfileComponent extends React.Component {
                         <button
                           type="submit"
                           className="btn btn-primary"
-                          disabled={this.state.disabled}
+                          disabled={this.props.disabled}
                         >
                           <i
                             className="fa fa-spinner fa-spin"
-                            style={{ display: this.state.visibility }}
+                            style={{ display: this.props.visibility }}
                           />
                           &nbsp; Save
                         </button>
@@ -335,6 +317,9 @@ export const Profile = connect(mapStateToProps, mapDispatchToProps)(ProfileCompo
 ProfileComponent.propTypes = {
   setProfileDetails: PropTypes.func,
   profileDetails: PropTypes.arrayOf(PropTypes.object),
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  match: PropTypes.object,
 };
 ProfileInput.propTypes = {
   type: PropTypes.string,

@@ -18,4 +18,5 @@ export class ModalHeader extends React.Component {
 ModalHeader.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
+  action: PropTypes.func,
 };

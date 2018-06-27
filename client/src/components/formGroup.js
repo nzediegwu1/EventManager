@@ -12,6 +12,7 @@ const Input = props => {
         required
         className={props.params.className}
         ref={props.params.ref}
+        autoComplete={props.params.autocomplete}
       />
     );
   }
@@ -22,6 +23,7 @@ const Input = props => {
       placeholder={props.params.placeholder}
       className={props.params.className}
       ref={props.params.ref}
+      autoComplete={props.params.autocomplete}
     />
   );
 };

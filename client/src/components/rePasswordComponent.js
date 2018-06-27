@@ -2,6 +2,7 @@ import React from 'react';
 import { FormGroup } from './formGroup';
 import { ModalHeader } from './modalHeader';
 import { recoverPassword } from '../services';
+import PropTypes from 'prop-types';
 
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
@@ -12,32 +13,14 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
   required,
 });
 export class RecoverPassword extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.changeSubmitState = this.changeSubmitState.bind(this);
-    this.state = {
-      disabled: false,
-      visibility: 'none',
-    };
-  }
-
-  // Set and reset submitButton state: initial || processing
-  changeSubmitState(state) {
-    this.setState({
-      disabled: state === 'initial' ? false : 'disabled',
-      visibility: state === 'initial' ? 'none' : true,
-    });
-  }
-
-  handleSubmit(e) {
-    const changeSubmit = this.changeSubmitState;
-    changeSubmit('processing');
+  handleSubmit = e => {
     e.preventDefault();
+    this.props.changeSubmitState('processing');
     recoverPassword({ email: this.email.value }, () => {
-      changeSubmit('initial');
+      this.props.changeSubmitState('initial');
     });
-  }
+  };
+
   render() {
     return (
       <div
@@ -71,11 +54,11 @@ export class RecoverPassword extends React.Component {
                     <button
                       type="submit"
                       className="btn btn-lg btn-primary btn-block modal-theme send-password"
-                      disabled={this.state.disabled}
+                      disabled={this.props.disabled}
                     >
                       <i
                         className="fa fa-spinner fa-spin"
-                        style={{ display: this.state.visibility }}
+                        style={{ display: this.props.visibility }}
                       />
                       &nbsp; Recover Password
                     </button>
@@ -94,3 +77,8 @@ export class RecoverPassword extends React.Component {
     );
   }
 }
+RecoverPassword.propTypes = {
+  changeSubmitState: PropTypes.func,
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+};

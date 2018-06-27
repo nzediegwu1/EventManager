@@ -18,6 +18,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   centerDetails: state.centers.centerDetails,
   facilities: state.facilities.facilities,
+  currentPage: state.page.currentPage,
 });
 
 class CenterDetailsComponent extends React.Component {
@@ -54,6 +55,7 @@ class CenterDetailsComponent extends React.Component {
             param={this.id}
             title={center.name}
             editModal="#addNewCenter"
+            currentPage={this.props.currentPage}
           />
         </div>
         <div className="card-body">
@@ -170,4 +172,6 @@ CenterDetailsComponent.propTypes = {
   centerDetails: PropTypes.arrayOf(PropTypes.object),
   facilities: PropTypes.array,
   history: PropTypes.object,
+  currentPage: PropTypes.number,
 };
+
