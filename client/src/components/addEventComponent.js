@@ -242,7 +242,7 @@ class AddEventComponent extends React.Component {
                     required
                     ref={input => (this.center = input)}
                     className="custom-select-sm"
-                    // style={{ display: 'none' }}
+                    style={{ display: 'none' }}
                   >
                     <Option value="" text="Select Center" disabled selected />
                     {centers.map(center => (
