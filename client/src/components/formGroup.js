@@ -13,6 +13,7 @@ const Input = props => {
         className={props.params.className}
         ref={props.params.ref}
         autoComplete={props.params.autocomplete}
+        onChange={props.onChange}
       />
     );
   }
@@ -24,6 +25,7 @@ const Input = props => {
       className={props.params.className}
       ref={props.params.ref}
       autoComplete={props.params.autocomplete}
+      onChange={props.onChange}
     />
   );
 };
@@ -33,7 +35,7 @@ export const FormGroup = props => (
       <span className="input-group-addon">
         <img src={`${apiLink}/images/${props.image}`} alt={props.alt} />
       </span>
-      <Input params={props.inputProps} />
+      <Input params={props.inputProps} onChange={props.onChange} />
     </div>
   </div>
 );

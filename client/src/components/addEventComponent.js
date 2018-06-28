@@ -64,6 +64,7 @@ class AddEventComponent extends React.Component {
       selectedClass: 'custom-select-sm btn btn-info',
     });
     this.props.setEventDefaults(initialState);
+    this.picture.value = '';
   };
 
   selectCenter = e => {
@@ -149,17 +150,29 @@ class AddEventComponent extends React.Component {
   // Bind input controls with data when user wants to modify event
   // use get_derived_state_from_props
   componentWillReceiveProps(nextState) {
-    if (nextState.eventDefaults.title !== '') {
-      const eventDefaults = nextState.eventDefaults;
-      eventId = eventDefaults.id;
-      this.name.value = eventDefaults.title;
+    const eventDefaults = nextState.eventDefaults;
+    if (eventDefaults.title !== null) {
+      eventId = eventId || eventDefaults.id;
+      this.name.value = eventDefaults.title || '';
       const dateObject = this.generateDate(eventDefaults);
       this.date.value = dateObject.eventDate;
       this.time.value = dateObject.eventTime;
-      this.description.value = eventDefaults.description;
+      this.description.value = eventDefaults.description || '';
       this.center = eventDefaults.centerId;
     }
   }
+
+  handleChange = () => {
+    const data = {
+      title: this.name.value,
+      date: new Date(`${this.date.value} ${this.time.value}`),
+      picture: this.picture.value,
+      description: this.description.value,
+      centerId: this.center.value,
+    };
+    this.props.setEventDefaults(data);
+  };
+
   render() {
     const { modalTitle, centers } = this.props;
     return (
@@ -181,6 +194,7 @@ class AddEventComponent extends React.Component {
                 <FormGroup
                   image="glyphicons-619-mixed-buildings.png"
                   alt="eventname"
+                  onChange={this.handleChange}
                   inputProps={inputAttrs(
                     'text',
                     'eventTitle',
@@ -193,6 +207,7 @@ class AddEventComponent extends React.Component {
                 <FormGroup
                   image="glyphicons-139-picture.png"
                   alt="eventImage"
+                  onChange={this.handleChange}
                   inputProps={inputAttrs(
                     'file',
                     'eventImage',
@@ -204,6 +219,7 @@ class AddEventComponent extends React.Component {
                 <FormGroup
                   image="glyphicons-46-calendar.png"
                   alt="eventdate"
+                  onChange={this.handleChange}
                   inputProps={inputAttrs(
                     'date',
                     'eventdate',
@@ -216,6 +232,7 @@ class AddEventComponent extends React.Component {
                 <FormGroup
                   image="glyphicons-54-alarm.png"
                   alt="eventTime"
+                  onChange={this.handleChange}
                   inputProps={inputAttrs(
                     'time',
                     'eventTime',
@@ -235,6 +252,7 @@ class AddEventComponent extends React.Component {
                     ref={input => (this.description = input)}
                     rows="2"
                     className="form-control"
+                    onChange={this.handleChange}
                   />
                 </div>
                 <div className="form-group">
@@ -243,6 +261,7 @@ class AddEventComponent extends React.Component {
                     ref={input => (this.center = input)}
                     className="custom-select-sm"
                     style={{ display: 'none' }}
+                    onChange={this.handleChange}
                   >
                     <Option value="" text="Select Center" disabled selected />
                     {centers.map(center => (

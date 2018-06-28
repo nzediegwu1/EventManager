@@ -81,17 +81,19 @@ class AddCenterComponent extends React.Component {
     }
   };
   closeModal = () => {
-    // this.picture.value = null;
+    this.picture.value = '';
     this.props.setCenterDefaults(initialState);
   };
   componentWillReceiveProps(nextState) {
     const centerDefaults = nextState.centerDefaults;
-    this.name.value = centerDefaults.name;
-    this.address.value = centerDefaults.address;
-    this.location.value = centerDefaults.location;
-    this.capacity.value = centerDefaults.capacity;
-    this.price.value = centerDefaults.price;
-    this.availability.value = centerDefaults.availability;
+    if (centerDefaults.name !== null) {
+      this.name.value = centerDefaults.name || '';
+      this.address.value = centerDefaults.address || '';
+      this.location.value = centerDefaults.location || '';
+      this.capacity.value = centerDefaults.capacity;
+      this.price.value = centerDefaults.price;
+      this.availability.value = centerDefaults.availability;
+    }
     centerId = centerDefaults.id;
   }
   render() {

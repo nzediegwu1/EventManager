@@ -21,6 +21,7 @@ const mapStateToProps = state => ({
   currentPage: state.page.currentPage,
 });
 
+let centerOwner;
 class CenterDetailsComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -42,7 +43,7 @@ class CenterDetailsComponent extends React.Component {
       );
     }
     const loggedInUser = localStorage.token ? JSON.parse(localStorage.token).id : undefined;
-    const centerOwner = center.userId;
+    centerOwner = center.userId || centerOwner;
     const facilities = this.props.facilities.length > 0 ? this.props.facilities : center.facilities;
     return (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
@@ -174,4 +175,3 @@ CenterDetailsComponent.propTypes = {
   history: PropTypes.object,
   currentPage: PropTypes.number,
 };
-
