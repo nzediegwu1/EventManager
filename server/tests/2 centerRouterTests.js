@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 /*
 describe('Tests for EventManager application\n', () => {
   describe('Tests for centerRouter\n', () => {
-    it('Should test for addCenter 406 response', (done) => {
+    it('Should test for addCenter 409 response', (done) => {
       chai.request(app)
         .post('/api/v1/centers')
         .send({
@@ -22,7 +22,7 @@ describe('Tests for EventManager application\n', () => {
           token: adminToken,
         })
         .end((err, res) => {
-          expect(res).to.have.status(406);
+          expect(res).to.have.status(409);
           expect(res.body.message).to.include('Same center already exists');
           done();
         });
@@ -138,7 +138,7 @@ describe('Tests for EventManager application\n', () => {
           done();
         });
     });
-    it('Should test for modifyCenter 406 response', (done) => {
+    it('Should test for modifyCenter 409 response', (done) => {
       chai.request(app)
         .put('/api/v1/centers/1')
         .send({
@@ -152,7 +152,7 @@ describe('Tests for EventManager application\n', () => {
           token: adminToken,
         })
         .end((err, res) => {
-          expect(res).to.have.status(406);
+          expect(res).to.have.status(409);
           expect(res.body).to.have.property('message').to.include('Same center already exists');
           done();
         });

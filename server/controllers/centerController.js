@@ -17,7 +17,7 @@ cloudinary.config(cloudinaryConfig);
 const model = models.Centers;
 
 const include = [
-  { model: models.Events, as: 'events' },
+  { model: models.Events, as: 'events', limit: 2 },
   { model: models.Facilities, as: 'facilities' },
   {
     model: models.Users,
@@ -58,17 +58,9 @@ class Centers {
   // modify a center
   modifyCenter(req, res) {
     if (confirmParams(req, res) === true) {
-      return model
-        .findAll({ where: { id: { $ne: req.params.id } } }) // findAll where id notEqual to param.id
-        .then(centers => {
-          const modifiedEntry = centerEntry(req);
-          function modifyCenter() {
-            const condition = { id: req.params.id, userId: req.decoded.id };
-            return update(req, res, model, modifiedEntry, condition, attributes, include);
-          }
-          return compareCenters(req, res, centers, modifyCenter);
-        })
-        .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+      const modifiedEntry = centerEntry(req);
+      const condition = { id: req.params.id, userId: req.decoded.id };
+      return update(req, res, model, modifiedEntry, condition, attributes, include);
     }
     cloudinary.v2.uploader.destroy(req.body.publicId);
     return invalidParameter;

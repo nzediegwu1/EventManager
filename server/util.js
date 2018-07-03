@@ -53,7 +53,7 @@ export function compareCenters(req, res, centersToCompare, nextAction) {
     });
   }
   if (sameCenter) {
-    return errorResponseWithCloudinary(req, res, 406, sameCenter);
+    return errorResponseWithCloudinary(req, res, 409, sameCenter);
   }
   return nextAction();
 }
@@ -125,7 +125,7 @@ export function checkAvailability(req, res, timestamp, events) {
     }
   });
   if (errorMessage) {
-    return errorResponseWithCloudinary(req, res, 406, errorMessage);
+    return errorResponseWithCloudinary(req, res, 409, errorMessage);
   }
   return true;
 }

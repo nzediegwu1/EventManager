@@ -26,20 +26,22 @@ class Users {
       .then(members => {
         let accountType;
         if (members.length > 1) {
-          return restResponse(res, 'err', 406, 'User already exists');
+          const message = 'Username, email or phone_number entered already in use';
+          return restResponse(res, 'err', 409, message);
         } else if (members.length === 0) accountType = 'super';
         const newUser = userEntry(req);
         newUser.accountType = accountType || 'regular';
         return users
           .create(newUser)
           .then(createdUser => {
-            newUser.id = createdUser.id;
-            newUser.password = null; // hide password
+            /* eslint-disable */
+            const { id, username, name, email, phoneNo, accountType } = createdUser;
+            const createdUserData = { id, username, name, email, phoneNo, accountType };
             const token = jwt.sign({ id: createdUser.id }, key, {
               expiresIn: 60 * 60 * 24,
             });
             return restResponse(res, 'success', 201, {
-              User: newUser,
+              User: createdUserData,
               Token: token,
             });
           })
@@ -95,8 +97,8 @@ class Users {
         .findAll({ where: { id: { $ne: userId }, $or: [{ username }, { email }, { phoneNo }] } })
         .then(members => {
           if (members.length !== 0) {
-            const message = 'Username, email or phone_number entered already in use';
-            return restResponse(res, 'err', 406, message);
+            const message = 'Username, email or phone_number already in use';
+            return restResponse(res, 'err', 409, message);
           }
           const profileData = userEntry(req);
           return updateImmediate(req, res, users, user, profileData, null, attributes);
@@ -116,7 +118,7 @@ class Users {
         }
         return restResponse(res, 'error', 400, 'AccountType must be [admin] or [regular]');
       }
-      return restResponse(res, 'error', 403, 'Cannot perform this action');
+      return restResponse(res, 'error', 403, 'Not authorized to perform action');
     }
     return invalidParameter;
   }
