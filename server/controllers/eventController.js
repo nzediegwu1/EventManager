@@ -41,7 +41,7 @@ class Events {
             if (center.availability === 'open') {
               return create(req, res, model, newEntry, attributes, include);
             }
-            return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
+            return errorResponseWithCloudinary(req, res, 409, 'Selected center is unavailable');
           })
           .catch(() =>
             errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
@@ -62,7 +62,7 @@ class Events {
               const condition = { id: req.params.id, userId: req.decoded.id };
               return update(req, res, model, modified, condition, attributes, include);
             }
-            return errorResponseWithCloudinary(req, res, 406, 'Selected center is unavailable');
+            return errorResponseWithCloudinary(req, res, 409, 'Selected center is unavailable');
           })
           .catch(() =>
             errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
@@ -80,8 +80,8 @@ class Events {
         .destroy({ where: { id: req.params.id, userId: req.decoded.id } })
         .then(response => {
           if (response === 0) {
-            // Event does not exist or User not priviledged to delete
-            return restResponse(res, 'error', 401, 'Invalid transaction');
+            const message = 'Cannot delete unexisting or unauthorized item';
+            return restResponse(res, 'error', 401, message);
           }
           cloudinary.v2.uploader.destroy(req.query.file);
           return restResponse(res, 'success', 200, 'Successfully deleted');
@@ -120,7 +120,7 @@ class Events {
           if (!found) {
             return restResponse(res, 'error', 404, 'Event does not exist');
           } else if (found.center.userId !== req.decoded.id) {
-            return restResponse(res, 'error', 403, 'No proviledge to perform action');
+            return restResponse(res, 'error', 403, 'No priviledge to approve event');
           }
           return modifyEvent(req, res, model, found.centerId, found.date, then, found);
         })

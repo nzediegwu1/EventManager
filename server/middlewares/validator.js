@@ -85,6 +85,7 @@ class Validator {
     if (!this.isSentence(title, 3, 99)) {
       const message = 'Event title should be within 4-99 characters';
       this.verificationError = validationErrorMessage(message, res);
+      // EXAMPLE: July 17, 2018
     } else if (isNaN(Date.parse(date)) || Date.parse(date) < Date.parse(today)) {
       this.verificationError = validationErrorMessage('Event has none or invalid date', res);
     } else if (!time || !this.formatTime(time)) {

@@ -7,6 +7,7 @@ import {
   checkAvailability,
   eventEntry,
   emailConfig,
+  compareCenters,
 } from './util';
 
 cloudinary.config({ cloudinaryConfig });
@@ -20,7 +21,7 @@ export const findById = (req, res, model, query, attributes, include) =>
     })
     .then(response => {
       if (!response) {
-        return restResponse(res, 'error', 404, 'Could not find Resource');
+        return restResponse(res, 'error', 404, 'Could not find item');
       }
       return restResponse(res, 'success', 200, response);
     })
@@ -59,15 +60,24 @@ export function updateImmediate(req, res, model, found, newData, include, attrib
   if (req.body.publicId) {
     oldImage = model.publicId;
   }
-  return found
-    .updateAttributes(newData)
-    .then(updatedItem => {
-      if (req.body.publicId) {
-        cloudinary.v2.uploader.destroy(oldImage);
-      }
-      return findById(req, res, model, updatedItem, attributes, include);
-    })
-    .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+  function modifyStuff() {
+    return found
+      .updateAttributes(newData)
+      .then(updatedItem => {
+        if (req.body.publicId) {
+          cloudinary.v2.uploader.destroy(oldImage);
+        }
+        return findById(req, res, model, updatedItem, attributes, include);
+      })
+      .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+  }
+  if (found.availability) {
+    return model
+      .findAll({ where: { id: { $ne: req.params.id } } })
+      .then(centers => compareCenters(req, res, centers, modifyStuff))
+      .catch(() => modifyStuff());
+  }
+  return modifyStuff();
 }
 
 export function update(req, res, model, newData, condition, attributes, include) {

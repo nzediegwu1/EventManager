@@ -23,7 +23,7 @@ describe('Tests for EventManager application\n', () => {
         })
         .end((err, res) => {
           expect(res.body).to.be.an('object');
-          expect(res).to.have.status(406);
+          expect(res).to.have.status(409);
           done();
         });
     });
