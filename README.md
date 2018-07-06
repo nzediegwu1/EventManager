@@ -6,15 +6,15 @@ Given you manage an events center, this app will help you accept applications to
 
 <hr>
 
-### Table of Contents
+## Table of Contents
 
-1. Features
-2. Technologies
-2. Installation and Setup
-3. Testing the application
-4. Documentation
-5. Limitations
-6. How To Contribute
+    1. Features
+    2. Technologies
+    2. Installation and Setup
+    3. Testing the application
+    4. Documentation
+    5. Limitations
+    6. How To Contribute
 
 ## Features
 
@@ -83,7 +83,6 @@ Given you manage an events center, this app will help you accept applications to
     * Create Postgresql database and run migrations "npm run db:migrations".
     * Create a ".env" file by using the sample env file ".env.sample" in the root directory of the application. Use a different database for your testing and development.
   
-  ### Available Task Runners
   ### Production
   
     * "npm start" → for starting the server on Heroku; transpiles, bundles and runs the full application
