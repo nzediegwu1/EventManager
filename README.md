@@ -51,54 +51,54 @@ Given you manage an events center, this app will help you accept applications to
   
 ## Technologies
   ### Client
-    * Bootstrap 4: For UI styling
-    * React: For rapid front-end web developement
-    * Redux: For state management
-    * SASS: For custom styling
-    * Webpack: For bundling and running mundane tasks in development of the Client app
+    1. Bootstrap 4: For UI styling
+    2. React: For rapid front-end web developement
+    3. Redux: For state management
+    4. SASS: For custom styling
+    5. Webpack: For bundling and running mundane tasks in development of the Client app
 
   ### Server
-    * Nodejs for server-side logic
-    * Express for api routes implementation
-    * Json Web Tokens for session authentication
-    * Postgresql & Sequelize for database management
-    * Heroku for hosting services
+    1. Nodejs for server-side logic
+    2. Express for api routes implementation
+    3. Json Web Tokens for session authentication
+    4. Postgresql & Sequelize for database management
+    5. Heroku for hosting services
 
   ### Continuous Integration
-    * Travis CI & Codeclimate for test automation
-    * Coveralls for test coverage report
-    * Hounds CI for linting report
+    1. Travis CI & Codeclimate for test automation
+    2. Coveralls for test coverage report
+    3. Hounds CI for linting report
 
   ### Test
-    * Mocha & Chai for api route testing
-    * Jest & Enzyme for UI testing
-    * Nightwatch & Selenium for end-to-end testing
+    1. Mocha & Chai for api route testing
+    2. Jest & Enzyme for UI testing
+    3. Nightwatch & Selenium for end-to-end testing
 
 
 
 ## Installation and Setup
-    * Install [Nodejs](https://nodejs.org/en/download/) and [Postgres SQL](https://www.postgresql.org/download/)
-    * Clone this repo "git clone https://github.com/nzediegwu1/EventManager.git"
-    * Run "npm install" to install dependencies
-    * Create Postgresql database and run migrations "npm run db:migrations".
-    * Create a ".env" file by using the sample env file ".env.sample" in the root directory of the application. Use a different database for your testing and development.
+    1. Install [Nodejs](https://nodejs.org/en/download/) and [Postgres SQL](https://www.postgresql.org/download/)
+    2. Clone this repo "git clone https://github.com/nzediegwu1/EventManager.git"
+    3. Run "npm install" to install dependencies
+    4. Create Postgresql database and run migrations "npm run db:migrations".
+    5. Create a ".env" file by using the sample env file ".env.sample" in the root directory of the application. Use a different database for your testing and development.
   
   ### Production
   
-    * "npm start" → for starting the server on Heroku; transpiles, bundles and runs the full application
+    1. "npm start" → for starting the server on Heroku; transpiles, bundles and runs the full application
 
   ### Development
-    * "npm run start:dev" →  transpiles and runs the server on the fly, watches for file change and recompile
-    * "npm run client" → bundles the react project on the fly, watches for file changes, rebundles and reloads HMR server
+    1. "npm run start:dev" →  transpiles and runs the server on the fly, watches for file change and recompile
+    2. "npm run client" → bundles the react project on the fly, watches for file changes, rebundles and reloads HMR server
     
   ### Finally
     * Navigate to http://localhost:8080/
 
 
 ## Testing the Application
-    *  "npm test" →  run API tests
-    *  "npm run test:e2e" → Runs end-to-end unit tests
-    *  "npm run test:react" → Runs frontend tests
+    1. "npm test" →  run API tests
+    2. "npm run test:e2e" → Runs end-to-end unit tests
+    3. "npm run test:react" → Runs frontend tests
 
 ## Documentation
 
