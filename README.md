@@ -124,4 +124,4 @@ The API was documented using swagger. To view, click [here](http://eventmanagero
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Licence
-    This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
+This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
