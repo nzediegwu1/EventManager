@@ -1,5 +1,5 @@
 # EventManager
-[![Build Status](https://travis-ci.org/nzediegwu1/EventManager.svg?branch=develop)](https://travis-ci.org/nzediegwu1/EventManager) [![Coverage Status](https://coveralls.io/repos/github/nzediegwu1/EventManager/badge.svg?branch=develop)](https://coveralls.io/github/nzediegwu1/EventManager?branch=develop)
+[![Build Status](https://travis-ci.org/nzediegwu1/EventManager.svg?branch=develop)](https://travis-ci.org/nzediegwu1/EventManager) <a href='https://coveralls.io/github/nzediegwu1/EventManager?branch=develop'><img src='https://coveralls.io/repos/github/nzediegwu1/EventManager/badge.svg?branch=develop' alt='Coverage Status' /></a>
  [![Maintainability](https://api.codeclimate.com/v1/badges/8413c3ad5cdf27f79e38/maintainability)](https://codeclimate.com/github/nzediegwu1/EventManager/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/8413c3ad5cdf27f79e38/test_coverage)](https://codeclimate.com/github/nzediegwu1/EventManager/test_coverage)
 
 Given you manage an events center, this app will help you accept applications to use your center/facilities, and will either decline events when the proposed day is already taken, or suggest an available day
