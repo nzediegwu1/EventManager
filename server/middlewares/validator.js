@@ -156,42 +156,44 @@ class Validator {
 
   verifySignup = (req, res, next) => {
     const { username, name, email, phoneNo, password, confirmPassword } = req.body;
+    let message;
     if (
       typeof username !== 'string' ||
-      !val.isAlphanumeric(username) ||
-      !val.isByteLength(username, 4, 99)
+      !val.isAscii(username) ||
+      !val.isByteLength(username, 3, 99)
     ) {
-      const message = 'Username should be alphanumeric within 4-99 characters';
+      message = 'Username should be alphanumeric within 4-99 characters';
       this.verificationError = validationErrorMessage(message, res);
     } else if (!this.isSentence(name, 2, 99)) {
-      const message = 'Full name should be string within 3-99 characters';
+      message = 'Full name should be string within 3-99 characters';
       this.verificationError = validationErrorMessage(message, res);
     } else if (typeof email !== 'string' || !val.isEmail(email)) {
-      const message = 'Non or Invalid email format';
+      message = 'Non or Invalid email format';
       this.verificationError = validationErrorMessage(message, res);
     } else if (
       typeof phoneNo !== 'string' ||
       !val.isMobilePhone(phoneNo, 'any', { strictMode: true })
     ) {
-      const message = 'None or invalid phone no., include (+) and country code';
+      message = 'None or invalid phone no., include (+) and country code';
       this.verificationError = validationErrorMessage(message, res);
     } else if (!this.isSentence(password, 5, 99)) {
-      const message = 'Password should be within range: 6-99';
+      message = 'Password should be within range: 6-99';
       this.verificationError = validationErrorMessage(message, res);
     } else if (!confirmPassword) {
-      const message = 'Request has no confirmation password';
+      message = 'Request has no confirmation password';
       this.verificationError = validationErrorMessage(message, res);
     } else if (confirmPassword !== password) {
       this.verificationError = validationErrorMessage('Request passwords do not match', res);
     } else {
       next();
     }
+    // console.log('message>>>>>>>', message);
     return this.verificationError;
   };
 
   verifySignin = (req, res, next) => {
     const { username, password } = req.body;
-    if (typeof username !== 'string' || !val.isAlphanumeric(username)) {
+    if (typeof username !== 'string' || !val.isAscii(username)) {
       const message = 'Username should be non-empty string';
       this.verificationError = validationErrorMessage(message, res);
     } else if (!this.isSentence(password, 5, 99)) {

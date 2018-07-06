@@ -35,24 +35,21 @@ class Centers {
     if (validateImage !== true) {
       return errorResponseWithCloudinary(req, res, 400, validateImage);
     }
-    return models.Users.findById(req.decoded.id)
-      .then(user => {
-        if (!(user.accountType === 'admin' || user.accountType === 'super')) {
-          const errorMessage = 'Only an admin can perform this action';
-          return errorResponseWithCloudinary(req, res, 403, errorMessage);
+    return models.Users.findById(req.decoded.id).then(user => {
+      if (!(user.accountType === 'admin' || user.accountType === 'super')) {
+        const errorMessage = 'Only an admin can perform this action';
+        return errorResponseWithCloudinary(req, res, 403, errorMessage);
+      }
+      return model.findAll().then(centers => {
+        const newEntry = centerEntry(req);
+        function createNew() {
+          return create(req, res, model, newEntry, attributes, include);
         }
-        return model
-          .findAll()
-          .then(centers => {
-            const newEntry = centerEntry(req);
-            function createNew() {
-              return create(req, res, model, newEntry, attributes, include);
-            }
-            return compareCenters(req, res, centers, createNew);
-          })
-          .catch(error => errorResponseWithCloudinary(req, res, 500, error));
-      })
-      .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+        return compareCenters(req, res, centers, createNew);
+      });
+      // .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+    });
+    // .catch(error => errorResponseWithCloudinary(req, res, 500, error));
   }
 
   // modify a center
