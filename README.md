@@ -78,10 +78,10 @@ Super Admin can perform the following actions
 
 ## Installation and Setup
     * Install [Nodejs](https://nodejs.org/en/download/) and [Postgres SQL](https://www.postgresql.org/download/)
-    * Clone this repo ``` git clone https://github.com/nzediegwu1/EventManager.git ```
-    * Run ``npm install`` to install dependencies
-    * Create Postgresql database and run migrations `npm run db:migrations`.
-    * Create a `.env` file by using the sample env file `.env.sample` in the root directory of the application. Use a different database for your testing and development.
+    * Clone this repo "git clone https://github.com/nzediegwu1/EventManager.git"
+    * Run "npm install" to install dependencies
+    * Create Postgresql database and run migrations "npm run db:migrations".
+    * Create a ".env" file by using the sample env file ".env.sample" in the root directory of the application. Use a different database for your testing and development.
   
 ## Available Task Runners
   ### Production
