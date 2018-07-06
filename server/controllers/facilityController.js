@@ -13,22 +13,21 @@ class Facilities {
       quantity: facility.quantity,
       centerId,
     }));
-    return models.Centers.findOne({ where: { userId: req.decoded.id, id: centerId } })
-      .then(found => {
+    return models.Centers.findOne({ where: { userId: req.decoded.id, id: centerId } }).then(
+      found => {
         if (found) {
-          return model
-            .destroy({ where: { centerId } })
-            .then(() =>
-              model
-                .bulkCreate(newFacilities, { validate: true })
-                .then(() => restResponse(res, 'success', 200, newFacilities))
-                .catch(error => restResponse(res, 'error', 500, error))
-            )
-            .catch(error => restResponse(res, 'error', 500, error));
+          return model.destroy({ where: { centerId } }).then(() =>
+            model
+              .bulkCreate(newFacilities, { validate: true })
+              .then(() => restResponse(res, 'success', 200, newFacilities))
+              .catch(error => restResponse(res, 'error', 500, error))
+          );
+          // .catch(error => restResponse(res, 'error', 500, error));
         }
         return restResponse(res, 'error', 403, 'Unauthorized transaction');
-      })
-      .catch(error => restResponse(res, 'error', 500, error));
+      }
+    );
+    // .catch(error => restResponse(res, 'error', 500, error));
   }
 }
 const facilityController = new Facilities();

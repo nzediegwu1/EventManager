@@ -1,6 +1,7 @@
 ﻿import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
 import { userToken, adminToken } from './user.tests';
+import { facilityTests } from './facility.tests';
 import app from '../app';
 import faker from 'faker';
 
@@ -494,4 +495,5 @@ export function eventTests() {
         });
     });
   });
+  facilityTests();
 }

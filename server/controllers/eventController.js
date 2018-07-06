@@ -27,27 +27,23 @@ class Events {
   // add an event
   addEvent(req, res) {
     const { date, time, centerId } = req.body;
-    return model
-      .findAll({ where: { centerId: parseInt(centerId, 10) } })
-      .then(events => {
-        const timestamp = new Date(`${date} ${time}`);
-        const availability = checkAvailability(req, res, timestamp, events);
-        if (availability !== true) {
-          return availability;
-        }
-        const newEntry = eventEntry(req, timestamp);
-        return models.Centers.findById(centerId)
-          .then(center => {
-            if (center.availability === 'open') {
-              return create(req, res, model, newEntry, attributes, include);
-            }
-            return errorResponseWithCloudinary(req, res, 409, 'Selected center is unavailable');
-          })
-          .catch(() =>
-            errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist')
-          );
-      })
-      .catch(error => errorResponseWithCloudinary(req, res, 500, error));
+    return model.findAll({ where: { centerId: parseInt(centerId, 10) } }).then(events => {
+      const timestamp = new Date(`${date} ${time}`);
+      const availability = checkAvailability(req, res, timestamp, events);
+      if (availability !== true) {
+        return availability;
+      }
+      const newEntry = eventEntry(req, timestamp);
+      return models.Centers.findById(centerId)
+        .then(center => {
+          if (center.availability === 'open') {
+            return create(req, res, model, newEntry, attributes, include);
+          }
+          return errorResponseWithCloudinary(req, res, 409, 'Selected center is unavailable');
+        })
+        .catch(() => errorResponseWithCloudinary(req, res, 400, 'Center selected does not exist'));
+    });
+    // .catch(error => errorResponseWithCloudinary(req, res, 500, error));
   }
 
   // modify an event
