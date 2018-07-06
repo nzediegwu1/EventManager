@@ -18,35 +18,36 @@ Given you manage an events center, this app will help you accept applications to
 
 ## Features
 
-#### Users
-Users can perform the following actions with the application
-  - Create documents
-  - Edit documents
-  - Delete documents
-  - View documents
-  - Search for documents (Private, Public and Role)
-  - View All Documents (All Documents)
-
-Admin can perform all users actions and the following actions
-  - Search for Users
-  - Search for documents
-
-Super Admin can perform all admin and users actions and the following actions
-  - Create Roles
-  - View Roles
-
-#### Documents
-A single document has the following properties
-  - Title
-  - Content
-  - Access right : Private (default), Public and Role
-  - User ID
-
 #### Roles
 The application contains 3 roles by default
   - SuperAdmin
   - Admin
-  - User
+  - Regular
+  
+#### Users
+All users can perform the following actions with the application
+  - Create events
+  - Retrieve events
+  - Retrieve an event
+  - Update own events
+  - Delete own events
+  - Retrieve centers
+  - Retrieve a single center
+  - View user profiles
+  - Update profile details
+  - Upload profile picture
+  - Recover lost password
+  
+Admin and SuperAdmin can perform the following actions
+  - Create centers
+  - Modify own Centers
+  - Approve event on own center
+  - Create/Update/Delete facilities on own center
+  
+
+Super Admin can perform the following actions
+  - Upgrade AccountType/Role of other existing users
+  - Retrieve list of all users
   
 ## Technologies
   ### Client
@@ -106,8 +107,11 @@ The API was documented using swagger. To view, click [here](http://eventmanagero
 
 
 ## Limitations
-1. Superadmin cannot customize a new role
-2. The number of people that view a public document is tracked.
+1. User cannot book for an event online
+2. User cannot book a center online
+2. An event cannot span more than one day, user has to create multiple events for multiple days
+3. Cannot upload multiple images for a center/event
+4. User cannot upvote/downvote events or submit rating for centers
 
 ## How to Contribute
 To contribute to the project, follow the instructions below
@@ -120,4 +124,4 @@ To contribute to the project, follow the instructions below
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Licence
-This project is licensed under the [MIT License](https://swaggerhub.com/apis/nzediegwu1/EventsManager/1.0.0)
+This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
