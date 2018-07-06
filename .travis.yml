@@ -4,7 +4,12 @@ node_js:
 env:
  global:
    - export NODE_ENV=test
-   - export SECRET_KEY=The Wisdom of God Rules the World
+   - export SECRET_KEY=The-Wisdom-of-God-Rules-the-World
+   - export API_KEY=789891965151338
+   - export UPLOAD_PRESET=m4vlbdts
+   - export API_SECRET=ynezeVbgUnGIfNYKj19GvyrflSI
+   - export EMAIL_USER=eventmgronline@gmail.com
+   - export EMAIL_PASS=isikote657
 script:
 - npm test
 - npm run coverage

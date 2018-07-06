@@ -44,6 +44,6 @@ app.use('/api/v1/facilities', facilities);
 const port = process.env.PORT || 8080;
 const server = http.createServer(app);
 
-server.listen(port, () => {
+export default server.listen(port, () => {
   console.log(`Server is up at ${port}`);
 });
