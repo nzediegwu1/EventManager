@@ -113,14 +113,14 @@ The API was documented using swagger. To view, click [here](http://eventmanagero
     4. User cannot upvote/downvote events or submit rating for centers
 
 ## How to Contribute
-    To contribute to the project, follow the instructions below
-     1. **Fork** the repo on GitHub
-     2. **Clone** the project to your own machine
-     3. **Commit** changes to your own branch
-     4. **Push** your work back up to your fork
-     5. Submit a **Pull request** so that I can review your changes
+To contribute to the project, follow the instructions below
+ 1. **Fork** the repo on GitHub
+ 2. **Clone** the project to your own machine
+ 3. **Commit** changes to your own branch
+ 4. **Push** your work back up to your fork
+ 5. Submit a **Pull request** so that I can review your changes
 
-NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+**NOTE**: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Licence
 This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
