@@ -18,36 +18,36 @@ Given you manage an events center, this app will help you accept applications to
 
 ## Features
 
-#### Roles
-The application contains 3 roles by default
-  - SuperAdmin
-  - Admin
-  - Regular
+  #### Roles
+    The application contains 3 roles by default
+      - SuperAdmin
+      - Admin
+      - Regular
   
-#### Users
-All users can perform the following actions with the application
-  - Create events
-  - Retrieve events
-  - Retrieve an event
-  - Update own events
-  - Delete own events
-  - Retrieve centers
-  - Retrieve a single center
-  - View user profiles
-  - Update profile details
-  - Upload profile picture
-  - Recover lost password
+  #### Users
+    All users can perform the following actions with the application
+      - Create events
+      - Retrieve events
+      - Retrieve an event
+      - Update own events
+      - Delete own events
+      - Retrieve centers
+      - Retrieve a single center
+      - View user profiles
+      - Update profile details
+      - Upload profile picture
+      - Recover lost password
   
-Admin and SuperAdmin can perform the following actions
-  - Create centers
-  - Modify own Centers
-  - Approve event on own center
-  - Create/Update/Delete facilities on own center
-  
+    Admin and SuperAdmin can perform the following actions
+      - Create centers
+      - Modify own Centers
+      - Approve event on own center
+      - Create/Update/Delete facilities on own center
 
-Super Admin can perform the following actions
-  - Upgrade AccountType/Role of other existing users
-  - Retrieve list of all users
+
+    Super Admin can perform the following actions
+      - Upgrade AccountType/Role of other existing users
+      - Retrieve list of all users
   
 ## Technologies
   ### Client
@@ -83,7 +83,7 @@ Super Admin can perform the following actions
     * Create Postgresql database and run migrations "npm run db:migrations".
     * Create a ".env" file by using the sample env file ".env.sample" in the root directory of the application. Use a different database for your testing and development.
   
-## Available Task Runners
+  ### Available Task Runners
   ### Production
   
     * "npm start" → for starting the server on Heroku; transpiles, bundles and runs the full application
@@ -96,7 +96,7 @@ Super Admin can perform the following actions
     * Navigate to http://localhost:8080/
 
 
-  ### Testing the Application
+## Testing the Application
     *  "npm test" →  run API tests
     *  "npm run test:e2e" → Runs end-to-end unit tests
     *  "npm run test:react" → Runs frontend tests
@@ -107,21 +107,21 @@ The API was documented using swagger. To view, click [here](http://eventmanagero
 
 
 ## Limitations
-1. User cannot book for an event online
-2. User cannot book a center online
-2. An event cannot span more than one day, user has to create multiple events for multiple days
-3. Cannot upload multiple images for a center/event
-4. User cannot upvote/downvote events or submit rating for centers
+    1. User cannot book for an event online
+    2. User cannot book a center online
+    2. An event cannot span more than one day, user has to create multiple events for multiple days
+    3. Cannot upload multiple images for a center/event
+    4. User cannot upvote/downvote events or submit rating for centers
 
 ## How to Contribute
-To contribute to the project, follow the instructions below
- 1. **Fork** the repo on GitHub
- 2. **Clone** the project to your own machine
- 3. **Commit** changes to your own branch
- 4. **Push** your work back up to your fork
- 5. Submit a **Pull request** so that I can review your changes
+    To contribute to the project, follow the instructions below
+     1. **Fork** the repo on GitHub
+     2. **Clone** the project to your own machine
+     3. **Commit** changes to your own branch
+     4. **Push** your work back up to your fork
+     5. Submit a **Pull request** so that I can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Licence
-This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
+    This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
