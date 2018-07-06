@@ -55,7 +55,7 @@ Super Admin can perform the following actions
     * React: For rapid front-end web developement
     * Redux: For state management
     * SASS: For custom styling
-    * Webpack: For bundling, running tasks and load-time optimization
+    * Webpack: For bundling and running mundane tasks in development of the Client app
 
   ### Server
     * Nodejs for server-side logic
@@ -86,20 +86,20 @@ Super Admin can perform the following actions
 ## Available Task Runners
   ### Production
   
-    * npm start → for starting the server on Heroku; transpiles, bundles and runs the full application
+    * "npm start" → for starting the server on Heroku; transpiles, bundles and runs the full application
 
   ### Development
-    * npm run start:dev →  transpiles and runs the server on the fly, watches for file change and recompile
-    * npm run client → bundles the react project on the fly, watches for file changes, rebundles and reloads HMR server
+    * "npm run start:dev" →  transpiles and runs the server on the fly, watches for file change and recompile
+    * "npm run client" → bundles the react project on the fly, watches for file changes, rebundles and reloads HMR server
     
   ### Finally
     * Navigate to http://localhost:8080/
 
 
   ### Testing the Application
-    *  npm test →  run API tests
-    *  npm run test:e2e → Runs end-to-end unit tests
-    *  npm run test:react → Runs frontend tests
+    *  "npm test" →  run API tests
+    *  "npm run test:e2e" → Runs end-to-end unit tests
+    *  "npm run test:react" → Runs frontend tests
 
 ## Documentation
 
