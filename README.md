@@ -77,22 +77,23 @@ Given you manage an events center, this app will help you accept applications to
 
 
 ## Installation and Setup
-    1. Install [Nodejs](https://nodejs.org/en/download/) and [Postgres SQL](https://www.postgresql.org/download/)
+    1. Install Nodejs and Postgres SQL
     2. Clone this repo "git clone https://github.com/nzediegwu1/EventManager.git"
     3. Run "npm install" to install dependencies
-    4. Create Postgresql database and run migrations "npm run db:migrations".
-    5. Create a ".env" file by using the sample env file ".env.sample" in the root directory of the application. Use a different database for your testing and development.
+    4. Create a Postgresql database 
+    5. Create a ".env" file and define env variables using the sample file ".env.sample" in the root directory of this project.
+    6. Run migrations "npm run db:migrations".
   
   ### Production
   
-    1. "npm start" → for starting the server on Heroku; transpiles, bundles and runs the full application
+    1. "npm start" → for starting the server on Heroku: transpiles, bundles and runs the full application
 
   ### Development
     1. "npm run start:dev" →  transpiles and runs the server on the fly, watches for file change and recompile
     2. "npm run client" → bundles the react project on the fly, watches for file changes, rebundles and reloads HMR server
     
   ### Finally
-    * Navigate to http://localhost:8080/
+    Go to http://localhost:8080 on your browser to view app
 
 
 ## Testing the Application
@@ -102,12 +103,12 @@ Given you manage an events center, this app will help you accept applications to
 
 ## Documentation
 
-The API was documented using swagger. To view, click [here](http://eventmanageronline.herokuapp.com/api-docs/)
+The API was documented using swagger. To view, click [here](http://eventmanageronline.herokuapp.com/api/v1/docs)
 
 
 ## Limitations
     1. User cannot book for an event online
-    2. User cannot book a center online
+    2. User cannot pay for center booking online
     2. An event cannot span more than one day, user has to create multiple events for multiple days
     3. Cannot upload multiple images for a center/event
     4. User cannot upvote/downvote events or submit rating for centers
