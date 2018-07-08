@@ -103,7 +103,7 @@ Given you manage an events center, this app will help you accept applications to
 
 ## Documentation
 
-The API was documented using swagger. To view, click [here](http://eventmanageronline.herokuapp.com/api/v1/docs)
+* The API was documented using swagger. To view, click [here](http://eventmanageronline.herokuapp.com/api/v1/docs)
 
 
 ## Limitations
@@ -124,4 +124,5 @@ To contribute to the project, follow the instructions below
 **NOTE**: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Licence
-This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
+* This project is licensed under the [MIT License](https://github.com/nzediegwu1/EventManager/blob/develop/LICENSE)
+* Copyright ©  2018 Anaeze Nsoffor
