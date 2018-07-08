@@ -13,7 +13,7 @@ export let superAdminToken;
 export function userTests() {
   const regularPhone = '+2348089340098';
   const adminPhone = '+2347067256519';
-  describe('Tests for for userRouter\n', () => {
+  describe('Tests for userRouter\n', () => {
     it('Should test for superAdmin signup', done => {
       chai
         .request(app)

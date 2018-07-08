@@ -79,7 +79,7 @@
     "sequelize-cli": "^3.1.0",
     "style-loader": "^0.19.1",
     "swagger-tools": "^0.10.3",
-    "swagger-ui": "^3.8.1",
+    "swagger-ui-express": "^3.0.10",
     "toastr": "^2.1.4",
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",

@@ -187,7 +187,6 @@ class Validator {
     } else {
       next();
     }
-    // console.log('message>>>>>>>', message);
     return this.verificationError;
   };
 

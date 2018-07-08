@@ -5,18 +5,20 @@ import events from './routers/eventRouter';
 import centers from './routers/centerRouter';
 import users from './routers/userRouter';
 import facilities from './routers/facilityRouter';
-// import swaggerTools from 'swagger-tools';
-// import swaggerDoc from './swaggerDoc.json';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDoc from './swaggerDoc.json';
 import cors from 'cors';
 import history from 'connect-history-api-fallback';
 import * as http from 'http';
 require('dotenv').config();
 
 const app = express();
+const env = process.env.NODE_ENV;
+const imageUrl =
+  env === 'development' ? '../client/src/resources/images' : '../../client/src/resources/images';
 /*
-const environment = process.env.NODE_ENV;
 const options = {
-  controllers: environment === 'development' ? './server/controllers' : './server/dist/controllers',
+  controllers: env === 'development' ? './server/controllers' : './server/dist/controllers',
   useStubs: true,
 };
 
@@ -27,9 +29,8 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
   app.use(middleware.swaggerUi());
 });
 */
-const env = process.env.NODE_ENV;
-const imageUrl =
-  env === 'development' ? '../client/src/resources/images' : '../../client/src/resources/images';
+
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to allow chai-http post and put tests to run
