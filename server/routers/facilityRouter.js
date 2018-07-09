@@ -9,3 +9,4 @@ const router = express.Router();
 router.post('/:centerId', Validator.verify, Auth.Verify, Facilities.addFacility);
 
 export default router;
+

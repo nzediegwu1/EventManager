@@ -7,11 +7,7 @@
     dialect: 'postgres',
   },
   test: {
-    username: 'omkcdhmt',
-    password: 'rxAH5VckpPKKQlg0dGyk5fbELSipPo3X',
-    database: 'omkcdhmt',
-    host: 'baasu.db.elephantsql.com',
-    port: '5432',
+    use_env_variable: 'DATABASE_URL_TEST',
     dialect: 'postgres',
   },
   production: {

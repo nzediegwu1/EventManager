@@ -16,19 +16,6 @@ const app = express();
 const env = process.env.NODE_ENV;
 const imageUrl =
   env === 'development' ? '../client/src/resources/images' : '../../client/src/resources/images';
-/*
-const options = {
-  controllers: env === 'development' ? './server/controllers' : './server/dist/controllers',
-  useStubs: true,
-};
-
-swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
-  app.use(middleware.swaggerMetadata());
-  app.use(middleware.swaggerValidator());
-  app.use(middleware.swaggerRouter(options));
-  app.use(middleware.swaggerUi());
-});
-*/
 
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use(cors());
