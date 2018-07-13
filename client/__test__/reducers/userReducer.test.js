@@ -1,5 +1,5 @@
 import reducer from '../../src/reducers/userReducer';
-import * as types from '../../src/constants/ActionTypes';
+import * as types from '../../src/constants/actionTypes';
 import userData from '../mocks/users';
 
 const initialState = {

@@ -1,5 +1,5 @@
 import reducer from '../../src/reducers/pageReducer';
-import * as types from '../../src/constants/ActionTypes';
+import * as types from '../../src/constants/actionTypes';
 import pageData from '../mocks/page';
 const initialState = {
   currentPage: 'dashboard',

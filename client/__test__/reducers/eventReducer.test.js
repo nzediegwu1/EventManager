@@ -1,5 +1,5 @@
 import reducer from '../../src/reducers/eventReducer';
-import * as types from '../../src/constants/ActionTypes';
+import * as types from '../../src/constants/actionTypes';
 import eventData from '../mocks/events';
 
 const initialState = {

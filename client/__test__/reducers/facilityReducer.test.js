@@ -1,5 +1,5 @@
 import reducer from '../../src/reducers/facilityReducer';
-import * as types from '../../src/constants/ActionTypes';
+import * as types from '../../src/constants/actionTypes';
 import facilityData from '../mocks/facilities';
 
 const initialState = {
