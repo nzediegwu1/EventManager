@@ -2,7 +2,7 @@ module.exports = {
   verbose: true,
   rootDir: 'client',
   roots: ['<rootDir>'],
-  setupFiles: ['<rootDir>/test/testConfig.js', '<rootDir>/test/mocks/globals.js'],
+  setupFiles: ['<rootDir>/__test__/testConfig.js', '<rootDir>/__test__/mocks/globals.js'],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/template/',
@@ -16,7 +16,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/src/constants/',
     '<rootDir>/src/resources/',
-    '<rootDir>/test/',
+    '<rootDir>/__test__/',
     '<rootDir>/src/app',
     '<rootDir>/src/store',
     '<rootDir>/dist/',
@@ -50,7 +50,7 @@ module.exports = {
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm)$':
-      '<rootDir>/test/mocks/fileMock.js',
-    '\\.(css)$': '<rootDir>/test/mocks/styleMock.js',
+      '<rootDir>/__test__/mocks/fileMock.js',
+    '\\.(css)$': '<rootDir>/__test__/mocks/styleMock.js',
   },
 };
