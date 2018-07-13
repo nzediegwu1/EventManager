@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests for addEvent component should render self without crashing 1`] = `
+<form
+  className="formDiv"
+  id="signupForm"
+  onSubmit={[Function]}
+  role="form"
+>
+  <h3
+    className="text-center panel-font"
+  >
+    <b>
+      Register
+    </b>
+  </h3>
+  <br />
+  <FormGroup
+    alt="username"
+    image="glyphicons-522-user-lock.png"
+    inputProps={
+      Object {
+        "className": "form-control input-sm",
+        "inputName": "username",
+        "inputType": "text",
+        "placeholder": "Username",
+        "ref": [Function],
+        "required": "required",
+      }
+    }
+  />
+  <FormGroup
+    alt="fullname"
+    image="glyphicons-4-user.png"
+    inputProps={
+      Object {
+        "className": "form-control input-sm",
+        "inputName": "fullname",
+        "inputType": "text",
+        "placeholder": "Full name",
+        "ref": [Function],
+        "required": "required",
+      }
+    }
+  />
+  <FormGroup
+    alt="email"
+    image="glyphicons-11-envelope.png"
+    inputProps={
+      Object {
+        "className": "form-control input-sm",
+        "inputName": "email",
+        "inputType": "email",
+        "placeholder": "Email",
+        "ref": [Function],
+        "required": "required",
+      }
+    }
+  />
+  <FormGroup
+    alt="phone"
+    image="glyphicons-442-phone-alt.png"
+    inputProps={
+      Object {
+        "className": "form-control input-sm",
+        "inputName": "phone",
+        "inputType": "number",
+        "placeholder": "Phone number",
+        "ref": [Function],
+        "required": "required",
+      }
+    }
+  />
+  <FormGroup
+    alt="password"
+    image="glyphicons-204-lock.png"
+    inputProps={
+      Object {
+        "className": "form-control input-sm",
+        "inputName": "password",
+        "inputType": "password",
+        "placeholder": "Password",
+        "ref": [Function],
+        "required": "required",
+      }
+    }
+  />
+  <FormGroup
+    alt="password"
+    image="glyphicons-204-lock.png"
+    inputProps={
+      Object {
+        "className": "form-control input-sm",
+        "inputName": "rePassword",
+        "inputType": "password",
+        "placeholder": "Re-enter Password",
+        "ref": [Function],
+        "required": "required",
+      }
+    }
+  />
+  <button
+    className="btn btn-lg btn-primary btn-block submitButton"
+    disabled="disabled"
+    type="submit"
+  >
+    <i
+      className="fa fa-spinner fa-spin"
+      style={
+        Object {
+          "display": false,
+        }
+      }
+    />
+      Signup
+  </button>
+  <div
+    className="form-links"
+  >
+    <a
+      className="welcome"
+      href="#"
+      onClick={[MockFunction]}
+    >
+      Already have an account? Signin
+    </a>
+  </div>
+</form>
+`;

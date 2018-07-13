@@ -1,6 +1,9 @@
 import axios from 'axios';
 import toastr from 'toastr';
 import { LIMIT } from './constants/actionTypes';
+import $ from 'jquery';
+import 'bootstrap';
+// global.$ = global.jQuery = $;
 
 export const toastSettings = {
   closeButton: true,
@@ -153,7 +156,7 @@ export const getAll = (props, type, pageNumber, limit) => {
     type !== 'eventCenters'
       ? `${apiLink}/api/v1/${type}/?token=${token}&pageNumber=${pageNumber}&limit=${limit || LIMIT}`
       : `${apiLink}/api/v1/centers/?pageNumber=${pageNumber}&limit=${limit || LIMIT}`;
-  axios
+  return axios
     .get(url)
     .then(res => {
       const response = res.data.data;
@@ -236,7 +239,7 @@ export const getOne = (props, itemId, type) => {
   }
   const pageTitle = type === 'centers' ? 'centerDetails' : 'manageEvent';
   const { setPage, history } = props;
-  axios
+  return axios
     .get(`${apiLink}/api/v1/${type !== 'eventCenter' ? type : 'centers'}/${itemId}`)
     .then(res => {
       if (type === 'eventCenter') {
@@ -261,9 +264,6 @@ export const getOne = (props, itemId, type) => {
       }
       if (status === 404 || status === 400) history.push(`/dashboard/${type}`);
     });
-  if (type === 'users') {
-    return details;
-  }
 };
 /**
  * @description - Handles all http post and put requests
@@ -272,13 +272,6 @@ export const getOne = (props, itemId, type) => {
  * @class Transactions
  */
 export class Transactions {
-  /**
-   * @description Creates an instance of Transactions.
-   *
-   * @param {object} props - Component props
-   * @param {string} target - The resource to put or post // event, center, profile, etc
-   * @memberof Transactions
-   */
   constructor(props, target) {
     this.props = props;
     this.target = target;
@@ -324,13 +317,13 @@ export class Transactions {
       );
     } else if (!modalTitle) {
       http = axios.put(`${apiLink}/api/v1/events/approve/${itemiId}?token=${token}`, data);
-    } else if (modalTitle === `New ${modalType}`) {
+    } else if (modalTitle === `New ${modalType}` || modalTitle.payload === `New ${modalType}`) {
       http = axios.post(`${apiLink}/api/v1/${this.target}s`, data);
     } else {
       http = axios.put(`${apiLink}/api/v1/${this.target}s/${itemiId}`, data);
     }
     let details;
-    http
+    return http
       .then(response => {
         details = response.data.data;
         if (this.target === 'facilities') {
@@ -369,9 +362,6 @@ export class Transactions {
           logout('#addNewCenter, #addNewEvent, #manageFacilities', history);
         }
       });
-    if (this.target === 'profilePic' || this.target === 'upgrade' || this.target === 'profile') {
-      return details;
-    }
   }
   /**
    * @description - Handles image upload
@@ -382,7 +372,7 @@ export class Transactions {
    * @memberof Transactions
    */
   uploadImage(imageData, saveResource, cb) {
-    axios
+    return axios
       .post('https://api.cloudinary.com/v1_1/eventmanager/image/upload', imageData)
       .then(res => saveResource(res))
       .catch(err => {

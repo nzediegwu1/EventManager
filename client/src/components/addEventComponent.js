@@ -46,7 +46,7 @@ const mapStateToProps = state => ({
 
 let eventId;
 const folder = apiLink === 'http://localhost:8080' ? 'dev/events' : 'prod/events';
-class AddEventComponent extends React.Component {
+export class AddEventComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

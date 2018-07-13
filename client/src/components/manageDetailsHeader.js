@@ -13,7 +13,7 @@ import { getEventCenters } from '../actions/centerActions';
 import { apiLink, deleteResource, getOne } from '../services';
 import PropTypes from 'prop-types';
 
-class ManageDetails extends React.Component {
+export class ManageDetailsHeader extends React.Component {
   componentWillReceiveProps(nextState) {
     this.param = nextState.param;
     this.currentPage = nextState.currentPage;
@@ -114,7 +114,7 @@ const mapDispatchToProps = dispatch => ({
   setDataCount: count => dispatch(setDataCount(count)),
 });
 
-export const ManageDetailsHeader = connect(mapStateToProps, mapDispatchToProps)(ManageDetails);
+export const ManageDetails = connect(mapStateToProps, mapDispatchToProps)(ManageDetailsHeader);
 ManageDetails.propTypes = {
   param: PropTypes.string,
   currentPage: PropTypes.string,

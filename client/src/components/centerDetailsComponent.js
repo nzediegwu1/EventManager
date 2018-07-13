@@ -10,19 +10,9 @@ import Icon from './icon';
 import { ManageFacilities } from './manageFacilityComponent';
 import PropTypes from 'prop-types';
 
-const mapDispatchToProps = dispatch => ({
-  setCenterDetails: center => dispatch(setCenterDetails(center)),
-  setPage: page => dispatch(setPage(page)),
-});
-
-const mapStateToProps = state => ({
-  centerDetails: state.centers.centerDetails,
-  facilities: state.facilities.facilities,
-  currentPage: state.page.currentPage,
-});
 
 let centerOwner;
-class CenterDetailsComponent extends React.Component {
+export class CenterDetailsComponent extends React.Component {
   constructor(props) {
     super(props);
     this.id = this.props.match.params.id;
@@ -166,7 +156,17 @@ class CenterDetailsComponent extends React.Component {
     );
   }
 }
-export const CenterDetails = connect(mapStateToProps, mapDispatchToProps)(CenterDetailsComponent);
+export const mapStateToProps = state => ({
+  centerDetails: state.centers.centerDetails,
+  facilities: state.facilities.facilities,
+  currentPage: state.page.currentPage,
+});
+
+export const mapDispatchToProps = dispatch => ({
+  setCenterDetails: center => dispatch(setCenterDetails(center)),
+  setPage: page => dispatch(setPage(page)),
+});
+
 CenterDetailsComponent.propTypes = {
   match: PropTypes.object,
   setPage: PropTypes.func,
@@ -175,3 +175,4 @@ CenterDetailsComponent.propTypes = {
   history: PropTypes.object,
   currentPage: PropTypes.number,
 };
+export const CenterDetails = connect(mapStateToProps, mapDispatchToProps)(CenterDetailsComponent);
