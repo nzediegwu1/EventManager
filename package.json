@@ -13,7 +13,7 @@
     "start": "node ./server/dist/app.js",
     "build": "babel server -d server/dist --copy-files --ignore server/dist && webpack -p --config ./webpack.prod.config.js --progress",
     "postinstall": "npm run build",
-    "test:react": "jest -u && codecov"
+    "test:react": "jest /client/* -u && codecov"
   },
   "repository": {
     "type": "git",
