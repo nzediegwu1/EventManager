@@ -1,3 +1,4 @@
+/* global expect afterEach beforeEach describe it */
 import * as actionTypes from '../../src/constants/actionTypes';
 import { populateEvents, setEventDetail } from '../../src/actions/eventActions';
 import eventData from '../mocks/events';

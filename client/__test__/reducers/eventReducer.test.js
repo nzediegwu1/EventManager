@@ -1,3 +1,4 @@
+/* global expect afterEach beforeEach describe it */
 import reducer from '../../src/reducers/eventReducer';
 import * as types from '../../src/constants/actionTypes';
 import eventData from '../mocks/events';

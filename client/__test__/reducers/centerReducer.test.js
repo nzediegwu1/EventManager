@@ -1,3 +1,4 @@
+/* global expect afterEach beforeEach describe it */
 import reducer from '../../src/reducers/centerReducer';
 import * as types from '../../src/constants/actionTypes';
 import centerData from '../mocks/centers';

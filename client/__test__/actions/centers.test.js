@@ -1,3 +1,4 @@
+/* global expect afterEach beforeEach describe it */
 import * as actionTypes from '../../src/constants/actionTypes';
 import * as actions from '../../src/actions/centerActions';
 import centerData from '../mocks/centers';

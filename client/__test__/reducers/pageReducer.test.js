@@ -1,3 +1,4 @@
+/* global expect afterEach beforeEach describe it */
 import reducer from '../../src/reducers/pageReducer';
 import * as types from '../../src/constants/actionTypes';
 import pageData from '../mocks/page';

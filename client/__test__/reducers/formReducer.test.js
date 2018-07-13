@@ -1,3 +1,4 @@
+/* global expect afterEach beforeEach describe it */
 import reducer from '../../src/reducers/formReducer';
 import * as types from '../../src/constants/actionTypes';
 
