@@ -12,21 +12,7 @@ checks:
     enabled: false
   method-lines:
     enabled: false
-  nested-control-flow:
-    enabled: false
-  return-statements:
-    enabled: false
-  similar-code:
-    enabled: false
-  identical-code:
-    enabled: false
-plugins:
-  duplication:
-    enabled: false
-    config:
-      languages:
-      - javascript
 exclude_paths:
 - "server/migrations"
 - "server/tests"
-- "client/test"
+- "client/__test__"
