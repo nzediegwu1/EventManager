@@ -4,7 +4,7 @@
   "description": "Event manager application",
   "scripts": {
     "start:dev": "nodemon --watch server/ --exec babel-node server/app.js",
-    "test": "NODE_ENV=test npm run migrations && NODE_ENV=test npm run start:test",
+    "test": "NODE_ENV=test npm run migrations && NODE_ENV=test npm run start:test && npm run test:react",
     "migrations": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "start:test": "nyc --reporter=html --reporter=text mocha --timeout 250000 ./server/tests/index.js --compilers js:babel-register",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -13,7 +13,7 @@
     "start": "node ./server/dist/app.js",
     "build": "babel server -d server/dist --copy-files --ignore server/dist && webpack -p --config ./webpack.prod.config.js --progress",
     "postinstall": "npm run build",
-    "test:react": "jest -u --watch"
+    "test:react": "jest -u && codecov"
   },
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "bootstrap": "^4.0.0",
     "brotli-webpack-plugin": "^1.0.0",
     "cloudinary": "^1.10.0",
+    "codecov": "^3.0.4",
     "compression-webpack-plugin": "^1.1.11",
     "connect-history-api-fallback": "^1.5.0",
     "cors": "^2.8.4",
