@@ -1,5 +1,5 @@
 import React from 'react';
-import { ManageDetailsHeader } from './manageDetailsHeader';
+import { ManageDetails } from './manageDetailsHeader';
 import { TableHead, TableRow } from './table';
 import { setCenterDetails } from '../actions/centerActions';
 import { setPage } from '../actions/pageActions';
@@ -41,7 +41,7 @@ export class CenterDetailsComponent extends React.Component {
           <ManageFacilities history={this.props.history} data={facilities} centerId={this.id} />
         )}
         <div className="card-header mg-event-header card-header-body">
-          <ManageDetailsHeader
+          <ManageDetails
             history={this.props.history}
             param={this.id}
             title={center.name}

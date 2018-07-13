@@ -18,11 +18,12 @@ export function centerTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('No resource available');
+            .to.equal('No resource available');
           done();
         });
     });
     it('Should test for addCenter success response', done => {
+      const capacity = `${faker.random.number()}`;
       chai
         .request(app)
         .post('/api/v1/centers')
@@ -30,7 +31,7 @@ export function centerTests() {
           name: 'Millenium stadium',
           address: '22 Kings Village',
           location: 'Lekki Island, Lagos',
-          capacity: `${faker.random.number()}`,
+          capacity,
           price: `${faker.random.number()}`,
           picture: 'https://api.cloudinary.com/Youth_developm_auditorium.jpg',
           publicId: 'dev/centers/youth_dev_auditorium',
@@ -40,9 +41,12 @@ export function centerTests() {
         .end((err, res) => {
           expect(res).to.have.status(201);
           expect(res.body.data)
+            .to.have.property('capacity')
+            .to.equal(parseInt(capacity, 10));
+          expect(res.body.data)
             .to.have.property('user')
             .that.has.property('accountType')
-            .to.include('admin');
+            .to.equal('admin');
           done();
         });
     });
@@ -66,7 +70,7 @@ export function centerTests() {
           expect(res).to.have.status(201);
           expect(res.body.data)
             .to.have.property('name')
-            .to.include('Yaba Metropolitan Center');
+            .to.equal('Yaba Metropolitan Center');
           done();
         });
     });
@@ -90,7 +94,7 @@ export function centerTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Only an admin can perform this action');
+            .to.equal('Only an admin can perform this action');
           done();
         });
     });
@@ -113,7 +117,7 @@ export function centerTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Invalid picture');
+            .to.equal('Invalid picture');
           done();
         });
     });
@@ -136,7 +140,7 @@ export function centerTests() {
           expect(res).to.have.status(409);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Same center already exists');
+            .to.equal('Same center already exists');
           done();
         });
     });
@@ -161,10 +165,10 @@ export function centerTests() {
           expect(res.body.data)
             .to.have.property('user')
             .that.has.property('username')
-            .to.include('anaeze');
+            .to.equal('anaeze');
           expect(res.body.data)
             .to.have.property('name')
-            .to.include(centerName);
+            .to.equal(centerName);
           done();
         });
     });
@@ -188,7 +192,7 @@ export function centerTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Unexisting or unauthorized item');
+            .to.equal('Unexisting or unauthorized item');
           done();
         });
     });
@@ -211,7 +215,7 @@ export function centerTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Unexisting or unauthorized item');
+            .to.equal('Unexisting or unauthorized item');
           done();
         });
     });
@@ -234,7 +238,7 @@ export function centerTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });
@@ -257,7 +261,7 @@ export function centerTests() {
           expect(res).to.have.status(409);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Same center already exists');
+            .to.equal('Same center already exists');
           done();
         });
     });
@@ -274,7 +278,8 @@ export function centerTests() {
           expect(res.body)
             .to.have.property('data')
             .that.has.property('count')
-            .which.is.a('number');
+            .which.is.a('number')
+            .that.equals(2);
           done();
         });
     });
@@ -299,7 +304,7 @@ export function centerTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Could not find item');
+            .to.equal('Could not find item');
           done();
         });
     });
@@ -311,7 +316,7 @@ export function centerTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });

@@ -115,7 +115,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export const ManageDetails = connect(mapStateToProps, mapDispatchToProps)(ManageDetailsHeader);
-ManageDetails.propTypes = {
+ManageDetailsHeader.propTypes = {
   param: PropTypes.string,
   currentPage: PropTypes.string,
   history: PropTypes.object,

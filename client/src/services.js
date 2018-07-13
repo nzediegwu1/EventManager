@@ -347,9 +347,12 @@ export class Transactions {
         } else if (message) {
           let occupiedDates = '';
           message.OccupiedDates.forEach(date => {
-            occupiedDates += `${new Date(date).toDateString()}\n`;
+            occupiedDates += `<li class="list-group-item">${new Date(date).toDateString()}</li>`;
           });
-          toastr.info(`OCCUPIED DATES:\n${occupiedDates}`, `${message.Sorry}`);
+          toastr.options.timeOut = 0;
+          const errMessage = `<ul class="list-group">
+            <li class="list-group-item">Booked dates on center</li>${occupiedDates}</ul>`;
+          toastr.error(errMessage, '&nbsp; Center has been booked');
           occupiedDates = '';
         } else {
           toastr.error(err);

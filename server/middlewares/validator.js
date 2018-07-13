@@ -22,6 +22,12 @@ class Validator {
     return result;
   };
 
+  isValidUsername = input => {
+    const regex = /^[-\w\.\$\@]{1,30}$/;
+    if (input.match(regex)) return true;
+    return undefined;
+  };
+
   verify = (req, res, next) => {
     switch (this.model) {
       case 'events':
@@ -157,12 +163,8 @@ class Validator {
   verifySignup = (req, res, next) => {
     const { username, name, email, phoneNo, password, confirmPassword } = req.body;
     let message;
-    if (
-      typeof username !== 'string' ||
-      !val.isAscii(username) ||
-      !val.isByteLength(username, 3, 99)
-    ) {
-      message = 'Username should be alphanumeric within 4-99 characters';
+    if (typeof username !== 'string' || !this.isValidUsername(username)) {
+      message = 'Username should be alphanumeric and less than 30 characters (no special chars)';
       this.verificationError = validationErrorMessage(message, res);
     } else if (!this.isSentence(name, 2, 99)) {
       message = 'Full name should be string within 3-99 characters';
@@ -192,8 +194,9 @@ class Validator {
 
   verifySignin = (req, res, next) => {
     const { username, password } = req.body;
-    if (typeof username !== 'string' || !val.isAscii(username)) {
-      const message = 'Username should be non-empty string';
+    if (typeof username !== 'string' || !this.isValidUsername(username)) {
+      const message =
+        'Username should be alphanumeric and less than 30 characters (no special chars)';
       this.verificationError = validationErrorMessage(message, res);
     } else if (!this.isSentence(password, 5, 99)) {
       const message = 'Password should be string not less than 6';

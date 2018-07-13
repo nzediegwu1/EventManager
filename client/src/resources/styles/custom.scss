@@ -522,3 +522,9 @@ select {
 .table-responsive {
   overflow: auto;
 }
+.list-group-item:first-child {
+  background-color: #1b1e21;
+}
+.list-group-item {
+  height: 3em;
+}
