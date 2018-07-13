@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   eventDetails: state.events.event,
 });
-class ManageEventComponent extends React.Component {
+export class ManageEventComponent extends React.Component {
   constructor(props) {
     super(props);
     this.id = this.props.match.params.id;

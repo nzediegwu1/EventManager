@@ -65,8 +65,9 @@ class ProfileComponent extends React.Component {
           publicId: res.data.public_id,
           token,
         };
-        profileData = transactions.addOrUpdate(null, profileUpdate, () => {
+        transactions.addOrUpdate(null, profileUpdate, () => {
           props.setSubmitState('initial');
+          profileData = props.profileDetails[0];
         });
       };
       transactions.uploadImage(imageData, saveImage, () => {
@@ -77,11 +78,13 @@ class ProfileComponent extends React.Component {
   upgradeAccount = () => {
     const account = this.account.value;
     const transactions = new Transactions(this.props, 'upgrade');
-    profileData = transactions.addOrUpdate(profileData.id, account);
+    transactions.addOrUpdate(profileData.id, account);
+    profileData = this.props.profileDetails[0];
   };
   componentDidMount() {
     const userId = this.props.match.params.id;
-    profileData = getOne(this.props, userId, 'users');
+    getOne(this.props, userId, 'users');
+    profileData = this.props.profileDetails[0];
   }
   reset = () => {
     this.props.setProfileDetails(profileData);
@@ -105,8 +108,9 @@ class ProfileComponent extends React.Component {
     if (validationStatus === true) {
       props.setSubmitState('processing');
       const transactions = new Transactions(props, 'profile');
-      profileData = transactions.addOrUpdate(null, profileInputs, () => {
+      transactions.addOrUpdate(null, profileInputs, () => {
         props.setSubmitState('initial');
+        profileData = props.profileDetails[0];
       });
     } else {
       toastr.error(validationStatus);

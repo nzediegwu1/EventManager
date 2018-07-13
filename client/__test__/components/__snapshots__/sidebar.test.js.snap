@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests for addEvent component should render self without crashing 1`] = `
+<div
+  aria-hidden="true"
+  aria-labelledby="myModalSidebarLabel"
+  className="modal left fade"
+  id="myModalSidebar"
+  role="dialog"
+  tabIndex="-1"
+>
+  <div
+    className="modal-dialog"
+  >
+    <div
+      className="modal-content sidebar"
+    >
+      <div
+        className="modal-header  sidebar-header"
+      >
+        <h5
+          className="modal-title"
+        >
+          <b
+            id="dashboard"
+          >
+            Dashboard
+          </b>
+        </h5>
+        <div
+          data-dismiss="modal"
+        >
+          <Icon
+            alt="close"
+            class="invert-color close"
+            src="glyphicons-198-remove-circle.png"
+          />
+        </div>
+      </div>
+      <div
+        className="modal-body"
+      >
+        <ul
+          className="nav flex-column nav-tabs"
+        >
+          <ListItem
+            alt="myEvents"
+            class="nav-item first"
+            event={[Function]}
+            icon="glyphicons-619-mixed-buildings.png"
+            title="Events"
+          />
+          <ListItem
+            alt="myCenters"
+            class="nav-item"
+            event={[Function]}
+            icon="glyphicons-503-map.png"
+            title="Centers"
+          />
+          <ListItem
+            alt="myProfile"
+            class="nav-item"
+            event={[Function]}
+            icon="glyphicons-4-user.png"
+            title="MyProfile"
+          />
+          <ListItem
+            alt="userList"
+            class="nav-item allUsers"
+            event={[Function]}
+            icon="glyphicons-44-group.png"
+            title="All Users"
+          />
+          <ListItem
+            alt="logout"
+            class="nav-item logout"
+            event={[Function]}
+            icon="glyphicons-64-power.png"
+            title="Logout"
+          />
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+`;

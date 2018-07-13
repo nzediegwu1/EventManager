@@ -8,10 +8,6 @@ import PropTypes from 'prop-types';
 
 toastr.options = toastSettings;
 
-const mapDispatchToProps = dispatch => ({
-  setAccountType: accountType => dispatch(setAccountType(accountType)),
-});
-
 const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
   inputType,
   inputName,
@@ -21,7 +17,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
   required,
 });
 // all props are from signin component
-class SignupComponent extends React.Component {
+export class SignupComponent extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const signupData = {
@@ -144,7 +140,9 @@ class SignupComponent extends React.Component {
     );
   }
 }
-export const SignupForm = connect(null, mapDispatchToProps)(SignupComponent);
+export const mapDispatchToProps = dispatch => ({
+  setAccountType: accountType => dispatch(setAccountType(accountType)),
+});
 const validations = {
   changeSubmitState: PropTypes.func,
   disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
@@ -152,3 +150,5 @@ const validations = {
   changeState: PropTypes.func,
 };
 SignupComponent.propTypes = validations;
+
+export const SignupForm = connect(null, mapDispatchToProps)(SignupComponent);
