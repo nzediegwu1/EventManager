@@ -21,7 +21,7 @@ const mapStateToProps = state => ({
   activePage: state.page.activePage,
 });
 
-class CenterList extends React.Component {
+export class CenterList extends React.Component {
   searchEvents = e => {
     searchFunction(e, 'centerTable');
   };

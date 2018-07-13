@@ -9,7 +9,7 @@
 /node_modules
 /server/typings
 /.nyc_output
-/coverage
+coverage
 /npm-debug.log
 /.env
 /typings

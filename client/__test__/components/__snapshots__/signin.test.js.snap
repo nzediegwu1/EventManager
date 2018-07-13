@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests for addEvent component should render self without crashing 1`] = `
+<Redirect
+  push={false}
+  to="/dashboard"
+/>
+`;

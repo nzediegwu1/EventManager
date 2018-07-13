@@ -21,17 +21,7 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required)
   required,
 });
 
-const mapDispatchToProps = dispatch => ({
-  setAccountType: accountType => dispatch(setAccountType(accountType)),
-  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
-});
-
-const mapStateToProps = state => ({
-  disabled: state.process.disabled,
-  visibility: state.process.visibility,
-});
-
-class SignInPage extends React.Component {
+export class SignInPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,11 +140,19 @@ class SignInPage extends React.Component {
     return token ? <Redirect to="/dashboard" /> : content;
   }
 }
+export const mapDispatchToProps = dispatch => ({
+  setAccountType: accountType => dispatch(setAccountType(accountType)),
+  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
+});
 
-export const SignIn = connect(mapStateToProps, mapDispatchToProps)(SignInPage);
+export const mapStateToProps = state => ({
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
+});
 SignInPage.propTypes = {
   history: PropTypes.object,
   setSubmitState: PropTypes.func,
   disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   visibility: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
+export const SignIn = connect(mapStateToProps, mapDispatchToProps)(SignInPage);

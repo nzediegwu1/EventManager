@@ -2,3 +2,4 @@ version: "2"
 exclude_paths:
 - "server/migrations"
 - "server/tests"
+- "client/test"

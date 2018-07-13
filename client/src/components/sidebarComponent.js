@@ -5,23 +5,13 @@ import { logout, getOne } from '../services';
 import { connect } from 'react-redux';
 import { setProfileDetails } from '../actions/userActions';
 import PropTypes from 'prop-types';
+import { ListItem } from './listComponent';
+import $ from 'jquery';
+import 'bootstrap';
 
-const mapDispatchToProps = dispatch => ({
-  setProfileDetails: data => dispatch(setProfileDetails(data)),
-});
 
 const history = createHistory();
-export const ListItem = props => (
-  <li onClick={props.event} className={props.class}>
-    <h6>
-      <a className="nav-link" href="#">
-        {props.title}
-        <Icon src={props.icon} alt={props.alt} class="invert-color icon-margin-left" />
-      </a>
-    </h6>
-  </li>
-);
-class SidebarComponent extends React.Component {
+export class SidebarComponent extends React.Component {
   constructor(props) {
     super(props);
     this.userId = JSON.parse(localStorage.token).id;
@@ -37,8 +27,8 @@ class SidebarComponent extends React.Component {
       const profileData = getOne(this.props, this.userId, 'users');
       this.props.setProfileDetails(profileData);
     }
-    history.push(url);
     $('#myModalSidebar').modal('hide');
+    history.push(url);
   };
 
   render() {
@@ -55,7 +45,7 @@ class SidebarComponent extends React.Component {
           <div className="modal-content sidebar">
             <div className="modal-header  sidebar-header">
               <h5 className="modal-title">
-                <b>Dashboard</b>
+                <b id="dashboard">Dashboard</b>
               </h5>
               <div data-dismiss="modal">
                 <Icon
@@ -69,7 +59,7 @@ class SidebarComponent extends React.Component {
               <ul className="nav flex-column nav-tabs">
                 <ListItem
                   event={this.changeLocation.bind(this, `${this.props.match.path}`)}
-                  class="nav-item"
+                  class="nav-item first"
                   title="Events"
                   icon="glyphicons-619-mixed-buildings.png"
                   alt="myEvents"
@@ -94,7 +84,7 @@ class SidebarComponent extends React.Component {
                 {this.userId === 1 && (
                   <ListItem
                     event={this.changeLocation.bind(this, `${this.props.match.path}/userList`)}
-                    class="nav-item"
+                    class="nav-item allUsers"
                     title="All Users"
                     icon="glyphicons-44-group.png"
                     alt="userList"
@@ -115,14 +105,11 @@ class SidebarComponent extends React.Component {
     );
   }
 }
+export const mapDispatchToProps = dispatch => ({
+  setProfileDetails: data => dispatch(setProfileDetails(data)),
+});
+
 export const Sidebar = connect(null, mapDispatchToProps)(SidebarComponent);
-ListItem.propTypes = {
-  event: PropTypes.func,
-  class: PropTypes.string,
-  title: PropTypes.string,
-  icon: PropTypes.string,
-  alt: PropTypes.string,
-};
 SidebarComponent.propTypes = {
   match: PropTypes.object,
   setProfileDetails: PropTypes.func,

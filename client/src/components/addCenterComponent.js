@@ -37,7 +37,7 @@ const mapStateToProps = state => ({
 
 let centerId;
 const folder = apiLink === 'http://localhost:8080' ? 'dev/centers' : 'prod/centers';
-class AddCenterComponent extends React.Component {
+export class AddCenterComponent extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const props = this.props;
