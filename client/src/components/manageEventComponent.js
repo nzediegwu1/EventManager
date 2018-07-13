@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from './icon';
-import { ManageDetailsHeader } from './manageDetailsHeader';
+import { ManageDetails } from './manageDetailsHeader';
 import { connect } from 'react-redux';
 import { setEventDetail } from '../actions/eventActions';
 import { setPage } from '../actions/pageActions';
@@ -56,7 +56,7 @@ export class ManageEventComponent extends React.Component {
     return (
       <div className="card mx-sm-auto col-sm-11 zero-padding">
         <div className="card-header mg-event-header card-header-body">
-          <ManageDetailsHeader
+          <ManageDetails
             history={this.props.history}
             param={this.id}
             title={event.title}

@@ -27,7 +27,7 @@ class Events {
   // add an event
   addEvent(req, res) {
     const { date, time, centerId } = req.body;
-    return model.findAll({ where: { centerId: parseInt(centerId, 10) } }).then(events => {
+    return model.findAll({ where: { centerId, date: { $gte: new Date() } } }).then(events => {
       const timestamp = new Date(`${date} ${time}`);
       const availability = checkAvailability(req, res, timestamp, events);
       if (availability !== true) {

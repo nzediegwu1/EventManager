@@ -15,11 +15,12 @@ export function userTests() {
   const adminPhone = '+2347067256519';
   describe('Tests for userRouter\n', () => {
     it('Should test for superAdmin signup', done => {
+      const username = 'nzediegwu1';
       chai
         .request(app)
         .post('/api/v1/users')
         .send({
-          username: 'nzediegwu1',
+          username,
           name: 'Anaeze Nsoffor',
           email: 'nzediegwu1@gmail.com',
           phoneNo: adminPhone,
@@ -31,22 +32,27 @@ export function userTests() {
           expect(res.body)
             .to.have.property('data')
             .that.has.property('Token');
+          expect(res.body.data)
+            .to.have.property('User')
+            .that.has.property('username')
+            .to.equal(username);
           expect(res.body.data.User)
             .to.have.property('accountType')
-            .to.include('super');
+            .to.equal('super');
           superAdminToken = res.body.data.Token;
           expect(res).to.have.status(201);
           done();
         });
     });
     it('Should test for regular user signup (future admin)', done => {
+      const email = faker.internet.email();
       chai
         .request(app)
         .post('/api/v1/users')
         .send({
           username: 'anaeze',
           name: faker.name.firstName(),
-          email: faker.internet.email(),
+          email,
           phoneNo: regularPhone,
           password: 'password1',
           confirmPassword: 'password1',
@@ -54,16 +60,16 @@ export function userTests() {
         .end((err, res) => {
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
-          expect(res.body)
-            .to.have.property('data')
+          expect(res.body.data.User)
+            .to.have.property('email')
+            .to.equal(email);
+          expect(res.body.data)
             .that.has.property('User')
             .that.does.not.have.property('password');
           expect(res.body.data.User)
             .to.have.property('accountType')
-            .to.include('regular');
-          expect(res.body)
-            .to.have.property('data')
-            .that.has.property('Token');
+            .to.equal('regular');
+          expect(res.body.data).that.has.property('Token');
           done();
         });
     });
@@ -82,16 +88,14 @@ export function userTests() {
         .end((err, res) => {
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
-          expect(res.body)
-            .to.have.property('data')
-            .that.has.property('User')
+          expect(res.body.data)
+            .to.have.property('User')
             .that.does.not.have.property('password');
           expect(res.body.data.User)
             .to.have.property('accountType')
-            .to.include('regular');
-          expect(res.body)
-            .to.have.property('data')
-            .that.has.property('Token');
+            .to.equal('regular');
+          expect(res.body.data)
+            .to.have.property('Token');
           userToken = res.body.data.Token;
           done();
         });
@@ -113,10 +117,10 @@ export function userTests() {
           expect(res.body).to.be.an('object');
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Username, email or phone_number already in use');
+            .to.equal('Username, email or phone_number already in use');
           done();
         });
     });
@@ -137,10 +141,10 @@ export function userTests() {
           expect(res.body).to.be.an('object');
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Username, email or phone_number already in use');
+            .to.equal('Username, email or phone_number already in use');
           done();
         });
     });
@@ -161,10 +165,10 @@ export function userTests() {
           expect(res.body).to.be.an('object');
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Username, email or phone_number already in use');
+            .to.equal('Username, email or phone_number already in use');
           done();
         });
     });
@@ -182,6 +186,10 @@ export function userTests() {
           expect(res.body)
             .to.have.property('data')
             .that.has.property('User')
+            .that.does.not.have.property('password');
+          expect(res.body.data.User)
+            .to.have.property('email')
+            .to.equal('nzediegwu1@gmail.com')
             .that.does.not.have.property('password');
           expect(res.body)
             .to.have.property('data')
@@ -201,10 +209,10 @@ export function userTests() {
           expect(res).to.have.status(401);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Invalid Login Details');
+            .to.equal('Invalid Login Details');
           done();
         });
     });
@@ -220,10 +228,10 @@ export function userTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('User not found');
+            .to.equal('User not found');
           done();
         });
     });
@@ -240,7 +248,8 @@ export function userTests() {
           expect(res.body)
             .to.have.property('data')
             .that.has.property('count')
-            .which.is.a('number');
+            .which.is.a('number')
+            .that.equals(3);
           done();
         });
     });
@@ -252,10 +261,10 @@ export function userTests() {
           expect(res).to.have.status(401);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('You do not have access to this resource!');
+            .to.equal('You do not have access to this resource!');
           done();
         });
     });
@@ -267,10 +276,10 @@ export function userTests() {
           expect(res).to.have.status(401);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Unauthorized');
+            .to.equal('Unauthorized');
           done();
         });
     });
@@ -282,10 +291,10 @@ export function userTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Token could not be authenticated');
+            .to.equal('Token could not be authenticated');
           done();
         });
     });
@@ -309,10 +318,10 @@ export function userTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Could not find item');
+            .to.equal('Could not find item');
           done();
         });
     });
@@ -324,10 +333,10 @@ export function userTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });
@@ -352,7 +361,7 @@ export function userTests() {
             .that.does.not.have.property('password');
           expect(res.body.data)
             .to.have.property('company')
-            .to.include('Andela');
+            .to.equal('Andela');
           done();
         });
     });
@@ -374,10 +383,10 @@ export function userTests() {
           expect(res).to.have.status(409);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Username, email or phone_number already in use');
+            .to.equal('Username, email or phone_number already in use');
           done();
         });
     });
@@ -393,7 +402,7 @@ export function userTests() {
             .that.does.not.have.property('password');
           expect(res.body.data)
             .to.have.property('accountType')
-            .to.include(newAccountType);
+            .to.equal(newAccountType);
           done();
         });
     });
@@ -414,7 +423,7 @@ export function userTests() {
             .that.does.not.have.property('password');
           expect(res.body.data.User)
             .to.have.property('accountType')
-            .to.include('admin');
+            .to.equal('admin');
           expect(res.body)
             .to.have.property('data')
             .that.has.property('Token');
@@ -430,10 +439,10 @@ export function userTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('Not authorized to perform action');
+            .to.equal('Not authorized to perform action');
           done();
         });
     });
@@ -445,10 +454,10 @@ export function userTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('AccountType must be [admin] or [regular]');
+            .to.equal('AccountType must be [admin] or [regular]');
           done();
         });
     });
@@ -460,10 +469,10 @@ export function userTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('status')
-            .to.include('error');
+            .to.equal('error');
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });
@@ -481,7 +490,7 @@ export function userTests() {
             .that.does.not.have.property('password');
           expect(res.body.data)
             .to.have.property('picture')
-            .to.include(picture);
+            .to.equal(picture);
           done();
         });
     });
@@ -495,7 +504,7 @@ export function userTests() {
           expect(res).to.have.status(202);
           expect(res.body)
             .to.have.property('data')
-            .to.include('New password has been sent to your email!');
+            .to.equal('New password has been sent to your email!');
           done();
         });
     });
@@ -509,7 +518,7 @@ export function userTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('User not found');
+            .to.equal('User not found');
           done();
         });
     });
@@ -523,7 +532,7 @@ export function userTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Invalid email entry');
+            .to.equal('Invalid email entry');
           done();
         });
     });

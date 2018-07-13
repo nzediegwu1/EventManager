@@ -45,13 +45,12 @@ class Users {
           .create(newUser)
           .then(createdUser => {
             /* eslint-disable */
-            const { id, username, name, email, phoneNo, accountType } = createdUser;
-            const createdUserData = { id, username, name, email, phoneNo, accountType };
+            createdUser.password = undefined;
             const token = jwt.sign({ id: createdUser.id }, key, {
               expiresIn: 60 * 60 * 24,
             });
             return restResponse(res, 'success', 201, {
-              User: createdUserData,
+              User: createdUser,
               Token: token,
             });
           })

@@ -101,14 +101,22 @@ export function create(req, res, model, newData, attributes, include) {
     .catch(error => errorResponseWithCloudinary(req, res, 500, error));
 }
 export function modifyEvent(req, res, model, centerId, timestamp, then, data) {
-  return model.findAll({ where: { centerId, id: { $ne: req.params.id } } }).then(events => {
-    const availability = checkAvailability(req, res, timestamp, events);
-    if (availability !== true) {
-      return availability;
-    }
-    const modifiedEntry = data || eventEntry(req, timestamp);
-    return then(modifiedEntry);
-  });
+  return model
+    .findAll({
+      where: {
+        centerId,
+        id: { $ne: req.params.id },
+        date: { $gte: new Date() },
+      },
+    })
+    .then(events => {
+      const availability = checkAvailability(req, res, timestamp, events);
+      if (availability !== true) {
+        return availability;
+      }
+      const modifiedEntry = data || eventEntry(req, timestamp);
+      return then(modifiedEntry);
+    });
   // .catch(error => errorResponseWithCloudinary(req, res, 500, error));
 }
 

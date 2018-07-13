@@ -18,11 +18,12 @@ export function eventTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('No resource available');
+            .to.equal('No resource available');
           done();
         });
     });
     it('Should test for addEvents success response', done => {
+      const description = 'A technology learning program';
       chai
         .request(app)
         .post('/api/v1/events')
@@ -30,7 +31,7 @@ export function eventTests() {
           title: faker.name.title(),
           date: 'August 17, 2019',
           time: '17:30',
-          description: 'A technology learning program',
+          description,
           picture: 'https://api.cloudinary.com/Youth_developm_auditorium.jpg',
           publicId: 'dev/centers/youth_dev_auditorium',
           centerId: '1',
@@ -40,14 +41,18 @@ export function eventTests() {
           expect(res).to.have.status(201);
           expect(res.body)
             .to.have.property('data')
-            .that.has.property('center')
+            .that.has.property('description')
+            .to.equal(description);
+          expect(res.body.data)
+            .to.have.property('center')
             .that.has.property('name')
-            .to.include('Millenium stadium');
+            .to.equal('Millenium stadium International');
           eventToDelete = res.body.data.id;
           done();
         });
     });
     it('Should test for addEvents success response (second event)', done => {
+      const picture = 'https://api.cloudinary.com/Youth_developm_auditorium.jpg';
       chai
         .request(app)
         .post('/api/v1/events')
@@ -56,7 +61,7 @@ export function eventTests() {
           date: 'August 18, 2019',
           time: '17:30',
           description: 'A technology learning program',
-          picture: 'https://api.cloudinary.com/Youth_developm_auditorium.jpg',
+          picture,
           publicId: 'dev/centers/youth_dev_auditorium',
           centerId: '1',
           token: userToken,
@@ -65,9 +70,40 @@ export function eventTests() {
           expect(res).to.have.status(201);
           expect(res.body)
             .to.have.property('data')
-            .that.has.property('center')
+            .that.has.property('picture')
+            .to.equal(picture);
+          expect(res.body.data)
+            .to.have.property('center')
             .that.has.property('name')
-            .to.include('Millenium stadium');
+            .to.equal('Millenium stadium International');
+          done();
+        });
+    });
+    it('Should test for addEvents success response (Third event)', done => {
+      const publicId = 'dev/centers/youth_dev_auditorium';
+      chai
+        .request(app)
+        .post('/api/v1/events')
+        .send({
+          title: faker.name.title(),
+          date: 'August 28, 2019',
+          time: '17:30',
+          description: 'A technology learning program',
+          picture: 'https://api.cloudinary.com/Youth_enhancement_confab.jpg',
+          publicId,
+          centerId: '1',
+          token: userToken,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          expect(res.body)
+            .to.have.property('data')
+            .that.has.property('publicId')
+            .to.equal(publicId);
+          expect(res.body.data)
+            .to.have.property('center')
+            .that.has.property('name')
+            .to.equal('Millenium stadium International');
           done();
         });
     });
@@ -157,11 +193,11 @@ export function eventTests() {
           expect(res.body)
             .to.have.property('data')
             .that.has.property('title')
-            .to.contain(newTitle);
+            .to.equal(newTitle);
           expect(res.body.data)
             .to.have.property('center')
             .that.has.property('availability')
-            .to.include('open');
+            .to.equal('open');
           done();
         });
     });
@@ -204,7 +240,7 @@ export function eventTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Unexisting or unauthorized item');
+            .to.equal('Unexisting or unauthorized item');
           done();
         });
     });
@@ -224,7 +260,7 @@ export function eventTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Unexisting or unauthorized item');
+            .to.equal('Unexisting or unauthorized item');
           done();
         });
     });
@@ -244,7 +280,7 @@ export function eventTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Center selected does not exist');
+            .to.equal('Center selected does not exist');
           done();
         });
     });
@@ -264,7 +300,7 @@ export function eventTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });
@@ -277,7 +313,7 @@ export function eventTests() {
         })
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.data).to.contain('Successfully deleted');
+          expect(res.body.data).to.equal('Successfully deleted');
           done();
         });
     });
@@ -289,7 +325,7 @@ export function eventTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Could not find item');
+            .to.equal('Could not find item');
           done();
         });
     });
@@ -304,7 +340,7 @@ export function eventTests() {
           expect(res).to.have.status(401);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Cannot delete unexisting or unauthorized item');
+            .to.equal('Cannot delete unexisting or unauthorized item');
           done();
         });
     });
@@ -319,7 +355,7 @@ export function eventTests() {
           expect(res).to.have.status(401);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Cannot delete unexisting or unauthorized item');
+            .to.equal('Cannot delete unexisting or unauthorized item');
           done();
         });
     });
@@ -334,7 +370,7 @@ export function eventTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });
@@ -351,7 +387,8 @@ export function eventTests() {
           expect(res.body)
             .to.have.property('data')
             .that.has.property('count')
-            .which.is.a('number');
+            .which.is.a('number')
+            .that.equals(2)
           done();
         });
     });
@@ -379,7 +416,7 @@ export function eventTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Could not find item');
+            .to.equal('Could not find item');
           done();
         });
     });
@@ -391,7 +428,7 @@ export function eventTests() {
           expect(res).to.have.status(400);
           expect(res.body)
             .to.have.property('message')
-            .to.include('invalid parameter');
+            .to.equal('invalid parameter');
           done();
         });
     });
@@ -408,7 +445,7 @@ export function eventTests() {
           expect(res).to.have.status(202);
           expect(res.body.data)
             .to.have.property('status')
-            .to.include(newStatus);
+            .to.equal(newStatus);
           expect(res.body.data)
             .to.have.property('user')
             .which.is.an('object');
@@ -428,7 +465,7 @@ export function eventTests() {
           expect(res).to.have.status(403);
           expect(res.body)
             .to.have.property('message')
-            .to.include('No priviledge to approve event');
+            .to.equal('No priviledge to approve event');
           done();
         });
     });
@@ -445,7 +482,7 @@ export function eventTests() {
           expect(res).to.have.status(404);
           expect(res.body)
             .to.have.property('message')
-            .to.include('Event does not exist');
+            .to.equal('Event does not exist');
           done();
         });
     });
@@ -470,7 +507,7 @@ export function eventTests() {
             .to.have.property('data')
             .that.has.property('center')
             .that.has.property('name')
-            .to.include('Millenium stadium');
+            .to.equal('Millenium stadium International');
           done();
         });
     });
