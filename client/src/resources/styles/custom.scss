@@ -522,9 +522,9 @@ select {
 .table-responsive {
   overflow: auto;
 }
-.list-group-item:first-child {
+.list-group-item:first-child:not(.sidebar-header) {
   background-color: #1b1e21;
 }
-.list-group-item {
+.list-group-item:not(.sidebar-header) {
   height: 3em;
 }
