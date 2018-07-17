@@ -16,32 +16,14 @@ import { ModalFooter } from './modalFooter';
 import { initialState } from '../reducers/pageReducer';
 
 toastr.options = toastSettings;
-const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
+const inputAttrs = (inputType, inputName, placeholder, className, ref, id, required) => ({
   inputType,
   inputName,
   placeholder,
   className,
   ref,
+  id,
   required,
-});
-const mapDispatchToProps = dispatch => ({
-  setEventDetail: event => dispatch(setEventDetail(event)),
-  getEventCenters: centers => dispatch(getEventCenters(centers)),
-  setDataCount: count => dispatch(setDataCount(count)),
-  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
-  setActivePage: pageNumber => dispatch(setActivePage(pageNumber)),
-  setEventDefaults: data => dispatch(setEventDefaults(data)),
-});
-const mapStateToProps = state => ({
-  modalTitle: state.page.modalTitle,
-  eventDetails: state.events.event,
-  eventDefaults: state.page.eventDefaults,
-  centers: state.centers.eventCenters,
-  dataCount: state.page.dataCount,
-  disabled: state.process.disabled,
-  visibility: state.process.visibility,
-  activePage: state.page.activePage,
-  random: state.page.random,
 });
 
 let eventId;
@@ -51,6 +33,8 @@ export class AddEventComponent extends React.Component {
     super(props);
     this.state = {
       selectedClass: 'custom-select-sm btn btn-info',
+      displayDate: 'none',
+      displayTime: 'none',
     };
   }
   checkValidation = () => {
@@ -62,6 +46,8 @@ export class AddEventComponent extends React.Component {
   closeModal = () => {
     this.setState({
       selectedClass: 'custom-select-sm btn btn-info',
+      displayDate: 'none',
+      displayTime: 'none',
     });
     this.props.setEventDefaults(initialState);
     this.picture.value = '';
@@ -170,6 +156,16 @@ export class AddEventComponent extends React.Component {
       description: this.description.value,
       centerId: this.center.value,
     };
+    if (this.date.value !== '') {
+      this.setState({
+        displayDate: 'block',
+      });
+    }
+    if (this.time.value !== '') {
+      this.setState({
+        displayTime: 'block',
+      });
+    }
     this.props.setEventDefaults(data);
   };
 
@@ -226,6 +222,7 @@ export class AddEventComponent extends React.Component {
                     'Event Date',
                     'form-control input-sm',
                     input => (this.date = input),
+                    'event-date',
                     'required'
                   )}
                 />
@@ -239,6 +236,7 @@ export class AddEventComponent extends React.Component {
                     'Event Time',
                     'form-control input-sm',
                     input => (this.time = input),
+                    'event-time',
                     'required'
                   )}
                 />
@@ -275,7 +273,7 @@ export class AddEventComponent extends React.Component {
                   {centers.map(center => (
                     <div key={center.id}>
                       <div>
-                        <div>
+                        <div className="event-center-img">
                           <img
                             id="cardImage"
                             className="event-center-Image"
@@ -338,6 +336,12 @@ export class AddEventComponent extends React.Component {
                     display={this.props.visibility}
                     closeModal={this.closeModal}
                   />
+                  <p id="displayDate" style={{ display: this.state.displayDate }}>
+                    {' '}
+                  </p>
+                  <p id="displayTime" style={{ display: this.state.displayTime }}>
+                    {' '}
+                  </p>
                 </div>
               </form>
             </div>
@@ -348,7 +352,27 @@ export class AddEventComponent extends React.Component {
   }
 }
 
-export const AddEvent = connect(mapStateToProps, mapDispatchToProps)(AddEventComponent);
+const actionCreators = {
+  setEventDetail,
+  getEventCenters,
+  setDataCount,
+  setSubmitState,
+  setActivePage,
+  setEventDefaults,
+};
+const mapStateToProps = state => ({
+  modalTitle: state.page.modalTitle,
+  eventDetails: state.events.event,
+  eventDefaults: state.page.eventDefaults,
+  centers: state.centers.eventCenters,
+  dataCount: state.page.dataCount,
+  disabled: state.process.disabled,
+  visibility: state.process.visibility,
+  activePage: state.page.activePage,
+  random: state.page.random,
+});
+
+export const AddEvent = connect(mapStateToProps, actionCreators)(AddEventComponent);
 AddEventComponent.propTypes = {
   modalTitle: PropTypes.string,
   centers: PropTypes.arrayOf(PropTypes.object),

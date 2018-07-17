@@ -1,0 +1,31 @@
+{
+    "src_folders": ["./end2end"],
+    "output_folder": "reports",
+    "selenium": {
+      "start_process": true,
+      "server_path": "./drivers/selenium-server-standalone-3.9.1.jar",
+      "log_path": "",
+      "port": 4448,
+      "cli_args": {
+        "webdriver.chrome.driver": "./drivers/chromedriver"
+      }
+    },
+    "test_settings": {
+      "default": {
+        "launch_url": "http://localhost:9876",
+        "selenium_port": 4448,
+        "selenium_host": "localhost",
+        "screenshots": {
+          "enabled": false,
+          "path": "./reports/"
+        },
+        "desiredCapabilities": {
+          "browserName": "chrome",
+          "javascriptEnabled": true,
+          "acceptSslCerts": true,
+          "elementScrollBehavior": 1,
+          "marionette": true
+        }
+      }
+    }
+  }

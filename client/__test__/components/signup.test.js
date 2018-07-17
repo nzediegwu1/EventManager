@@ -6,7 +6,7 @@ import { SignupComponent, mapDispatchToProps } from '../../src/components/signup
 
 configure({ adapter: new Adapter() });
 
-describe('Tests for addEvent component', () => {
+describe('Tests for signup component', () => {
   const props = {
     changeState: jest.fn(),
     changeSubmitState: jest.fn(),

@@ -47,7 +47,7 @@ export class SidebarComponent extends React.Component {
               <h5 className="modal-title">
                 <b id="dashboard">Dashboard</b>
               </h5>
-              <div data-dismiss="modal">
+              <div data-dismiss="modal" id="toggle-sidebar">
                 <Icon
                   src="glyphicons-198-remove-circle.png"
                   alt="close"
@@ -66,7 +66,7 @@ export class SidebarComponent extends React.Component {
                 />
                 <ListItem
                   event={this.changeLocation.bind(this, `${this.props.match.path}/centers`)}
-                  class="nav-item"
+                  class="nav-item center-list"
                   title="Centers"
                   icon="glyphicons-503-map.png"
                   alt="myCenters"
@@ -76,7 +76,7 @@ export class SidebarComponent extends React.Component {
                     this,
                     `${this.props.match.path}/profile/${this.userId}`
                   )}
-                  class="nav-item"
+                  class="nav-item user-profile"
                   title="MyProfile"
                   icon="glyphicons-4-user.png"
                   alt="myProfile"
@@ -84,7 +84,7 @@ export class SidebarComponent extends React.Component {
                 {this.userId === 1 && (
                   <ListItem
                     event={this.changeLocation.bind(this, `${this.props.match.path}/userList`)}
-                    class="nav-item allUsers"
+                    class="nav-item all-users"
                     title="All Users"
                     icon="glyphicons-44-group.png"
                     alt="userList"

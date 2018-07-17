@@ -10,7 +10,7 @@ import {
 
 configure({ adapter: new Adapter() });
 
-describe('Tests for addEvent component', () => {
+describe('Tests for sidebar component', () => {
   const props = {
     match: {},
     setProfileDetails: jest.fn(),

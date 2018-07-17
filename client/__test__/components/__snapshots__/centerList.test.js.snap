@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Tests for addEvent component should render self without crashing 1`] = `
+exports[`Tests for centerList component should render self without crashing 1`] = `
 <div
   className="mx-sm-auto col-sm-11"
 >
@@ -11,6 +11,7 @@ exports[`Tests for addEvent component should render self without crashing 1`] = 
   </b>
   <Filter
     handleSearch={[Function]}
+    id="filter-centers"
     placeholder="Filter by name or location..."
   />
   <div

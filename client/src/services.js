@@ -12,6 +12,7 @@ export const toastSettings = {
   showMethod: 'slideDown',
   hideMethod: 'slideUp',
 };
+
 export const apiLink =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:8080'
@@ -115,7 +116,7 @@ export const userValidator = (userData, context) => {
   } else if (name.length < 4) {
     return 'Full name must not be less than 4 characters';
   } else if (password !== confirmPassword) {
-    return 'passwords do not match';
+    return 'Passwords do not match';
   }
   return true;
 };

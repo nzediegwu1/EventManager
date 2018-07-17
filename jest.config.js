@@ -41,6 +41,7 @@ module.exports = {
     '<rootDir>/src/components/sidebarComponent',
     '<rootDir>/src/components/centerListComponent',
     '<rootDir>/src/components/centerDetailsComponent',
+    '<rootDir>/validator',
   ],
   unmockedModulePathPatterns: ['./node_modules/react'],
   testEnvironment: 'jsdom',

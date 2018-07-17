@@ -39,7 +39,11 @@ export class CenterList extends React.Component {
     return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Centers</b>
-        <Filter placeholder="Filter by name or location..." handleSearch={this.searchEvents} />
+        <Filter
+          id="filter-centers"
+          placeholder="Filter by name or location..."
+          handleSearch={this.searchEvents}
+        />
         <div className="table-responsive">
           <table id="centerTable" className="table table-hover table-main">
             <TableHead

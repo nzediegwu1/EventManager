@@ -8,6 +8,7 @@ export const ModalFooter = props => (
       </button>
     )}
     <button
+      id={props.id}
       type={props.type}
       className="btn btn-success createEvent"
       disabled={props.disabled}

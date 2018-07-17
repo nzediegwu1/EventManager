@@ -16,3 +16,5 @@ exclude_paths:
 - "server/migrations"
 - "server/tests"
 - "client/__test__"
+- "e2e_files"
+- "end2end"

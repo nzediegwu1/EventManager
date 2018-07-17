@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Tests for addEvent component should render self without crashing 1`] = `
+exports[`Tests for sidebar component should render self without crashing 1`] = `
 <div
   aria-hidden="true"
   aria-labelledby="myModalSidebarLabel"
@@ -29,6 +29,7 @@ exports[`Tests for addEvent component should render self without crashing 1`] = 
         </h5>
         <div
           data-dismiss="modal"
+          id="toggle-sidebar"
         >
           <Icon
             alt="close"
@@ -52,21 +53,21 @@ exports[`Tests for addEvent component should render self without crashing 1`] = 
           />
           <ListItem
             alt="myCenters"
-            class="nav-item"
+            class="nav-item center-list"
             event={[Function]}
             icon="glyphicons-503-map.png"
             title="Centers"
           />
           <ListItem
             alt="myProfile"
-            class="nav-item"
+            class="nav-item user-profile"
             event={[Function]}
             icon="glyphicons-4-user.png"
             title="MyProfile"
           />
           <ListItem
             alt="userList"
-            class="nav-item allUsers"
+            class="nav-item all-users"
             event={[Function]}
             icon="glyphicons-44-group.png"
             title="All Users"
