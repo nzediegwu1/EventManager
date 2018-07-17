@@ -10,7 +10,7 @@ import {
 
 configure({ adapter: new Adapter() });
 
-describe('Tests for addEvent component', () => {
+describe('Tests for centerDetails component', () => {
   const props = {
     match: {
       params: {
@@ -28,12 +28,7 @@ describe('Tests for addEvent component', () => {
     const wrapper = shallow(<CenterDetailsComponent {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
-  it('should render call setPage function when comopnent unmounts', () => {
-    const wrapper = shallow(<CenterDetailsComponent {...props} />);
-    wrapper.unmount();
-    expect(props.setPage).toHaveBeenCalled();
-  });
-  it('should render call setPage function when comopnent unmounts', () => {
+  it('should call setPage function when comopnent unmounts', () => {
     const wrapper = shallow(<CenterDetailsComponent {...props} />);
     wrapper.unmount();
     expect(props.setPage).toHaveBeenCalled();

@@ -30,7 +30,7 @@ function setup() {
   };
 }
 
-describe('Tests for addEvent component', () => {
+describe('Tests for manageDetailsHeader component', () => {
   it('should render self without crashing', () => {
     const { enzymeWrapper } = setup();
     expect(enzymeWrapper.length).toBe(1);

@@ -14,6 +14,8 @@ const Input = props => {
         ref={props.params.ref}
         autoComplete={props.params.autocomplete}
         onChange={props.onChange}
+        id={props.params.id}
+        value={props.params.value}
       />
     );
   }

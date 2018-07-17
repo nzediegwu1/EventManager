@@ -25,7 +25,7 @@ function setup() {
   };
 }
 
-describe('Tests for addEvent component', () => {
+describe('Tests for manageEvent component', () => {
   it('should render self without crashing', () => {
     const { enzymeWrapper, props } = setup();
     expect(enzymeWrapper.length).toBe(1);

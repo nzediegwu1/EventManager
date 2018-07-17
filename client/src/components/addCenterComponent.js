@@ -20,12 +20,11 @@ const inputAttrs = (inputType, inputName, placeholder, className, ref, required,
   required,
   autocomplete,
 });
-
-const mapDispatchToProps = dispatch => ({
-  setCenterDetails: center => dispatch(setCenterDetails(center)),
-  setSubmitState: submitState => dispatch(setSubmitState(submitState)),
-  setCenterDefaults: submitState => dispatch(setCenterDefaults(submitState)),
-});
+const actionCreators = {
+  setCenterDetails,
+  setSubmitState,
+  setCenterDefaults,
+};
 
 const mapStateToProps = state => ({
   modalTitle: state.page.modalTitle,
@@ -121,7 +120,7 @@ export class AddCenterComponent extends React.Component {
                     'text',
                     'centername',
                     'Center Name',
-                    'form-control input-sm',
+                    'form-control input-sm center-name',
                     input => (this.name = input),
                     'required'
                   )}
@@ -133,7 +132,7 @@ export class AddCenterComponent extends React.Component {
                     'file',
                     'centerImage',
                     'Center Image',
-                    'form-control input-sm',
+                    'form-control input-sm center-image',
                     input => (this.picture = input),
                     required
                   )}
@@ -145,7 +144,7 @@ export class AddCenterComponent extends React.Component {
                     'text',
                     'street',
                     'Address',
-                    'form-control input-sm',
+                    'form-control input-sm center-address',
                     input => (this.address = input),
                     'required',
                     'street-address'
@@ -158,7 +157,7 @@ export class AddCenterComponent extends React.Component {
                     'text',
                     'city',
                     'State/City',
-                    'form-control input-sm',
+                    'form-control input-sm center-city',
                     input => (this.location = input),
                     'required',
                     'address-level2'
@@ -171,7 +170,7 @@ export class AddCenterComponent extends React.Component {
                     'number',
                     'capacity',
                     'Capacity',
-                    'form-control input-sm',
+                    'form-control input-sm center-capacity',
                     input => (this.capacity = input),
                     'required'
                   )}
@@ -183,7 +182,7 @@ export class AddCenterComponent extends React.Component {
                     'number',
                     'bookingAmount',
                     'Booking price(per day)',
-                    'form-control input-sm',
+                    'form-control input-sm center-price',
                     input => (this.price = input),
                     'required'
                   )}
@@ -192,7 +191,8 @@ export class AddCenterComponent extends React.Component {
                   <select
                     required
                     ref={input => (this.availability = input)}
-                    className="custom-select-sm"
+                    className="custom-select-sm center-availability"
+                    id="set-availability"
                   >
                     <Option value="" text="Availability" disabled selected />
                     <Option value="open" text="open" />
@@ -200,6 +200,7 @@ export class AddCenterComponent extends React.Component {
                   </select>
                 </div>
                 <ModalFooter
+                  id="add-center-button"
                   type="submit"
                   disabled={this.props.disabled}
                   display={this.props.visibility}
@@ -213,7 +214,7 @@ export class AddCenterComponent extends React.Component {
     );
   }
 }
-export const AddCenter = connect(mapStateToProps, mapDispatchToProps)(AddCenterComponent);
+export const AddCenter = connect(mapStateToProps, actionCreators)(AddCenterComponent);
 AddCenterComponent.propTypes = {
   modalTitle: PropTypes.string,
   required: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),

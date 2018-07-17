@@ -10,7 +10,7 @@ import {
 
 configure({ adapter: new Adapter() });
 
-describe('Tests for addEvent component', () => {
+describe('Tests for signin component', () => {
   const props = {
     history: {},
     setSubmitState: jest.fn(),

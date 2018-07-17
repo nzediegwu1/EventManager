@@ -40,7 +40,11 @@ export class Events extends React.Component {
     return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Events</b>
-        <Filter placeholder="Filter by title or venue..." handleSearch={this.searchEvents} />
+        <Filter
+          id="filter-events"
+          placeholder="Filter by title or venue..."
+          handleSearch={this.searchEvents}
+        />
         <div className="table-responsive">
           <table id="eventTable" className="table table-hover table-main">
             <TableHead

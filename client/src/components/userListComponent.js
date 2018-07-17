@@ -39,7 +39,11 @@ class UserListComponent extends React.Component {
     return (
       <div className="mx-sm-auto col-sm-11">
         <b className="page-header">Users</b>
-        <Filter placeholder="Filter by name or phone..." handleSearch={this.searchEvents} />
+        <Filter
+          id="filter-users"
+          placeholder="Filter by name or phone..."
+          handleSearch={this.searchEvents}
+        />
         <div className="table-responsive">
           <table id="userTable" className="table table-hover table-main">
             <TableHead

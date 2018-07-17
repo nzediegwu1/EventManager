@@ -6,7 +6,7 @@ import { CenterList } from '../../src/components/centerListComponent';
 
 configure({ adapter: new Adapter() });
 
-describe('Tests for addEvent component', () => {
+describe('Tests for centerList component', () => {
   const props = {
     centers: [],
     match: {},

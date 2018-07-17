@@ -98,9 +98,9 @@ Given you manage an events center, this app will help you accept applications to
 
 
 ## Testing the Application
-    1. "npm test" →  run API tests
-    2. "npm run test:e2e" → Runs end-to-end unit tests
-    3. "npm run test:react" → Runs frontend tests
+    1. API test → "npm run test:api"
+    2. End-to-end test → Install latest JDK, Set superAdmin username and password using `SUPER_ADMIN` and `SUPER_ADMIN_PASS` respectively in your .env file, then run "npm run test:e2e" 
+    3. Frontend test → "npm run test:react"
 
 ## Documentation
 

@@ -12,12 +12,13 @@ import PropTypes from 'prop-types';
 
 toastr.options = toastSettings;
 
-const inputAttrs = (inputType, inputName, placeholder, className, ref, required) => ({
+const inputAttrs = (inputType, inputName, placeholder, className, ref, id, required) => ({
   inputType,
   inputName,
   placeholder,
   className,
   ref,
+  id,
   required,
 });
 
@@ -94,6 +95,7 @@ export class SignInPage extends React.Component {
                   'Username',
                   'form-control input-sm',
                   input => (this.username = input),
+                  'login_textbox',
                   'required'
                 )}
               />
@@ -106,6 +108,7 @@ export class SignInPage extends React.Component {
                   'Password',
                   'form-control input-sm',
                   input => (this.password = input),
+                  'password_textbox',
                   'required'
                 )}
               />
@@ -122,7 +125,7 @@ export class SignInPage extends React.Component {
                 <a href="#" className="welcome" onClick={this.changeState}>
                   Create account
                 </a>&nbsp; |&nbsp;
-                <a href="#" data-toggle="modal" data-target="#resetPassword">
+                <a href="#" id="reset-password" data-toggle="modal" data-target="#resetPassword">
                   reset password
                 </a>
               </div>
